@@ -7,7 +7,7 @@ namespace LmdbCache.Domain
 {
     public interface ILightClient
     {
-        string[] TryAdd((string, ByteString, DateTimeOffset)[] entries, bool overrideExisting);
+        string[] TryAdd(bool overrideExisting, (string, ByteString, DateTimeOffset)[] entries);
 
         (string, ByteString)[] TryGet(string[] keys);
 
@@ -18,7 +18,7 @@ namespace LmdbCache.Domain
         /// <returns>Any keys which did not exist, or an empty set otherwise.</returns>
         string[] TryDelete(string[] keys);
 
-        IDictionary<string, string[]> SearchManyByPrefix(string[] keysPrefixes); // TODO: , int? depthIndex = null, string delimiter = null | Add regex?
+        (string, string[]) SearchByPrefix(string keysPrefix); // TODO: , int? depthIndex = null, string delimiter = null | Add regex?
     }
 
     public interface ILightAdminClient
