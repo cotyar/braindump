@@ -53,7 +53,7 @@ message AddResponse {
 }
 
 message GetRequest {
-  repeated string key    = 1;
+  repeated string keys    = 1;
 }
 
 message GetResponse {
@@ -110,7 +110,7 @@ message KeyValueListResponse {
 }
 
 message DeleteRequest {
-  repeated string key   = 1;
+  repeated string keys   = 1;
 }
 
 message DeleteResponse {

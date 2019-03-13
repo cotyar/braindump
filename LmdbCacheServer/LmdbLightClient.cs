@@ -36,10 +36,9 @@ namespace LmdbCacheServer
 
             var preparedBatch = batch.Select(ks => (new TableKey(ks.Item1), new TableValue(ks.Item2))).ToArray();
 
-            var ret = _lmdb.WriteAsync(txn => allowOverride ? txn.AddOrUpdateBatch(_kvTable, preparedBatch) : txn.AddBatch(_kvTable, preparedBatch), false);
-            ret.Wait();
+            var ret = _lmdb.WriteAsync(txn => allowOverride ? txn.AddOrUpdateBatch(_kvTable, preparedBatch) : txn.AddBatch(_kvTable, preparedBatch), false).Result;
 
-            return new HashSet<string>(ret.Result.Where(kb => kb.Item2).Select(kb => kb.Item1.ToString())); // TODO: Reconfirm if successful or failed keys should be returned
+            return new HashSet<string>(ret.Where(kb => kb.Item2).Select(kb => kb.Item1.ToString())); // TODO: Reconfirm if successful or failed keys should be returned
         }
 
         public HashSet<string> TryAdd(IEnumerable<string> keys, Action<string, Stream> streamWriter, DateTimeOffset expiry,

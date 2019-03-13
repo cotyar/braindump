@@ -1,22 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Google.Protobuf;
 using Grpc.Core;
 using LmdbCache;
+using LmdbLight;
 
 namespace LmdbCacheServer
 {
     public class LmdbCacheServiceImpl : LmdbCacheService.LmdbCacheServiceBase
     {
-        public override Task<AddResponse> Add(AddRequest request, ServerCallContext context)
+        private readonly LightningPersistence _lmdb;
+        private readonly Table _kvTable;
+
+        public LmdbCacheServiceImpl(LightningConfig config) 
         {
-            return base.Add(request, context);
+            _lmdb = new LightningPersistence(config);
+            _kvTable = _lmdb.OpenTable("kv");
+        }
+
+        public override async Task<AddResponse> Add(AddRequest request, ServerCallContext context)
+        {
+            var batch = request.Entries.Select(ks => (new TableKey(ks.Key), new TableValue(ks.Value))).ToArray();
+
+            var ret = await (request.OverrideExisting ? _lmdb.AddOrUpdateBatch(_kvTable, batch, false) : _lmdb.AddBatch(_kvTable, batch));
+            var response = new AddResponse();
+            var addResults = ret.Select(kv => kv.Item2 
+                ? (request.OverrideExisting ? AddResponse.Types.AddResult.KeyUpdated : AddResponse.Types.AddResult.Failure) // TODO: Recheck statuses
+                : (request.OverrideExisting ? AddResponse.Types.AddResult.KeyAdded : AddResponse.Types.AddResult.KeyAlreadyExists));
+            response.Results.AddRange(addResults);
+
+            return response;
         }
 
         public override Task<ContainsKeysResponse> ContainsKeys(GetRequest request, ServerCallContext context)
         {
-            return base.ContainsKeys(request, context);
+            var ret = _lmdb.ContainsKeys(_kvTable, request.Keys.Select(k => new TableKey(k)).ToArray());
+
+            var response = new ContainsKeysResponse();
+            response.Results.AddRange(ret.Select(kv => kv.Item2));
+
+            return Task.FromResult(response);
         }
 
         public override Task<CopyResponse> Copy(CopyRequest request, ServerCallContext context)
@@ -24,14 +50,32 @@ namespace LmdbCacheServer
             return base.Copy(request, context);
         }
 
-        public override Task<DeleteResponse> Delete(DeleteRequest request, ServerCallContext context)
+        public override async Task<DeleteResponse> Delete(DeleteRequest request, ServerCallContext context)
         {
-            return base.Delete(request, context);
+            var keys = request.Keys.Select(k => new TableKey(k)).ToArray();
+            var kvs = _lmdb.ContainsKeys(_kvTable, keys).ToArray();
+
+            var foundKeys = kvs.Where(kv => kv.Item2).Select(kv => kv.Item1).ToArray();
+            await _lmdb.WriteAsync(txn => txn.Delete(_kvTable, foundKeys), false);
+
+            var response = new DeleteResponse();
+            var addResults = kvs.Select(kv => kv.Item2 ? DeleteResponse.Types.DeleteResult.Success : DeleteResponse.Types.DeleteResult.NotFound);
+            response.Results.AddRange(addResults);
+
+            return response;
         }
 
         public override Task<GetResponse> Get(GetRequest request, ServerCallContext context)
         {
-            return base.Get(request, context);
+            var ret = _lmdb.Get(_kvTable, request.Keys.Select(k => new TableKey(k)));
+
+            var response = new GetResponse();
+            var getResponseEntries = ret.Select(kv => kv.Item2.HasValue 
+                ? new GetResponse.Types.GetResponseEntry { Result = GetResponse.Types.GetResponseEntry.Types.GetResult.Success, Value = kv.Item2.Value.Value }
+                : new GetResponse.Types.GetResponseEntry { Result = GetResponse.Types.GetResponseEntry.Types.GetResult.NotFound, Value = ByteString.Empty });
+            response.Results.AddRange(getResponseEntries);
+
+            return Task.FromResult(response);
         }
 
         public override Task ListKeys(KeyListRequest request, IServerStreamWriter<KeyListResponse> responseStream, ServerCallContext context)
