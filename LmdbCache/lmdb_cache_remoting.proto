@@ -12,11 +12,13 @@ service LmdbCacheService {
 
   rpc Add(AddRequest) returns (AddResponse) {}
 
+  rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+
+  rpc Copy(CopyRequest) returns (CopyResponse) {}
+
   rpc Get(GetRequest) returns (GetResponse) {}
 
   rpc ContainsKeys(GetRequest) returns (ContainsKeysResponse) {}
-
-  rpc Delete(DeleteRequest) returns (DeleteResponse) {}
 
   rpc ListKeys(KeyListRequest) returns (stream KeyListResponse) {}
 
@@ -68,7 +70,7 @@ message GetResponse {
 }
 
 message ContainsKeysResponse {
-  repeated bool key    = 1;
+  repeated bool results = 1;
 }
 
 message CopyRequest {
@@ -87,7 +89,7 @@ message CopyResponse {
     TO_KEY_EXISTS       = 2;
     FAILURE             = 3;
   }
-  repeated CopyResult entries = 1;
+  repeated CopyResult results = 1;
 }
 
 message KeyListRequest {
@@ -107,9 +109,8 @@ message KeyValueListResponse {
   bytes  value  = 3;
 }
 
-
 message DeleteRequest {
-  string key    = 1;
+  repeated string key   = 1;
 }
 
 message DeleteResponse {
@@ -118,5 +119,5 @@ message DeleteResponse {
     NOT_FOUND           = 1;
     FAILURE             = 2;
   }
-  DeleteResult result = 1;
+  repeated DeleteResult results = 1;
 }

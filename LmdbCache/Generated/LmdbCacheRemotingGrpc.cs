@@ -17,11 +17,13 @@ namespace LmdbCache {
 
     static readonly grpc::Marshaller<global::LmdbCache.AddRequest> __Marshaller_LmdbCache_AddRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.AddRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.AddResponse> __Marshaller_LmdbCache_AddResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.AddResponse.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::LmdbCache.DeleteRequest> __Marshaller_LmdbCache_DeleteRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.DeleteRequest.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::LmdbCache.DeleteResponse> __Marshaller_LmdbCache_DeleteResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.DeleteResponse.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::LmdbCache.CopyRequest> __Marshaller_LmdbCache_CopyRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.CopyRequest.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::LmdbCache.CopyResponse> __Marshaller_LmdbCache_CopyResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.CopyResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.GetRequest> __Marshaller_LmdbCache_GetRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.GetRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.GetResponse> __Marshaller_LmdbCache_GetResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.GetResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.ContainsKeysResponse> __Marshaller_LmdbCache_ContainsKeysResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.ContainsKeysResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::LmdbCache.DeleteRequest> __Marshaller_LmdbCache_DeleteRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.DeleteRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::LmdbCache.DeleteResponse> __Marshaller_LmdbCache_DeleteResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.DeleteResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.KeyListRequest> __Marshaller_LmdbCache_KeyListRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.KeyListRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.KeyListResponse> __Marshaller_LmdbCache_KeyListResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.KeyListResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.KeyValueListResponse> __Marshaller_LmdbCache_KeyValueListResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.KeyValueListResponse.Parser.ParseFrom);
@@ -32,6 +34,20 @@ namespace LmdbCache {
         "Add",
         __Marshaller_LmdbCache_AddRequest,
         __Marshaller_LmdbCache_AddResponse);
+
+    static readonly grpc::Method<global::LmdbCache.DeleteRequest, global::LmdbCache.DeleteResponse> __Method_Delete = new grpc::Method<global::LmdbCache.DeleteRequest, global::LmdbCache.DeleteResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "Delete",
+        __Marshaller_LmdbCache_DeleteRequest,
+        __Marshaller_LmdbCache_DeleteResponse);
+
+    static readonly grpc::Method<global::LmdbCache.CopyRequest, global::LmdbCache.CopyResponse> __Method_Copy = new grpc::Method<global::LmdbCache.CopyRequest, global::LmdbCache.CopyResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "Copy",
+        __Marshaller_LmdbCache_CopyRequest,
+        __Marshaller_LmdbCache_CopyResponse);
 
     static readonly grpc::Method<global::LmdbCache.GetRequest, global::LmdbCache.GetResponse> __Method_Get = new grpc::Method<global::LmdbCache.GetRequest, global::LmdbCache.GetResponse>(
         grpc::MethodType.Unary,
@@ -46,13 +62,6 @@ namespace LmdbCache {
         "ContainsKeys",
         __Marshaller_LmdbCache_GetRequest,
         __Marshaller_LmdbCache_ContainsKeysResponse);
-
-    static readonly grpc::Method<global::LmdbCache.DeleteRequest, global::LmdbCache.DeleteResponse> __Method_Delete = new grpc::Method<global::LmdbCache.DeleteRequest, global::LmdbCache.DeleteResponse>(
-        grpc::MethodType.Unary,
-        __ServiceName,
-        "Delete",
-        __Marshaller_LmdbCache_DeleteRequest,
-        __Marshaller_LmdbCache_DeleteResponse);
 
     static readonly grpc::Method<global::LmdbCache.KeyListRequest, global::LmdbCache.KeyListResponse> __Method_ListKeys = new grpc::Method<global::LmdbCache.KeyListRequest, global::LmdbCache.KeyListResponse>(
         grpc::MethodType.ServerStreaming,
@@ -82,17 +91,22 @@ namespace LmdbCache {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
 
+      public virtual global::System.Threading.Tasks.Task<global::LmdbCache.DeleteResponse> Delete(global::LmdbCache.DeleteRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      public virtual global::System.Threading.Tasks.Task<global::LmdbCache.CopyResponse> Copy(global::LmdbCache.CopyRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
       public virtual global::System.Threading.Tasks.Task<global::LmdbCache.GetResponse> Get(global::LmdbCache.GetRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
 
       public virtual global::System.Threading.Tasks.Task<global::LmdbCache.ContainsKeysResponse> ContainsKeys(global::LmdbCache.GetRequest request, grpc::ServerCallContext context)
-      {
-        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
-      }
-
-      public virtual global::System.Threading.Tasks.Task<global::LmdbCache.DeleteResponse> Delete(global::LmdbCache.DeleteRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -148,6 +162,38 @@ namespace LmdbCache {
       {
         return CallInvoker.AsyncUnaryCall(__Method_Add, null, options, request);
       }
+      public virtual global::LmdbCache.DeleteResponse Delete(global::LmdbCache.DeleteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return Delete(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual global::LmdbCache.DeleteResponse Delete(global::LmdbCache.DeleteRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_Delete, null, options, request);
+      }
+      public virtual grpc::AsyncUnaryCall<global::LmdbCache.DeleteResponse> DeleteAsync(global::LmdbCache.DeleteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return DeleteAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual grpc::AsyncUnaryCall<global::LmdbCache.DeleteResponse> DeleteAsync(global::LmdbCache.DeleteRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_Delete, null, options, request);
+      }
+      public virtual global::LmdbCache.CopyResponse Copy(global::LmdbCache.CopyRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return Copy(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual global::LmdbCache.CopyResponse Copy(global::LmdbCache.CopyRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_Copy, null, options, request);
+      }
+      public virtual grpc::AsyncUnaryCall<global::LmdbCache.CopyResponse> CopyAsync(global::LmdbCache.CopyRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return CopyAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual grpc::AsyncUnaryCall<global::LmdbCache.CopyResponse> CopyAsync(global::LmdbCache.CopyRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_Copy, null, options, request);
+      }
       public virtual global::LmdbCache.GetResponse Get(global::LmdbCache.GetRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return Get(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -180,22 +226,6 @@ namespace LmdbCache {
       {
         return CallInvoker.AsyncUnaryCall(__Method_ContainsKeys, null, options, request);
       }
-      public virtual global::LmdbCache.DeleteResponse Delete(global::LmdbCache.DeleteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return Delete(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      public virtual global::LmdbCache.DeleteResponse Delete(global::LmdbCache.DeleteRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.BlockingUnaryCall(__Method_Delete, null, options, request);
-      }
-      public virtual grpc::AsyncUnaryCall<global::LmdbCache.DeleteResponse> DeleteAsync(global::LmdbCache.DeleteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return DeleteAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      public virtual grpc::AsyncUnaryCall<global::LmdbCache.DeleteResponse> DeleteAsync(global::LmdbCache.DeleteRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.AsyncUnaryCall(__Method_Delete, null, options, request);
-      }
       public virtual grpc::AsyncServerStreamingCall<global::LmdbCache.KeyListResponse> ListKeys(global::LmdbCache.KeyListRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return ListKeys(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -225,9 +255,10 @@ namespace LmdbCache {
     {
       return grpc::ServerServiceDefinition.CreateBuilder()
           .AddMethod(__Method_Add, serviceImpl.Add)
+          .AddMethod(__Method_Delete, serviceImpl.Delete)
+          .AddMethod(__Method_Copy, serviceImpl.Copy)
           .AddMethod(__Method_Get, serviceImpl.Get)
           .AddMethod(__Method_ContainsKeys, serviceImpl.ContainsKeys)
-          .AddMethod(__Method_Delete, serviceImpl.Delete)
           .AddMethod(__Method_ListKeys, serviceImpl.ListKeys)
           .AddMethod(__Method_ListKeyValues, serviceImpl.ListKeyValues).Build();
     }
