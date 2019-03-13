@@ -14,11 +14,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="LightningDB" Version="0.10.0" />
-    <PackageReference Include="Spreads.LMDB" Version="1.0.0-build1809031215" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LmdbCache\LmdbCache.csproj" />
+    <ProjectReference Include="..\LmdbLight\LmdbLight.csproj" />
   </ItemGroup>
 
 </Project>

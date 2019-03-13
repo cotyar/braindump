@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 using LightningDB;
 using Google.Protobuf;
 using LightningDB.Native;
-using LmdbCache;
 
 namespace LmdbLight
 {
@@ -477,7 +476,7 @@ namespace LmdbLight
         /// <param name="requiresIsolation">Guarantees that the action will me executed in a separate transaction. Otherwise batches the write requests.</param>
         /// <param name="fireAndForget">If fireAndForget is true then return immediately</param>
         /// <returns>a Task to await</returns>
-        internal Task<T> WriteAsync<T>(Func<WriteTransaction, T> writeFunction, bool requiresIsolation, bool fireAndForget = false)
+        public Task<T> WriteAsync<T>(Func<WriteTransaction, T> writeFunction, bool requiresIsolation, bool fireAndForget = false)
         {
             TaskCompletionSource<object> tcs;
             if (!_writeQueue.IsAddingCompleted)

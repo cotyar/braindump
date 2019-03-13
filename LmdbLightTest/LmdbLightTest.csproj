@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LmdbCacheServer\LmdbCacheServer.csproj" />
     <ProjectReference Include="..\LmdbLight\LmdbLight.csproj" />
   </ItemGroup>
 

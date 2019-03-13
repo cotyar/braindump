@@ -74,6 +74,7 @@ message AddStreamRequest {
 message KeyListRequest {
   string keyPrefix = 1;
   uint32 pageSize  = 2;
+  uint32 page      = 3;
 }
 
 message KeyListResponse {

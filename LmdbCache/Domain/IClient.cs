@@ -1,20 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
-namespace LmdbLight
+namespace LmdbCache.Domain
 {
-    public enum AvailabilityLevel
-    {
-        SavedToDisk
-    }
-
-    public struct DiskUsageInfo
-    {
-        public int Usage;
-    }
-
     public interface IClient
     {
         HashSet<string> TryAdd(
