@@ -60,7 +60,7 @@ namespace LmdbCacheClient
             var keysCopied = keys.ToArray();
 
             var request = new GetRequest();
-            request.Key.AddRange(keysCopied);
+            request.Keys.AddRange(keysCopied);
             var getResponse = _lightClient.Get(request);
 
             var ret = getResponse.Results.Select((r, i) => (r, i)).Where(res => res.Item1.Result == GetResponse.Types.GetResponseEntry.Types.GetResult.Success).ToArray();
@@ -114,7 +114,7 @@ namespace LmdbCacheClient
             var keysCopied = keys.ToArray();
 
             var request = new GetRequest();
-            request.Key.AddRange(keysCopied);
+            request.Keys.AddRange(keysCopied);
             var containsKeys = _lightClient.ContainsKeys(request);
 
             return containsKeys.Results.Select((r, i) => (r, i)).Where(res => res.Item1).Select(res => keysCopied[res.Item2]).ToHashSet();
@@ -131,7 +131,7 @@ namespace LmdbCacheClient
             var keysCopied = keys.ToArray();
 
             var request = new DeleteRequest();
-            request.Key.AddRange(keysCopied);
+            request.Keys.AddRange(keysCopied);
             var containsKeys = _lightClient.Delete(request);
 
             return containsKeys.Results.Select((r, i) => (r, i)).Where(res => res.Item1 == DeleteResponse.Types.DeleteResult.Success).Select(res => keysCopied[res.Item2]).ToHashSet();

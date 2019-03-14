@@ -52,6 +52,19 @@ message AddResponse {
   repeated AddResult results = 1;
 }
 
+message DeleteRequest {
+  repeated string keys   = 1;
+}
+
+message DeleteResponse {
+  enum DeleteResult {
+    SUCCESS             = 0;
+    NOT_FOUND           = 1;
+    FAILURE             = 2;
+  }
+  repeated DeleteResult results = 1;
+}
+
 message GetRequest {
   repeated string keys    = 1;
 }
@@ -107,17 +120,4 @@ message KeyValueListResponse {
   string key    = 1;
   // Timestamp expiry = 2;
   bytes  value  = 3;
-}
-
-message DeleteRequest {
-  repeated string keys   = 1;
-}
-
-message DeleteResponse {
-  enum DeleteResult {
-    SUCCESS             = 0;
-    NOT_FOUND           = 1;
-    FAILURE             = 2;
-  }
-  repeated DeleteResult results = 1;
 }
