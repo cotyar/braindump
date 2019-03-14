@@ -121,3 +121,15 @@ message KeyValueListResponse {
   // Timestamp expiry = 2;
   bytes  value  = 3;
 }
+
+///////////////////////////////
+
+// Interface exported by the server.
+service SyncService {
+
+  rpc Add(AddRequest) returns (AddResponse) {}
+
+  rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+
+  rpc Copy(CopyRequest) returns (CopyResponse) {}
+}

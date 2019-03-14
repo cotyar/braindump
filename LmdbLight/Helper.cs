@@ -56,6 +56,7 @@ namespace LmdbLight
         }
 
         public static byte[] ToBytes(this uint index) => BitConverter.GetBytes(IPAddress.HostToNetworkOrder((int)index));
+        public static byte[] ToBytes(this long index) => BitConverter.GetBytes(IPAddress.HostToNetworkOrder(index));
 
         public static uint ToUint32(this byte[] bytes) => (uint)IPAddress.NetworkToHostOrder(BitConverter.ToInt32(bytes, 0));
 

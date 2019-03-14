@@ -48,7 +48,6 @@ namespace LmdbCacheServer
 
         public override async Task<CopyResponse> Copy(CopyRequest request, ServerCallContext context)
         {
-
             var ret = await _lmdb.WriteAsync(txn =>
                 request.Entries.Select(fromTo =>
                 {

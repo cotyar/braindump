@@ -417,7 +417,7 @@ namespace LmdbLight
             return _tables.GetOrAdd(name, n => WriteAsync(tx => tx.OpenTable(n), true).Result); 
         }
 
-        public Table OpenDupTable(string name)
+        public DupTable OpenDupTable(string name)
         {
             if (_tables.ContainsKey(name)) // TODO: Replace with normal lock
             {

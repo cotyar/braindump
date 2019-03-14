@@ -28,6 +28,5 @@ namespace LmdbLight
             lmdb.WriteAsync(txn => txn.AddBatch(table, batch), requiresIsolation);
         public static Task<(TableKey, bool)[]> AddOrUpdateBatch(this LightningPersistence lmdb, Table table, (TableKey, TableValue)[] batch, bool requiresIsolation = false) =>
             lmdb.WriteAsync(txn => txn.AddOrUpdateBatch(table, batch), requiresIsolation);
-
     }
 }
