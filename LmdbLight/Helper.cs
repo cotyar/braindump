@@ -28,6 +28,7 @@ namespace LmdbLight
             }
 
             var ret = new T[totalLen];
+            ret[0] = x;
             var accLen = 1;
             foreach (var yi in y)
             {

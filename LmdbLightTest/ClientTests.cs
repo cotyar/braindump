@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using LmdbCache.Domain;
 using LmdbCacheServer;
 using LmdbLight;
 using NUnit.Framework;
@@ -12,9 +13,26 @@ namespace LmdbLightTest
 {
     public class ClientTests
     {
+        private interface IClientFactory
+        {
+            IClient Create();
+        }
+
+        private class LocalClientFactory : IClientFactory
+        {
+            public IClient Create() => new LmdbLightClient(Config);
+        }
+
+        private class GrpcClientFactory : IClientFactory
+        {
+            public IClient Create() => new GrpcTestClient(Config);
+        }
+
+
         private const string TestDir = "./client_testdb";
 
-        private LightningConfig _config;
+        public static LightningConfig Config =>
+            new LightningConfig { Name = TestDir, MaxTables = 20, StorageLimit = 1, WriteBatchMaxDelegates = 100, WriteBatchTimeoutMilliseconds = 1 };
 
         [SetUp]
         public void Setup()
@@ -25,22 +43,22 @@ namespace LmdbLightTest
             }
 
             Directory.CreateDirectory(TestDir);
-
-            _config = new LightningConfig { Name = TestDir, MaxTables = 20, StorageLimit = 1, WriteBatchMaxDelegates = 100, WriteBatchTimeoutMilliseconds = 1 };
         }
 
+        private IClient CreateClient(Type type) => ((IClientFactory) Activator.CreateInstance(type)).Create();
+
         [Test]
-        public void TestCreateClient()
+        public void TestCreateClient([Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory)
         {
-            using (var client = new LmdbLightClient(_config)) { }
+            using (var client = CreateClient(clientFactory)) { }
 
             Assert.Pass();
         }
 
         [Test]
-        public void TestAddGet([Values(1, 10, 100, 1000, 10000)] int iterations)
+        public void TestAddGet([Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory, [Values(1, 10, 100, 1000/*, 10000*/)] int iterations)
         {
-            using (var client = new LmdbLightClient(_config))
+            using (var client = CreateClient(clientFactory))
             {
                 for (int i = 0; i < iterations; i++)
                 {
@@ -50,7 +68,7 @@ namespace LmdbLightTest
 
                     var sw = new Stopwatch();
                     sw.Start();
-                    var addRet = client.TryAdd(new[] {testKey}, (k, s) => s.Write(testValueBytes, 0, testValueBytes.Length), DateTimeOffset.Now.AddSeconds(5));
+                    var addRet = client.TryAdd(new[] {testKey}, (k, s) => s.Write(testValueBytes, 0, testValueBytes.Length), DateTimeOffset.UtcNow.AddSeconds(500));
                     sw.Stop();
                     Console.WriteLine($"Write {i} elapsed: {sw.Elapsed}");
 
@@ -73,9 +91,9 @@ namespace LmdbLightTest
         }
 
         [Test]
-        public void TestAddGetMany([Values(1, 10, 100, 1000, 10000, 100000)] int iterations)
+        public void TestAddGetMany([Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory, [Values(1, 10, 100, 1000, 10000, 100000)] int iterations)
         {
-            using (var client = new LmdbLightClient(_config))
+            using (var client = CreateClient(clientFactory))
             {
                 var kvs = Enumerable.Range(0, iterations).ToDictionary(i => Enumerable.Range(0, 20).Aggregate("", (s, _) => s + "test key  ") + i, i =>
                 {
@@ -120,9 +138,9 @@ namespace LmdbLightTest
         }
 
         [Test]
-        public void TestSearchByPrefix([Values(1, 10, 100, 1000, 10000, 100000)] int iterations)
+        public void TestSearchByPrefix([Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory, [Values(1, 10, 100, 1000, 10000, 100000)] int iterations)
         {
-            using (var client = new LmdbLightClient(_config))
+            using (var client = CreateClient(clientFactory))
             {
                 var kvs = Enumerable.Range(0, iterations).ToDictionary(i => Enumerable.Range(0, 20).Aggregate("", (s, _) => s + "test key  ") + i, i =>
                 {
@@ -140,7 +158,7 @@ namespace LmdbLightTest
                 var sw = new Stopwatch();
                 sw.Start();
                 var getRet = client.SearchByPrefix("test");
-                Console.WriteLine($"Search elapsed: {sw.Elapsed}");
+                Console.WriteLine($"Search elapsed: '{sw.Elapsed}', #records returned: '{getRet.Count}'");
 
                 Assert.AreEqual(kvs.Keys.Count, getRet.Count);
                 Assert.IsTrue(getRet.All(k => kvs.ContainsKey(k)));

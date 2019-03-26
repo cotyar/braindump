@@ -4,7 +4,7 @@ using System.IO;
 
 namespace LmdbCache.Domain
 {
-    public interface IClient
+    public interface IClient : IDisposable
     {
         HashSet<string> TryAdd(
             IEnumerable<string> keys,

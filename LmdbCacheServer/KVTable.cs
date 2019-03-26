@@ -44,20 +44,7 @@ namespace LmdbCacheServer
 
         public static explicit operator KvTableEntry(TableValue entry) => (KvTableEntry) entry.Value.ToByteArray();
 
-        public TableValue ToTableValue()
-        {
-            switch (this)
-            {
-                case KvExpiry e:
-                    return new TableValue(e);
-                case KvVectorClock e:
-                    return new TableValue(e);
-                case KvEntryChunk e:
-                    return new TableValue(e);
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
+        public abstract TableValue ToTableValue();
     }
 
     public class KvExpiry : KvTableEntry
@@ -69,7 +56,7 @@ namespace LmdbCacheServer
             Expiry = expiry;
         }
 
-        public static implicit operator byte[] (KvExpiry kvExpiry) => ((byte)kvExpiry.ItemType).Concat(kvExpiry.Expiry.ToByteArray());
+        public override TableValue ToTableValue() => ((byte)ItemType).Concat(Expiry.ToByteArray());
     }
 
     public class KvVectorClock : KvTableEntry
@@ -81,7 +68,7 @@ namespace LmdbCacheServer
             VectorClock = vectorClock;
         }
 
-        public static implicit operator byte[] (KvVectorClock kvVectorClock) => ((byte)kvVectorClock.ItemType).Concat(kvVectorClock.VectorClock.ToByteArray());
+        public override TableValue ToTableValue() => ((byte)ItemType).Concat(VectorClock.ToByteArray());
     }
 
     public class KvEntryChunk : KvTableEntry
@@ -98,7 +85,7 @@ namespace LmdbCacheServer
         public KvEntryChunk(uint index, byte[] value) : this(index, ByteString.CopyFrom(value)) { }
         public KvEntryChunk(uint index, string value) : this(index, ByteString.CopyFromUtf8(value)) { }
 
-        public static implicit operator byte[] (KvEntryChunk entry) => ((byte)entry.ItemType).Concat(entry.Index.ToBytes(), entry.Value.ToByteArray());       
+        public override TableValue ToTableValue() => ((byte) ItemType).Concat(Index.ToBytes(), Value.ToByteArray());
     }
 
     public class KvTable //: IKvTable
@@ -109,7 +96,6 @@ namespace LmdbCacheServer
         private readonly Action<WriteTransaction, DupTable, TableKey, Timestamp> _expirationQueue;
         private readonly Action<WriteTransaction, KvKey, KvMetadata, KvValue> _onAddOrUpdate;
         private readonly DupTable _kvTable;
-        protected internal TableValue? existingExpiry;
 
         public KvTable(LightningPersistence lmdb, string kvTableName, ExpiryTable expiryTable, Func<Timestamp> currentTime, 
             Action<WriteTransaction, DupTable, TableKey, Timestamp> expirationQueue, Action<WriteTransaction, KvKey, KvMetadata, KvValue> onAddOrUpdate)
@@ -126,7 +112,7 @@ namespace LmdbCacheServer
 
         private bool CheckAndRemoveIfExpired(TableKey key, Timestamp currentTime, Timestamp timeToCheck)
         {
-            if (currentTime.TicksOffsetUtc < timeToCheck.TicksOffsetUtc)
+            //if (currentTime.TicksOffsetUtc < timeToCheck.TicksOffsetUtc)
             {
                 return true;
             }
@@ -143,7 +129,7 @@ namespace LmdbCacheServer
                 Select(k =>
                 {
                     var tableKey = ToTableKey(k);
-                    existingExpiry = txn.TryGet(_kvTable, tableKey);
+                    var existingExpiry = txn.TryGet(_kvTable, tableKey);
                     return (k, existingExpiry.HasValue && CheckAndRemoveIfExpired(tableKey, currentTime, ((KvExpiry) existingExpiry.Value).Expiry));
                 }).
                 ToArray();
@@ -164,9 +150,14 @@ namespace LmdbCacheServer
                     {
                         var tableKey = ToTableKey(k);
                         var expiry = txn.TryGet(_kvTable, tableKey);
-                        return expiry.HasValue && CheckAndRemoveIfExpired(tableKey, currentTime, ((KvExpiry)expiry.Value).Expiry)
-                            ? (k, FromTableValue(txn.ReadDuplicatePage(v => (KvTableEntry)v, _kvTable, tableKey, 0, uint.MaxValue).ToArray()))
-                            : (k, (KvValue?) null);
+                        if (expiry.HasValue && CheckAndRemoveIfExpired(tableKey, currentTime, ((KvExpiry) expiry.Value).Expiry))
+                        {
+                            var tableEntries = txn.ReadDuplicatePage(v => (KvTableEntry) v, _kvTable, tableKey, 0, uint.MaxValue).ToArray();
+                            var kvValue = FromTableValue(tableEntries);
+                            return (k, kvValue);
+                        }
+
+                        return (k, (KvValue?) null);
                     }).ToArray();
                 });
         }
@@ -180,7 +171,7 @@ namespace LmdbCacheServer
                 var tableKey = ToTableKey(prefix);
                 var currentTime = _currentTime();
                 return txn.PageByPrefix(_kvTable, tableKey, page, pageSize).
-                    Where(ke => CheckAndRemoveIfExpired(tableKey, currentTime, ((KvExpiry) existingExpiry.Value).Expiry)).
+                    Where(ke => CheckAndRemoveIfExpired(tableKey, currentTime, ((KvExpiry) (ke.Item2.Value.ToByteArray())).Expiry)). // TODO: Change to more optimal KvExpiry conversion
                     Select(ke => FromTableKey(ke.Item1)).
                     ToArray();
             });
@@ -194,7 +185,7 @@ namespace LmdbCacheServer
                 var tableKey = ToTableKey(prefix);
                 var currentTime = _currentTime();
                 return txn.PageByPrefix(_kvTable, tableKey, page, pageSize).
-                    Where(ke => CheckAndRemoveIfExpired(tableKey, currentTime, ((KvExpiry)existingExpiry.Value).Expiry)).
+                    Where(ke => CheckAndRemoveIfExpired(tableKey, currentTime, ((KvExpiry)ke.Item2.Value.ToByteArray()).Expiry)).
                     // TODO: Rewrite to use only one Cursor
                     Select(ke => (FromTableKey(ke.Item1), FromTableValue(txn.ReadDuplicatePage(v => (KvTableEntry)v, _kvTable, tableKey, 0, uint.MaxValue).ToArray()))).
                     ToArray();
@@ -234,7 +225,8 @@ namespace LmdbCacheServer
                             }
                         }
 
-                        txn.AddBatch(_kvTable, ToTableMetadataArray(metadata).Concat(ToTableValue(value)).Select(v => (tableKey, v.ToTableValue())).ToArray());
+                        var valueEntries = ToTableMetadataArray(metadata).Concat(ToTableEntryChunk(value)).Select(v => (tableKey, v.ToTableValue())).ToArray();
+                        txn.AddOrUpdateBatch(_kvTable, valueEntries);
                         _expiryTable.AddExpiryRecords(txn, new [] {(metadata.Expiry, tableKey)});
                         _onAddOrUpdate(txn, key, metadata, value);
                         return (key, true);
@@ -304,7 +296,7 @@ namespace LmdbCacheServer
         public TableKey ToTableKey(KvKey key) => new TableKey(key.Key);
         public (KvExpiry, KvVectorClock) ToTableMetadata(KvMetadata metadata) => (new KvExpiry(metadata.Expiry), new KvVectorClock(metadata.VectorClock));
         public KvTableEntry[] ToTableMetadataArray(KvMetadata metadata) => new KvTableEntry[] { new KvExpiry(metadata.Expiry), new KvVectorClock(metadata.VectorClock) };
-        public KvEntryChunk[] ToTableValue(KvValue value) => value.Value.Select((v, i) => new KvEntryChunk((uint)i, v)).ToArray();
+        public KvEntryChunk[] ToTableEntryChunk(KvValue value) => value.Value.Select((v, i) => new KvEntryChunk((uint)i, v)).ToArray();
 
         public KvKey FromTableKey(TableKey key) => new KvKey(key.Key.ToStringUtf8());
         public KvMetadata FromTableMetadata(KvExpiry expiry, KvVectorClock vectorClock) => new KvMetadata(new Timestamp(expiry.Expiry), new VectorClock(vectorClock.VectorClock));

@@ -34,8 +34,8 @@ namespace LmdbCacheServer
             var ret = await (request.OverrideExisting ? _kvTable.AddOrUpdate(batch) : _kvTable.Add(batch));
             var response = new AddResponse();
             var addResults = ret.Select(kv => kv.Item2 
-                ? (request.OverrideExisting ? AddResponse.Types.AddResult.KeyUpdated : AddResponse.Types.AddResult.Failure) // TODO: Recheck statuses
-                : (request.OverrideExisting ? AddResponse.Types.AddResult.KeyAdded : AddResponse.Types.AddResult.KeyAlreadyExists));
+                ? (request.OverrideExisting ? AddResponse.Types.AddResult.KeyUpdated : AddResponse.Types.AddResult.KeyAdded) // TODO: Recheck statuses
+                : (request.OverrideExisting ? AddResponse.Types.AddResult.Failure : AddResponse.Types.AddResult.KeyAlreadyExists));
             response.Results.AddRange(addResults);
 
             return response;

@@ -15,10 +15,12 @@ namespace LmdbCacheClient
 {
     public class LightClient : IClient, IDisposable
     {
+        private readonly Channel _channel;
         private readonly LmdbCacheService.LmdbCacheServiceClient _lightClient;
 
         public LightClient(Channel channel)
         {
+            _channel = channel;
             _lightClient = new LmdbCacheService.LmdbCacheServiceClient(channel);
         }
 
@@ -70,7 +72,7 @@ namespace LmdbCacheClient
                 streamReader(keysCopied[kv.Item2], kv.Item1.Value.ToByteArray().ToStream());
             }
 
-            return ret.Select(kv => kv.Item1.ToString()).ToHashSet();
+            return ret.Select(kv => keysCopied[kv.Item2]).ToHashSet();
         }
 
         public void TryCopy(IEnumerable<KeyValuePair<string, string>> keyCopies, DateTimeOffset expiry, out HashSet<string> fromKeysWhichDidNotExist,
@@ -169,6 +171,9 @@ namespace LmdbCacheClient
             return tasks.ToDictionary(t => t.Item1, t => t.Item2.Result.ToHashSet());
         }
 
-        public void Dispose() {} //=> _lightClient.Dispose();
+        public void Dispose()
+        {
+            _channel.ShutdownAsync().Wait();
+        } //=> _lightClient.Dispose();
     }
 }

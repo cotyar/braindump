@@ -17,7 +17,7 @@ using LightningDB.Native;
 
 namespace LmdbLight
 {
-    public struct LightningConfig
+    public struct LightningConfig // NOTE: GrpcTestClient does rely on LightningConfig being a struct
     {
         public string Name;
         public long? StorageLimit;
@@ -105,7 +105,7 @@ namespace LmdbLight
 
         protected Table(WriteTransaction txn, string tableName, DatabaseOpenFlags flags)
         {
-            Database = txn.Transaction.OpenDatabase(tableName, new DatabaseConfiguration { Flags = DatabaseOpenFlags.Create });
+            Database = txn.Transaction.OpenDatabase(tableName, new DatabaseConfiguration { Flags = flags });
             txn.Commit();
         }
 
@@ -171,7 +171,7 @@ namespace LmdbLight
                     }
 
                     if (i >= pageStart) yield return (toKey(kv.Key), toValue(kv.Value));
-                } while (++i < pageEnd && cursor.MoveNext());
+                } while (++i < pageEnd && cursor.MoveNextNoDuplicate());
             }
         }
 
@@ -194,7 +194,7 @@ namespace LmdbLight
             using (var cursor = Transaction.CreateCursor(table.Database))
             {
                 var keyBytes = key;
-                if (!cursor.MoveTo(keyBytes)) yield break;
+                if (!cursor.MoveTo(keyBytes) /*|| !cursor.MoveToFirstDuplicate() */) yield break;
 
                 do
                 {
