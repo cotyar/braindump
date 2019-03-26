@@ -81,7 +81,7 @@ namespace LmdbCacheServer
         public override Task ListKeys(KeyListRequest request, IServerStreamWriter<KeyListResponse> responseStream, ServerCallContext context)
         {
             var ret = _kvTable.KeysByPrefix(new KvKey(request.KeyPrefix), 0, uint.MaxValue);
-            return responseStream.WriteAllAsync(ret.Select(k => new KeyListResponse { Key = k.ToString() }));
+            return responseStream.WriteAllAsync(ret.Select(k => new KeyListResponse { Key = k.Key }));
         }
 
         public override Task ListKeyValues(KeyListRequest request, IServerStreamWriter<KeyValueListResponse> responseStream, ServerCallContext context)
