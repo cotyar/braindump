@@ -13,20 +13,25 @@ namespace LmdbCacheServer
 {
     public class LmdbCacheServiceImpl : LmdbCacheService.LmdbCacheServiceBase
     {
+        private readonly Func<VectorClock> _clock;
         private readonly LightningPersistence _lmdb;
-        private readonly Table _kvTable;
+        private readonly KvTable _kvTable;
+        private readonly ExpiryTable _kvExpiryTable;
 
-        public LmdbCacheServiceImpl(LightningConfig config) 
+        public LmdbCacheServiceImpl(LightningConfig config, Func<VectorClock> clock, Action<WriteTransaction, KvKey, KvMetadata, KvValue> onAddOrUpdate) 
         {
             _lmdb = new LightningPersistence(config);
-            _kvTable = _lmdb.OpenTable("kv");
+            _kvExpiryTable = new ExpiryTable(_lmdb, "kvexpiry");
+            _kvTable = new KvTable(_lmdb, "kv", _kvExpiryTable, 
+                () => DateTimeOffset.UtcNow.ToTimestamp(), (transaction, table, key, expiry) => {}, onAddOrUpdate);
+            _clock = clock;
         }
 
         public override async Task<AddResponse> Add(AddRequest request, ServerCallContext context)
         {
-            var batch = request.Entries.Select(ks => (new TableKey(ks.Key), new TableValue(ks.Value))).ToArray();
+            var batch = request.Entries.Select(ks => (new KvKey(ks.Key), new KvMetadata(ks.Expiry, _clock()), new KvValue(new [] { ks.Value }))).ToArray();
 
-            var ret = await (request.OverrideExisting ? _lmdb.AddOrUpdateBatch(_kvTable, batch, false) : _lmdb.AddBatch(_kvTable, batch));
+            var ret = await (request.OverrideExisting ? _kvTable.AddOrUpdate(batch) : _kvTable.Add(batch));
             var response = new AddResponse();
             var addResults = ret.Select(kv => kv.Item2 
                 ? (request.OverrideExisting ? AddResponse.Types.AddResult.KeyUpdated : AddResponse.Types.AddResult.Failure) // TODO: Recheck statuses
@@ -38,7 +43,7 @@ namespace LmdbCacheServer
 
         public override Task<ContainsKeysResponse> ContainsKeys(GetRequest request, ServerCallContext context)
         {
-            var ret = _lmdb.ContainsKeys(_kvTable, request.Keys.Select(k => new TableKey(k)).ToArray());
+            var ret = _kvTable.ContainsKeys(request.Keys.Select(k => new KvKey(k)).ToArray());
 
             var response = new ContainsKeysResponse();
             response.Results.AddRange(ret.Select(kv => kv.Item2));
@@ -46,43 +51,12 @@ namespace LmdbCacheServer
             return Task.FromResult(response);
         }
 
-        public override async Task<CopyResponse> Copy(CopyRequest request, ServerCallContext context)
-        {
-            var ret = await _lmdb.WriteAsync(txn =>
-                request.Entries.Select(fromTo =>
-                {
-                    var from = new TableKey(fromTo.KeyFrom);
-                    var to = new TableKey(fromTo.KeyTo);
-
-                    if (!txn.ContainsKey(_kvTable, from))
-                    {
-                        return CopyResponse.Types.CopyResult.FromKeyNotFound;
-                    }
-                    else if (txn.ContainsKey(_kvTable, to))
-                    {
-                        return CopyResponse.Types.CopyResult.ToKeyExists;
-                    }
-                    else
-                    {
-                        var val = txn.Get(_kvTable, from);
-                        txn.Add(_kvTable, to, val);
-                        return CopyResponse.Types.CopyResult.Success;
-                    }
-                }).ToArray(), false);
-
-            var response = new CopyResponse();
-            response.Results.AddRange(ret);
-
-            return response;
-        }
+        public override async Task<CopyResponse> Copy(CopyRequest request, ServerCallContext context) => await _kvTable.Copy(request);
 
         public override async Task<DeleteResponse> Delete(DeleteRequest request, ServerCallContext context)
         {
-            var keys = request.Keys.Select(k => new TableKey(k)).ToArray();
-            var kvs = _lmdb.ContainsKeys(_kvTable, keys).ToArray();
-
-            var foundKeys = kvs.Where(kv => kv.Item2).Select(kv => kv.Item1).ToArray();
-            await _lmdb.WriteAsync(txn => txn.Delete(_kvTable, foundKeys), false);
+            var keys = request.Keys.Select(k => new KvKey(k)).ToArray();
+            var kvs = await _kvTable.Delete(keys);
 
             var response = new DeleteResponse();
             var addResults = kvs.Select(kv => kv.Item2 ? DeleteResponse.Types.DeleteResult.Success : DeleteResponse.Types.DeleteResult.NotFound);
@@ -93,11 +67,11 @@ namespace LmdbCacheServer
 
         public override Task<GetResponse> Get(GetRequest request, ServerCallContext context)
         {
-            var ret = _lmdb.Get(_kvTable, request.Keys.Select(k => new TableKey(k)));
+            var ret = _kvTable.Get(request.Keys.Select(k => new KvKey(k)));
 
             var response = new GetResponse();
             var getResponseEntries = ret.Select(kv => kv.Item2.HasValue 
-                ? new GetResponse.Types.GetResponseEntry { Result = GetResponse.Types.GetResponseEntry.Types.GetResult.Success, Value = kv.Item2.Value.Value }
+                ? new GetResponse.Types.GetResponseEntry { Result = GetResponse.Types.GetResponseEntry.Types.GetResult.Success, Value = kv.Item2.Value.Value[0] } // TODO: Add value streaming
                 : new GetResponse.Types.GetResponseEntry { Result = GetResponse.Types.GetResponseEntry.Types.GetResult.NotFound, Value = ByteString.Empty });
             response.Results.AddRange(getResponseEntries);
 
@@ -106,16 +80,14 @@ namespace LmdbCacheServer
 
         public override Task ListKeys(KeyListRequest request, IServerStreamWriter<KeyListResponse> responseStream, ServerCallContext context)
         {
-            var ret = _lmdb.KeysByPrefix(_kvTable, request.KeyPrefix, 0, uint.MaxValue);
-
+            var ret = _kvTable.KeysByPrefix(new KvKey(request.KeyPrefix), 0, uint.MaxValue);
             return responseStream.WriteAllAsync(ret.Select(k => new KeyListResponse { Key = k.ToString() }));
         }
 
         public override Task ListKeyValues(KeyListRequest request, IServerStreamWriter<KeyValueListResponse> responseStream, ServerCallContext context)
         {
-            var ret = _lmdb.PageByPrefix(_kvTable, request.KeyPrefix, 0, uint.MaxValue);
-
-            return responseStream.WriteAllAsync(ret.Select(k => new KeyValueListResponse { Key = k.Item1.ToString(), Value = k.Item2.Value }));
+            var ret = _kvTable.PageByPrefix(new KvKey(request.KeyPrefix), 0, uint.MaxValue);
+            return responseStream.WriteAllAsync(ret.Select(k => new KeyValueListResponse { Key = k.Item1.ToString(), Value = k.Item2.Value[0] })); // TODO: Add value streaming
         }
     }
 }

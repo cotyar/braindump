@@ -73,7 +73,8 @@ namespace LmdbCacheServer
                     var from = new TableKey(fromTo.Key);
                     var to = new TableKey(fromTo.Value);
 
-                    if (!txn.ContainsKey(_kvTable, from))
+                    var val = txn.TryGet(_kvTable, from);
+                    if (!val.HasValue)
                     {
                         notExists.Add(fromTo.Key);
                     }
@@ -83,8 +84,7 @@ namespace LmdbCacheServer
                     }
                     else
                     {
-                        var val = txn.Get(_kvTable, from);
-                        txn.Add(_kvTable, to, val);
+                        txn.Add(_kvTable, to, val.Value);
                     }
                 }
 

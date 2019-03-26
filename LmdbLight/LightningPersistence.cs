@@ -42,6 +42,7 @@ namespace LmdbLight
         public static implicit operator byte[](TableKey key) => key.Key.ToByteArray();
         public static implicit operator TableKey(byte[] key) => new TableKey(key);
         public static implicit operator TableKey(string key) => new TableKey(key);
+        public static implicit operator TableKey(ByteString key) => new TableKey(key);
 
         private int? _hashCode;
         public bool Equals(TableKey other) => Key.Equals(other.Key);
@@ -79,24 +80,24 @@ namespace LmdbLight
         public static implicit operator TableValue(string value) => new TableValue(value);
     }
 
-    public struct TableValueChunk
-    {
-        public uint Index { get; }
-        public ByteString Value { get; }
-
-        public TableValueChunk(uint index, ByteString value)
-        {
-            Index = index;
-            Value = value;
-        }
-
-        public TableValueChunk(uint index, byte[] value) : this(index, ByteString.CopyFrom(value)) { }
-        public TableValueChunk(uint index, string value) : this(index, ByteString.CopyFromUtf8(value)) { }
-
-        public static implicit operator byte[] (TableValueChunk value) => value.Index.ToBytes().Concat(value.Value.ToByteArray());
-        public static implicit operator TableValueChunk(byte[] value) => 
-            new TableValueChunk(value.Take(sizeof(uint)).ToArray().ToUint32(), ByteString.CopyFrom(value, sizeof(uint), value.Length - sizeof(uint)));
-    }
+//    public struct TableValueChunk
+//    {
+//        public uint Index { get; }
+//        public ByteString Value { get; }
+//
+//        public TableValueChunk(uint index, ByteString value)
+//        {
+//            Index = index;
+//            Value = value;
+//        }
+//
+//        public TableValueChunk(uint index, byte[] value) : this(index, ByteString.CopyFrom(value)) { }
+//        public TableValueChunk(uint index, string value) : this(index, ByteString.CopyFromUtf8(value)) { }
+//
+//        public static implicit operator byte[] (TableValueChunk value) => value.Index.ToBytes().Concat(value.Value.ToByteArray());
+//        public static implicit operator TableValueChunk(byte[] value) => 
+//            new TableValueChunk(value.Take(sizeof(uint)).ToArray().ToUint32(), ByteString.CopyFrom(value, sizeof(uint), value.Length - sizeof(uint)));
+//    }
 
     public class Table : IDisposable
     {
@@ -124,7 +125,7 @@ namespace LmdbLight
 
         protected AbstractTransaction(LightningTransaction transaction) => Transaction = transaction;
 
-        public TableValue Get(Table table, TableKey key) => new TableValue(Transaction.Get(table.Database, key));
+        //public TableValue Get(Table table, TableKey key) => new TableValue(Transaction.Get(table.Database, key));
 
         public bool TryGet(Table table, TableKey key, out TableValue val)
         {
@@ -144,9 +145,9 @@ namespace LmdbLight
         public bool ContainsKey(Table table, TableKey key) => Transaction.ContainsKey(table.Database, key);
         public (TableKey, bool)[] ContainsKeys(Table table, TableKey[] keys) => keys.Select(key => (key, Transaction.ContainsKey(table.Database, key))).ToArray();
 
-        protected IEnumerable<(TableKey, TV)> ReadPage<TV>(Table table,
-            Func<byte[], TableKey> toKey, Func<byte[], TV> toValue,
-            TableKey prefix, uint page, uint pageSize)
+        protected IEnumerable<(TableKey, TableValue)> ReadPage(Table table,
+            Func<byte[], TableKey> toKey, Func<byte[], TableValue> toValue,
+            TableKey prefix, Func<TableKey, TableValue, bool> takeWhile, uint page, uint pageSize)
         {
             const uint maxPageSize = 1024 * 1024;
             pageSize = pageSize > 0 && pageSize < maxPageSize ? pageSize : maxPageSize;
@@ -164,7 +165,7 @@ namespace LmdbLight
                 {
                     var kv = cursor.Current;
 
-                    if (!kv.Key.StartsWith(keyBytes))
+                    if (!takeWhile(toKey(kv.Key), toValue(kv.Value)))
                     {
                         yield break;
                     }
@@ -174,8 +175,16 @@ namespace LmdbLight
             }
         }
 
-        protected IEnumerable<TableValueChunk> ReadDupPage(
-            Func<byte[], TableValueChunk> toValueChunk, DupTable table,
+        protected IEnumerable<(TableKey, TableValue)> ReadPage(Table table,
+            Func<byte[], TableKey> toKey, Func<byte[], TableValue> toValue,
+            TableKey prefix, uint page, uint pageSize) => ReadPage(table, toKey, toValue, prefix, (k, v) => true, page, pageSize);
+
+        protected IEnumerable<(TableKey, TableValue)> ReadPageWhile(Table table,
+            Func<byte[], TableKey> toKey, Func<byte[], TableValue> toValue,
+            Func<TableKey, TableValue, bool> takeWhile, uint pageSize) => ReadPage(table, toKey, toValue, "", takeWhile, 0, pageSize);
+
+        public IEnumerable<TV> ReadDuplicatePage<TV>(
+            Func<byte[], TV> toValueChunk, DupTable table,
             TableKey key, uint page, uint pageSize)
         {
             const uint maxPageSize = 1024 * 1024;
@@ -198,14 +207,16 @@ namespace LmdbLight
         }
 
         public TableKey[] KeysByPrefix(Table table, TableKey prefix, uint page, uint pageSize) => 
-            ReadPage<object>(table, b => b, _ => null, prefix, page, pageSize).Select(kv => kv.Item1).ToArray();
+            ReadPage(table, b => b, _ => default(TableValue), prefix, page, pageSize).Select(kv => kv.Item1).ToArray();
         
         public (TableKey, TableValue)[] PageByPrefix(Table table, TableKey prefix, uint page, uint pageSize) =>
-            ReadPage<TableValue>(table, b => b, b => b, prefix, page, pageSize).ToArray();
+            ReadPage(table, b => b, b => b, prefix, page, pageSize).ToArray();
 
-        public TableValueChunk[] GetValueChunks(DupTable table, TableKey key, uint page, uint pageSize) =>
-            ReadDupPage(b => b, table, key, page, pageSize).ToArray();
+//        public TableValueChunk[] GetValueChunks(DupTable table, TableKey key, uint page, uint pageSize) =>
+//            ReadDuplicatePage<TableValueChunk>(b => b, table, key, page, pageSize).ToArray();
 
+        public TableKey[] KeysTakeWhile(Table table, Func<TableKey, TableValue, bool> takeWhile, uint pageSize) =>
+            ReadPageWhile(table, b => b, _ => default(TableValue), takeWhile, pageSize).Select(kv => kv.Item1).ToArray();
 
         #region IDisposable Support
         private bool _disposedValue; // To detect redundant calls
@@ -285,46 +296,46 @@ namespace LmdbLight
         public (TableKey, bool)[] AddBatch(Table table, (TableKey, TableValue)[] batch) => batch.Select(kv => (kv.Item1, Add(table, kv.Item1, kv.Item2))).ToArray();
         public (TableKey, bool)[] AddOrUpdateBatch(Table table, (TableKey, TableValue)[] batch) => batch.Select(kv => (kv.Item1, AddOrUpdate(table, kv.Item1, kv.Item2))).ToArray();
 
-        public bool AddValueChunk(DupTable table, TableKey key, TableValueChunk value, bool overrideExisting)
-        {
-            return AddOrUpdate(table, key, (byte[]) value); // TODO: Add override existing at index and remove extra copying
-        }
+        public void AddValueDuplicate(DupTable table, TableKey key, TableValue value) => Transaction.Put(table.Database, key, value, PutOptions.NoOverwrite);
 
-        public void DeleteChunk(DupTable table, TableKey key, TableValueChunk value)
+        public void DeleteDuplicate(DupTable table, TableKey key, TableValue value)
         {
-            if (!ContainsKey(table, key)) return;
-
             using (var cursor = Transaction.CreateCursor(table.Database))
             {
-                byte[] keyBytes = key;
-                byte[] valueBytes = value;
-
-                if (!cursor.MoveTo(keyBytes)) return;
-
-                do
+                if (cursor.MoveTo(key, value)) 
                 {
-                    if (valueBytes.SequenceEqual(cursor.Current.Value))
-                    {
-                        cursor.Delete();
-                        return;
-                    }
-                } while (cursor.MoveNextDuplicate());
+                    cursor.Delete();
+                } 
             }
         }
 
-        public void DeleteAllChunks(DupTable table, TableKey key, TableValueChunk value, bool overrideExisting)
+        public void DeleteDuplicatesWhile(DupTable table, TableKey key, Func<TableValue, bool> predecate)
+        {
+            //if (!ContainsKey(table, key)) return;
+
+            using (var cursor = Transaction.CreateCursor(table.Database))
+            {
+                if (cursor.MoveTo(key) && cursor.MoveToFirstDuplicate())
+                {
+                    while (predecate(cursor.Current.Value))
+                        cursor.Delete();
+                }
+            }
+        }
+
+        public void DeleteAllDuplicates(DupTable table, TableKey key)
         {
             if (!ContainsKey(table, key)) return;
 
             using (var cursor = Transaction.CreateCursor(table.Database))
             {
-                var keyBytes = key;
-
-                if (!cursor.MoveTo(keyBytes)) return;
-
-                cursor.DeleteDuplicates();
+                if (cursor.MoveTo(key))
+                {
+                    cursor.DeleteDuplicates();
+                }
             }
         }
+
 
         protected override void Disposing()
         {

@@ -17,11 +17,15 @@ namespace LmdbCacheServer
 
         TableKey[] KeysByPrefix(TableKey prefix, uint page, uint pageSize);
         (TableKey, TableValue)[] PageByPrefix(TableKey prefix, uint page, uint pageSize);
-        Task<bool> Add(TableKey key, TableValue value, bool requiresIsolation = false);
-        Task<bool> AddOrUpdate(TableKey key, TableValue value, bool requiresIsolation = false);
-        Task<(TableKey, bool)[]> AddBatch((TableKey, TableValue)[] batch, bool requiresIsolation = false);
-        Task<(TableKey, bool)[]> AddOrUpdateBatch((TableKey, TableValue)[] batch, bool requiresIsolation = false);
+
+        Task<bool> Add(TableKey key, TableValue value);
+        Task<bool> AddOrUpdate(TableKey key, TableValue value);
+
+        Task<(TableKey, bool)[]> Add((TableKey, TableValue)[] batch);
+        Task<(TableKey, bool)[]> AddOrUpdate((TableKey, TableValue)[] batch);
+
         Task<CopyResponse> Copy(CopyRequest request);
+
         Task<(TableKey, bool)[]> Delete(TableKey[] keys);
     }
 }

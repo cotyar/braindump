@@ -29,7 +29,12 @@ message Empty {
 }
 
 message Timestamp {
-  int64 ticksOffsetUtc = 1;
+  uint64 ticksOffsetUtc = 1;
+}
+
+message VectorClock {
+  map<string, uint64> nodes = 1;
+  uint64 ticksOffsetUtc     = 2;
 }
 
 message AddRequest {

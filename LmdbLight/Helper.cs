@@ -15,6 +15,28 @@ namespace LmdbLight
             return x;
         }
 
+        public static T[] Concat<T>(this T x, params T[][] y)
+        {
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (y == null) throw new ArgumentNullException(nameof(y));
+            var totalLen = 1;
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            // Disabled for performance
+            foreach (var yi in y)
+            {
+                totalLen += yi.Length;
+            }
+
+            var ret = new T[totalLen];
+            var accLen = 1;
+            foreach (var yi in y)
+            {
+                Array.Copy(yi, 0, ret, accLen, yi.Length);
+                accLen += yi.Length;
+            }
+            return ret;
+        }
+
         public static T[] Concat<T>(this T[] x, params T[][] y)
         {
             if (x == null) throw new ArgumentNullException(nameof(x));
@@ -55,10 +77,16 @@ namespace LmdbLight
             return true;
         }
 
+
+        // TODO: Deal with uint and ulong properly
+        public static byte[] ToBytes(this int index) => BitConverter.GetBytes(IPAddress.HostToNetworkOrder(index));
         public static byte[] ToBytes(this uint index) => BitConverter.GetBytes(IPAddress.HostToNetworkOrder((int)index));
         public static byte[] ToBytes(this long index) => BitConverter.GetBytes(IPAddress.HostToNetworkOrder(index));
+        public static byte[] ToBytes(this ulong index) => BitConverter.GetBytes(IPAddress.HostToNetworkOrder((long)index));
 
-        public static uint ToUint32(this byte[] bytes) => (uint)IPAddress.NetworkToHostOrder(BitConverter.ToInt32(bytes, 0));
-
+        public static int ToInt32(this byte[] bytes, int startIndex = 0) => IPAddress.NetworkToHostOrder(BitConverter.ToInt32(bytes, startIndex));
+        public static uint ToUint32(this byte[] bytes, int startIndex = 0) => (uint)IPAddress.NetworkToHostOrder(BitConverter.ToInt32(bytes, startIndex));
+        public static long ToInt64(this byte[] bytes, int startIndex = 0) => IPAddress.NetworkToHostOrder(BitConverter.ToInt64(bytes, startIndex));
+        public static ulong ToUint64(this byte[] bytes, int startIndex = 0) => (ulong)IPAddress.NetworkToHostOrder(BitConverter.ToInt64(bytes, startIndex));
     }
 }
