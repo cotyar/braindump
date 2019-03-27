@@ -140,6 +140,24 @@ namespace LmdbLight
             return ret ? new TableValue(v) : (TableValue?) null;
         }
 
+        public (TableKey, TableValue)? TryGetFirst(Table table)
+        {
+            using (var cursor = Transaction.CreateCursor(table.Database))
+            {
+                if (cursor.MoveToFirst()) return (new TableKey(cursor.Current.Key), new TableValue(cursor.Current.Value));
+                return null;
+            }
+        }
+
+        public (TableKey, TableValue)? TryGetLast(Table table)
+        {
+            using (var cursor = Transaction.CreateCursor(table.Database))
+            {
+                if (cursor.MoveToLast()) return (new TableKey(cursor.Current.Key), new TableValue(cursor.Current.Value));
+                return null;
+            }
+        }
+
         public long GetEntriesCount(Table table) => Transaction.GetEntriesCount(table.Database);
 
         public bool ContainsKey(Table table, TableKey key) => Transaction.ContainsKey(table.Database, key);

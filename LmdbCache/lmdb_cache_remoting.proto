@@ -32,8 +32,8 @@ message Timestamp {
   uint64 ticksOffsetUtc = 1;
 }
 
-message VectorClock {
-  map<string, uint64> nodes = 1;
+message VectorClock { // In fact we are following LWWRegister ("Last Write Wins") logic for conflict resolution here
+  map<string, uint64> replicas = 1;
   uint64 ticksOffsetUtc     = 2;
 }
 
