@@ -138,3 +138,30 @@ service SyncService {
 
   rpc Copy(CopyRequest) returns (CopyResponse) {}
 }
+
+///////////////////////////////
+
+// WriteLog types.
+
+message WriteLogEvent {
+  message Added { // TODO: Add a value hash?
+    string      key     = 1;
+  }
+  message Updated {
+    string      key     = 1;
+  }
+  message Deleted {
+    string      key     = 1;
+  }
+  message Expired {
+    string      key     = 1;
+  }
+
+  VectorClock clock   = 1; 
+  oneof loggedEvent {
+    Added   added     = 5; 
+    Updated updated   = 6;
+    Deleted deleted   = 7;
+    Expired expired   = 8; 
+  }
+}

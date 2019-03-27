@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using LmdbCache;
 using LmdbLight;
 
-namespace LmdbCacheServer
+namespace LmdbCacheServer.Tables
 {
     public interface IKvTable
     {

@@ -7,6 +7,7 @@ using Google.Protobuf;
 using Grpc.Core;
 using Grpc.Core.Utils;
 using LmdbCache;
+using LmdbCacheServer.Tables;
 using LmdbLight;
 
 namespace LmdbCacheServer
