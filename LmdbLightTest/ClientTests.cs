@@ -32,7 +32,7 @@ namespace LmdbLightTest
         private const string TestDir = "./client_testdb";
 
         public static LightningConfig Config =>
-            new LightningConfig { Name = TestDir, MaxTables = 20, StorageLimit = 1, WriteBatchMaxDelegates = 100, WriteBatchTimeoutMilliseconds = 1 };
+            new LightningConfig { Name = TestDir, MaxTables = 20, StorageLimit = 1, WriteBatchMaxDelegates = 1, WriteBatchTimeoutMilliseconds = 1 };
 
         [SetUp]
         public void Setup()
@@ -56,10 +56,13 @@ namespace LmdbLightTest
         }
 
         [Test]
-        public void TestAddGet([Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory, [Values(1, 10, 100, 1000/*, 10000*/)] int iterations)
+        public void TestAddGet([Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory, [Values(1, 10, 100, 1000, 10000)] int iterations)
         {
             using (var client = CreateClient(clientFactory))
             {
+                var swTotal = new Stopwatch();
+                swTotal.Start();
+
                 for (int i = 0; i < iterations; i++)
                 {
                     var testKey = "test key " + i;
@@ -87,6 +90,9 @@ namespace LmdbLightTest
                     Assert.AreEqual(testValueBytes.Length, readBytes);
                     CollectionAssert.AreEqual(testValueBytes, readBuffer.Take(readBytes).ToArray());
                 }
+
+                swTotal.Stop();
+                Console.WriteLine($"Write elapsed total: {swTotal.Elapsed}");
             }
         }
 

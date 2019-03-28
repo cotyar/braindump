@@ -18,6 +18,10 @@ namespace LmdbCacheServer
     {
         public static VectorClock CreateEmpty() => new VectorClock();
 
+        public static VectorClock Create(string replicaId, ulong replicaValue) => new VectorClock().SetReplicaValue(replicaId, replicaValue);
+
+        public static VectorClock Create(IEnumerable<(string, ulong)> replicaValues) => new VectorClock().SetReplicaValues(replicaValues);
+
         public static VectorClock Increment(this VectorClock oldVectorClock, string replicaId)
         {
             var newVectorClock = oldVectorClock.Clone();
@@ -38,6 +42,13 @@ namespace LmdbCacheServer
         {
             var newVectorClock = oldVectorClock.Clone();
             newVectorClock.Replicas[replicaId] = replicaValue;
+            return newVectorClock;
+        }
+
+        public static VectorClock SetTime(this VectorClock oldVectorClock, Timestamp timestamp)
+        {
+            var newVectorClock = oldVectorClock.Clone();
+            newVectorClock.TicksOffsetUtc = timestamp.TicksOffsetUtc;
             return newVectorClock;
         }
 
@@ -94,8 +105,11 @@ namespace LmdbCacheServer
                 if (!ordLt && !ordGt) return Ord.Cc;
             }
 
-            if (!ordLt) return Ord.Gt;
             if (!ordGt) return Ord.Lt;
+            if (!ordLt) return Ord.Gt;
+
+            if (left.TicksOffsetUtc < right.TicksOffsetUtc) return Ord.Lt;
+            if (left.TicksOffsetUtc > right.TicksOffsetUtc) return Ord.Gt;
 
             return Ord.Eq; 
         }

@@ -69,7 +69,7 @@ namespace LmdbCacheClient
 
             foreach (var kv in ret)
             {
-                streamReader(keysCopied[kv.Item2], kv.Item1.Value.ToByteArray().ToStream());
+                streamReader(keysCopied[kv.Item2], kv.Item1.Value.SelectMany(v => v).ToStream());
             }
 
             return ret.Select(kv => keysCopied[kv.Item2]).ToHashSet();

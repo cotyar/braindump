@@ -1,9 +1,7 @@
 using System;
-using System.IO;
 using System.Linq;
 using LmdbCache;
 using LmdbCacheServer;
-using LmdbLight;
 using NUnit.Framework;
 
 namespace LmdbLightTest
@@ -15,7 +13,6 @@ namespace LmdbLightTest
         public void Setup()
         {
         }
-
 
         [Test]
         public void TestCreateVectorClock()
@@ -95,6 +92,9 @@ namespace LmdbLightTest
 
             Assert.AreEqual(Ord.Cc, vc.SetReplicaValue("Breaking value", 1).Compare(vc2));
             Assert.AreEqual(Ord.Cc, vc1.SetReplicaValue("Breaking value 1", 1).Compare(vc2.SetReplicaValue("Breaking value 2", 1)));
+
+            Assert.AreEqual(Ord.Lt, vc1.Compare(vc2.SetTime(DateTimeOffset.UtcNow.ToTimestamp())));
+            Assert.AreEqual(Ord.Gt, vc1.SetTime(DateTimeOffset.UtcNow.ToTimestamp()).Compare(vc2));
         }
 
         [Test]

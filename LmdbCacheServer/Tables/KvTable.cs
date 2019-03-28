@@ -93,46 +93,59 @@ namespace LmdbCacheServer.Tables
         private readonly ExpiryTable _expiryTable;
         private readonly Func<Timestamp> _currentTime;
         private readonly Action<WriteTransaction, DupTable, TableKey, Timestamp> _expirationQueue;
-        private readonly Action<WriteTransaction, KvKey, KvMetadata, KvValue> _onAddOrUpdate;
+        private readonly KvUpdateHandler _kvUpdateHandler;
         private readonly DupTable _kvTable;
 
         public KvTable(LightningPersistence lmdb, string kvTableName, ExpiryTable expiryTable, Func<Timestamp> currentTime, 
-            Action<WriteTransaction, DupTable, TableKey, Timestamp> expirationQueue, Action<WriteTransaction, KvKey, KvMetadata, KvValue> onAddOrUpdate)
+            Action<WriteTransaction, DupTable, TableKey, Timestamp> expirationQueue, KvUpdateHandler kvUpdateHandler)
         {
             _lmdb = lmdb;
             _kvTable = _lmdb.OpenDupTable(kvTableName);
             _expiryTable = expiryTable;
             _currentTime = currentTime;
             _expirationQueue = expirationQueue;
-            _onAddOrUpdate = onAddOrUpdate;
+            _kvUpdateHandler = kvUpdateHandler;
         }
 
         private void RemoveExpired(WriteTransaction txn, TableKey key, Timestamp keyExpiry) => _expirationQueue(txn, _kvTable, key, keyExpiry);
 
-        private bool CheckAndRemoveIfExpired(TableKey key, Timestamp currentTime, Timestamp timeToCheck)
+        private bool CheckAndRemoveIfExpired(KvKey key, Timestamp currentTime, Timestamp timeToCheck)
         {
             //if (currentTime.TicksOffsetUtc < timeToCheck.TicksOffsetUtc)
             {
                 return true;
             }
 
-            _lmdb.WriteAsync(txn => RemoveExpired(txn, key, timeToCheck), true);
+            _lmdb.WriteAsync(txn => RemoveExpired(txn, ToTableKey(key), timeToCheck), true);
             return false;
         }
 
-        public (KvKey, bool)[] ContainsKeys(KvKey[] keys) => _lmdb.Read(txn =>
+        private KvMetadata? TryGetMetadata(AbstractTransaction txn, KvKey key)
         {
-            var currentTime = _currentTime();
-            // Relying on fact that Expiry is the first dupvalue and can be returned with regular Get
+            var tableKey = ToTableKey(key);
+            var tableEntries = txn.ReadDuplicatePage(v => (KvTableEntry)v, _kvTable, tableKey, 0, 2).ToArray();
+
+            return tableEntries.Length > 0
+                ? FromTableMetadata(tableEntries)
+                : (KvMetadata?)null;
+        }
+
+        private (KvKey, KvMetadata?)[] TryGetMetadata(AbstractTransaction txn, IEnumerable<KvKey> keys)
+        {
             return keys.
-                Select(k =>
-                {
-                    var tableKey = ToTableKey(k);
-                    var existingExpiry = txn.TryGet(_kvTable, tableKey);
-                    return (k, existingExpiry.HasValue && CheckAndRemoveIfExpired(tableKey, currentTime, ((KvExpiry) existingExpiry.Value).Expiry));
-                }).
+                Select(key => (key, TryGetMetadata(txn, key))).
                 ToArray();
-        });
+        }
+
+        public (KvKey, KvMetadata?)[] TryGetMetadata(KvKey[] keys) => _lmdb.Read(txn => TryGetMetadata(txn, keys));
+
+        public (KvKey, bool)[] ContainsKeys(KvKey[] keys)
+        { 
+            var currentTime = _currentTime();
+            return TryGetMetadata(keys).
+                Select(km => (km.Item1, km.Item2.HasValue && CheckAndRemoveIfExpired(km.Item1, currentTime, km.Item2.Value.Expiry))).
+                ToArray();
+        }
 
         public bool ContainsKey(KvKey key) => ContainsKeys(new [] { key }) [0].Item2;
 
@@ -145,18 +158,22 @@ namespace LmdbCacheServer.Tables
             return _lmdb.Read(txn => 
                 {
                     var currentTime = _currentTime();
-                    return keys.Select(k =>
+                    return keys.Select(key =>
                     {
-                        var tableKey = ToTableKey(k);
-                        var expiry = txn.TryGet(_kvTable, tableKey);
-                        if (expiry.HasValue && CheckAndRemoveIfExpired(tableKey, currentTime, ((KvExpiry) expiry.Value).Expiry))
+                        var tableKey = ToTableKey(key);
+                        var tableEntries = txn.ReadDuplicatePage(v => (KvTableEntry)v, _kvTable, tableKey, 0, uint.MaxValue).ToArray();
+
+                        if (tableEntries.Length > 0)
                         {
-                            var tableEntries = txn.ReadDuplicatePage(v => (KvTableEntry) v, _kvTable, tableKey, 0, uint.MaxValue).ToArray();
-                            var kvValue = FromTableValue(tableEntries);
-                            return (k, kvValue);
+                            var metadata = FromTableMetadata(tableEntries);
+                            if (CheckAndRemoveIfExpired(key, currentTime, metadata.Expiry))
+                            {
+                                var kvValue = FromTableValue(tableEntries);
+                                return (key, kvValue);
+                            }
                         }
 
-                        return (k, (KvValue?) null);
+                        return (key, (KvValue?) null);
                     }).ToArray();
                 });
         }
@@ -170,8 +187,9 @@ namespace LmdbCacheServer.Tables
                 var tableKey = ToTableKey(prefix);
                 var currentTime = _currentTime();
                 return txn.PageByPrefix(_kvTable, tableKey, page, pageSize).
-                    Where(ke => CheckAndRemoveIfExpired(tableKey, currentTime, ((KvExpiry) (ke.Item2.Value.ToByteArray())).Expiry)). // TODO: Change to more optimal KvExpiry conversion
-                    Select(ke => FromTableKey(ke.Item1)).
+                    Select(ke => (FromTableKey(ke.Item1), ke.Item2)).
+                    Where(ke => CheckAndRemoveIfExpired(ke.Item1, currentTime, ((KvExpiry) (ke.Item2.Value.ToByteArray())).Expiry)). // TODO: Change to more optimal KvExpiry conversion
+                    Select(ke => ke.Item1).
                     ToArray();
             });
         }
@@ -184,9 +202,10 @@ namespace LmdbCacheServer.Tables
                 var tableKey = ToTableKey(prefix);
                 var currentTime = _currentTime();
                 return txn.PageByPrefix(_kvTable, tableKey, page, pageSize).
-                    Where(ke => CheckAndRemoveIfExpired(tableKey, currentTime, ((KvExpiry)ke.Item2.Value.ToByteArray()).Expiry)).
+                    Select(ke => (FromTableKey(ke.Item1), ke.Item2)).
+                    Where(ke => CheckAndRemoveIfExpired(ke.Item1, currentTime, ((KvExpiry)ke.Item2.Value.ToByteArray()).Expiry)).
                     // TODO: Rewrite to use only one Cursor
-                    Select(ke => (FromTableKey(ke.Item1), FromTableValue(txn.ReadDuplicatePage(v => (KvTableEntry)v, _kvTable, tableKey, 0, uint.MaxValue).ToArray()))).
+                    Select(ke => (ke.Item1, FromTableValue(txn.ReadDuplicatePage(v => (KvTableEntry)v, _kvTable, tableKey, 0, uint.MaxValue).ToArray()))).
                     ToArray();
             });
         }
@@ -227,7 +246,7 @@ namespace LmdbCacheServer.Tables
                         var valueEntries = ToTableMetadataArray(metadata).Concat(ToTableEntryChunk(value)).Select(v => (tableKey, v.ToTableValue())).ToArray();
                         txn.AddOrUpdateBatch(_kvTable, valueEntries);
                         _expiryTable.AddExpiryRecords(txn, new [] {(metadata.Expiry, tableKey)});
-                        _onAddOrUpdate(txn, key, metadata, value);
+                        _kvUpdateHandler.OnAddOrUpdate(txn, key, metadata, value);
                         return (key, true);
                     }).
                     ToArray();
@@ -280,15 +299,28 @@ namespace LmdbCacheServer.Tables
 
         public async Task<(KvKey, bool)[]> Delete(KvKey[] keys)
         {
-            var kvResults = await _lmdb.WriteAsync(txn =>
+            var kvResults = await _lmdb.WriteAsync(txn => 
             {
-                var kvs = txn.ContainsKeys(_kvTable, keys.Select(ToTableKey).ToArray());
-                var foundKeys = kvs.Where(kv => kv.Item2).Select(kv => kv.Item1).ToArray();
-                txn.Delete(_kvTable, foundKeys);
-                return kvs;
+                var currentTime = _currentTime();
+
+                return keys.
+                    Select(key => 
+                        {
+                            var metadata = TryGetMetadata(txn, key);
+
+                            if (metadata.HasValue && CheckAndRemoveIfExpired(key, currentTime, metadata.Value.Expiry))
+                            {
+                                txn.Delete(_kvTable, ToTableKey(key)); // TODO: Apply VectorClock logic. Replace with soft delete.
+                                _kvUpdateHandler.OnDelete(txn, key, metadata.Value);
+                                return (key, true);
+                            }
+
+                            return (key, false);
+                        }).
+                    ToArray();
             }, false);
 
-            return kvResults.Select(kb => (FromTableKey(kb.Item1), kb.Item2)).ToArray();
+            return kvResults;
         }
 
 

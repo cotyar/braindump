@@ -9,6 +9,10 @@ using Grpc.Core.Utils;
 using LmdbCache;
 using LmdbCacheServer.Tables;
 using LmdbLight;
+using static LmdbCache.AddResponse.Types;
+using static LmdbCache.DeleteResponse.Types;
+using static LmdbCache.GetResponse.Types;
+using static LmdbCache.GetResponse.Types.GetResponseEntry.Types;
 
 namespace LmdbCacheServer
 {
@@ -19,12 +23,12 @@ namespace LmdbCacheServer
         private readonly KvTable _kvTable;
         private readonly ExpiryTable _kvExpiryTable;
 
-        public LmdbCacheServiceImpl(LightningConfig config, Func<VectorClock> clock, Action<WriteTransaction, KvKey, KvMetadata, KvValue> onAddOrUpdate) 
+        public LmdbCacheServiceImpl(LightningConfig config, Func<VectorClock> clock, KvUpdateHandler kvUpdateHandler) 
         {
             _lmdb = new LightningPersistence(config);
             _kvExpiryTable = new ExpiryTable(_lmdb, "kvexpiry");
             _kvTable = new KvTable(_lmdb, "kv", _kvExpiryTable, 
-                () => DateTimeOffset.UtcNow.ToTimestamp(), (transaction, table, key, expiry) => {}, onAddOrUpdate);
+                () => DateTimeOffset.UtcNow.ToTimestamp(), (transaction, table, key, expiry) => {}, kvUpdateHandler);
             _clock = clock;
         }
 
@@ -35,8 +39,8 @@ namespace LmdbCacheServer
             var ret = await (request.OverrideExisting ? _kvTable.AddOrUpdate(batch) : _kvTable.Add(batch));
             var response = new AddResponse();
             var addResults = ret.Select(kv => kv.Item2 
-                ? (request.OverrideExisting ? AddResponse.Types.AddResult.KeyUpdated : AddResponse.Types.AddResult.KeyAdded) // TODO: Recheck statuses
-                : (request.OverrideExisting ? AddResponse.Types.AddResult.Failure : AddResponse.Types.AddResult.KeyAlreadyExists));
+                ? (request.OverrideExisting ? AddResult.KeyUpdated : AddResult.KeyAdded) // TODO: Recheck statuses
+                : (request.OverrideExisting ? AddResult.Failure : AddResult.KeyAlreadyExists));
             response.Results.AddRange(addResults);
 
             return response;
@@ -60,7 +64,7 @@ namespace LmdbCacheServer
             var kvs = await _kvTable.Delete(keys);
 
             var response = new DeleteResponse();
-            var addResults = kvs.Select(kv => kv.Item2 ? DeleteResponse.Types.DeleteResult.Success : DeleteResponse.Types.DeleteResult.NotFound);
+            var addResults = kvs.Select(kv => kv.Item2 ? DeleteResult.Success : DeleteResult.NotFound);
             response.Results.AddRange(addResults);
 
             return response;
@@ -71,9 +75,14 @@ namespace LmdbCacheServer
             var ret = _kvTable.Get(request.Keys.Select(k => new KvKey(k)));
 
             var response = new GetResponse();
-            var getResponseEntries = ret.Select(kv => kv.Item2.HasValue 
-                ? new GetResponse.Types.GetResponseEntry { Result = GetResponse.Types.GetResponseEntry.Types.GetResult.Success, Value = kv.Item2.Value.Value[0] } // TODO: Add value streaming
-                : new GetResponse.Types.GetResponseEntry { Result = GetResponse.Types.GetResponseEntry.Types.GetResult.NotFound, Value = ByteString.Empty });
+            var getResponseEntries = ret.Select(kv =>
+                {
+                    if (!kv.Item2.HasValue) return new GetResponseEntry {Result = GetResult.NotFound};
+
+                    var gre = new GetResponseEntry {Result = GetResult.Success}; // TODO: Add value streaming
+                    gre.Value.AddRange(kv.Item2.Value.Value);
+                    return gre;
+                });
             response.Results.AddRange(getResponseEntries);
 
             return Task.FromResult(response);

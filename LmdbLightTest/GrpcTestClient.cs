@@ -8,6 +8,7 @@ using LmdbCache;
 using LmdbCache.Domain;
 using LmdbCacheClient;
 using LmdbCacheServer;
+using LmdbCacheServer.Tables;
 using LmdbLight;
 
 namespace LmdbLightTest
@@ -33,7 +34,12 @@ namespace LmdbLightTest
                 //Services = { LmdbCacheService.BindService(new InMemoryCacheServiceImpl()) },
                 Services = { LmdbCacheService.BindService(
                     new LmdbCacheServiceImpl(config, () => new VectorClock { TicksOffsetUtc = (ulong)DateTimeOffset.UtcNow.Ticks}, 
-                        (transaction, key, metadata, value) => Console.WriteLine($"Added key: '{key.Key}'"))) },
+//                        (transaction, key, metadata, value) =>
+//                        {
+//                            Console.WriteLine($"Added key: '{key.Key}'");
+//                        }
+                        new KvUpdateHandler(() => Console.WriteLine("Key changed"))
+                        )) },
                 Ports = { new ServerPort("127.0.0.1", port, ServerCredentials.Insecure) }
             };
             _server.Start();

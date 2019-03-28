@@ -44,7 +44,7 @@ namespace LmdbCache {
             "bnNlEjgKB3Jlc3VsdHMYASADKAsyJy5MbWRiQ2FjaGUuR2V0UmVzcG9uc2Uu",
             "R2V0UmVzcG9uc2VFbnRyeRqaAQoQR2V0UmVzcG9uc2VFbnRyeRJBCgZyZXN1",
             "bHQYASABKA4yMS5MbWRiQ2FjaGUuR2V0UmVzcG9uc2UuR2V0UmVzcG9uc2VF",
-            "bnRyeS5HZXRSZXN1bHQSDQoFdmFsdWUYAiABKAwiNAoJR2V0UmVzdWx0EgsK",
+            "bnRyeS5HZXRSZXN1bHQSDQoFdmFsdWUYAiADKAwiNAoJR2V0UmVzdWx0EgsK",
             "B1NVQ0NFU1MQABINCglOT1RfRk9VTkQQARILCgdGQUlMVVJFEAIiJwoUQ29u",
             "dGFpbnNLZXlzUmVzcG9uc2USDwoHcmVzdWx0cxgBIAMoCCKhAQoLQ29weVJl",
             "cXVlc3QSOAoHZW50cmllcxgBIAMoCzInLkxtZGJDYWNoZS5Db3B5UmVxdWVz",
@@ -1501,7 +1501,7 @@ namespace LmdbCache {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public GetResponseEntry(GetResponseEntry other) : this() {
           result_ = other.result_;
-          value_ = other.value_;
+          value_ = other.value_.Clone();
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
@@ -1523,13 +1523,12 @@ namespace LmdbCache {
 
         /// <summary>Field number for the "value" field.</summary>
         public const int ValueFieldNumber = 2;
-        private pb::ByteString value_ = pb::ByteString.Empty;
+        private static readonly pb::FieldCodec<pb::ByteString> _repeated_value_codec
+            = pb::FieldCodec.ForBytes(18);
+        private readonly pbc::RepeatedField<pb::ByteString> value_ = new pbc::RepeatedField<pb::ByteString>();
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public pb::ByteString Value {
+        public pbc::RepeatedField<pb::ByteString> Value {
           get { return value_; }
-          set {
-            value_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-          }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1546,7 +1545,7 @@ namespace LmdbCache {
             return true;
           }
           if (Result != other.Result) return false;
-          if (Value != other.Value) return false;
+          if(!value_.Equals(other.value_)) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
@@ -1554,7 +1553,7 @@ namespace LmdbCache {
         public override int GetHashCode() {
           int hash = 1;
           if (Result != 0) hash ^= Result.GetHashCode();
-          if (Value.Length != 0) hash ^= Value.GetHashCode();
+          hash ^= value_.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -1572,10 +1571,7 @@ namespace LmdbCache {
             output.WriteRawTag(8);
             output.WriteEnum((int) Result);
           }
-          if (Value.Length != 0) {
-            output.WriteRawTag(18);
-            output.WriteBytes(Value);
-          }
+          value_.WriteTo(output, _repeated_value_codec);
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
           }
@@ -1587,9 +1583,7 @@ namespace LmdbCache {
           if (Result != 0) {
             size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
           }
-          if (Value.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeBytesSize(Value);
-          }
+          size += value_.CalculateSize(_repeated_value_codec);
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
           }
@@ -1604,9 +1598,7 @@ namespace LmdbCache {
           if (other.Result != 0) {
             Result = other.Result;
           }
-          if (other.Value.Length != 0) {
-            Value = other.Value;
-          }
+          value_.Add(other.value_);
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
 
@@ -1623,7 +1615,7 @@ namespace LmdbCache {
                 break;
               }
               case 18: {
-                Value = input.ReadBytes();
+                value_.AddEntriesFrom(input, _repeated_value_codec);
                 break;
               }
             }
