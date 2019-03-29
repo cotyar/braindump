@@ -23,7 +23,7 @@ namespace LmdbCacheServer
         private readonly KvTable _kvTable;
         private readonly ExpiryTable _kvExpiryTable;
 
-        public LmdbCacheServiceImpl(LightningConfig config, Func<VectorClock> clock, KvUpdateHandler kvUpdateHandler) 
+        public LmdbCacheServiceImpl(LightningConfig config, Func<VectorClock> clock, Action<WriteTransaction, WriteLogEvent> kvUpdateHandler) 
         {
             _lmdb = new LightningPersistence(config);
             _kvExpiryTable = new ExpiryTable(_lmdb, "kvexpiry");

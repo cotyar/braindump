@@ -38,7 +38,7 @@ namespace LmdbLightTest
 //                        {
 //                            Console.WriteLine($"Added key: '{key.Key}'");
 //                        }
-                        new KvUpdateHandler(() => Console.WriteLine("Key changed"))
+                        ((txn, wle) => Console.WriteLine($"Key changed: '{wle.LoggedEventCase} - {wle.Clock}'"))
                         )) },
                 Ports = { new ServerPort("127.0.0.1", port, ServerCredentials.Insecure) }
             };

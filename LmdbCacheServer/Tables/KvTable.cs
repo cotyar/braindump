@@ -93,11 +93,11 @@ namespace LmdbCacheServer.Tables
         private readonly ExpiryTable _expiryTable;
         private readonly Func<Timestamp> _currentTime;
         private readonly Action<WriteTransaction, DupTable, TableKey, Timestamp> _expirationQueue;
-        private readonly KvUpdateHandler _kvUpdateHandler;
+        private readonly Action<WriteTransaction, WriteLogEvent> _kvUpdateHandler;
         private readonly DupTable _kvTable;
 
         public KvTable(LightningPersistence lmdb, string kvTableName, ExpiryTable expiryTable, Func<Timestamp> currentTime, 
-            Action<WriteTransaction, DupTable, TableKey, Timestamp> expirationQueue, KvUpdateHandler kvUpdateHandler)
+            Action<WriteTransaction, DupTable, TableKey, Timestamp> expirationQueue, Action<WriteTransaction, WriteLogEvent> kvUpdateHandler)
         {
             _lmdb = lmdb;
             _kvTable = _lmdb.OpenDupTable(kvTableName);
@@ -246,7 +246,7 @@ namespace LmdbCacheServer.Tables
                         var valueEntries = ToTableMetadataArray(metadata).Concat(ToTableEntryChunk(value)).Select(v => (tableKey, v.ToTableValue())).ToArray();
                         txn.AddOrUpdateBatch(_kvTable, valueEntries);
                         _expiryTable.AddExpiryRecords(txn, new [] {(metadata.Expiry, tableKey)});
-                        _kvUpdateHandler.OnAddOrUpdate(txn, key, metadata, value);
+                        _kvUpdateHandler(txn, ToAddOrUpdateLogEvent(key, metadata, value));
                         return (key, true);
                     }).
                     ToArray();
@@ -311,7 +311,7 @@ namespace LmdbCacheServer.Tables
                             if (metadata.HasValue && CheckAndRemoveIfExpired(key, currentTime, metadata.Value.Expiry))
                             {
                                 txn.Delete(_kvTable, ToTableKey(key)); // TODO: Apply VectorClock logic. Replace with soft delete.
-                                _kvUpdateHandler.OnDelete(txn, key, metadata.Value);
+                                _kvUpdateHandler(txn, ToDeleteLogEvent(key, metadata.Value));
                                 return (key, true);
                             }
 
@@ -334,9 +334,33 @@ namespace LmdbCacheServer.Tables
         public KvMetadata FromTableMetadata(KvTableEntry[] metadata) => FromTableMetadata((KvExpiry)metadata[0], (KvVectorClock)metadata[1]);
         public KvValue FromTableValue(KvTableEntry[] value) => new KvValue(value.Skip(2).Select(v => ((KvEntryChunk) v).Value).ToArray());
 
-//        new Timestamp(value[0].ItemType == KvItemType.Expiry? ((KvExpiry) value[0]).Expiry : throw new Exception("Expiry Data value corrupted")), // TODO: Introduce data consistency Exception type
-//        new VectorClock(value[1].ItemType == KvItemType.VectorClock? ((KvVectorClock) value[1]).VectorClock : throw new Exception("VectorClock value corrupted")),
-//        value.Skip(2).Select(v => v.ItemType == KvItemType.Data? ((KvEntryChunk) v).Value : throw new Exception("VectorClock value corrupted")).ToArray()
+        public WriteLogEvent ToAddOrUpdateLogEvent(KvKey key, KvMetadata metadata, KvValue value)
+        {
+            if (value.Value.Length != 1)
+                throw new ArgumentException(
+                    $"Chunked values are not supported by the WriteLog yet. For key '{key.Key}' received value of '{value.Value.Length}' chunks");
+
+            return new WriteLogEvent { Updated = 
+                new WriteLogEvent.Types.AddedOrUpdated
+                {
+                    Key = key.Key,
+                    Value = value.Value[0],
+                    Expiry = metadata.Expiry
+                }};
+        }
+
+        public WriteLogEvent ToDeleteLogEvent(KvKey key, KvMetadata metadata) => 
+            new WriteLogEvent
+            {
+                Deleted = new WriteLogEvent.Types.Deleted
+                {
+                    Key = key.Key
+                }
+            };
+
+        //        new Timestamp(value[0].ItemType == KvItemType.Expiry? ((KvExpiry) value[0]).Expiry : throw new Exception("Expiry Data value corrupted")), // TODO: Introduce data consistency Exception type
+        //        new VectorClock(value[1].ItemType == KvItemType.VectorClock? ((KvVectorClock) value[1]).VectorClock : throw new Exception("VectorClock value corrupted")),
+        //        value.Skip(2).Select(v => v.ItemType == KvItemType.Data? ((KvEntryChunk) v).Value : throw new Exception("VectorClock value corrupted")).ToArray()
 
     }
 

@@ -12,36 +12,31 @@ namespace LmdbCacheServer
     public class WriteLogTable
     {
         private readonly LightningPersistence _lmdb;
-        private readonly Func<(ulong, VectorClock)> _initClock;
-        private readonly Func<(ulong, VectorClock), (ulong, VectorClock)> _incrementClock;
+        private readonly string _replicaId;
         private readonly Table _table;
 
-        public WriteLogTable(LightningPersistence lmdb, string tableName, Func<(ulong, VectorClock)> initClock, Func<(ulong, VectorClock), (ulong, VectorClock)> incrementClock)
+        public WriteLogTable(LightningPersistence lmdb, string tableName, string replicaId)
         {
             _lmdb = lmdb;
-            _initClock = initClock;
-            _incrementClock = incrementClock;
+            _replicaId = replicaId;
             _table = _lmdb.OpenTable(tableName);
         }
 
-        public (ulong, VectorClock) GetLastClock(AbstractTransaction txn)
+        public (ulong, VectorClock)? GetLastClock(AbstractTransaction txn)
         {
             var ret = txn.TryGetLast(_table);
             return ret.HasValue 
                 ? (FromTableKey(ret.Value.Item1), FromTableValue(ret.Value.Item2).Clock)
-                : _initClock();
+                : ((ulong, VectorClock)?) null;
         }
 
-        public void AddLogEvents(WriteTransaction txn, WriteLogEvent[] logEvents)
+        public bool AddLogEvents(WriteTransaction txn, WriteLogEvent logEvent)
         {
-            var vClock = GetLastClock(txn);
-            txn.AddBatch(_table,
-                logEvents.Select(logEvent =>
-                {
-                    vClock = _incrementClock(vClock);
-                    logEvent.Clock = vClock.Item2;
-                    return (ToTableKey(vClock.Item1), ToTableValue(logEvent));
-                }).ToArray());
+            var replicaValue = logEvent.Clock.GetReplicaValue(_replicaId);
+            if (!replicaValue.HasValue)
+                throw new ArgumentException(nameof(logEvent), $"VectorClock for the event is not properly prepared and empty for this replicaId: '{_replicaId}'");
+
+            return txn.Add(_table, ToTableKey(replicaValue.Value), ToTableValue(logEvent));
         }
 
         public (ulong, WriteLogEvent)[] GetLogPage(AbstractTransaction txn, ulong startFrom, uint pageSize) => 

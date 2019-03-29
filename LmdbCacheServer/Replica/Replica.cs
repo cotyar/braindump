@@ -28,22 +28,25 @@ namespace LmdbCacheServer.Replica
             _clock = clock ?? VectorClockHelper.Create(Config.ReplicaId, 0);
             LightningConfig = lightningConfig;
 
-            var kvUpdateHandler = new KvUpdateHandler(IncrementClock);
-
             _lmdb = new LightningPersistence(LightningConfig);
             _kvExpiryTable = new ExpiryTable(_lmdb, "kvexpiry");
+            _wlTable = new WriteLogTable(_lmdb, "writelog", Config.ReplicaId);
+
             _kvTable = new KvTable(_lmdb, "kv", _kvExpiryTable,
-                CurrentTime, (transaction, table, key, expiry) => { }, kvUpdateHandler);
-            _wlTable = new WriteLogTable(_lmdb, "writelog", () =>
+                CurrentTime, (transaction, table, key, expiry) => { }, (txn, wle) =>
                 {
-                    var clk = CurrentClock();
-                    return (clk.GetReplicaValue(Config.ReplicaId) ?? 0, clk);
-                }, vc => (vc.Item1 + 1, vc.Item2.Increment(Config.ReplicaId))); // TODO: Remove KvUpdateHandler and simplify this
+                    wle.Clock = IncrementClock();
+
+                    if (!_wlTable.AddLogEvents(txn, wle))
+                    {
+                        throw new EventLogException($"Cannot write event to the WriteLog: '{wle}'"); // TODO: Values can be large, possibly exclude them from the Exception.
+                    }
+                });
         }
 
-        private void IncrementClock()
+        private VectorClock IncrementClock()
         {
-            _clock = _clock.Increment(Config.ReplicaId);
+            return _clock = _clock.Increment(Config.ReplicaId);
         }
     }
 }
