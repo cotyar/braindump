@@ -57,30 +57,29 @@ namespace LmdbCache {
             "c3RSZXF1ZXN0EhEKCWtleVByZWZpeBgBIAEoCRIQCghwYWdlU2l6ZRgCIAEo",
             "DRIMCgRwYWdlGAMgASgNIh4KD0tleUxpc3RSZXNwb25zZRILCgNrZXkYASAB",
             "KAkiMgoUS2V5VmFsdWVMaXN0UmVzcG9uc2USCwoDa2V5GAEgASgJEg0KBXZh",
-            "bHVlGAMgASgMIvMCCg1Xcml0ZUxvZ0V2ZW50EiUKBWNsb2NrGAEgASgLMhYu",
-            "TG1kYkNhY2hlLlZlY3RvckNsb2NrEi8KBWFkZGVkGAUgASgLMh4uTG1kYkNh",
-            "Y2hlLldyaXRlTG9nRXZlbnQuQWRkZWRIABIzCgd1cGRhdGVkGAYgASgLMiAu",
-            "TG1kYkNhY2hlLldyaXRlTG9nRXZlbnQuVXBkYXRlZEgAEjMKB2RlbGV0ZWQY",
-            "ByABKAsyIC5MbWRiQ2FjaGUuV3JpdGVMb2dFdmVudC5EZWxldGVkSAASMwoH",
-            "ZXhwaXJlZBgIIAEoCzIgLkxtZGJDYWNoZS5Xcml0ZUxvZ0V2ZW50LkV4cGly",
-            "ZWRIABoUCgVBZGRlZBILCgNrZXkYASABKAkaFgoHVXBkYXRlZBILCgNrZXkY",
-            "ASABKAkaFgoHRGVsZXRlZBILCgNrZXkYASABKAkaFgoHRXhwaXJlZBILCgNr",
-            "ZXkYASABKAlCDQoLbG9nZ2VkRXZlbnQy4AMKEExtZGJDYWNoZVNlcnZpY2US",
-            "NgoDQWRkEhUuTG1kYkNhY2hlLkFkZFJlcXVlc3QaFi5MbWRiQ2FjaGUuQWRk",
-            "UmVzcG9uc2UiABI/CgZEZWxldGUSGC5MbWRiQ2FjaGUuRGVsZXRlUmVxdWVz",
-            "dBoZLkxtZGJDYWNoZS5EZWxldGVSZXNwb25zZSIAEjkKBENvcHkSFi5MbWRi",
-            "Q2FjaGUuQ29weVJlcXVlc3QaFy5MbWRiQ2FjaGUuQ29weVJlc3BvbnNlIgAS",
-            "NgoDR2V0EhUuTG1kYkNhY2hlLkdldFJlcXVlc3QaFi5MbWRiQ2FjaGUuR2V0",
-            "UmVzcG9uc2UiABJICgxDb250YWluc0tleXMSFS5MbWRiQ2FjaGUuR2V0UmVx",
-            "dWVzdBofLkxtZGJDYWNoZS5Db250YWluc0tleXNSZXNwb25zZSIAEkUKCExp",
-            "c3RLZXlzEhkuTG1kYkNhY2hlLktleUxpc3RSZXF1ZXN0GhouTG1kYkNhY2hl",
-            "LktleUxpc3RSZXNwb25zZSIAMAESTwoNTGlzdEtleVZhbHVlcxIZLkxtZGJD",
-            "YWNoZS5LZXlMaXN0UmVxdWVzdBofLkxtZGJDYWNoZS5LZXlWYWx1ZUxpc3RS",
-            "ZXNwb25zZSIAMAEywQEKC1N5bmNTZXJ2aWNlEjYKA0FkZBIVLkxtZGJDYWNo",
-            "ZS5BZGRSZXF1ZXN0GhYuTG1kYkNhY2hlLkFkZFJlc3BvbnNlIgASPwoGRGVs",
-            "ZXRlEhguTG1kYkNhY2hlLkRlbGV0ZVJlcXVlc3QaGS5MbWRiQ2FjaGUuRGVs",
-            "ZXRlUmVzcG9uc2UiABI5CgRDb3B5EhYuTG1kYkNhY2hlLkNvcHlSZXF1ZXN0",
-            "GhcuTG1kYkNhY2hlLkNvcHlSZXNwb25zZSIAQgyqAglMbWRiQ2FjaGViBnBy",
+            "bHVlGAMgASgMIqICCg1Xcml0ZUxvZ0V2ZW50EiUKBWNsb2NrGAEgASgLMhYu",
+            "TG1kYkNhY2hlLlZlY3RvckNsb2NrEjoKB3VwZGF0ZWQYBSABKAsyJy5MbWRi",
+            "Q2FjaGUuV3JpdGVMb2dFdmVudC5BZGRlZE9yVXBkYXRlZEgAEjMKB2RlbGV0",
+            "ZWQYByABKAsyIC5MbWRiQ2FjaGUuV3JpdGVMb2dFdmVudC5EZWxldGVkSAAa",
+            "UgoOQWRkZWRPclVwZGF0ZWQSCwoDa2V5GAEgASgJEiQKBmV4cGlyeRgCIAEo",
+            "CzIULkxtZGJDYWNoZS5UaW1lc3RhbXASDQoFdmFsdWUYAyABKAwaFgoHRGVs",
+            "ZXRlZBILCgNrZXkYASABKAlCDQoLbG9nZ2VkRXZlbnQiUAoUU3luY1N1YnNj",
+            "cmliZVJlcXVlc3QSEQoJcmVwbGljYUlkGAEgASgJEiUKBXNpbmNlGAIgASgL",
+            "MhYuTG1kYkNhY2hlLlZlY3RvckNsb2NrIjoKDFN5bmNSZXNwb25zZRIqCghs",
+            "b2dFdmVudBgBIAEoCzIYLkxtZGJDYWNoZS5Xcml0ZUxvZ0V2ZW50MuADChBM",
+            "bWRiQ2FjaGVTZXJ2aWNlEjYKA0FkZBIVLkxtZGJDYWNoZS5BZGRSZXF1ZXN0",
+            "GhYuTG1kYkNhY2hlLkFkZFJlc3BvbnNlIgASPwoGRGVsZXRlEhguTG1kYkNh",
+            "Y2hlLkRlbGV0ZVJlcXVlc3QaGS5MbWRiQ2FjaGUuRGVsZXRlUmVzcG9uc2Ui",
+            "ABI5CgRDb3B5EhYuTG1kYkNhY2hlLkNvcHlSZXF1ZXN0GhcuTG1kYkNhY2hl",
+            "LkNvcHlSZXNwb25zZSIAEjYKA0dldBIVLkxtZGJDYWNoZS5HZXRSZXF1ZXN0",
+            "GhYuTG1kYkNhY2hlLkdldFJlc3BvbnNlIgASSAoMQ29udGFpbnNLZXlzEhUu",
+            "TG1kYkNhY2hlLkdldFJlcXVlc3QaHy5MbWRiQ2FjaGUuQ29udGFpbnNLZXlz",
+            "UmVzcG9uc2UiABJFCghMaXN0S2V5cxIZLkxtZGJDYWNoZS5LZXlMaXN0UmVx",
+            "dWVzdBoaLkxtZGJDYWNoZS5LZXlMaXN0UmVzcG9uc2UiADABEk8KDUxpc3RL",
+            "ZXlWYWx1ZXMSGS5MbWRiQ2FjaGUuS2V5TGlzdFJlcXVlc3QaHy5MbWRiQ2Fj",
+            "aGUuS2V5VmFsdWVMaXN0UmVzcG9uc2UiADABMlgKC1N5bmNTZXJ2aWNlEkkK",
+            "CVN1YnNjcmliZRIfLkxtZGJDYWNoZS5TeW5jU3Vic2NyaWJlUmVxdWVzdBoX",
+            "LkxtZGJDYWNoZS5TeW5jUmVzcG9uc2UiADABQgyqAglMbWRiQ2FjaGViBnBy",
             "b3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
@@ -100,10 +99,10 @@ namespace LmdbCache {
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.KeyListRequest), global::LmdbCache.KeyListRequest.Parser, new[]{ "KeyPrefix", "PageSize", "Page" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.KeyListResponse), global::LmdbCache.KeyListResponse.Parser, new[]{ "Key" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.KeyValueListResponse), global::LmdbCache.KeyValueListResponse.Parser, new[]{ "Key", "Value" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.WriteLogEvent), global::LmdbCache.WriteLogEvent.Parser, new[]{ "Clock", "Added", "Updated", "Deleted", "Expired" }, new[]{ "LoggedEvent" }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.WriteLogEvent.Types.Added), global::LmdbCache.WriteLogEvent.Types.Added.Parser, new[]{ "Key" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.WriteLogEvent.Types.Updated), global::LmdbCache.WriteLogEvent.Types.Updated.Parser, new[]{ "Key" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.WriteLogEvent.Types.Deleted), global::LmdbCache.WriteLogEvent.Types.Deleted.Parser, new[]{ "Key" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.WriteLogEvent.Types.Expired), global::LmdbCache.WriteLogEvent.Types.Expired.Parser, new[]{ "Key" }, null, null, null)})
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.WriteLogEvent), global::LmdbCache.WriteLogEvent.Parser, new[]{ "Clock", "Updated", "Deleted" }, new[]{ "LoggedEvent" }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.WriteLogEvent.Types.AddedOrUpdated), global::LmdbCache.WriteLogEvent.Types.AddedOrUpdated.Parser, new[]{ "Key", "Expiry", "Value" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.WriteLogEvent.Types.Deleted), global::LmdbCache.WriteLogEvent.Types.Deleted.Parser, new[]{ "Key" }, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.SyncSubscribeRequest), global::LmdbCache.SyncSubscribeRequest.Parser, new[]{ "ReplicaId", "Since" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.SyncResponse), global::LmdbCache.SyncResponse.Parser, new[]{ "LogEvent" }, null, null, null)
           }));
     }
     #endregion
@@ -2723,17 +2722,11 @@ namespace LmdbCache {
     public WriteLogEvent(WriteLogEvent other) : this() {
       clock_ = other.clock_ != null ? other.clock_.Clone() : null;
       switch (other.LoggedEventCase) {
-        case LoggedEventOneofCase.Added:
-          Added = other.Added.Clone();
-          break;
         case LoggedEventOneofCase.Updated:
           Updated = other.Updated.Clone();
           break;
         case LoggedEventOneofCase.Deleted:
           Deleted = other.Deleted.Clone();
-          break;
-        case LoggedEventOneofCase.Expired:
-          Expired = other.Expired.Clone();
           break;
       }
 
@@ -2756,22 +2749,11 @@ namespace LmdbCache {
       }
     }
 
-    /// <summary>Field number for the "added" field.</summary>
-    public const int AddedFieldNumber = 5;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::LmdbCache.WriteLogEvent.Types.Added Added {
-      get { return loggedEventCase_ == LoggedEventOneofCase.Added ? (global::LmdbCache.WriteLogEvent.Types.Added) loggedEvent_ : null; }
-      set {
-        loggedEvent_ = value;
-        loggedEventCase_ = value == null ? LoggedEventOneofCase.None : LoggedEventOneofCase.Added;
-      }
-    }
-
     /// <summary>Field number for the "updated" field.</summary>
-    public const int UpdatedFieldNumber = 6;
+    public const int UpdatedFieldNumber = 5;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::LmdbCache.WriteLogEvent.Types.Updated Updated {
-      get { return loggedEventCase_ == LoggedEventOneofCase.Updated ? (global::LmdbCache.WriteLogEvent.Types.Updated) loggedEvent_ : null; }
+    public global::LmdbCache.WriteLogEvent.Types.AddedOrUpdated Updated {
+      get { return loggedEventCase_ == LoggedEventOneofCase.Updated ? (global::LmdbCache.WriteLogEvent.Types.AddedOrUpdated) loggedEvent_ : null; }
       set {
         loggedEvent_ = value;
         loggedEventCase_ = value == null ? LoggedEventOneofCase.None : LoggedEventOneofCase.Updated;
@@ -2780,6 +2762,9 @@ namespace LmdbCache {
 
     /// <summary>Field number for the "deleted" field.</summary>
     public const int DeletedFieldNumber = 7;
+    /// <summary>
+    ///Expired expired   = 8; 
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::LmdbCache.WriteLogEvent.Types.Deleted Deleted {
       get { return loggedEventCase_ == LoggedEventOneofCase.Deleted ? (global::LmdbCache.WriteLogEvent.Types.Deleted) loggedEvent_ : null; }
@@ -2789,25 +2774,12 @@ namespace LmdbCache {
       }
     }
 
-    /// <summary>Field number for the "expired" field.</summary>
-    public const int ExpiredFieldNumber = 8;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::LmdbCache.WriteLogEvent.Types.Expired Expired {
-      get { return loggedEventCase_ == LoggedEventOneofCase.Expired ? (global::LmdbCache.WriteLogEvent.Types.Expired) loggedEvent_ : null; }
-      set {
-        loggedEvent_ = value;
-        loggedEventCase_ = value == null ? LoggedEventOneofCase.None : LoggedEventOneofCase.Expired;
-      }
-    }
-
     private object loggedEvent_;
     /// <summary>Enum of possible cases for the "loggedEvent" oneof.</summary>
     public enum LoggedEventOneofCase {
       None = 0,
-      Added = 5,
-      Updated = 6,
+      Updated = 5,
       Deleted = 7,
-      Expired = 8,
     }
     private LoggedEventOneofCase loggedEventCase_ = LoggedEventOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2835,10 +2807,8 @@ namespace LmdbCache {
         return true;
       }
       if (!object.Equals(Clock, other.Clock)) return false;
-      if (!object.Equals(Added, other.Added)) return false;
       if (!object.Equals(Updated, other.Updated)) return false;
       if (!object.Equals(Deleted, other.Deleted)) return false;
-      if (!object.Equals(Expired, other.Expired)) return false;
       if (LoggedEventCase != other.LoggedEventCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -2847,10 +2817,8 @@ namespace LmdbCache {
     public override int GetHashCode() {
       int hash = 1;
       if (clock_ != null) hash ^= Clock.GetHashCode();
-      if (loggedEventCase_ == LoggedEventOneofCase.Added) hash ^= Added.GetHashCode();
       if (loggedEventCase_ == LoggedEventOneofCase.Updated) hash ^= Updated.GetHashCode();
       if (loggedEventCase_ == LoggedEventOneofCase.Deleted) hash ^= Deleted.GetHashCode();
-      if (loggedEventCase_ == LoggedEventOneofCase.Expired) hash ^= Expired.GetHashCode();
       hash ^= (int) loggedEventCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -2869,21 +2837,13 @@ namespace LmdbCache {
         output.WriteRawTag(10);
         output.WriteMessage(Clock);
       }
-      if (loggedEventCase_ == LoggedEventOneofCase.Added) {
-        output.WriteRawTag(42);
-        output.WriteMessage(Added);
-      }
       if (loggedEventCase_ == LoggedEventOneofCase.Updated) {
-        output.WriteRawTag(50);
+        output.WriteRawTag(42);
         output.WriteMessage(Updated);
       }
       if (loggedEventCase_ == LoggedEventOneofCase.Deleted) {
         output.WriteRawTag(58);
         output.WriteMessage(Deleted);
-      }
-      if (loggedEventCase_ == LoggedEventOneofCase.Expired) {
-        output.WriteRawTag(66);
-        output.WriteMessage(Expired);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -2896,17 +2856,11 @@ namespace LmdbCache {
       if (clock_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Clock);
       }
-      if (loggedEventCase_ == LoggedEventOneofCase.Added) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Added);
-      }
       if (loggedEventCase_ == LoggedEventOneofCase.Updated) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Updated);
       }
       if (loggedEventCase_ == LoggedEventOneofCase.Deleted) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Deleted);
-      }
-      if (loggedEventCase_ == LoggedEventOneofCase.Expired) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Expired);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2926,15 +2880,9 @@ namespace LmdbCache {
         Clock.MergeFrom(other.Clock);
       }
       switch (other.LoggedEventCase) {
-        case LoggedEventOneofCase.Added:
-          if (Added == null) {
-            Added = new global::LmdbCache.WriteLogEvent.Types.Added();
-          }
-          Added.MergeFrom(other.Added);
-          break;
         case LoggedEventOneofCase.Updated:
           if (Updated == null) {
-            Updated = new global::LmdbCache.WriteLogEvent.Types.Updated();
+            Updated = new global::LmdbCache.WriteLogEvent.Types.AddedOrUpdated();
           }
           Updated.MergeFrom(other.Updated);
           break;
@@ -2943,12 +2891,6 @@ namespace LmdbCache {
             Deleted = new global::LmdbCache.WriteLogEvent.Types.Deleted();
           }
           Deleted.MergeFrom(other.Deleted);
-          break;
-        case LoggedEventOneofCase.Expired:
-          if (Expired == null) {
-            Expired = new global::LmdbCache.WriteLogEvent.Types.Expired();
-          }
-          Expired.MergeFrom(other.Expired);
           break;
       }
 
@@ -2971,16 +2913,7 @@ namespace LmdbCache {
             break;
           }
           case 42: {
-            global::LmdbCache.WriteLogEvent.Types.Added subBuilder = new global::LmdbCache.WriteLogEvent.Types.Added();
-            if (loggedEventCase_ == LoggedEventOneofCase.Added) {
-              subBuilder.MergeFrom(Added);
-            }
-            input.ReadMessage(subBuilder);
-            Added = subBuilder;
-            break;
-          }
-          case 50: {
-            global::LmdbCache.WriteLogEvent.Types.Updated subBuilder = new global::LmdbCache.WriteLogEvent.Types.Updated();
+            global::LmdbCache.WriteLogEvent.Types.AddedOrUpdated subBuilder = new global::LmdbCache.WriteLogEvent.Types.AddedOrUpdated();
             if (loggedEventCase_ == LoggedEventOneofCase.Updated) {
               subBuilder.MergeFrom(Updated);
             }
@@ -2997,15 +2930,6 @@ namespace LmdbCache {
             Deleted = subBuilder;
             break;
           }
-          case 66: {
-            global::LmdbCache.WriteLogEvent.Types.Expired subBuilder = new global::LmdbCache.WriteLogEvent.Types.Expired();
-            if (loggedEventCase_ == LoggedEventOneofCase.Expired) {
-              subBuilder.MergeFrom(Expired);
-            }
-            input.ReadMessage(subBuilder);
-            Expired = subBuilder;
-            break;
-          }
         }
       }
     }
@@ -3017,11 +2941,11 @@ namespace LmdbCache {
       /// <summary>
       /// TODO: Add a value hash?
       /// </summary>
-      public sealed partial class Added : pb::IMessage<Added> {
-        private static readonly pb::MessageParser<Added> _parser = new pb::MessageParser<Added>(() => new Added());
+      public sealed partial class AddedOrUpdated : pb::IMessage<AddedOrUpdated> {
+        private static readonly pb::MessageParser<AddedOrUpdated> _parser = new pb::MessageParser<AddedOrUpdated>(() => new AddedOrUpdated());
         private pb::UnknownFieldSet _unknownFields;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public static pb::MessageParser<Added> Parser { get { return _parser; } }
+        public static pb::MessageParser<AddedOrUpdated> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor {
@@ -3034,21 +2958,23 @@ namespace LmdbCache {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public Added() {
+        public AddedOrUpdated() {
           OnConstruction();
         }
 
         partial void OnConstruction();
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public Added(Added other) : this() {
+        public AddedOrUpdated(AddedOrUpdated other) : this() {
           key_ = other.key_;
+          expiry_ = other.expiry_ != null ? other.expiry_.Clone() : null;
+          value_ = other.value_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public Added Clone() {
-          return new Added(this);
+        public AddedOrUpdated Clone() {
+          return new AddedOrUpdated(this);
         }
 
         /// <summary>Field number for the "key" field.</summary>
@@ -3062,13 +2988,35 @@ namespace LmdbCache {
           }
         }
 
+        /// <summary>Field number for the "expiry" field.</summary>
+        public const int ExpiryFieldNumber = 2;
+        private global::LmdbCache.Timestamp expiry_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public override bool Equals(object other) {
-          return Equals(other as Added);
+        public global::LmdbCache.Timestamp Expiry {
+          get { return expiry_; }
+          set {
+            expiry_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "value" field.</summary>
+        public const int ValueFieldNumber = 3;
+        private pb::ByteString value_ = pb::ByteString.Empty;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public pb::ByteString Value {
+          get { return value_; }
+          set {
+            value_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public bool Equals(Added other) {
+        public override bool Equals(object other) {
+          return Equals(other as AddedOrUpdated);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(AddedOrUpdated other) {
           if (ReferenceEquals(other, null)) {
             return false;
           }
@@ -3076,6 +3024,8 @@ namespace LmdbCache {
             return true;
           }
           if (Key != other.Key) return false;
+          if (!object.Equals(Expiry, other.Expiry)) return false;
+          if (Value != other.Value) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
@@ -3083,6 +3033,8 @@ namespace LmdbCache {
         public override int GetHashCode() {
           int hash = 1;
           if (Key.Length != 0) hash ^= Key.GetHashCode();
+          if (expiry_ != null) hash ^= Expiry.GetHashCode();
+          if (Value.Length != 0) hash ^= Value.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -3100,6 +3052,14 @@ namespace LmdbCache {
             output.WriteRawTag(10);
             output.WriteString(Key);
           }
+          if (expiry_ != null) {
+            output.WriteRawTag(18);
+            output.WriteMessage(Expiry);
+          }
+          if (Value.Length != 0) {
+            output.WriteRawTag(26);
+            output.WriteBytes(Value);
+          }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
           }
@@ -3111,6 +3071,12 @@ namespace LmdbCache {
           if (Key.Length != 0) {
             size += 1 + pb::CodedOutputStream.ComputeStringSize(Key);
           }
+          if (expiry_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(Expiry);
+          }
+          if (Value.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeBytesSize(Value);
+          }
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
           }
@@ -3118,12 +3084,21 @@ namespace LmdbCache {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void MergeFrom(Added other) {
+        public void MergeFrom(AddedOrUpdated other) {
           if (other == null) {
             return;
           }
           if (other.Key.Length != 0) {
             Key = other.Key;
+          }
+          if (other.expiry_ != null) {
+            if (expiry_ == null) {
+              expiry_ = new global::LmdbCache.Timestamp();
+            }
+            Expiry.MergeFrom(other.Expiry);
+          }
+          if (other.Value.Length != 0) {
+            Value = other.Value;
           }
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
@@ -3140,133 +3115,15 @@ namespace LmdbCache {
                 Key = input.ReadString();
                 break;
               }
-            }
-          }
-        }
-
-      }
-
-      public sealed partial class Updated : pb::IMessage<Updated> {
-        private static readonly pb::MessageParser<Updated> _parser = new pb::MessageParser<Updated>(() => new Updated());
-        private pb::UnknownFieldSet _unknownFields;
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public static pb::MessageParser<Updated> Parser { get { return _parser; } }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public static pbr::MessageDescriptor Descriptor {
-          get { return global::LmdbCache.WriteLogEvent.Descriptor.NestedTypes[1]; }
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        pbr::MessageDescriptor pb::IMessage.Descriptor {
-          get { return Descriptor; }
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public Updated() {
-          OnConstruction();
-        }
-
-        partial void OnConstruction();
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public Updated(Updated other) : this() {
-          key_ = other.key_;
-          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public Updated Clone() {
-          return new Updated(this);
-        }
-
-        /// <summary>Field number for the "key" field.</summary>
-        public const int KeyFieldNumber = 1;
-        private string key_ = "";
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public string Key {
-          get { return key_; }
-          set {
-            key_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-          }
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public override bool Equals(object other) {
-          return Equals(other as Updated);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public bool Equals(Updated other) {
-          if (ReferenceEquals(other, null)) {
-            return false;
-          }
-          if (ReferenceEquals(other, this)) {
-            return true;
-          }
-          if (Key != other.Key) return false;
-          return Equals(_unknownFields, other._unknownFields);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public override int GetHashCode() {
-          int hash = 1;
-          if (Key.Length != 0) hash ^= Key.GetHashCode();
-          if (_unknownFields != null) {
-            hash ^= _unknownFields.GetHashCode();
-          }
-          return hash;
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public override string ToString() {
-          return pb::JsonFormatter.ToDiagnosticString(this);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void WriteTo(pb::CodedOutputStream output) {
-          if (Key.Length != 0) {
-            output.WriteRawTag(10);
-            output.WriteString(Key);
-          }
-          if (_unknownFields != null) {
-            _unknownFields.WriteTo(output);
-          }
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public int CalculateSize() {
-          int size = 0;
-          if (Key.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(Key);
-          }
-          if (_unknownFields != null) {
-            size += _unknownFields.CalculateSize();
-          }
-          return size;
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void MergeFrom(Updated other) {
-          if (other == null) {
-            return;
-          }
-          if (other.Key.Length != 0) {
-            Key = other.Key;
-          }
-          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void MergeFrom(pb::CodedInputStream input) {
-          uint tag;
-          while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
-              default:
-                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+              case 18: {
+                if (expiry_ == null) {
+                  expiry_ = new global::LmdbCache.Timestamp();
+                }
+                input.ReadMessage(expiry_);
                 break;
-              case 10: {
-                Key = input.ReadString();
+              }
+              case 26: {
+                Value = input.ReadBytes();
                 break;
               }
             }
@@ -3283,7 +3140,7 @@ namespace LmdbCache {
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::LmdbCache.WriteLogEvent.Descriptor.NestedTypes[2]; }
+          get { return global::LmdbCache.WriteLogEvent.Descriptor.NestedTypes[1]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3404,137 +3261,306 @@ namespace LmdbCache {
 
       }
 
-      public sealed partial class Expired : pb::IMessage<Expired> {
-        private static readonly pb::MessageParser<Expired> _parser = new pb::MessageParser<Expired>(() => new Expired());
-        private pb::UnknownFieldSet _unknownFields;
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public static pb::MessageParser<Expired> Parser { get { return _parser; } }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public static pbr::MessageDescriptor Descriptor {
-          get { return global::LmdbCache.WriteLogEvent.Descriptor.NestedTypes[3]; }
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        pbr::MessageDescriptor pb::IMessage.Descriptor {
-          get { return Descriptor; }
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public Expired() {
-          OnConstruction();
-        }
-
-        partial void OnConstruction();
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public Expired(Expired other) : this() {
-          key_ = other.key_;
-          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public Expired Clone() {
-          return new Expired(this);
-        }
-
-        /// <summary>Field number for the "key" field.</summary>
-        public const int KeyFieldNumber = 1;
-        private string key_ = "";
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public string Key {
-          get { return key_; }
-          set {
-            key_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-          }
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public override bool Equals(object other) {
-          return Equals(other as Expired);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public bool Equals(Expired other) {
-          if (ReferenceEquals(other, null)) {
-            return false;
-          }
-          if (ReferenceEquals(other, this)) {
-            return true;
-          }
-          if (Key != other.Key) return false;
-          return Equals(_unknownFields, other._unknownFields);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public override int GetHashCode() {
-          int hash = 1;
-          if (Key.Length != 0) hash ^= Key.GetHashCode();
-          if (_unknownFields != null) {
-            hash ^= _unknownFields.GetHashCode();
-          }
-          return hash;
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public override string ToString() {
-          return pb::JsonFormatter.ToDiagnosticString(this);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void WriteTo(pb::CodedOutputStream output) {
-          if (Key.Length != 0) {
-            output.WriteRawTag(10);
-            output.WriteString(Key);
-          }
-          if (_unknownFields != null) {
-            _unknownFields.WriteTo(output);
-          }
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public int CalculateSize() {
-          int size = 0;
-          if (Key.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(Key);
-          }
-          if (_unknownFields != null) {
-            size += _unknownFields.CalculateSize();
-          }
-          return size;
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void MergeFrom(Expired other) {
-          if (other == null) {
-            return;
-          }
-          if (other.Key.Length != 0) {
-            Key = other.Key;
-          }
-          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void MergeFrom(pb::CodedInputStream input) {
-          uint tag;
-          while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
-              default:
-                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-                break;
-              case 10: {
-                Key = input.ReadString();
-                break;
-              }
-            }
-          }
-        }
-
-      }
-
     }
     #endregion
+
+  }
+
+  public sealed partial class SyncSubscribeRequest : pb::IMessage<SyncSubscribeRequest> {
+    private static readonly pb::MessageParser<SyncSubscribeRequest> _parser = new pb::MessageParser<SyncSubscribeRequest>(() => new SyncSubscribeRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<SyncSubscribeRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[16]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public SyncSubscribeRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public SyncSubscribeRequest(SyncSubscribeRequest other) : this() {
+      replicaId_ = other.replicaId_;
+      since_ = other.since_ != null ? other.since_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public SyncSubscribeRequest Clone() {
+      return new SyncSubscribeRequest(this);
+    }
+
+    /// <summary>Field number for the "replicaId" field.</summary>
+    public const int ReplicaIdFieldNumber = 1;
+    private string replicaId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string ReplicaId {
+      get { return replicaId_; }
+      set {
+        replicaId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "since" field.</summary>
+    public const int SinceFieldNumber = 2;
+    private global::LmdbCache.VectorClock since_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::LmdbCache.VectorClock Since {
+      get { return since_; }
+      set {
+        since_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as SyncSubscribeRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(SyncSubscribeRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (ReplicaId != other.ReplicaId) return false;
+      if (!object.Equals(Since, other.Since)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (ReplicaId.Length != 0) hash ^= ReplicaId.GetHashCode();
+      if (since_ != null) hash ^= Since.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (ReplicaId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(ReplicaId);
+      }
+      if (since_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Since);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (ReplicaId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ReplicaId);
+      }
+      if (since_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Since);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(SyncSubscribeRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.ReplicaId.Length != 0) {
+        ReplicaId = other.ReplicaId;
+      }
+      if (other.since_ != null) {
+        if (since_ == null) {
+          since_ = new global::LmdbCache.VectorClock();
+        }
+        Since.MergeFrom(other.Since);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            ReplicaId = input.ReadString();
+            break;
+          }
+          case 18: {
+            if (since_ == null) {
+              since_ = new global::LmdbCache.VectorClock();
+            }
+            input.ReadMessage(since_);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class SyncResponse : pb::IMessage<SyncResponse> {
+    private static readonly pb::MessageParser<SyncResponse> _parser = new pb::MessageParser<SyncResponse>(() => new SyncResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<SyncResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[17]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public SyncResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public SyncResponse(SyncResponse other) : this() {
+      logEvent_ = other.logEvent_ != null ? other.logEvent_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public SyncResponse Clone() {
+      return new SyncResponse(this);
+    }
+
+    /// <summary>Field number for the "logEvent" field.</summary>
+    public const int LogEventFieldNumber = 1;
+    private global::LmdbCache.WriteLogEvent logEvent_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::LmdbCache.WriteLogEvent LogEvent {
+      get { return logEvent_; }
+      set {
+        logEvent_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as SyncResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(SyncResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(LogEvent, other.LogEvent)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (logEvent_ != null) hash ^= LogEvent.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (logEvent_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(LogEvent);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (logEvent_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(LogEvent);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(SyncResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.logEvent_ != null) {
+        if (logEvent_ == null) {
+          logEvent_ = new global::LmdbCache.WriteLogEvent();
+        }
+        LogEvent.MergeFrom(other.LogEvent);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (logEvent_ == null) {
+              logEvent_ = new global::LmdbCache.WriteLogEvent();
+            }
+            input.ReadMessage(logEvent_);
+            break;
+          }
+        }
+      }
+    }
 
   }
 

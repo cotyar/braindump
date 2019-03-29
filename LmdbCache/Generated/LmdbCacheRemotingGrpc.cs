@@ -271,33 +271,15 @@ namespace LmdbCache {
   {
     static readonly string __ServiceName = "LmdbCache.SyncService";
 
-    static readonly grpc::Marshaller<global::LmdbCache.AddRequest> __Marshaller_LmdbCache_AddRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.AddRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::LmdbCache.AddResponse> __Marshaller_LmdbCache_AddResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.AddResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::LmdbCache.DeleteRequest> __Marshaller_LmdbCache_DeleteRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.DeleteRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::LmdbCache.DeleteResponse> __Marshaller_LmdbCache_DeleteResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.DeleteResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::LmdbCache.CopyRequest> __Marshaller_LmdbCache_CopyRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.CopyRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::LmdbCache.CopyResponse> __Marshaller_LmdbCache_CopyResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.CopyResponse.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::LmdbCache.SyncSubscribeRequest> __Marshaller_LmdbCache_SyncSubscribeRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.SyncSubscribeRequest.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::LmdbCache.SyncResponse> __Marshaller_LmdbCache_SyncResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.SyncResponse.Parser.ParseFrom);
 
-    static readonly grpc::Method<global::LmdbCache.AddRequest, global::LmdbCache.AddResponse> __Method_Add = new grpc::Method<global::LmdbCache.AddRequest, global::LmdbCache.AddResponse>(
-        grpc::MethodType.Unary,
+    static readonly grpc::Method<global::LmdbCache.SyncSubscribeRequest, global::LmdbCache.SyncResponse> __Method_Subscribe = new grpc::Method<global::LmdbCache.SyncSubscribeRequest, global::LmdbCache.SyncResponse>(
+        grpc::MethodType.ServerStreaming,
         __ServiceName,
-        "Add",
-        __Marshaller_LmdbCache_AddRequest,
-        __Marshaller_LmdbCache_AddResponse);
-
-    static readonly grpc::Method<global::LmdbCache.DeleteRequest, global::LmdbCache.DeleteResponse> __Method_Delete = new grpc::Method<global::LmdbCache.DeleteRequest, global::LmdbCache.DeleteResponse>(
-        grpc::MethodType.Unary,
-        __ServiceName,
-        "Delete",
-        __Marshaller_LmdbCache_DeleteRequest,
-        __Marshaller_LmdbCache_DeleteResponse);
-
-    static readonly grpc::Method<global::LmdbCache.CopyRequest, global::LmdbCache.CopyResponse> __Method_Copy = new grpc::Method<global::LmdbCache.CopyRequest, global::LmdbCache.CopyResponse>(
-        grpc::MethodType.Unary,
-        __ServiceName,
-        "Copy",
-        __Marshaller_LmdbCache_CopyRequest,
-        __Marshaller_LmdbCache_CopyResponse);
+        "Subscribe",
+        __Marshaller_LmdbCache_SyncSubscribeRequest,
+        __Marshaller_LmdbCache_SyncResponse);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -308,17 +290,7 @@ namespace LmdbCache {
     /// <summary>Base class for server-side implementations of SyncService</summary>
     public abstract partial class SyncServiceBase
     {
-      public virtual global::System.Threading.Tasks.Task<global::LmdbCache.AddResponse> Add(global::LmdbCache.AddRequest request, grpc::ServerCallContext context)
-      {
-        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
-      }
-
-      public virtual global::System.Threading.Tasks.Task<global::LmdbCache.DeleteResponse> Delete(global::LmdbCache.DeleteRequest request, grpc::ServerCallContext context)
-      {
-        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
-      }
-
-      public virtual global::System.Threading.Tasks.Task<global::LmdbCache.CopyResponse> Copy(global::LmdbCache.CopyRequest request, grpc::ServerCallContext context)
+      public virtual global::System.Threading.Tasks.Task Subscribe(global::LmdbCache.SyncSubscribeRequest request, grpc::IServerStreamWriter<global::LmdbCache.SyncResponse> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -348,53 +320,13 @@ namespace LmdbCache {
       {
       }
 
-      public virtual global::LmdbCache.AddResponse Add(global::LmdbCache.AddRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual grpc::AsyncServerStreamingCall<global::LmdbCache.SyncResponse> Subscribe(global::LmdbCache.SyncSubscribeRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
-        return Add(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+        return Subscribe(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
-      public virtual global::LmdbCache.AddResponse Add(global::LmdbCache.AddRequest request, grpc::CallOptions options)
+      public virtual grpc::AsyncServerStreamingCall<global::LmdbCache.SyncResponse> Subscribe(global::LmdbCache.SyncSubscribeRequest request, grpc::CallOptions options)
       {
-        return CallInvoker.BlockingUnaryCall(__Method_Add, null, options, request);
-      }
-      public virtual grpc::AsyncUnaryCall<global::LmdbCache.AddResponse> AddAsync(global::LmdbCache.AddRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return AddAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      public virtual grpc::AsyncUnaryCall<global::LmdbCache.AddResponse> AddAsync(global::LmdbCache.AddRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.AsyncUnaryCall(__Method_Add, null, options, request);
-      }
-      public virtual global::LmdbCache.DeleteResponse Delete(global::LmdbCache.DeleteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return Delete(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      public virtual global::LmdbCache.DeleteResponse Delete(global::LmdbCache.DeleteRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.BlockingUnaryCall(__Method_Delete, null, options, request);
-      }
-      public virtual grpc::AsyncUnaryCall<global::LmdbCache.DeleteResponse> DeleteAsync(global::LmdbCache.DeleteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return DeleteAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      public virtual grpc::AsyncUnaryCall<global::LmdbCache.DeleteResponse> DeleteAsync(global::LmdbCache.DeleteRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.AsyncUnaryCall(__Method_Delete, null, options, request);
-      }
-      public virtual global::LmdbCache.CopyResponse Copy(global::LmdbCache.CopyRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return Copy(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      public virtual global::LmdbCache.CopyResponse Copy(global::LmdbCache.CopyRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.BlockingUnaryCall(__Method_Copy, null, options, request);
-      }
-      public virtual grpc::AsyncUnaryCall<global::LmdbCache.CopyResponse> CopyAsync(global::LmdbCache.CopyRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return CopyAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      public virtual grpc::AsyncUnaryCall<global::LmdbCache.CopyResponse> CopyAsync(global::LmdbCache.CopyRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.AsyncUnaryCall(__Method_Copy, null, options, request);
+        return CallInvoker.AsyncServerStreamingCall(__Method_Subscribe, null, options, request);
       }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       protected override SyncServiceClient NewInstance(ClientBaseConfiguration configuration)
@@ -408,9 +340,7 @@ namespace LmdbCache {
     public static grpc::ServerServiceDefinition BindService(SyncServiceBase serviceImpl)
     {
       return grpc::ServerServiceDefinition.CreateBuilder()
-          .AddMethod(__Method_Add, serviceImpl.Add)
-          .AddMethod(__Method_Delete, serviceImpl.Delete)
-          .AddMethod(__Method_Copy, serviceImpl.Copy).Build();
+          .AddMethod(__Method_Subscribe, serviceImpl.Subscribe).Build();
     }
 
   }

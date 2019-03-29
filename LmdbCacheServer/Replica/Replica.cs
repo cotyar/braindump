@@ -20,7 +20,7 @@ namespace LmdbCacheServer.Replica
         private readonly LightningPersistence _lmdb;
         private readonly ExpiryTable _kvExpiryTable;
         private readonly KvTable _kvTable;
-
+        private readonly WriteLogTable _wlTable;
 
         public Replica(ReplicaConfig config, LightningConfig lightningConfig, VectorClock clock = null)
         {
@@ -34,7 +34,11 @@ namespace LmdbCacheServer.Replica
             _kvExpiryTable = new ExpiryTable(_lmdb, "kvexpiry");
             _kvTable = new KvTable(_lmdb, "kv", _kvExpiryTable,
                 CurrentTime, (transaction, table, key, expiry) => { }, kvUpdateHandler);
-
+            _wlTable = new WriteLogTable(_lmdb, "writelog", () =>
+                {
+                    var clk = CurrentClock();
+                    return (clk.GetReplicaValue(Config.ReplicaId) ?? 0, clk);
+                }, vc => (vc.Item1 + 1, vc.Item2.Increment(Config.ReplicaId))); // TODO: Remove KvUpdateHandler and simplify this
         }
 
         private void IncrementClock()

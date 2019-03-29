@@ -132,11 +132,7 @@ message KeyValueListResponse {
 // Interface exported by the server.
 service SyncService {
 
-  rpc Add(AddRequest) returns (AddResponse) {}
-
-  rpc Delete(DeleteRequest) returns (DeleteResponse) {}
-
-  rpc Copy(CopyRequest) returns (CopyResponse) {}
+  rpc Subscribe(SyncSubscribeRequest) returns (stream SyncResponse) {}
 }
 
 ///////////////////////////////
@@ -144,24 +140,31 @@ service SyncService {
 // WriteLog types.
 
 message WriteLogEvent {
-  message Added { // TODO: Add a value hash?
+  message AddedOrUpdated { // TODO: Add a value hash?
     string      key     = 1;
-  }
-  message Updated {
-    string      key     = 1;
+    Timestamp expiry    = 2; 
+    bytes     value     = 3;
   }
   message Deleted {
     string      key     = 1;
   }
-  message Expired {
-    string      key     = 1;
-  }
+  // message Expired {
+  //   string      key     = 1;
+  // }
 
   VectorClock clock   = 1; 
   oneof loggedEvent {
-    Added   added     = 5; 
-    Updated updated   = 6;
-    Deleted deleted   = 7;
-    Expired expired   = 8; 
+    AddedOrUpdated updated = 5;
+    Deleted deleted        = 7;
+    //Expired expired   = 8; 
   }
+}
+
+message SyncSubscribeRequest {
+  string replicaId   = 1;
+  VectorClock since  = 2; 
+}
+
+message SyncResponse {
+  WriteLogEvent logEvent = 1;
 }
