@@ -33,7 +33,7 @@ namespace LmdbLightTest
         private const string TestDir = "./client_testdb";
 
         public static LightningConfig Config =>
-            new LightningConfig { Name = TestDir, MaxTables = 20, StorageLimit = 1, WriteBatchMaxDelegates = 1000, WriteBatchTimeoutMilliseconds = 100 };
+            new LightningConfig { Name = TestDir, MaxTables = 20, StorageLimit = 1, WriteBatchMaxDelegates = 100, WriteBatchTimeoutMilliseconds = 1 };
 
         [SetUp]
         public void Setup()
