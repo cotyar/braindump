@@ -131,8 +131,8 @@ message KeyValueListResponse {
 
 // Interface exported by the server.
 service SyncService {
-
-  rpc Subscribe(SyncSubscribeRequest) returns (stream SyncResponse) {}
+  rpc GetReplicaId(Empty) returns (GetReplicaIdResponse) {}
+  rpc Subscribe(SyncSubscribeRequest) returns (stream SyncResponse) {} // TODO: Add Acks streaming
 }
 
 ///////////////////////////////
@@ -158,6 +158,10 @@ message WriteLogEvent {
     Deleted deleted        = 7;
     //Expired expired   = 8; 
   }
+}
+
+message GetReplicaIdResponse {
+  string replicaId   = 1;
 }
 
 message SyncSubscribeRequest {

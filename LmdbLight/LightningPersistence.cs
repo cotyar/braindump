@@ -574,9 +574,19 @@ namespace LmdbLight
                 processedSources = new List<(TaskCompletionSource<object>, object)>();
             }
 
+            void ReportErrorAction(Delegates del, Exception e)
+            {
+                // TODO: Add logging
+                Console.Error.Write($"Exception during processing: '{e}'");
+                Console.Write($"Exception during processing: '{e}'");
+                del.Tcs.SetException(e);
+            }
+
             void ReportError(Exception e)
             {
                 // TODO: Add logging
+                Console.Error.Write($"Exception during processing: '{e}'");
+                Console.Write($"Exception during processing: '{e}'");
 
                 foreach (var (ps, v) in processedSources)
                 {
@@ -625,20 +635,34 @@ namespace LmdbLight
                 {
                     if (del.WriteFunction != null)
                     {
-                        var res = del.WriteFunction(txn);
-                        if (del.Tcs != null)
+                        try
                         {
-                            processedSources.Add((del.Tcs, res));
+                            var res = del.WriteFunction(txn);
+                            if (del.Tcs != null)
+                            {
+                                processedSources.Add((del.Tcs, res));
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            ReportErrorAction(del, e);
                         }
 
                         BounceTxnIfNeeded();
                     }
                     else if (del.WriteAction != null)
                     {
-                        del.WriteAction(txn);
-                        if (del.Tcs != null)
+                        try
                         {
-                            processedSources.Add((del.Tcs, null));
+                            del.WriteAction(txn);
+                            if (del.Tcs != null)
+                            {
+                                processedSources.Add((del.Tcs, null));
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            ReportErrorAction(del, e);
                         }
 
                         BounceTxnIfNeeded();

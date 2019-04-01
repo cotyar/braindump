@@ -24,7 +24,7 @@ namespace LmdbCacheServer
 
         public static VectorClock Increment(this VectorClock oldVectorClock, string replicaId)
         {
-            var newVectorClock = oldVectorClock.Clone();
+            var newVectorClock = oldVectorClock.SetTimeNow();
             var replicas = newVectorClock.Replicas;
             if (replicas.TryGetValue(replicaId, out var replicaValue))
             {
@@ -51,6 +51,8 @@ namespace LmdbCacheServer
             newVectorClock.TicksOffsetUtc = timestamp.TicksOffsetUtc;
             return newVectorClock;
         }
+
+        public static VectorClock SetTimeNow(this VectorClock oldVectorClock) => oldVectorClock.SetTime(DateTimeOffset.UtcNow.ToTimestamp());
 
         public static VectorClock SetReplicaValues(this VectorClock oldVectorClock, IEnumerable<(string, ulong)> replicaValues)
         {

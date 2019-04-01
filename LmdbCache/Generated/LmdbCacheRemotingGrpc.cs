@@ -271,8 +271,17 @@ namespace LmdbCache {
   {
     static readonly string __ServiceName = "LmdbCache.SyncService";
 
+    static readonly grpc::Marshaller<global::LmdbCache.Empty> __Marshaller_LmdbCache_Empty = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.Empty.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::LmdbCache.GetReplicaIdResponse> __Marshaller_LmdbCache_GetReplicaIdResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.GetReplicaIdResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.SyncSubscribeRequest> __Marshaller_LmdbCache_SyncSubscribeRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.SyncSubscribeRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.SyncResponse> __Marshaller_LmdbCache_SyncResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.SyncResponse.Parser.ParseFrom);
+
+    static readonly grpc::Method<global::LmdbCache.Empty, global::LmdbCache.GetReplicaIdResponse> __Method_GetReplicaId = new grpc::Method<global::LmdbCache.Empty, global::LmdbCache.GetReplicaIdResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetReplicaId",
+        __Marshaller_LmdbCache_Empty,
+        __Marshaller_LmdbCache_GetReplicaIdResponse);
 
     static readonly grpc::Method<global::LmdbCache.SyncSubscribeRequest, global::LmdbCache.SyncResponse> __Method_Subscribe = new grpc::Method<global::LmdbCache.SyncSubscribeRequest, global::LmdbCache.SyncResponse>(
         grpc::MethodType.ServerStreaming,
@@ -290,6 +299,11 @@ namespace LmdbCache {
     /// <summary>Base class for server-side implementations of SyncService</summary>
     public abstract partial class SyncServiceBase
     {
+      public virtual global::System.Threading.Tasks.Task<global::LmdbCache.GetReplicaIdResponse> GetReplicaId(global::LmdbCache.Empty request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
       public virtual global::System.Threading.Tasks.Task Subscribe(global::LmdbCache.SyncSubscribeRequest request, grpc::IServerStreamWriter<global::LmdbCache.SyncResponse> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -320,6 +334,22 @@ namespace LmdbCache {
       {
       }
 
+      public virtual global::LmdbCache.GetReplicaIdResponse GetReplicaId(global::LmdbCache.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetReplicaId(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual global::LmdbCache.GetReplicaIdResponse GetReplicaId(global::LmdbCache.Empty request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetReplicaId, null, options, request);
+      }
+      public virtual grpc::AsyncUnaryCall<global::LmdbCache.GetReplicaIdResponse> GetReplicaIdAsync(global::LmdbCache.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetReplicaIdAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual grpc::AsyncUnaryCall<global::LmdbCache.GetReplicaIdResponse> GetReplicaIdAsync(global::LmdbCache.Empty request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetReplicaId, null, options, request);
+      }
       public virtual grpc::AsyncServerStreamingCall<global::LmdbCache.SyncResponse> Subscribe(global::LmdbCache.SyncSubscribeRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return Subscribe(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -340,6 +370,7 @@ namespace LmdbCache {
     public static grpc::ServerServiceDefinition BindService(SyncServiceBase serviceImpl)
     {
       return grpc::ServerServiceDefinition.CreateBuilder()
+          .AddMethod(__Method_GetReplicaId, serviceImpl.GetReplicaId)
           .AddMethod(__Method_Subscribe, serviceImpl.Subscribe).Build();
     }
 

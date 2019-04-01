@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using LmdbCache.Domain;
 using LmdbCacheServer;
+using LmdbCacheServer.Replica;
 using LmdbLight;
 using NUnit.Framework;
 
@@ -32,7 +33,7 @@ namespace LmdbLightTest
         private const string TestDir = "./client_testdb";
 
         public static LightningConfig Config =>
-            new LightningConfig { Name = TestDir, MaxTables = 20, StorageLimit = 1, WriteBatchMaxDelegates = 1, WriteBatchTimeoutMilliseconds = 1 };
+            new LightningConfig { Name = TestDir, MaxTables = 20, StorageLimit = 1, WriteBatchMaxDelegates = 1000, WriteBatchTimeoutMilliseconds = 100 };
 
         [SetUp]
         public void Setup()
@@ -63,17 +64,19 @@ namespace LmdbLightTest
                 var swTotal = new Stopwatch();
                 swTotal.Start();
 
-                for (int i = 0; i < iterations; i++)
+                var kvs = BuildKeyValuePairs(iterations);
+
+                foreach (var kv in kvs)
                 {
-                    var testKey = "test key " + i;
-                    var testValue = "test value" + i;
-                    var testValueBytes = Encoding.UTF8.GetBytes(testValue);
+                    var testKey = kv.Key;
+                    var testValue = kv.Value.Item2;
+                    var testValueBytes = kv.Value.Item3;
 
                     var sw = new Stopwatch();
                     sw.Start();
                     var addRet = client.TryAdd(new[] {testKey}, (k, s) => s.Write(testValueBytes, 0, testValueBytes.Length), DateTimeOffset.UtcNow.AddSeconds(500));
                     sw.Stop();
-                    Console.WriteLine($"Write {i} elapsed: {sw.Elapsed}");
+                    Console.WriteLine($"Write {kv.Value.Item1} elapsed: {sw.Elapsed}");
 
                     Assert.AreEqual(1, addRet.Count);
                     Assert.AreEqual(testKey, addRet.First());
@@ -83,7 +86,7 @@ namespace LmdbLightTest
                     sw = new Stopwatch();
                     sw.Start();
                     var getRet = client.TryGet(new[] {testKey}, (k, s) => readBytes = s.Read(readBuffer, 0, readBuffer.Length));
-                    Console.WriteLine($"Read {i} elapsed: {sw.Elapsed}");
+                    Console.WriteLine($"Read {kv.Value.Item1} elapsed: {sw.Elapsed}");
 
                     Assert.AreEqual(1, getRet.Count);
                     Assert.AreEqual(testKey, getRet.First());
@@ -92,7 +95,7 @@ namespace LmdbLightTest
                 }
 
                 swTotal.Stop();
-                Console.WriteLine($"Write elapsed total: {swTotal.Elapsed}");
+                Console.WriteLine($"Total te elapsed total: {swTotal.Elapsed}");
             }
         }
 
@@ -101,18 +104,20 @@ namespace LmdbLightTest
         {
             using (var client = CreateClient(clientFactory))
             {
-                var kvs = Enumerable.Range(0, iterations).ToDictionary(i => Enumerable.Range(0, 20).Aggregate("", (s, _) => s + "test key  ") + i, i =>
-                {
-                    var testValue = Enumerable.Range(0, 20).Aggregate("", (s, _) => s + "test value ") + i;
-                    var testValueBytes = Encoding.UTF8.GetBytes(testValue);
-                    return (testValue, testValueBytes);
-                });
+                //var kvs = Enumerable.Range(0, iterations).ToDictionary(i => Enumerable.Range(0, 20).Aggregate("", (s, _) => s + "test key  ") + i, i =>
+                //{
+                //    var testValue = Enumerable.Range(0, 20).Aggregate("", (s, _) => s + "test value ") + i;
+                //    var testValueBytes = Encoding.UTF8.GetBytes(testValue);
+                //    return (testValue, testValueBytes);
+                //});
+
+                var kvs = BuildKeyValuePairs(iterations);
 
                 var sw = new Stopwatch();
                 sw.Start();
                 var addRet = client.TryAdd(kvs.Keys, (k, s) =>
                     {
-                        var buffer = kvs[k].Item2;
+                        var buffer = kvs[k].Item3;
                         s.Write(buffer, 0, buffer.Length);
                     }, DateTimeOffset.Now.AddSeconds(5));
                 sw.Stop();
@@ -141,6 +146,17 @@ namespace LmdbLightTest
                     CollectionAssert.AreEqual(kvs[kv.Key].Item2, kv.Value);
                 }
             }
+        }
+
+        private static Dictionary<string, (int, string, byte[])> BuildKeyValuePairs(int iterations)
+        {
+            return Enumerable.Range(0, iterations).ToDictionary(i => Guid.NewGuid().ToString(), i =>
+            {
+                var rnd = new Random();
+                var testValue = Enumerable.Range(0, 51).Aggregate("", (s, _) => s + rnd.Next(16).ToString("X"));
+                var testValueBytes = Encoding.UTF8.GetBytes(testValue);
+                return (i, testValue, testValueBytes);
+            });
         }
 
         [Test]

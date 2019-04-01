@@ -91,27 +91,27 @@ namespace LmdbCacheServer.Tables
     {
         private readonly LightningPersistence _lmdb;
         private readonly ExpiryTable _expiryTable;
-        private readonly Func<Timestamp> _currentTime;
+        private readonly Func<VectorClock> _currentClock;
         private readonly Action<WriteTransaction, DupTable, TableKey, Timestamp> _expirationQueue;
         private readonly Action<WriteTransaction, WriteLogEvent> _kvUpdateHandler;
         private readonly DupTable _kvTable;
 
-        public KvTable(LightningPersistence lmdb, string kvTableName, ExpiryTable expiryTable, Func<Timestamp> currentTime, 
+        public KvTable(LightningPersistence lmdb, string kvTableName, ExpiryTable expiryTable, Func<VectorClock> currentClock, 
             Action<WriteTransaction, DupTable, TableKey, Timestamp> expirationQueue, Action<WriteTransaction, WriteLogEvent> kvUpdateHandler)
         {
             _lmdb = lmdb;
             _kvTable = _lmdb.OpenDupTable(kvTableName);
             _expiryTable = expiryTable;
-            _currentTime = currentTime;
+            _currentClock = currentClock;
             _expirationQueue = expirationQueue;
             _kvUpdateHandler = kvUpdateHandler;
         }
 
         private void RemoveExpired(WriteTransaction txn, TableKey key, Timestamp keyExpiry) => _expirationQueue(txn, _kvTable, key, keyExpiry);
 
-        private bool CheckAndRemoveIfExpired(KvKey key, Timestamp currentTime, Timestamp timeToCheck)
+        private bool CheckAndRemoveIfExpired(KvKey key, VectorClock currentClock, Timestamp timeToCheck)
         {
-            //if (currentTime.TicksOffsetUtc < timeToCheck.TicksOffsetUtc)
+            //if (currentClock.TicksOffsetUtc < timeToCheck.TicksOffsetUtc)
             {
                 return true;
             }
@@ -141,7 +141,7 @@ namespace LmdbCacheServer.Tables
 
         public (KvKey, bool)[] ContainsKeys(KvKey[] keys)
         { 
-            var currentTime = _currentTime();
+            var currentTime = _currentClock();
             return TryGetMetadata(keys).
                 Select(km => (km.Item1, km.Item2.HasValue && CheckAndRemoveIfExpired(km.Item1, currentTime, km.Item2.Value.Expiry))).
                 ToArray();
@@ -157,7 +157,7 @@ namespace LmdbCacheServer.Tables
         {
             return _lmdb.Read(txn => 
                 {
-                    var currentTime = _currentTime();
+                    var currentTime = _currentClock();
                     return keys.Select(key =>
                     {
                         var tableKey = ToTableKey(key);
@@ -185,7 +185,7 @@ namespace LmdbCacheServer.Tables
             return _lmdb.Read(txn =>
             {
                 var tableKey = ToTableKey(prefix);
-                var currentTime = _currentTime();
+                var currentTime = _currentClock();
                 return txn.PageByPrefix(_kvTable, tableKey, page, pageSize).
                     Select(ke => (FromTableKey(ke.Item1), ke.Item2)).
                     Where(ke => CheckAndRemoveIfExpired(ke.Item1, currentTime, ((KvExpiry) (ke.Item2.Value.ToByteArray())).Expiry)). // TODO: Change to more optimal KvExpiry conversion
@@ -200,7 +200,7 @@ namespace LmdbCacheServer.Tables
             return _lmdb.Read(txn =>
             {
                 var tableKey = ToTableKey(prefix);
-                var currentTime = _currentTime();
+                var currentTime = _currentClock();
                 return txn.PageByPrefix(_kvTable, tableKey, page, pageSize).
                     Select(ke => (FromTableKey(ke.Item1), ke.Item2)).
                     Where(ke => CheckAndRemoveIfExpired(ke.Item1, currentTime, ((KvExpiry)ke.Item2.Value.ToByteArray()).Expiry)).
@@ -214,7 +214,7 @@ namespace LmdbCacheServer.Tables
         public Task<(KvKey, bool)[]> Add((KvKey, KvMetadata, KvValue)[] batch, Func<KvKey, VectorClock /*old*/, VectorClock/*new*/, bool> proceedWithUpdatePredicate) =>
             _lmdb.WriteAsync(txn =>
             {
-                var currentTime = _currentTime();
+                var currentTime = _currentClock();
 
                 return batch.
                     Select(item =>
@@ -297,11 +297,17 @@ namespace LmdbCacheServer.Tables
             return response;
         }
 
+        public async Task<bool> Delete(KvKey key)
+        {
+            var ret = await Delete(new[] {key});
+            return ret[0].Item2;
+        }
+
         public async Task<(KvKey, bool)[]> Delete(KvKey[] keys)
         {
             var kvResults = await _lmdb.WriteAsync(txn => 
             {
-                var currentTime = _currentTime();
+                var currentTime = _currentClock();
 
                 return keys.
                     Select(key => 

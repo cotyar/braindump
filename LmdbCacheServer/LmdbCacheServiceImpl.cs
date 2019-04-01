@@ -19,16 +19,11 @@ namespace LmdbCacheServer
     public class LmdbCacheServiceImpl : LmdbCacheService.LmdbCacheServiceBase
     {
         private readonly Func<VectorClock> _clock;
-        private readonly LightningPersistence _lmdb;
         private readonly KvTable _kvTable;
-        private readonly ExpiryTable _kvExpiryTable;
 
-        public LmdbCacheServiceImpl(LightningConfig config, Func<VectorClock> clock, Action<WriteTransaction, WriteLogEvent> kvUpdateHandler) 
+        public LmdbCacheServiceImpl(KvTable kvTable, Func<VectorClock> clock) 
         {
-            _lmdb = new LightningPersistence(config);
-            _kvExpiryTable = new ExpiryTable(_lmdb, "kvexpiry");
-            _kvTable = new KvTable(_lmdb, "kv", _kvExpiryTable, 
-                () => DateTimeOffset.UtcNow.ToTimestamp(), (transaction, table, key, expiry) => {}, kvUpdateHandler);
+            _kvTable = kvTable;
             _clock = clock;
         }
 

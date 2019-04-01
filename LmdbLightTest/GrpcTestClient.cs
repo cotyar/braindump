@@ -8,6 +8,7 @@ using LmdbCache;
 using LmdbCache.Domain;
 using LmdbCacheClient;
 using LmdbCacheServer;
+using LmdbCacheServer.Replica;
 using LmdbCacheServer.Tables;
 using LmdbLight;
 
@@ -17,32 +18,25 @@ namespace LmdbLightTest
     {
         private static int _startingPort = 55000;
         private readonly IClient _client;
-        private readonly Server _server;
+        private readonly Replica _server;
 
-        public GrpcTestClient(LightningConfig config)
+        public GrpcTestClient(LightningConfig lightningConfig)
         {
             var port = Interlocked.Increment(ref _startingPort);
-            config.Name = $"{config.Name ?? "db"}_{port}"; // It is safe to do as LightningConfig is a struct
+            lightningConfig.Name = $"{lightningConfig.Name ?? "db"}_{port}"; // It is safe to do as LightningConfig is a struct
 
-            if (Directory.Exists(config.Name))
+            if (Directory.Exists(lightningConfig.Name))
             {
-                Directory.Delete(config.Name, true);
+                Directory.Delete(lightningConfig.Name, true);
             }
 
-            _server = new Server
+            _server = new Replica(new ReplicaConfig
             {
-                //Services = { LmdbCacheService.BindService(new InMemoryCacheServiceImpl()) },
-                Services = { LmdbCacheService.BindService(
-                    new LmdbCacheServiceImpl(config, () => new VectorClock { TicksOffsetUtc = (ulong)DateTimeOffset.UtcNow.Ticks}, 
-//                        (transaction, key, metadata, value) =>
-//                        {
-//                            Console.WriteLine($"Added key: '{key.Key}'");
-//                        }
-                        ((txn, wle) => Console.WriteLine($"Key changed: '{wle.LoggedEventCase} - {wle.Clock}'"))
-                        )) },
-                Ports = { new ServerPort("127.0.0.1", port, ServerCredentials.Insecure) }
-            };
-            _server.Start();
+                ReplicaId = "replica_1",
+                Port = port,
+                ReplicationPort = port + 2000,
+                LightningConfig = lightningConfig
+            });
 
             Console.WriteLine("Cache server listening on port " + port);
             Console.WriteLine("Press any key to stop the server...");
@@ -55,7 +49,7 @@ namespace LmdbLightTest
         public void Dispose()
         {
             _client.Dispose();
-            _server.ShutdownAsync().Wait();
+            _server.Dispose();
         }
 
         public Dictionary<string, Dictionary<string, DiskUsageInfo>> GetDiskUsage(string server = null, int topNKeys = 0, string chunkStore = null) => 
