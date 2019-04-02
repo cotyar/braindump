@@ -12,6 +12,7 @@ using LmdbCache;
 using LmdbCache.Domain;
 using static LmdbCache.AddRequest.Types;
 using static LmdbCache.AddStreamRequest.Types;
+using static LmdbCache.GetResponse.Types;
 
 namespace LmdbCacheClient
 {
@@ -89,22 +90,38 @@ namespace LmdbCacheClient
         public HashSet<string> TryAddOrUpdate(IEnumerable<string> keys, Action<string, Stream> streamWriter, DateTimeOffset expiry,
             AvailabilityLevel requiredAvailabilityLevel = AvailabilityLevel.SavedToDisk) => TryAdd(keys, streamWriter, true, expiry, requiredAvailabilityLevel);
 
+        private async Task<IEnumerable<GetResponseEntry>> GetStream(GetRequest request)
+        {
+            var ret = new List<GetResponseEntry>(request.Keys.Count);
+            using (var call = _lightClient.GetStream(request))
+            {
+                while (await call.ResponseStream.MoveNext())
+                {
+                    ret.Add(call.ResponseStream.Current.Result);
+                }
+            }
+
+            return ret;
+        }
+
         public HashSet<string> TryGet(IEnumerable<string> keys, Action<string, Stream> streamReader)
         {
             var keysCopied = keys.ToArray();
 
             var request = new GetRequest();
             request.Keys.AddRange(keysCopied);
-            var getResponse = _lightClient.Get(request);
+            var results = _useStreaming
+                ? GetStream(request).Result
+                : _lightClient.Get(request).Results;
 
-            var ret = getResponse.Results.Select((r, i) => (r, i)).Where(res => res.Item1.Result == GetResponse.Types.GetResponseEntry.Types.GetResult.Success).ToArray();
+            var ret = results.Where(res => res.Result == GetResponseEntry.Types.GetResult.Success).ToArray();
 
             foreach (var kv in ret)
             {
-                streamReader(keysCopied[kv.Item2], kv.Item1.Value.SelectMany(v => v).ToStream());
+                streamReader(keysCopied[kv.Index], kv.Value.ToStream());
             }
 
-            return ret.Select(kv => keysCopied[kv.Item2]).ToHashSet();
+            return ret.Select(kv => keysCopied[kv.Index]).ToHashSet();
         }
 
         public void TryCopy(IEnumerable<KeyValuePair<string, string>> keyCopies, DateTimeOffset expiry, out HashSet<string> fromKeysWhichDidNotExist,

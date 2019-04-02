@@ -16,25 +16,33 @@ namespace LmdbLightTest
     {
         private interface IClientFactory
         {
-            IClient Create();
+            IClient Create(LightningConfig config);
         }
 
         private class LocalClientFactory : IClientFactory
         {
-            public IClient Create() => new LmdbLightClient(Config);
+            public IClient Create(LightningConfig config) => new LmdbLightClient(config);
         }
 
         private class GrpcClientFactory : IClientFactory
         {
-            public IClient Create() => new GrpcTestClient(Config);
+            public IClient Create(LightningConfig config) => new GrpcTestClient(config);
         }
 
 
-//        private const string TestDir = "./client_testdb";
-        private const string TestDir = @"D:\CacheTest\client_testdb";
+        private const string TestDir = "./client_testdb";
+//        private const string TestDir = @"D:\CacheTest\client_testdb";
 
         public static LightningConfig Config =>
-            new LightningConfig { Name = TestDir, MaxTables = 20, StorageLimit = 1, WriteBatchMaxDelegates = 100, WriteBatchTimeoutMilliseconds = 1 };
+            new LightningConfig
+            {
+                Name = TestDir,
+                MaxTables = 20,
+                StorageLimit = 10,
+                WriteBatchMaxDelegates = 100,
+                WriteBatchTimeoutMilliseconds = 1,
+                AsyncStore = false
+            };
 
         [SetUp]
         public void Setup()
@@ -47,12 +55,12 @@ namespace LmdbLightTest
             Directory.CreateDirectory(TestDir);
         }
 
-        private IClient CreateClient(Type type) => ((IClientFactory) Activator.CreateInstance(type)).Create();
+        private IClient CreateClient(Type type, LightningConfig config) => ((IClientFactory) Activator.CreateInstance(type)).Create(config);
 
         [Test]
         public void TestCreateClient([Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory)
         {
-            using (var client = CreateClient(clientFactory)) { }
+            using (var client = CreateClient(clientFactory, Config)) { }
 
             Assert.Pass();
         }
@@ -60,14 +68,14 @@ namespace LmdbLightTest
         [Test]
         public void TestAddGet([Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory, [Values(1, 10, 100, 1000, 10000)] int iterations)
         {
-            using (var client = CreateClient(clientFactory))
+            using (var client = CreateClient(clientFactory, Config))
             {
                 var totalWrite = new TimeSpan();
                 var totalRead = new TimeSpan();
 
                 var swTotal = new Stopwatch();
                 swTotal.Start();
-                var kvs = BuildKeyValuePairs(iterations, 10240);
+                var kvs = BuildKeyValuePairs(iterations, 1024);
                 swTotal.Stop();
                 Console.WriteLine($"Preparing data elapsed: {swTotal.Elapsed}");
 
@@ -78,11 +86,10 @@ namespace LmdbLightTest
                 {
                     var testKey = kv.Key;
                     var testValue = kv.Value.Item2;
-                    var testValueBytes = kv.Value.Item3;
 
                     var sw = new Stopwatch();
                     sw.Start();
-                    var addRet = client.TryAdd(new[] {testKey}, (k, s) => s.Write(testValueBytes, 0, testValueBytes.Length), DateTimeOffset.UtcNow.AddSeconds(500));
+                    var addRet = client.TryAdd(new[] {testKey}, (k, s) => s.Write(testValue, 0, testValue.Length), DateTimeOffset.UtcNow.AddSeconds(500));
                     sw.Stop();
 //                    Console.WriteLine($"Write {kv.Value.Item1} elapsed: {sw.Elapsed}");
                     totalWrite += sw.Elapsed;
@@ -101,8 +108,8 @@ namespace LmdbLightTest
 
                     Assert.AreEqual(1, getRet.Count);
                     Assert.AreEqual(testKey, getRet.First());
-                    Assert.AreEqual(testValueBytes.Length, readBytes);
-                    CollectionAssert.AreEqual(testValueBytes, readBuffer.Take(readBytes).ToArray());
+                    Assert.AreEqual(testValue.Length, readBytes);
+                    CollectionAssert.AreEqual(testValue, readBuffer.Take(readBytes).ToArray());
                 }
 
                 swTotal.Stop();
@@ -115,7 +122,7 @@ namespace LmdbLightTest
         [Test]
         public void TestAddGetMany([Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory, [Values(1, 10, 100, 1000, 10000, 100000)] int iterations)
         {
-            using (var client = CreateClient(clientFactory))
+            using (var client = CreateClient(clientFactory, Config))
             {
                 //var kvs = Enumerable.Range(0, iterations).ToDictionary(i => Enumerable.Range(0, 20).Aggregate("", (s, _) => s + "test key  ") + i, i =>
                 //{
@@ -126,7 +133,7 @@ namespace LmdbLightTest
 
                 var sw = new Stopwatch();
                 sw.Start();
-                var kvs = BuildKeyValuePairs(iterations, 10240);
+                var kvs = BuildKeyValuePairs(iterations, 1024);
                 sw.Stop();
                 Console.WriteLine($"Preparing data elapsed: {sw.Elapsed}");
 
@@ -134,7 +141,7 @@ namespace LmdbLightTest
                 sw.Start();
                 var addRet = client.TryAdd(kvs.Keys, (k, s) =>
                     {
-                        var buffer = kvs[k].Item3;
+                        var buffer = kvs[k].Item2;
                         s.Write(buffer, 0, buffer.Length);
                     }, DateTimeOffset.Now.AddSeconds(50));
                 sw.Stop();
@@ -165,21 +172,21 @@ namespace LmdbLightTest
             }
         }
 
-        private static Dictionary<string, (int, string, byte[])> BuildKeyValuePairs(int iterations, int length)
+        private static Dictionary<string, (int, byte[])> BuildKeyValuePairs(int iterations, int length)
         {
+            var rnd = new Random();
             return Enumerable.Range(0, iterations).ToDictionary(i => Guid.NewGuid().ToString(), i =>
             {
-                var rnd = new Random();
-                var testValue = Enumerable.Range(0, length).Aggregate("", (s, _) => s + rnd.Next(16).ToString("X"));
-                var testValueBytes = Encoding.UTF8.GetBytes(testValue);
-                return (i, testValue, testValueBytes);
+                var testValue = new byte[length];
+                rnd.NextBytes(testValue);
+                return (i, testValue);
             });
         }
 
         [Test]
         public void TestSearchByPrefix([Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory, [Values(1, 10, 100, 1000, 10000, 100000)] int iterations)
         {
-            using (var client = CreateClient(clientFactory))
+            using (var client = CreateClient(clientFactory, Config))
             {
                 var kvs = Enumerable.Range(0, iterations).ToDictionary(i => Enumerable.Range(0, 20).Aggregate("", (s, _) => s + "test key  ") + i, i =>
                 {

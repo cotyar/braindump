@@ -24,6 +24,7 @@ namespace LmdbLight
         public int? MaxTables;
         public int? WriteBatchTimeoutMilliseconds;
         public int? WriteBatchMaxDelegates;
+        public bool AsyncStore;
     }
 
     public struct TableKey : IEquatable<TableKey>
@@ -401,7 +402,11 @@ namespace LmdbLight
 
             Console.WriteLine($"ThreadId ctor: {Thread.CurrentThread.ManagedThreadId}");
             Env = new LightningEnvironment(_config.Name ?? "db") { MaxDatabases = _config.MaxTables ?? 20, MapSize = (_config.StorageLimit ?? 10L) * 1024 * 1024 * 1024 };
-            Env.Open(EnvironmentOpenFlags.NoThreadLocalStorage /*| EnvironmentOpenFlags.NoLock */ );
+            var envFlags = config.AsyncStore
+                ? EnvironmentOpenFlags.NoThreadLocalStorage | EnvironmentOpenFlags.WriteMap | EnvironmentOpenFlags.MapAsync
+                : EnvironmentOpenFlags.NoThreadLocalStorage;
+
+            Env.Open(envFlags);
             _envHandle = GCHandle.Alloc(Env);
 
             _tables = new ConcurrentDictionary<string, Table>();

@@ -129,17 +129,30 @@ namespace LmdbCacheServer
             var ret = _kvTable.Get(request.Keys.Select(k => new KvKey(k)));
 
             var response = new GetResponse();
-            var getResponseEntries = ret.Select(kv =>
+            var getResponseEntries = ret.Select((kv, i) =>
                 {
-                    if (!kv.Item2.HasValue) return new GetResponseEntry {Result = GetResult.NotFound};
+                    if (!kv.Item2.HasValue) return new GetResponseEntry { Result = GetResult.NotFound, Index = (uint) i };
 
-                    var gre = new GetResponseEntry {Result = GetResult.Success}; // TODO: Add value streaming
-                    gre.Value.AddRange(new [] { kv.Item2.Value.Value });
+                    var gre = new GetResponseEntry { Result = GetResult.Success, Index = (uint) i, Value = kv.Item2.Value.Value };
                     return gre;
                 });
             response.Results.AddRange(getResponseEntries);
 
             return Task.FromResult(response);
+        }
+
+        public override async Task GetStream(GetRequest request, IServerStreamWriter<GetStreamResponse> responseStream, ServerCallContext context)
+        {
+            var kvs = _kvTable.Get(request.Keys.Select(k => new KvKey(k)));
+
+            for (var i = 0; i < kvs.Length; i++)
+            {
+                var kv = kvs[i];
+                var gre = kv.Item2.HasValue
+                    ? new GetResponseEntry { Result = GetResult.Success, Index = (uint) i, Value = kv.Item2.Value.Value }
+                    : new GetResponseEntry { Result = GetResult.NotFound, Index = (uint) i };
+                await responseStream.WriteAsync(new GetStreamResponse {Result = gre});
+            }
         }
 
         public override Task ListKeys(KeyListRequest request, IServerStreamWriter<KeyListResponse> responseStream, ServerCallContext context)

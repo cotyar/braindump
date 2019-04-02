@@ -24,6 +24,7 @@ namespace LmdbCache {
     static readonly grpc::Marshaller<global::LmdbCache.CopyResponse> __Marshaller_LmdbCache_CopyResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.CopyResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.GetRequest> __Marshaller_LmdbCache_GetRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.GetRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.GetResponse> __Marshaller_LmdbCache_GetResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.GetResponse.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::LmdbCache.GetStreamResponse> __Marshaller_LmdbCache_GetStreamResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.GetStreamResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.ContainsKeysResponse> __Marshaller_LmdbCache_ContainsKeysResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.ContainsKeysResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.KeyListRequest> __Marshaller_LmdbCache_KeyListRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.KeyListRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.KeyListResponse> __Marshaller_LmdbCache_KeyListResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.KeyListResponse.Parser.ParseFrom);
@@ -63,6 +64,13 @@ namespace LmdbCache {
         "Get",
         __Marshaller_LmdbCache_GetRequest,
         __Marshaller_LmdbCache_GetResponse);
+
+    static readonly grpc::Method<global::LmdbCache.GetRequest, global::LmdbCache.GetStreamResponse> __Method_GetStream = new grpc::Method<global::LmdbCache.GetRequest, global::LmdbCache.GetStreamResponse>(
+        grpc::MethodType.ServerStreaming,
+        __ServiceName,
+        "GetStream",
+        __Marshaller_LmdbCache_GetRequest,
+        __Marshaller_LmdbCache_GetStreamResponse);
 
     static readonly grpc::Method<global::LmdbCache.GetRequest, global::LmdbCache.ContainsKeysResponse> __Method_ContainsKeys = new grpc::Method<global::LmdbCache.GetRequest, global::LmdbCache.ContainsKeysResponse>(
         grpc::MethodType.Unary,
@@ -115,6 +123,11 @@ namespace LmdbCache {
       }
 
       public virtual global::System.Threading.Tasks.Task<global::LmdbCache.GetResponse> Get(global::LmdbCache.GetRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      public virtual global::System.Threading.Tasks.Task GetStream(global::LmdbCache.GetRequest request, grpc::IServerStreamWriter<global::LmdbCache.GetStreamResponse> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -231,6 +244,14 @@ namespace LmdbCache {
       {
         return CallInvoker.AsyncUnaryCall(__Method_Get, null, options, request);
       }
+      public virtual grpc::AsyncServerStreamingCall<global::LmdbCache.GetStreamResponse> GetStream(global::LmdbCache.GetRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetStream(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual grpc::AsyncServerStreamingCall<global::LmdbCache.GetStreamResponse> GetStream(global::LmdbCache.GetRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncServerStreamingCall(__Method_GetStream, null, options, request);
+      }
       public virtual global::LmdbCache.ContainsKeysResponse ContainsKeys(global::LmdbCache.GetRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return ContainsKeys(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -280,6 +301,7 @@ namespace LmdbCache {
           .AddMethod(__Method_Delete, serviceImpl.Delete)
           .AddMethod(__Method_Copy, serviceImpl.Copy)
           .AddMethod(__Method_Get, serviceImpl.Get)
+          .AddMethod(__Method_GetStream, serviceImpl.GetStream)
           .AddMethod(__Method_ContainsKeys, serviceImpl.ContainsKeys)
           .AddMethod(__Method_ListKeys, serviceImpl.ListKeys)
           .AddMethod(__Method_ListKeyValues, serviceImpl.ListKeyValues).Build();
