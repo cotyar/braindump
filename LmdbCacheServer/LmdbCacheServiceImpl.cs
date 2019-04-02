@@ -13,6 +13,8 @@ using static LmdbCache.AddResponse.Types;
 using static LmdbCache.DeleteResponse.Types;
 using static LmdbCache.GetResponse.Types;
 using static LmdbCache.GetResponse.Types.GetResponseEntry.Types;
+using static LmdbCache.KvMetadata.Types.Status;
+using static LmdbCache.KvMetadata.Types.UpdateAction;
 
 namespace LmdbCacheServer
 {
@@ -29,7 +31,15 @@ namespace LmdbCacheServer
 
         public override async Task<AddResponse> Add(AddRequest request, ServerCallContext context)
         {
-            var batch = request.Entries.Select(ks => (new KvKey(ks.Key), new KvMetadata(ks.Expiry, _clock()), new KvValue(new [] { ks.Value }))).ToArray();
+            var batch = request.Entries.
+                Select(ks => (new KvKey(ks.Key), new KvMetadata
+                {
+                    Status = Active,
+                    Expiry = ks.Expiry,
+                    Action = Added,
+                    Updated = _clock()
+                }, new KvValue(ks.Value))).
+                ToArray();
 
             var ret = await (request.OverrideExisting ? _kvTable.AddOrUpdate(batch) : _kvTable.Add(batch));
             var response = new AddResponse();
@@ -55,7 +65,17 @@ namespace LmdbCacheServer
 
         public override async Task<DeleteResponse> Delete(DeleteRequest request, ServerCallContext context)
         {
-            var keys = request.Keys.Select(k => new KvKey(k)).ToArray();
+            var keys = request.Keys.Select(k =>
+            {
+                var currentClock = _clock();
+                return (new KvKey(k), new KvMetadata
+                {
+                    Status = Deleted,
+                    Expiry = currentClock.TicksOffsetUtc.ToTimestamp(),
+                    Action = Added,
+                    Updated = currentClock
+                });
+            }).ToArray();
             var kvs = await _kvTable.Delete(keys);
 
             var response = new DeleteResponse();
@@ -75,7 +95,7 @@ namespace LmdbCacheServer
                     if (!kv.Item2.HasValue) return new GetResponseEntry {Result = GetResult.NotFound};
 
                     var gre = new GetResponseEntry {Result = GetResult.Success}; // TODO: Add value streaming
-                    gre.Value.AddRange(kv.Item2.Value.Value);
+                    gre.Value.AddRange(new [] { kv.Item2.Value.Value });
                     return gre;
                 });
             response.Results.AddRange(getResponseEntries);
@@ -92,7 +112,7 @@ namespace LmdbCacheServer
         public override Task ListKeyValues(KeyListRequest request, IServerStreamWriter<KeyValueListResponse> responseStream, ServerCallContext context)
         {
             var ret = _kvTable.PageByPrefix(new KvKey(request.KeyPrefix), 0, uint.MaxValue);
-            return responseStream.WriteAllAsync(ret.Select(k => new KeyValueListResponse { Key = k.Item1.ToString(), Value = k.Item2.Value[0] })); // TODO: Add value streaming
+            return responseStream.WriteAllAsync(ret.Select(k => new KeyValueListResponse { Key = k.Item1.ToString(), Value = k.Item2.Value })); // TODO: Add value streaming
         }
     }
 }

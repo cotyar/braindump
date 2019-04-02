@@ -29,66 +29,74 @@ namespace LmdbCache {
             "ZWN0b3JDbG9jaxI2CghyZXBsaWNhcxgBIAMoCzIkLkxtZGJDYWNoZS5WZWN0",
             "b3JDbG9jay5SZXBsaWNhc0VudHJ5EhYKDnRpY2tzT2Zmc2V0VXRjGAIgASgE",
             "Gi8KDVJlcGxpY2FzRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgE",
-            "OgI4ASKzAQoKQWRkUmVxdWVzdBIYChBvdmVycmlkZUV4aXN0aW5nGAEgASgI",
-            "EjYKB2VudHJpZXMYAiADKAsyJS5MbWRiQ2FjaGUuQWRkUmVxdWVzdC5BZGRS",
-            "ZXF1ZXN0RW50cnkaUwoPQWRkUmVxdWVzdEVudHJ5EgsKA2tleRgBIAEoCRIk",
-            "CgZleHBpcnkYAiABKAsyFC5MbWRiQ2FjaGUuVGltZXN0YW1wEg0KBXZhbHVl",
-            "GAMgASgMIpIBCgtBZGRSZXNwb25zZRIxCgdyZXN1bHRzGAEgAygOMiAuTG1k",
-            "YkNhY2hlLkFkZFJlc3BvbnNlLkFkZFJlc3VsdCJQCglBZGRSZXN1bHQSDQoJ",
-            "S0VZX0FEREVEEAASDwoLS0VZX1VQREFURUQQARIWChJLRVlfQUxSRUFEWV9F",
-            "WElTVFMQAhILCgdGQUlMVVJFEAMiHQoNRGVsZXRlUmVxdWVzdBIMCgRrZXlz",
-            "GAEgAygJIoIBCg5EZWxldGVSZXNwb25zZRI3CgdyZXN1bHRzGAEgAygOMiYu",
-            "TG1kYkNhY2hlLkRlbGV0ZVJlc3BvbnNlLkRlbGV0ZVJlc3VsdCI3CgxEZWxl",
-            "dGVSZXN1bHQSCwoHU1VDQ0VTUxAAEg0KCU5PVF9GT1VORBABEgsKB0ZBSUxV",
-            "UkUQAiIaCgpHZXRSZXF1ZXN0EgwKBGtleXMYASADKAki5AEKC0dldFJlc3Bv",
-            "bnNlEjgKB3Jlc3VsdHMYASADKAsyJy5MbWRiQ2FjaGUuR2V0UmVzcG9uc2Uu",
-            "R2V0UmVzcG9uc2VFbnRyeRqaAQoQR2V0UmVzcG9uc2VFbnRyeRJBCgZyZXN1",
-            "bHQYASABKA4yMS5MbWRiQ2FjaGUuR2V0UmVzcG9uc2UuR2V0UmVzcG9uc2VF",
-            "bnRyeS5HZXRSZXN1bHQSDQoFdmFsdWUYAiADKAwiNAoJR2V0UmVzdWx0EgsK",
-            "B1NVQ0NFU1MQABINCglOT1RfRk9VTkQQARILCgdGQUlMVVJFEAIiJwoUQ29u",
-            "dGFpbnNLZXlzUmVzcG9uc2USDwoHcmVzdWx0cxgBIAMoCCKhAQoLQ29weVJl",
-            "cXVlc3QSOAoHZW50cmllcxgBIAMoCzInLkxtZGJDYWNoZS5Db3B5UmVxdWVz",
-            "dC5Db3B5UmVxdWVzdEVudHJ5GlgKEENvcHlSZXF1ZXN0RW50cnkSDwoHa2V5",
-            "RnJvbRgBIAEoCRIkCgZleHBpcnkYAiABKAsyFC5MbWRiQ2FjaGUuVGltZXN0",
-            "YW1wEg0KBWtleVRvGAMgASgJIpYBCgxDb3B5UmVzcG9uc2USMwoHcmVzdWx0",
-            "cxgBIAMoDjIiLkxtZGJDYWNoZS5Db3B5UmVzcG9uc2UuQ29weVJlc3VsdCJR",
-            "CgpDb3B5UmVzdWx0EgsKB1NVQ0NFU1MQABIWChJGUk9NX0tFWV9OT1RfRk9V",
-            "TkQQARIRCg1UT19LRVlfRVhJU1RTEAISCwoHRkFJTFVSRRADIkMKDktleUxp",
-            "c3RSZXF1ZXN0EhEKCWtleVByZWZpeBgBIAEoCRIQCghwYWdlU2l6ZRgCIAEo",
-            "DRIMCgRwYWdlGAMgASgNIh4KD0tleUxpc3RSZXNwb25zZRILCgNrZXkYASAB",
-            "KAkiMgoUS2V5VmFsdWVMaXN0UmVzcG9uc2USCwoDa2V5GAEgASgJEg0KBXZh",
-            "bHVlGAMgASgMIqICCg1Xcml0ZUxvZ0V2ZW50EiUKBWNsb2NrGAEgASgLMhYu",
-            "TG1kYkNhY2hlLlZlY3RvckNsb2NrEjoKB3VwZGF0ZWQYBSABKAsyJy5MbWRi",
-            "Q2FjaGUuV3JpdGVMb2dFdmVudC5BZGRlZE9yVXBkYXRlZEgAEjMKB2RlbGV0",
-            "ZWQYByABKAsyIC5MbWRiQ2FjaGUuV3JpdGVMb2dFdmVudC5EZWxldGVkSAAa",
-            "UgoOQWRkZWRPclVwZGF0ZWQSCwoDa2V5GAEgASgJEiQKBmV4cGlyeRgCIAEo",
-            "CzIULkxtZGJDYWNoZS5UaW1lc3RhbXASDQoFdmFsdWUYAyABKAwaFgoHRGVs",
-            "ZXRlZBILCgNrZXkYASABKAlCDQoLbG9nZ2VkRXZlbnQiKQoUR2V0UmVwbGlj",
-            "YUlkUmVzcG9uc2USEQoJcmVwbGljYUlkGAEgASgJIlAKFFN5bmNTdWJzY3Jp",
-            "YmVSZXF1ZXN0EhEKCXJlcGxpY2FJZBgBIAEoCRIlCgVzaW5jZRgCIAEoCzIW",
-            "LkxtZGJDYWNoZS5WZWN0b3JDbG9jayI6CgxTeW5jUmVzcG9uc2USKgoIbG9n",
-            "RXZlbnQYASABKAsyGC5MbWRiQ2FjaGUuV3JpdGVMb2dFdmVudDLgAwoQTG1k",
-            "YkNhY2hlU2VydmljZRI2CgNBZGQSFS5MbWRiQ2FjaGUuQWRkUmVxdWVzdBoW",
-            "LkxtZGJDYWNoZS5BZGRSZXNwb25zZSIAEj8KBkRlbGV0ZRIYLkxtZGJDYWNo",
-            "ZS5EZWxldGVSZXF1ZXN0GhkuTG1kYkNhY2hlLkRlbGV0ZVJlc3BvbnNlIgAS",
-            "OQoEQ29weRIWLkxtZGJDYWNoZS5Db3B5UmVxdWVzdBoXLkxtZGJDYWNoZS5D",
-            "b3B5UmVzcG9uc2UiABI2CgNHZXQSFS5MbWRiQ2FjaGUuR2V0UmVxdWVzdBoW",
-            "LkxtZGJDYWNoZS5HZXRSZXNwb25zZSIAEkgKDENvbnRhaW5zS2V5cxIVLkxt",
-            "ZGJDYWNoZS5HZXRSZXF1ZXN0Gh8uTG1kYkNhY2hlLkNvbnRhaW5zS2V5c1Jl",
-            "c3BvbnNlIgASRQoITGlzdEtleXMSGS5MbWRiQ2FjaGUuS2V5TGlzdFJlcXVl",
-            "c3QaGi5MbWRiQ2FjaGUuS2V5TGlzdFJlc3BvbnNlIgAwARJPCg1MaXN0S2V5",
-            "VmFsdWVzEhkuTG1kYkNhY2hlLktleUxpc3RSZXF1ZXN0Gh8uTG1kYkNhY2hl",
-            "LktleVZhbHVlTGlzdFJlc3BvbnNlIgAwATKdAQoLU3luY1NlcnZpY2USQwoM",
-            "R2V0UmVwbGljYUlkEhAuTG1kYkNhY2hlLkVtcHR5Gh8uTG1kYkNhY2hlLkdl",
-            "dFJlcGxpY2FJZFJlc3BvbnNlIgASSQoJU3Vic2NyaWJlEh8uTG1kYkNhY2hl",
-            "LlN5bmNTdWJzY3JpYmVSZXF1ZXN0GhcuTG1kYkNhY2hlLlN5bmNSZXNwb25z",
-            "ZSIAMAFCDKoCCUxtZGJDYWNoZWIGcHJvdG8z"));
+            "OgI4ASKlAgoKS3ZNZXRhZGF0YRIsCgZzdGF0dXMYASABKA4yHC5MbWRiQ2Fj",
+            "aGUuS3ZNZXRhZGF0YS5TdGF0dXMSJAoGZXhwaXJ5GAIgASgLMhQuTG1kYkNh",
+            "Y2hlLlRpbWVzdGFtcBInCgd1cGRhdGVkGAMgASgLMhYuTG1kYkNhY2hlLlZl",
+            "Y3RvckNsb2NrEjIKBmFjdGlvbhgEIAEoDjIiLkxtZGJDYWNoZS5Ldk1ldGFk",
+            "YXRhLlVwZGF0ZUFjdGlvbiIuCgZTdGF0dXMSCgoGQUNUSVZFEAASCwoHREVM",
+            "RVRFRBABEgsKB0VYUElSRUQQAiI2CgxVcGRhdGVBY3Rpb24SCQoFQURERUQQ",
+            "ABILCgdVUERBVEVEEAESDgoKUkVQTElDQVRFRBACIrMBCgpBZGRSZXF1ZXN0",
+            "EhgKEG92ZXJyaWRlRXhpc3RpbmcYASABKAgSNgoHZW50cmllcxgCIAMoCzIl",
+            "LkxtZGJDYWNoZS5BZGRSZXF1ZXN0LkFkZFJlcXVlc3RFbnRyeRpTCg9BZGRS",
+            "ZXF1ZXN0RW50cnkSCwoDa2V5GAEgASgJEiQKBmV4cGlyeRgCIAEoCzIULkxt",
+            "ZGJDYWNoZS5UaW1lc3RhbXASDQoFdmFsdWUYAyABKAwikgEKC0FkZFJlc3Bv",
+            "bnNlEjEKB3Jlc3VsdHMYASADKA4yIC5MbWRiQ2FjaGUuQWRkUmVzcG9uc2Uu",
+            "QWRkUmVzdWx0IlAKCUFkZFJlc3VsdBINCglLRVlfQURERUQQABIPCgtLRVlf",
+            "VVBEQVRFRBABEhYKEktFWV9BTFJFQURZX0VYSVNUUxACEgsKB0ZBSUxVUkUQ",
+            "AyIdCg1EZWxldGVSZXF1ZXN0EgwKBGtleXMYASADKAkiggEKDkRlbGV0ZVJl",
+            "c3BvbnNlEjcKB3Jlc3VsdHMYASADKA4yJi5MbWRiQ2FjaGUuRGVsZXRlUmVz",
+            "cG9uc2UuRGVsZXRlUmVzdWx0IjcKDERlbGV0ZVJlc3VsdBILCgdTVUNDRVNT",
+            "EAASDQoJTk9UX0ZPVU5EEAESCwoHRkFJTFVSRRACIhoKCkdldFJlcXVlc3QS",
+            "DAoEa2V5cxgBIAMoCSLkAQoLR2V0UmVzcG9uc2USOAoHcmVzdWx0cxgBIAMo",
+            "CzInLkxtZGJDYWNoZS5HZXRSZXNwb25zZS5HZXRSZXNwb25zZUVudHJ5GpoB",
+            "ChBHZXRSZXNwb25zZUVudHJ5EkEKBnJlc3VsdBgBIAEoDjIxLkxtZGJDYWNo",
+            "ZS5HZXRSZXNwb25zZS5HZXRSZXNwb25zZUVudHJ5LkdldFJlc3VsdBINCgV2",
+            "YWx1ZRgCIAMoDCI0CglHZXRSZXN1bHQSCwoHU1VDQ0VTUxAAEg0KCU5PVF9G",
+            "T1VORBABEgsKB0ZBSUxVUkUQAiInChRDb250YWluc0tleXNSZXNwb25zZRIP",
+            "CgdyZXN1bHRzGAEgAygIIqEBCgtDb3B5UmVxdWVzdBI4CgdlbnRyaWVzGAEg",
+            "AygLMicuTG1kYkNhY2hlLkNvcHlSZXF1ZXN0LkNvcHlSZXF1ZXN0RW50cnka",
+            "WAoQQ29weVJlcXVlc3RFbnRyeRIPCgdrZXlGcm9tGAEgASgJEiQKBmV4cGly",
+            "eRgCIAEoCzIULkxtZGJDYWNoZS5UaW1lc3RhbXASDQoFa2V5VG8YAyABKAki",
+            "lgEKDENvcHlSZXNwb25zZRIzCgdyZXN1bHRzGAEgAygOMiIuTG1kYkNhY2hl",
+            "LkNvcHlSZXNwb25zZS5Db3B5UmVzdWx0IlEKCkNvcHlSZXN1bHQSCwoHU1VD",
+            "Q0VTUxAAEhYKEkZST01fS0VZX05PVF9GT1VORBABEhEKDVRPX0tFWV9FWElT",
+            "VFMQAhILCgdGQUlMVVJFEAMiQwoOS2V5TGlzdFJlcXVlc3QSEQoJa2V5UHJl",
+            "Zml4GAEgASgJEhAKCHBhZ2VTaXplGAIgASgNEgwKBHBhZ2UYAyABKA0iHgoP",
+            "S2V5TGlzdFJlc3BvbnNlEgsKA2tleRgBIAEoCSIyChRLZXlWYWx1ZUxpc3RS",
+            "ZXNwb25zZRILCgNrZXkYASABKAkSDQoFdmFsdWUYAyABKAwiogIKDVdyaXRl",
+            "TG9nRXZlbnQSJQoFY2xvY2sYASABKAsyFi5MbWRiQ2FjaGUuVmVjdG9yQ2xv",
+            "Y2sSOgoHdXBkYXRlZBgFIAEoCzInLkxtZGJDYWNoZS5Xcml0ZUxvZ0V2ZW50",
+            "LkFkZGVkT3JVcGRhdGVkSAASMwoHZGVsZXRlZBgHIAEoCzIgLkxtZGJDYWNo",
+            "ZS5Xcml0ZUxvZ0V2ZW50LkRlbGV0ZWRIABpSCg5BZGRlZE9yVXBkYXRlZBIL",
+            "CgNrZXkYASABKAkSJAoGZXhwaXJ5GAIgASgLMhQuTG1kYkNhY2hlLlRpbWVz",
+            "dGFtcBINCgV2YWx1ZRgDIAEoDBoWCgdEZWxldGVkEgsKA2tleRgBIAEoCUIN",
+            "Cgtsb2dnZWRFdmVudCIpChRHZXRSZXBsaWNhSWRSZXNwb25zZRIRCglyZXBs",
+            "aWNhSWQYASABKAkiUAoUU3luY1N1YnNjcmliZVJlcXVlc3QSEQoJcmVwbGlj",
+            "YUlkGAEgASgJEiUKBXNpbmNlGAIgASgLMhYuTG1kYkNhY2hlLlZlY3RvckNs",
+            "b2NrIjoKDFN5bmNSZXNwb25zZRIqCghsb2dFdmVudBgBIAEoCzIYLkxtZGJD",
+            "YWNoZS5Xcml0ZUxvZ0V2ZW50MuADChBMbWRiQ2FjaGVTZXJ2aWNlEjYKA0Fk",
+            "ZBIVLkxtZGJDYWNoZS5BZGRSZXF1ZXN0GhYuTG1kYkNhY2hlLkFkZFJlc3Bv",
+            "bnNlIgASPwoGRGVsZXRlEhguTG1kYkNhY2hlLkRlbGV0ZVJlcXVlc3QaGS5M",
+            "bWRiQ2FjaGUuRGVsZXRlUmVzcG9uc2UiABI5CgRDb3B5EhYuTG1kYkNhY2hl",
+            "LkNvcHlSZXF1ZXN0GhcuTG1kYkNhY2hlLkNvcHlSZXNwb25zZSIAEjYKA0dl",
+            "dBIVLkxtZGJDYWNoZS5HZXRSZXF1ZXN0GhYuTG1kYkNhY2hlLkdldFJlc3Bv",
+            "bnNlIgASSAoMQ29udGFpbnNLZXlzEhUuTG1kYkNhY2hlLkdldFJlcXVlc3Qa",
+            "Hy5MbWRiQ2FjaGUuQ29udGFpbnNLZXlzUmVzcG9uc2UiABJFCghMaXN0S2V5",
+            "cxIZLkxtZGJDYWNoZS5LZXlMaXN0UmVxdWVzdBoaLkxtZGJDYWNoZS5LZXlM",
+            "aXN0UmVzcG9uc2UiADABEk8KDUxpc3RLZXlWYWx1ZXMSGS5MbWRiQ2FjaGUu",
+            "S2V5TGlzdFJlcXVlc3QaHy5MbWRiQ2FjaGUuS2V5VmFsdWVMaXN0UmVzcG9u",
+            "c2UiADABMp0BCgtTeW5jU2VydmljZRJDCgxHZXRSZXBsaWNhSWQSEC5MbWRi",
+            "Q2FjaGUuRW1wdHkaHy5MbWRiQ2FjaGUuR2V0UmVwbGljYUlkUmVzcG9uc2Ui",
+            "ABJJCglTdWJzY3JpYmUSHy5MbWRiQ2FjaGUuU3luY1N1YnNjcmliZVJlcXVl",
+            "c3QaFy5MbWRiQ2FjaGUuU3luY1Jlc3BvbnNlIgAwAUIMqgIJTG1kYkNhY2hl",
+            "YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.Empty), global::LmdbCache.Empty.Parser, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.Timestamp), global::LmdbCache.Timestamp.Parser, new[]{ "TicksOffsetUtc" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.VectorClock), global::LmdbCache.VectorClock.Parser, new[]{ "Replicas", "TicksOffsetUtc" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.KvMetadata), global::LmdbCache.KvMetadata.Parser, new[]{ "Status", "Expiry", "Updated", "Action" }, null, new[]{ typeof(global::LmdbCache.KvMetadata.Types.Status), typeof(global::LmdbCache.KvMetadata.Types.UpdateAction) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddRequest), global::LmdbCache.AddRequest.Parser, new[]{ "OverrideExisting", "Entries" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddRequest.Types.AddRequestEntry), global::LmdbCache.AddRequest.Types.AddRequestEntry.Parser, new[]{ "Key", "Expiry", "Value" }, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddResponse), global::LmdbCache.AddResponse.Parser, new[]{ "Results" }, null, new[]{ typeof(global::LmdbCache.AddResponse.Types.AddResult) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.DeleteRequest), global::LmdbCache.DeleteRequest.Parser, new[]{ "Keys" }, null, null, null),
@@ -494,6 +502,253 @@ namespace LmdbCache {
 
   }
 
+  public sealed partial class KvMetadata : pb::IMessage<KvMetadata> {
+    private static readonly pb::MessageParser<KvMetadata> _parser = new pb::MessageParser<KvMetadata>(() => new KvMetadata());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<KvMetadata> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[3]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public KvMetadata() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public KvMetadata(KvMetadata other) : this() {
+      status_ = other.status_;
+      expiry_ = other.expiry_ != null ? other.expiry_.Clone() : null;
+      updated_ = other.updated_ != null ? other.updated_.Clone() : null;
+      action_ = other.action_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public KvMetadata Clone() {
+      return new KvMetadata(this);
+    }
+
+    /// <summary>Field number for the "status" field.</summary>
+    public const int StatusFieldNumber = 1;
+    private global::LmdbCache.KvMetadata.Types.Status status_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::LmdbCache.KvMetadata.Types.Status Status {
+      get { return status_; }
+      set {
+        status_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "expiry" field.</summary>
+    public const int ExpiryFieldNumber = 2;
+    private global::LmdbCache.Timestamp expiry_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::LmdbCache.Timestamp Expiry {
+      get { return expiry_; }
+      set {
+        expiry_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "updated" field.</summary>
+    public const int UpdatedFieldNumber = 3;
+    private global::LmdbCache.VectorClock updated_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::LmdbCache.VectorClock Updated {
+      get { return updated_; }
+      set {
+        updated_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "action" field.</summary>
+    public const int ActionFieldNumber = 4;
+    private global::LmdbCache.KvMetadata.Types.UpdateAction action_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::LmdbCache.KvMetadata.Types.UpdateAction Action {
+      get { return action_; }
+      set {
+        action_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as KvMetadata);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(KvMetadata other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Status != other.Status) return false;
+      if (!object.Equals(Expiry, other.Expiry)) return false;
+      if (!object.Equals(Updated, other.Updated)) return false;
+      if (Action != other.Action) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Status != 0) hash ^= Status.GetHashCode();
+      if (expiry_ != null) hash ^= Expiry.GetHashCode();
+      if (updated_ != null) hash ^= Updated.GetHashCode();
+      if (Action != 0) hash ^= Action.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Status != 0) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) Status);
+      }
+      if (expiry_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Expiry);
+      }
+      if (updated_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(Updated);
+      }
+      if (Action != 0) {
+        output.WriteRawTag(32);
+        output.WriteEnum((int) Action);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Status != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Status);
+      }
+      if (expiry_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Expiry);
+      }
+      if (updated_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Updated);
+      }
+      if (Action != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Action);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(KvMetadata other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Status != 0) {
+        Status = other.Status;
+      }
+      if (other.expiry_ != null) {
+        if (expiry_ == null) {
+          expiry_ = new global::LmdbCache.Timestamp();
+        }
+        Expiry.MergeFrom(other.Expiry);
+      }
+      if (other.updated_ != null) {
+        if (updated_ == null) {
+          updated_ = new global::LmdbCache.VectorClock();
+        }
+        Updated.MergeFrom(other.Updated);
+      }
+      if (other.Action != 0) {
+        Action = other.Action;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            status_ = (global::LmdbCache.KvMetadata.Types.Status) input.ReadEnum();
+            break;
+          }
+          case 18: {
+            if (expiry_ == null) {
+              expiry_ = new global::LmdbCache.Timestamp();
+            }
+            input.ReadMessage(expiry_);
+            break;
+          }
+          case 26: {
+            if (updated_ == null) {
+              updated_ = new global::LmdbCache.VectorClock();
+            }
+            input.ReadMessage(updated_);
+            break;
+          }
+          case 32: {
+            action_ = (global::LmdbCache.KvMetadata.Types.UpdateAction) input.ReadEnum();
+            break;
+          }
+        }
+      }
+    }
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the KvMetadata message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      public enum Status {
+        [pbr::OriginalName("ACTIVE")] Active = 0,
+        [pbr::OriginalName("DELETED")] Deleted = 1,
+        /// <summary>
+        ///    FAILURE             = 3;
+        /// </summary>
+        [pbr::OriginalName("EXPIRED")] Expired = 2,
+      }
+
+      public enum UpdateAction {
+        [pbr::OriginalName("ADDED")] Added = 0,
+        [pbr::OriginalName("UPDATED")] Updated = 1,
+        [pbr::OriginalName("REPLICATED")] Replicated = 2,
+      }
+
+    }
+    #endregion
+
+  }
+
   public sealed partial class AddRequest : pb::IMessage<AddRequest> {
     private static readonly pb::MessageParser<AddRequest> _parser = new pb::MessageParser<AddRequest>(() => new AddRequest());
     private pb::UnknownFieldSet _unknownFields;
@@ -502,7 +757,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[3]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -849,7 +1104,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[4]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -985,7 +1240,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[5]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1106,7 +1361,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[6]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1241,7 +1496,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[7]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1362,7 +1617,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[8]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1652,7 +1907,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[9]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[10]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1774,7 +2029,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[10]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[11]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2093,7 +2348,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[11]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[12]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2229,7 +2484,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[12]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[13]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2414,7 +2669,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[13]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[14]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2546,7 +2801,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[14]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[15]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2706,7 +2961,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[15]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[16]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3277,7 +3532,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[16]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[17]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3406,7 +3661,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[17]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[18]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3569,7 +3824,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[18]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[19]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

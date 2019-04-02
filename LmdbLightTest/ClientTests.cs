@@ -81,7 +81,7 @@ namespace LmdbLightTest
                     Assert.AreEqual(1, addRet.Count);
                     Assert.AreEqual(testKey, addRet.First());
 
-                    var readBuffer = new byte[100];
+                    var readBuffer = new byte[10000];
                     int readBytes = -1;
                     sw = new Stopwatch();
                     sw.Start();
@@ -131,7 +131,7 @@ namespace LmdbLightTest
                 sw.Start();
                 var getRet = client.TryGet(kvs.Keys, (k, s) =>
                 {
-                    var readBuffer = new byte[1000];
+                    var readBuffer = new byte[100000];
                     var readBytes = s.Read(readBuffer, 0, readBuffer.Length);
                     getDict[k] = readBuffer.Take(readBytes).ToArray();
                 });
@@ -153,7 +153,7 @@ namespace LmdbLightTest
             return Enumerable.Range(0, iterations).ToDictionary(i => Guid.NewGuid().ToString(), i =>
             {
                 var rnd = new Random();
-                var testValue = Enumerable.Range(0, 51).Aggregate("", (s, _) => s + rnd.Next(16).ToString("X"));
+                var testValue = Enumerable.Range(0, 1024).Aggregate("", (s, _) => s + rnd.Next(16).ToString("X"));
                 var testValueBytes = Encoding.UTF8.GetBytes(testValue);
                 return (i, testValue, testValueBytes);
             });

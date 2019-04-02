@@ -37,6 +37,24 @@ message VectorClock { // In fact we are following LWWRegister ("Last Write Wins"
   uint64 ticksOffsetUtc     = 2;
 }
 
+message KvMetadata {
+  enum Status {
+    ACTIVE              = 0;
+    DELETED             = 1;
+    EXPIRED             = 2;
+//    FAILURE             = 3;
+  }
+  enum UpdateAction {
+    ADDED               = 0;
+    UPDATED             = 1;
+    REPLICATED          = 2;
+  }
+  Status status       = 1;
+  Timestamp expiry    = 2;
+  VectorClock updated = 3;
+  UpdateAction action = 4;
+}
+
 message AddRequest {
   message AddRequestEntry {
     string    key    = 1;
@@ -141,7 +159,7 @@ service SyncService {
 
 message WriteLogEvent {
   message AddedOrUpdated { // TODO: Add a value hash?
-    string      key     = 1;
+    string    key       = 1;
     Timestamp expiry    = 2; 
     bytes     value     = 3;
   }

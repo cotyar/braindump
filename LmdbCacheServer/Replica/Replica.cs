@@ -6,6 +6,8 @@ using Grpc.Core;
 using LmdbCache;
 using LmdbCacheServer.Tables;
 using LmdbLight;
+using static LmdbCache.KvMetadata.Types.Status;
+using static LmdbCache.KvMetadata.Types.UpdateAction;
 
 namespace LmdbCacheServer.Replica
 {
@@ -19,6 +21,7 @@ namespace LmdbCacheServer.Replica
         public VectorClock CurrentClock() => _clock.SetTimeNow();
 
         private readonly LightningPersistence _lmdb;
+        private readonly KvMetadataTable _kvMetadataTable;
         private readonly ExpiryTable _kvExpiryTable;
         private readonly KvTable _kvTable;
         private readonly WriteLogTable _wlTable;
@@ -35,11 +38,12 @@ namespace LmdbCacheServer.Replica
             LightningConfig = replicaConfig.LightningConfig;
 
             _lmdb = new LightningPersistence(LightningConfig);
+            _kvMetadataTable = new KvMetadataTable(_lmdb, "kvmetadata");
             _kvExpiryTable = new ExpiryTable(_lmdb, "kvexpiry");
             _wlTable = new WriteLogTable(_lmdb, "writelog", ReplicaConfig.ReplicaId);
 
-            _kvTable = new KvTable(_lmdb, "kv", _kvExpiryTable,
-                CurrentClock, (transaction, table, key, expiry) => { }, (txn, wle) =>
+            _kvTable = new KvTable(_lmdb, "kv", _kvExpiryTable, _kvMetadataTable,
+                CurrentClock, (txn, wle) =>
                 {
                     wle.Clock = IncrementClock();
 
@@ -58,20 +62,35 @@ namespace LmdbCacheServer.Replica
                     {
                         switch (syncEvent.LogEvent.LoggedEventCase)
                         {
-                            case WriteLogEvent.LoggedEventOneofCase.None:
-                                throw new ArgumentException("syncEvent", $"Unexpected LogEvent case: {syncEvent.LogEvent.LoggedEventCase}");
                             case WriteLogEvent.LoggedEventOneofCase.Updated:
                                 var addedOrUpdated = syncEvent.LogEvent.Updated;
+                                var addMetadata = new KvMetadata
+                                {
+                                    Status = Active,
+                                    Expiry = addedOrUpdated.Expiry,
+                                    Action = Replicated,
+                                    Updated = IncrementClock()
+                                };
                                 var wasUpdated = await _kvTable.AddOrUpdate(new KvKey(addedOrUpdated.Key),
-                                    new KvMetadata(addedOrUpdated.Expiry, syncEvent.LogEvent.Clock),
-                                    new KvValue(new[] {addedOrUpdated.Value}));
+                                    addMetadata,
+                                    new KvValue(addedOrUpdated.Value));
                                 // TODO: Should we do anything if the value wasn't updated? Maybe logging?                                
                                 break;
                             case WriteLogEvent.LoggedEventOneofCase.Deleted:
                                 var deleted = syncEvent.LogEvent.Deleted;
-                                var wasDeleted = await _kvTable.Delete(new KvKey(deleted.Key));
+                                var currentClock = IncrementClock();
+                                var delMetadata = new KvMetadata
+                                {
+                                    Status = Deleted,
+                                    Expiry = currentClock.TicksOffsetUtc.ToTimestamp(),
+                                    Action = Replicated,
+                                    Updated = currentClock
+                                };
+                                var wasDeleted = await _kvTable.Delete(new KvKey(deleted.Key), delMetadata);
                                 // TODO: Should we do anything if the value wasn't updated? Maybe logging?
                                 break;
+                            case WriteLogEvent.LoggedEventOneofCase.None:
+                                throw new ArgumentException("syncEvent", $"Unexpected LogEvent case: {syncEvent.LogEvent.LoggedEventCase}");
                             default:
                                 throw new ArgumentOutOfRangeException();
                         }

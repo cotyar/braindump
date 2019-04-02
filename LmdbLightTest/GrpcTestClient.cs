@@ -39,7 +39,6 @@ namespace LmdbLightTest
             });
 
             Console.WriteLine("Cache server listening on port " + port);
-            Console.WriteLine("Press any key to stop the server...");
 
             _client = new LightClient(new Channel($"127.0.0.1:{port}", ChannelCredentials.Insecure));
         }
