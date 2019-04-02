@@ -171,7 +171,7 @@ namespace LmdbCacheServer.Tables
         /// <summary>
         /// NOTE: Long running keys enumerable will prevent ReadOnly transaction from closing which can affect efficiency of page reuse in the DB  
         /// </summary>
-        public (KvKey, KvValue?)[] Get(IEnumerable<KvKey> keys)
+        public (KvKey, KvMetadata, KvValue?)[] Get(IEnumerable<KvKey> keys)
         {
             return _lmdb.Read(txn => 
                 {
@@ -187,10 +187,10 @@ namespace LmdbCacheServer.Tables
                             if (tableEntry == null) throw new Exception($"DB inconsistency NO DATA for key: '{key}'");
 
                             var kvValue = FromTableValue(tableEntry.Value);
-                            return (key, kvValue);
+                            return (key, metadata, kvValue);
                         }
 
-                        return (key, (KvValue?) null);
+                        return (key, metadata, (KvValue?) null);
                     }).ToArray();
                 });
         }
@@ -362,7 +362,7 @@ namespace LmdbCacheServer.Tables
                 new WriteLogEvent.Types.AddedOrUpdated
                 {
                     Key = key.Key,
-                    Value = value.Value, // TODO: Add streaming
+                    //Value = value.Value, // TODO: Add streaming // TODO: Implement lazy value logic
                     Expiry = metadata.Expiry
                 }};
         }

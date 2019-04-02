@@ -6,6 +6,7 @@ using Grpc.Core;
 using LmdbCache;
 using LmdbCacheServer.Tables;
 using LmdbLight;
+using static LmdbCache.KvMetadata.Types;
 using static LmdbCache.KvMetadata.Types.Status;
 using static LmdbCache.KvMetadata.Types.UpdateAction;
 
@@ -69,7 +70,8 @@ namespace LmdbCacheServer.Replica
                                     Status = Active,
                                     Expiry = addedOrUpdated.Expiry,
                                     Action = Replicated,
-                                    Updated = IncrementClock()
+                                    Updated = IncrementClock(),
+                                    Compression = Compression.None
                                 };
                                 var wasUpdated = await _kvTable.AddOrUpdate(new KvKey(addedOrUpdated.Key),
                                     addMetadata,

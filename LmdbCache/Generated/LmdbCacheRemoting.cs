@@ -29,93 +29,98 @@ namespace LmdbCache {
             "ZWN0b3JDbG9jaxI2CghyZXBsaWNhcxgBIAMoCzIkLkxtZGJDYWNoZS5WZWN0",
             "b3JDbG9jay5SZXBsaWNhc0VudHJ5EhYKDnRpY2tzT2Zmc2V0VXRjGAIgASgE",
             "Gi8KDVJlcGxpY2FzRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgE",
-            "OgI4ASKlAgoKS3ZNZXRhZGF0YRIsCgZzdGF0dXMYASABKA4yHC5MbWRiQ2Fj",
+            "OgI4ASKJAwoKS3ZNZXRhZGF0YRIsCgZzdGF0dXMYASABKA4yHC5MbWRiQ2Fj",
             "aGUuS3ZNZXRhZGF0YS5TdGF0dXMSJAoGZXhwaXJ5GAIgASgLMhQuTG1kYkNh",
             "Y2hlLlRpbWVzdGFtcBInCgd1cGRhdGVkGAMgASgLMhYuTG1kYkNhY2hlLlZl",
             "Y3RvckNsb2NrEjIKBmFjdGlvbhgEIAEoDjIiLkxtZGJDYWNoZS5Ldk1ldGFk",
-            "YXRhLlVwZGF0ZUFjdGlvbiIuCgZTdGF0dXMSCgoGQUNUSVZFEAASCwoHREVM",
-            "RVRFRBABEgsKB0VYUElSRUQQAiI2CgxVcGRhdGVBY3Rpb24SCQoFQURERUQQ",
-            "ABILCgdVUERBVEVEEAESDgoKUkVQTElDQVRFRBACIrMBCgpBZGRSZXF1ZXN0",
-            "EhgKEG92ZXJyaWRlRXhpc3RpbmcYASABKAgSNgoHZW50cmllcxgCIAMoCzIl",
-            "LkxtZGJDYWNoZS5BZGRSZXF1ZXN0LkFkZFJlcXVlc3RFbnRyeRpTCg9BZGRS",
-            "ZXF1ZXN0RW50cnkSCwoDa2V5GAEgASgJEiQKBmV4cGlyeRgCIAEoCzIULkxt",
-            "ZGJDYWNoZS5UaW1lc3RhbXASDQoFdmFsdWUYAyABKAwikgEKC0FkZFJlc3Bv",
-            "bnNlEjEKB3Jlc3VsdHMYASADKA4yIC5MbWRiQ2FjaGUuQWRkUmVzcG9uc2Uu",
-            "QWRkUmVzdWx0IlAKCUFkZFJlc3VsdBINCglLRVlfQURERUQQABIPCgtLRVlf",
-            "VVBEQVRFRBABEhYKEktFWV9BTFJFQURZX0VYSVNUUxACEgsKB0ZBSUxVUkUQ",
-            "AyKSAgoQQWRkU3RyZWFtUmVxdWVzdBI0CgZoZWFkZXIYASABKAsyIi5MbWRi",
-            "Q2FjaGUuQWRkU3RyZWFtUmVxdWVzdC5IZWFkZXJIABI2CgVjaHVuaxgCIAEo",
-            "CzIlLkxtZGJDYWNoZS5BZGRTdHJlYW1SZXF1ZXN0LkRhdGFDaHVua0gAGjcK",
-            "BkhlYWRlchIYChBvdmVycmlkZUV4aXN0aW5nGAEgASgIEhMKC2NodW5rc0Nv",
-            "dW50GAIgASgNGlAKCURhdGFDaHVuaxINCgVpbmRleBgBIAEoDRI0CgVlbnRy",
-            "eRgCIAEoCzIlLkxtZGJDYWNoZS5BZGRSZXF1ZXN0LkFkZFJlcXVlc3RFbnRy",
-            "eUIFCgNtc2ciHQoNRGVsZXRlUmVxdWVzdBIMCgRrZXlzGAEgAygJIoIBCg5E",
-            "ZWxldGVSZXNwb25zZRI3CgdyZXN1bHRzGAEgAygOMiYuTG1kYkNhY2hlLkRl",
-            "bGV0ZVJlc3BvbnNlLkRlbGV0ZVJlc3VsdCI3CgxEZWxldGVSZXN1bHQSCwoH",
-            "U1VDQ0VTUxAAEg0KCU5PVF9GT1VORBABEgsKB0ZBSUxVUkUQAiIaCgpHZXRS",
-            "ZXF1ZXN0EgwKBGtleXMYASADKAki8wEKC0dldFJlc3BvbnNlEjgKB3Jlc3Vs",
-            "dHMYASADKAsyJy5MbWRiQ2FjaGUuR2V0UmVzcG9uc2UuR2V0UmVzcG9uc2VF",
-            "bnRyeRqpAQoQR2V0UmVzcG9uc2VFbnRyeRJBCgZyZXN1bHQYASABKA4yMS5M",
-            "bWRiQ2FjaGUuR2V0UmVzcG9uc2UuR2V0UmVzcG9uc2VFbnRyeS5HZXRSZXN1",
-            "bHQSDQoFaW5kZXgYAiABKA0SDQoFdmFsdWUYAyABKAwiNAoJR2V0UmVzdWx0",
-            "EgsKB1NVQ0NFU1MQABINCglOT1RfRk9VTkQQARILCgdGQUlMVVJFEAIiTAoR",
-            "R2V0U3RyZWFtUmVzcG9uc2USNwoGcmVzdWx0GAEgASgLMicuTG1kYkNhY2hl",
-            "LkdldFJlc3BvbnNlLkdldFJlc3BvbnNlRW50cnkiJwoUQ29udGFpbnNLZXlz",
-            "UmVzcG9uc2USDwoHcmVzdWx0cxgBIAMoCCKhAQoLQ29weVJlcXVlc3QSOAoH",
-            "ZW50cmllcxgBIAMoCzInLkxtZGJDYWNoZS5Db3B5UmVxdWVzdC5Db3B5UmVx",
-            "dWVzdEVudHJ5GlgKEENvcHlSZXF1ZXN0RW50cnkSDwoHa2V5RnJvbRgBIAEo",
-            "CRIkCgZleHBpcnkYAiABKAsyFC5MbWRiQ2FjaGUuVGltZXN0YW1wEg0KBWtl",
-            "eVRvGAMgASgJIpYBCgxDb3B5UmVzcG9uc2USMwoHcmVzdWx0cxgBIAMoDjIi",
-            "LkxtZGJDYWNoZS5Db3B5UmVzcG9uc2UuQ29weVJlc3VsdCJRCgpDb3B5UmVz",
-            "dWx0EgsKB1NVQ0NFU1MQABIWChJGUk9NX0tFWV9OT1RfRk9VTkQQARIRCg1U",
-            "T19LRVlfRVhJU1RTEAISCwoHRkFJTFVSRRADIkMKDktleUxpc3RSZXF1ZXN0",
-            "EhEKCWtleVByZWZpeBgBIAEoCRIQCghwYWdlU2l6ZRgCIAEoDRIMCgRwYWdl",
-            "GAMgASgNIh4KD0tleUxpc3RSZXNwb25zZRILCgNrZXkYASABKAkiMgoUS2V5",
-            "VmFsdWVMaXN0UmVzcG9uc2USCwoDa2V5GAEgASgJEg0KBXZhbHVlGAMgASgM",
-            "IqICCg1Xcml0ZUxvZ0V2ZW50EiUKBWNsb2NrGAEgASgLMhYuTG1kYkNhY2hl",
-            "LlZlY3RvckNsb2NrEjoKB3VwZGF0ZWQYBSABKAsyJy5MbWRiQ2FjaGUuV3Jp",
-            "dGVMb2dFdmVudC5BZGRlZE9yVXBkYXRlZEgAEjMKB2RlbGV0ZWQYByABKAsy",
-            "IC5MbWRiQ2FjaGUuV3JpdGVMb2dFdmVudC5EZWxldGVkSAAaUgoOQWRkZWRP",
-            "clVwZGF0ZWQSCwoDa2V5GAEgASgJEiQKBmV4cGlyeRgCIAEoCzIULkxtZGJD",
-            "YWNoZS5UaW1lc3RhbXASDQoFdmFsdWUYAyABKAwaFgoHRGVsZXRlZBILCgNr",
-            "ZXkYASABKAlCDQoLbG9nZ2VkRXZlbnQiKQoUR2V0UmVwbGljYUlkUmVzcG9u",
-            "c2USEQoJcmVwbGljYUlkGAEgASgJIlAKFFN5bmNTdWJzY3JpYmVSZXF1ZXN0",
-            "EhEKCXJlcGxpY2FJZBgBIAEoCRIlCgVzaW5jZRgCIAEoCzIWLkxtZGJDYWNo",
-            "ZS5WZWN0b3JDbG9jayI6CgxTeW5jUmVzcG9uc2USKgoIbG9nRXZlbnQYASAB",
-            "KAsyGC5MbWRiQ2FjaGUuV3JpdGVMb2dFdmVudDLsBAoQTG1kYkNhY2hlU2Vy",
-            "dmljZRI2CgNBZGQSFS5MbWRiQ2FjaGUuQWRkUmVxdWVzdBoWLkxtZGJDYWNo",
-            "ZS5BZGRSZXNwb25zZSIAEkQKCUFkZFN0cmVhbRIbLkxtZGJDYWNoZS5BZGRT",
-            "dHJlYW1SZXF1ZXN0GhYuTG1kYkNhY2hlLkFkZFJlc3BvbnNlIgAoARI/CgZE",
-            "ZWxldGUSGC5MbWRiQ2FjaGUuRGVsZXRlUmVxdWVzdBoZLkxtZGJDYWNoZS5E",
-            "ZWxldGVSZXNwb25zZSIAEjkKBENvcHkSFi5MbWRiQ2FjaGUuQ29weVJlcXVl",
-            "c3QaFy5MbWRiQ2FjaGUuQ29weVJlc3BvbnNlIgASNgoDR2V0EhUuTG1kYkNh",
-            "Y2hlLkdldFJlcXVlc3QaFi5MbWRiQ2FjaGUuR2V0UmVzcG9uc2UiABJECglH",
-            "ZXRTdHJlYW0SFS5MbWRiQ2FjaGUuR2V0UmVxdWVzdBocLkxtZGJDYWNoZS5H",
-            "ZXRTdHJlYW1SZXNwb25zZSIAMAESSAoMQ29udGFpbnNLZXlzEhUuTG1kYkNh",
-            "Y2hlLkdldFJlcXVlc3QaHy5MbWRiQ2FjaGUuQ29udGFpbnNLZXlzUmVzcG9u",
-            "c2UiABJFCghMaXN0S2V5cxIZLkxtZGJDYWNoZS5LZXlMaXN0UmVxdWVzdBoa",
-            "LkxtZGJDYWNoZS5LZXlMaXN0UmVzcG9uc2UiADABEk8KDUxpc3RLZXlWYWx1",
-            "ZXMSGS5MbWRiQ2FjaGUuS2V5TGlzdFJlcXVlc3QaHy5MbWRiQ2FjaGUuS2V5",
-            "VmFsdWVMaXN0UmVzcG9uc2UiADABMp0BCgtTeW5jU2VydmljZRJDCgxHZXRS",
-            "ZXBsaWNhSWQSEC5MbWRiQ2FjaGUuRW1wdHkaHy5MbWRiQ2FjaGUuR2V0UmVw",
-            "bGljYUlkUmVzcG9uc2UiABJJCglTdWJzY3JpYmUSHy5MbWRiQ2FjaGUuU3lu",
-            "Y1N1YnNjcmliZVJlcXVlc3QaFy5MbWRiQ2FjaGUuU3luY1Jlc3BvbnNlIgAw",
-            "AUIMqgIJTG1kYkNhY2hlYgZwcm90bzM="));
+            "YXRhLlVwZGF0ZUFjdGlvbhI2Cgtjb21wcmVzc2lvbhgFIAEoDjIhLkxtZGJD",
+            "YWNoZS5Ldk1ldGFkYXRhLkNvbXByZXNzaW9uIi4KBlN0YXR1cxIKCgZBQ1RJ",
+            "VkUQABILCgdERUxFVEVEEAESCwoHRVhQSVJFRBACIjYKDFVwZGF0ZUFjdGlv",
+            "bhIJCgVBRERFRBAAEgsKB1VQREFURUQQARIOCgpSRVBMSUNBVEVEEAIiKgoL",
+            "Q29tcHJlc3Npb24SCAoETk9ORRAAEgcKA0xaNBABEggKBEdaSVAQAiLrAQoK",
+            "QWRkUmVxdWVzdBIYChBvdmVycmlkZUV4aXN0aW5nGAEgASgIEjYKC2NvbXBy",
+            "ZXNzaW9uGAIgASgOMiEuTG1kYkNhY2hlLkt2TWV0YWRhdGEuQ29tcHJlc3Np",
+            "b24SNgoHZW50cmllcxgFIAMoCzIlLkxtZGJDYWNoZS5BZGRSZXF1ZXN0LkFk",
+            "ZFJlcXVlc3RFbnRyeRpTCg9BZGRSZXF1ZXN0RW50cnkSCwoDa2V5GAEgASgJ",
+            "EiQKBmV4cGlyeRgCIAEoCzIULkxtZGJDYWNoZS5UaW1lc3RhbXASDQoFdmFs",
+            "dWUYAyABKAwikgEKC0FkZFJlc3BvbnNlEjEKB3Jlc3VsdHMYASADKA4yIC5M",
+            "bWRiQ2FjaGUuQWRkUmVzcG9uc2UuQWRkUmVzdWx0IlAKCUFkZFJlc3VsdBIN",
+            "CglLRVlfQURERUQQABIPCgtLRVlfVVBEQVRFRBABEhYKEktFWV9BTFJFQURZ",
+            "X0VYSVNUUxACEgsKB0ZBSUxVUkUQAyKSAgoQQWRkU3RyZWFtUmVxdWVzdBI0",
+            "CgZoZWFkZXIYASABKAsyIi5MbWRiQ2FjaGUuQWRkU3RyZWFtUmVxdWVzdC5I",
+            "ZWFkZXJIABI2CgVjaHVuaxgCIAEoCzIlLkxtZGJDYWNoZS5BZGRTdHJlYW1S",
+            "ZXF1ZXN0LkRhdGFDaHVua0gAGjcKBkhlYWRlchIYChBvdmVycmlkZUV4aXN0",
+            "aW5nGAEgASgIEhMKC2NodW5rc0NvdW50GAIgASgNGlAKCURhdGFDaHVuaxIN",
+            "CgVpbmRleBgBIAEoDRI0CgVlbnRyeRgCIAEoCzIlLkxtZGJDYWNoZS5BZGRS",
+            "ZXF1ZXN0LkFkZFJlcXVlc3RFbnRyeUIFCgNtc2ciHQoNRGVsZXRlUmVxdWVz",
+            "dBIMCgRrZXlzGAEgAygJIoIBCg5EZWxldGVSZXNwb25zZRI3CgdyZXN1bHRz",
+            "GAEgAygOMiYuTG1kYkNhY2hlLkRlbGV0ZVJlc3BvbnNlLkRlbGV0ZVJlc3Vs",
+            "dCI3CgxEZWxldGVSZXN1bHQSCwoHU1VDQ0VTUxAAEg0KCU5PVF9GT1VORBAB",
+            "EgsKB0ZBSUxVUkUQAiIaCgpHZXRSZXF1ZXN0EgwKBGtleXMYASADKAkiqwIK",
+            "C0dldFJlc3BvbnNlEjgKB3Jlc3VsdHMYASADKAsyJy5MbWRiQ2FjaGUuR2V0",
+            "UmVzcG9uc2UuR2V0UmVzcG9uc2VFbnRyeRrhAQoQR2V0UmVzcG9uc2VFbnRy",
+            "eRJBCgZyZXN1bHQYASABKA4yMS5MbWRiQ2FjaGUuR2V0UmVzcG9uc2UuR2V0",
+            "UmVzcG9uc2VFbnRyeS5HZXRSZXN1bHQSDQoFaW5kZXgYAiABKA0SNgoLY29t",
+            "cHJlc3Npb24YAyABKA4yIS5MbWRiQ2FjaGUuS3ZNZXRhZGF0YS5Db21wcmVz",
+            "c2lvbhINCgV2YWx1ZRgFIAEoDCI0CglHZXRSZXN1bHQSCwoHU1VDQ0VTUxAA",
+            "Eg0KCU5PVF9GT1VORBABEgsKB0ZBSUxVUkUQAiJMChFHZXRTdHJlYW1SZXNw",
+            "b25zZRI3CgZyZXN1bHQYASABKAsyJy5MbWRiQ2FjaGUuR2V0UmVzcG9uc2Uu",
+            "R2V0UmVzcG9uc2VFbnRyeSInChRDb250YWluc0tleXNSZXNwb25zZRIPCgdy",
+            "ZXN1bHRzGAEgAygIIqEBCgtDb3B5UmVxdWVzdBI4CgdlbnRyaWVzGAEgAygL",
+            "MicuTG1kYkNhY2hlLkNvcHlSZXF1ZXN0LkNvcHlSZXF1ZXN0RW50cnkaWAoQ",
+            "Q29weVJlcXVlc3RFbnRyeRIPCgdrZXlGcm9tGAEgASgJEiQKBmV4cGlyeRgC",
+            "IAEoCzIULkxtZGJDYWNoZS5UaW1lc3RhbXASDQoFa2V5VG8YAyABKAkilgEK",
+            "DENvcHlSZXNwb25zZRIzCgdyZXN1bHRzGAEgAygOMiIuTG1kYkNhY2hlLkNv",
+            "cHlSZXNwb25zZS5Db3B5UmVzdWx0IlEKCkNvcHlSZXN1bHQSCwoHU1VDQ0VT",
+            "UxAAEhYKEkZST01fS0VZX05PVF9GT1VORBABEhEKDVRPX0tFWV9FWElTVFMQ",
+            "AhILCgdGQUlMVVJFEAMiQwoOS2V5TGlzdFJlcXVlc3QSEQoJa2V5UHJlZml4",
+            "GAEgASgJEhAKCHBhZ2VTaXplGAIgASgNEgwKBHBhZ2UYAyABKA0iHgoPS2V5",
+            "TGlzdFJlc3BvbnNlEgsKA2tleRgBIAEoCSIyChRLZXlWYWx1ZUxpc3RSZXNw",
+            "b25zZRILCgNrZXkYASABKAkSDQoFdmFsdWUYAyABKAwiogIKDVdyaXRlTG9n",
+            "RXZlbnQSJQoFY2xvY2sYASABKAsyFi5MbWRiQ2FjaGUuVmVjdG9yQ2xvY2sS",
+            "OgoHdXBkYXRlZBgFIAEoCzInLkxtZGJDYWNoZS5Xcml0ZUxvZ0V2ZW50LkFk",
+            "ZGVkT3JVcGRhdGVkSAASMwoHZGVsZXRlZBgHIAEoCzIgLkxtZGJDYWNoZS5X",
+            "cml0ZUxvZ0V2ZW50LkRlbGV0ZWRIABpSCg5BZGRlZE9yVXBkYXRlZBILCgNr",
+            "ZXkYASABKAkSJAoGZXhwaXJ5GAIgASgLMhQuTG1kYkNhY2hlLlRpbWVzdGFt",
+            "cBINCgV2YWx1ZRgDIAEoDBoWCgdEZWxldGVkEgsKA2tleRgBIAEoCUINCgts",
+            "b2dnZWRFdmVudCIpChRHZXRSZXBsaWNhSWRSZXNwb25zZRIRCglyZXBsaWNh",
+            "SWQYASABKAkiUAoUU3luY1N1YnNjcmliZVJlcXVlc3QSEQoJcmVwbGljYUlk",
+            "GAEgASgJEiUKBXNpbmNlGAIgASgLMhYuTG1kYkNhY2hlLlZlY3RvckNsb2Nr",
+            "IjoKDFN5bmNSZXNwb25zZRIqCghsb2dFdmVudBgBIAEoCzIYLkxtZGJDYWNo",
+            "ZS5Xcml0ZUxvZ0V2ZW50MuwEChBMbWRiQ2FjaGVTZXJ2aWNlEjYKA0FkZBIV",
+            "LkxtZGJDYWNoZS5BZGRSZXF1ZXN0GhYuTG1kYkNhY2hlLkFkZFJlc3BvbnNl",
+            "IgASRAoJQWRkU3RyZWFtEhsuTG1kYkNhY2hlLkFkZFN0cmVhbVJlcXVlc3Qa",
+            "Fi5MbWRiQ2FjaGUuQWRkUmVzcG9uc2UiACgBEj8KBkRlbGV0ZRIYLkxtZGJD",
+            "YWNoZS5EZWxldGVSZXF1ZXN0GhkuTG1kYkNhY2hlLkRlbGV0ZVJlc3BvbnNl",
+            "IgASOQoEQ29weRIWLkxtZGJDYWNoZS5Db3B5UmVxdWVzdBoXLkxtZGJDYWNo",
+            "ZS5Db3B5UmVzcG9uc2UiABI2CgNHZXQSFS5MbWRiQ2FjaGUuR2V0UmVxdWVz",
+            "dBoWLkxtZGJDYWNoZS5HZXRSZXNwb25zZSIAEkQKCUdldFN0cmVhbRIVLkxt",
+            "ZGJDYWNoZS5HZXRSZXF1ZXN0GhwuTG1kYkNhY2hlLkdldFN0cmVhbVJlc3Bv",
+            "bnNlIgAwARJICgxDb250YWluc0tleXMSFS5MbWRiQ2FjaGUuR2V0UmVxdWVz",
+            "dBofLkxtZGJDYWNoZS5Db250YWluc0tleXNSZXNwb25zZSIAEkUKCExpc3RL",
+            "ZXlzEhkuTG1kYkNhY2hlLktleUxpc3RSZXF1ZXN0GhouTG1kYkNhY2hlLktl",
+            "eUxpc3RSZXNwb25zZSIAMAESTwoNTGlzdEtleVZhbHVlcxIZLkxtZGJDYWNo",
+            "ZS5LZXlMaXN0UmVxdWVzdBofLkxtZGJDYWNoZS5LZXlWYWx1ZUxpc3RSZXNw",
+            "b25zZSIAMAEynQEKC1N5bmNTZXJ2aWNlEkMKDEdldFJlcGxpY2FJZBIQLkxt",
+            "ZGJDYWNoZS5FbXB0eRofLkxtZGJDYWNoZS5HZXRSZXBsaWNhSWRSZXNwb25z",
+            "ZSIAEkkKCVN1YnNjcmliZRIfLkxtZGJDYWNoZS5TeW5jU3Vic2NyaWJlUmVx",
+            "dWVzdBoXLkxtZGJDYWNoZS5TeW5jUmVzcG9uc2UiADABQgyqAglMbWRiQ2Fj",
+            "aGViBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.Empty), global::LmdbCache.Empty.Parser, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.Timestamp), global::LmdbCache.Timestamp.Parser, new[]{ "TicksOffsetUtc" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.VectorClock), global::LmdbCache.VectorClock.Parser, new[]{ "Replicas", "TicksOffsetUtc" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.KvMetadata), global::LmdbCache.KvMetadata.Parser, new[]{ "Status", "Expiry", "Updated", "Action" }, null, new[]{ typeof(global::LmdbCache.KvMetadata.Types.Status), typeof(global::LmdbCache.KvMetadata.Types.UpdateAction) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddRequest), global::LmdbCache.AddRequest.Parser, new[]{ "OverrideExisting", "Entries" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddRequest.Types.AddRequestEntry), global::LmdbCache.AddRequest.Types.AddRequestEntry.Parser, new[]{ "Key", "Expiry", "Value" }, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.KvMetadata), global::LmdbCache.KvMetadata.Parser, new[]{ "Status", "Expiry", "Updated", "Action", "Compression" }, null, new[]{ typeof(global::LmdbCache.KvMetadata.Types.Status), typeof(global::LmdbCache.KvMetadata.Types.UpdateAction), typeof(global::LmdbCache.KvMetadata.Types.Compression) }, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddRequest), global::LmdbCache.AddRequest.Parser, new[]{ "OverrideExisting", "Compression", "Entries" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddRequest.Types.AddRequestEntry), global::LmdbCache.AddRequest.Types.AddRequestEntry.Parser, new[]{ "Key", "Expiry", "Value" }, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddResponse), global::LmdbCache.AddResponse.Parser, new[]{ "Results" }, null, new[]{ typeof(global::LmdbCache.AddResponse.Types.AddResult) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddStreamRequest), global::LmdbCache.AddStreamRequest.Parser, new[]{ "Header", "Chunk" }, new[]{ "Msg" }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddStreamRequest.Types.Header), global::LmdbCache.AddStreamRequest.Types.Header.Parser, new[]{ "OverrideExisting", "ChunksCount" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddStreamRequest.Types.DataChunk), global::LmdbCache.AddStreamRequest.Types.DataChunk.Parser, new[]{ "Index", "Entry" }, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.DeleteRequest), global::LmdbCache.DeleteRequest.Parser, new[]{ "Keys" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.DeleteResponse), global::LmdbCache.DeleteResponse.Parser, new[]{ "Results" }, null, new[]{ typeof(global::LmdbCache.DeleteResponse.Types.DeleteResult) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.GetRequest), global::LmdbCache.GetRequest.Parser, new[]{ "Keys" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.GetResponse), global::LmdbCache.GetResponse.Parser, new[]{ "Results" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.GetResponse.Types.GetResponseEntry), global::LmdbCache.GetResponse.Types.GetResponseEntry.Parser, new[]{ "Result", "Index", "Value" }, null, new[]{ typeof(global::LmdbCache.GetResponse.Types.GetResponseEntry.Types.GetResult) }, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.GetResponse), global::LmdbCache.GetResponse.Parser, new[]{ "Results" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.GetResponse.Types.GetResponseEntry), global::LmdbCache.GetResponse.Types.GetResponseEntry.Parser, new[]{ "Result", "Index", "Compression", "Value" }, null, new[]{ typeof(global::LmdbCache.GetResponse.Types.GetResponseEntry.Types.GetResult) }, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.GetStreamResponse), global::LmdbCache.GetStreamResponse.Parser, new[]{ "Result" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.ContainsKeysResponse), global::LmdbCache.ContainsKeysResponse.Parser, new[]{ "Results" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.CopyRequest), global::LmdbCache.CopyRequest.Parser, new[]{ "Entries" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.CopyRequest.Types.CopyRequestEntry), global::LmdbCache.CopyRequest.Types.CopyRequestEntry.Parser, new[]{ "KeyFrom", "Expiry", "KeyTo" }, null, null, null)}),
@@ -545,6 +550,7 @@ namespace LmdbCache {
       expiry_ = other.expiry_ != null ? other.expiry_.Clone() : null;
       updated_ = other.updated_ != null ? other.updated_.Clone() : null;
       action_ = other.action_;
+      compression_ = other.compression_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -597,6 +603,17 @@ namespace LmdbCache {
       }
     }
 
+    /// <summary>Field number for the "compression" field.</summary>
+    public const int CompressionFieldNumber = 5;
+    private global::LmdbCache.KvMetadata.Types.Compression compression_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::LmdbCache.KvMetadata.Types.Compression Compression {
+      get { return compression_; }
+      set {
+        compression_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as KvMetadata);
@@ -614,6 +631,7 @@ namespace LmdbCache {
       if (!object.Equals(Expiry, other.Expiry)) return false;
       if (!object.Equals(Updated, other.Updated)) return false;
       if (Action != other.Action) return false;
+      if (Compression != other.Compression) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -624,6 +642,7 @@ namespace LmdbCache {
       if (expiry_ != null) hash ^= Expiry.GetHashCode();
       if (updated_ != null) hash ^= Updated.GetHashCode();
       if (Action != 0) hash ^= Action.GetHashCode();
+      if (Compression != 0) hash ^= Compression.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -653,6 +672,10 @@ namespace LmdbCache {
         output.WriteRawTag(32);
         output.WriteEnum((int) Action);
       }
+      if (Compression != 0) {
+        output.WriteRawTag(40);
+        output.WriteEnum((int) Compression);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -672,6 +695,9 @@ namespace LmdbCache {
       }
       if (Action != 0) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Action);
+      }
+      if (Compression != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Compression);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -701,6 +727,9 @@ namespace LmdbCache {
       }
       if (other.Action != 0) {
         Action = other.Action;
+      }
+      if (other.Compression != 0) {
+        Compression = other.Compression;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -735,6 +764,10 @@ namespace LmdbCache {
             action_ = (global::LmdbCache.KvMetadata.Types.UpdateAction) input.ReadEnum();
             break;
           }
+          case 40: {
+            compression_ = (global::LmdbCache.KvMetadata.Types.Compression) input.ReadEnum();
+            break;
+          }
         }
       }
     }
@@ -756,6 +789,12 @@ namespace LmdbCache {
         [pbr::OriginalName("ADDED")] Added = 0,
         [pbr::OriginalName("UPDATED")] Updated = 1,
         [pbr::OriginalName("REPLICATED")] Replicated = 2,
+      }
+
+      public enum Compression {
+        [pbr::OriginalName("NONE")] None = 0,
+        [pbr::OriginalName("LZ4")] Lz4 = 1,
+        [pbr::OriginalName("GZIP")] Gzip = 2,
       }
 
     }
@@ -789,6 +828,7 @@ namespace LmdbCache {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public AddRequest(AddRequest other) : this() {
       overrideExisting_ = other.overrideExisting_;
+      compression_ = other.compression_;
       entries_ = other.entries_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -809,10 +849,21 @@ namespace LmdbCache {
       }
     }
 
+    /// <summary>Field number for the "compression" field.</summary>
+    public const int CompressionFieldNumber = 2;
+    private global::LmdbCache.KvMetadata.Types.Compression compression_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::LmdbCache.KvMetadata.Types.Compression Compression {
+      get { return compression_; }
+      set {
+        compression_ = value;
+      }
+    }
+
     /// <summary>Field number for the "entries" field.</summary>
-    public const int EntriesFieldNumber = 2;
+    public const int EntriesFieldNumber = 5;
     private static readonly pb::FieldCodec<global::LmdbCache.AddRequest.Types.AddRequestEntry> _repeated_entries_codec
-        = pb::FieldCodec.ForMessage(18, global::LmdbCache.AddRequest.Types.AddRequestEntry.Parser);
+        = pb::FieldCodec.ForMessage(42, global::LmdbCache.AddRequest.Types.AddRequestEntry.Parser);
     private readonly pbc::RepeatedField<global::LmdbCache.AddRequest.Types.AddRequestEntry> entries_ = new pbc::RepeatedField<global::LmdbCache.AddRequest.Types.AddRequestEntry>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::LmdbCache.AddRequest.Types.AddRequestEntry> Entries {
@@ -833,6 +884,7 @@ namespace LmdbCache {
         return true;
       }
       if (OverrideExisting != other.OverrideExisting) return false;
+      if (Compression != other.Compression) return false;
       if(!entries_.Equals(other.entries_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -841,6 +893,7 @@ namespace LmdbCache {
     public override int GetHashCode() {
       int hash = 1;
       if (OverrideExisting != false) hash ^= OverrideExisting.GetHashCode();
+      if (Compression != 0) hash ^= Compression.GetHashCode();
       hash ^= entries_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -859,6 +912,10 @@ namespace LmdbCache {
         output.WriteRawTag(8);
         output.WriteBool(OverrideExisting);
       }
+      if (Compression != 0) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) Compression);
+      }
       entries_.WriteTo(output, _repeated_entries_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -870,6 +927,9 @@ namespace LmdbCache {
       int size = 0;
       if (OverrideExisting != false) {
         size += 1 + 1;
+      }
+      if (Compression != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Compression);
       }
       size += entries_.CalculateSize(_repeated_entries_codec);
       if (_unknownFields != null) {
@@ -885,6 +945,9 @@ namespace LmdbCache {
       }
       if (other.OverrideExisting != false) {
         OverrideExisting = other.OverrideExisting;
+      }
+      if (other.Compression != 0) {
+        Compression = other.Compression;
       }
       entries_.Add(other.entries_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -902,7 +965,11 @@ namespace LmdbCache {
             OverrideExisting = input.ReadBool();
             break;
           }
-          case 18: {
+          case 16: {
+            compression_ = (global::LmdbCache.KvMetadata.Types.Compression) input.ReadEnum();
+            break;
+          }
+          case 42: {
             entries_.AddEntriesFrom(input, _repeated_entries_codec);
             break;
           }
@@ -2304,6 +2371,7 @@ namespace LmdbCache {
         public GetResponseEntry(GetResponseEntry other) : this() {
           result_ = other.result_;
           index_ = other.index_;
+          compression_ = other.compression_;
           value_ = other.value_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
@@ -2335,8 +2403,19 @@ namespace LmdbCache {
           }
         }
 
+        /// <summary>Field number for the "compression" field.</summary>
+        public const int CompressionFieldNumber = 3;
+        private global::LmdbCache.KvMetadata.Types.Compression compression_ = 0;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public global::LmdbCache.KvMetadata.Types.Compression Compression {
+          get { return compression_; }
+          set {
+            compression_ = value;
+          }
+        }
+
         /// <summary>Field number for the "value" field.</summary>
-        public const int ValueFieldNumber = 3;
+        public const int ValueFieldNumber = 5;
         private pb::ByteString value_ = pb::ByteString.Empty;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public pb::ByteString Value {
@@ -2361,6 +2440,7 @@ namespace LmdbCache {
           }
           if (Result != other.Result) return false;
           if (Index != other.Index) return false;
+          if (Compression != other.Compression) return false;
           if (Value != other.Value) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
@@ -2370,6 +2450,7 @@ namespace LmdbCache {
           int hash = 1;
           if (Result != 0) hash ^= Result.GetHashCode();
           if (Index != 0) hash ^= Index.GetHashCode();
+          if (Compression != 0) hash ^= Compression.GetHashCode();
           if (Value.Length != 0) hash ^= Value.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
@@ -2392,8 +2473,12 @@ namespace LmdbCache {
             output.WriteRawTag(16);
             output.WriteUInt32(Index);
           }
+          if (Compression != 0) {
+            output.WriteRawTag(24);
+            output.WriteEnum((int) Compression);
+          }
           if (Value.Length != 0) {
-            output.WriteRawTag(26);
+            output.WriteRawTag(42);
             output.WriteBytes(Value);
           }
           if (_unknownFields != null) {
@@ -2409,6 +2494,9 @@ namespace LmdbCache {
           }
           if (Index != 0) {
             size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Index);
+          }
+          if (Compression != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Compression);
           }
           if (Value.Length != 0) {
             size += 1 + pb::CodedOutputStream.ComputeBytesSize(Value);
@@ -2429,6 +2517,9 @@ namespace LmdbCache {
           }
           if (other.Index != 0) {
             Index = other.Index;
+          }
+          if (other.Compression != 0) {
+            Compression = other.Compression;
           }
           if (other.Value.Length != 0) {
             Value = other.Value;
@@ -2452,7 +2543,11 @@ namespace LmdbCache {
                 Index = input.ReadUInt32();
                 break;
               }
-              case 26: {
+              case 24: {
+                compression_ = (global::LmdbCache.KvMetadata.Types.Compression) input.ReadEnum();
+                break;
+              }
+              case 42: {
                 Value = input.ReadBytes();
                 break;
               }

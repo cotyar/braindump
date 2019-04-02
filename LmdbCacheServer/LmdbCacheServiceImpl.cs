@@ -13,6 +13,7 @@ using static LmdbCache.AddResponse.Types;
 using static LmdbCache.DeleteResponse.Types;
 using static LmdbCache.GetResponse.Types;
 using static LmdbCache.GetResponse.Types.GetResponseEntry.Types;
+using static LmdbCache.KvMetadata.Types;
 using static LmdbCache.KvMetadata.Types.Status;
 using static LmdbCache.KvMetadata.Types.UpdateAction;
 
@@ -37,7 +38,8 @@ namespace LmdbCacheServer
                     Status = Active,
                     Expiry = ks.Expiry,
                     Action = Added,
-                    Updated = _clock()
+                    Updated = _clock(),
+                    Compression = Compression.None
                 }, new KvValue(ks.Value))).
                 ToArray();
 
@@ -131,9 +133,15 @@ namespace LmdbCacheServer
             var response = new GetResponse();
             var getResponseEntries = ret.Select((kv, i) =>
                 {
-                    if (!kv.Item2.HasValue) return new GetResponseEntry { Result = GetResult.NotFound, Index = (uint) i };
+                    if (!kv.Item3.HasValue) return new GetResponseEntry { Result = GetResult.NotFound, Index = (uint) i };
 
-                    var gre = new GetResponseEntry { Result = GetResult.Success, Index = (uint) i, Value = kv.Item2.Value.Value };
+                    var gre = new GetResponseEntry
+                    {
+                        Result = GetResult.Success,
+                        Index = (uint) i,
+                        Compression = kv.Item2.Compression,
+                        Value = kv.Item3.Value.Value
+                    };
                     return gre;
                 });
             response.Results.AddRange(getResponseEntries);
@@ -148,8 +156,8 @@ namespace LmdbCacheServer
             for (var i = 0; i < kvs.Length; i++)
             {
                 var kv = kvs[i];
-                var gre = kv.Item2.HasValue
-                    ? new GetResponseEntry { Result = GetResult.Success, Index = (uint) i, Value = kv.Item2.Value.Value }
+                var gre = kv.Item3.HasValue
+                    ? new GetResponseEntry { Result = GetResult.Success, Index = (uint) i, Compression = kv.Item2.Compression, Value = kv.Item3.Value.Value }
                     : new GetResponseEntry { Result = GetResult.NotFound, Index = (uint) i };
                 await responseStream.WriteAsync(new GetStreamResponse {Result = gre});
             }

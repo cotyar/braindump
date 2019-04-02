@@ -53,10 +53,16 @@ message KvMetadata {
     UPDATED             = 1;
     REPLICATED          = 2;
   }
-  Status status       = 1;
-  Timestamp expiry    = 2;
-  VectorClock updated = 3;
-  UpdateAction action = 4;
+  enum Compression {
+    NONE                = 0;
+    LZ4                 = 1;
+    GZIP                = 2;
+  }
+  Status status           = 1;
+  Timestamp expiry        = 2;
+  VectorClock updated     = 3;
+  UpdateAction action     = 4;
+  Compression compression = 5;
 }
 
 message AddRequest {
@@ -65,8 +71,9 @@ message AddRequest {
     Timestamp expiry = 2; 
     bytes     value  = 3;
   }
-  bool overrideExisting            = 1;
-  repeated AddRequestEntry entries = 2;
+  bool overrideExisting               = 1;
+  KvMetadata.Compression compression  = 2;        
+  repeated AddRequestEntry entries    = 5;
 }
 
 message AddResponse {
@@ -118,9 +125,10 @@ message GetResponse {
       NOT_FOUND           = 1;
       FAILURE             = 2;
     }
-    GetResult result = 1;
-    uint32    index  = 2;
-    bytes     value  = 3;
+    GetResult result                    = 1;
+    uint32    index                     = 2;
+    KvMetadata.Compression compression  = 3;
+    bytes     value                     = 5;
   }
   repeated GetResponseEntry results = 1;
 }

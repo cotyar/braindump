@@ -40,7 +40,7 @@ namespace LmdbLightTest
                 MaxTables = 20,
                 StorageLimit = 10,
                 WriteBatchMaxDelegates = 100,
-                WriteBatchTimeoutMilliseconds = 1,
+                WriteBatchTimeoutMilliseconds = 0,
                 AsyncStore = false
             };
 
@@ -66,16 +66,24 @@ namespace LmdbLightTest
         }
 
         [Test]
-        public void TestAddGet([Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory, [Values(1, 10, 100, 1000, 10000)] int iterations)
+        public void TestAddGet(
+            [Values(false, true)] bool asyncStore,
+            [Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory, 
+            [Values(1, 10, 100, 1000, 10000)] int iterations)
         {
-            using (var client = CreateClient(clientFactory, Config))
+            var config = Config;
+            config.AsyncStore = asyncStore;
+
+            using (var client = CreateClient(clientFactory, config))
             {
+                var valueLength = 1024;
+
                 var totalWrite = new TimeSpan();
                 var totalRead = new TimeSpan();
 
                 var swTotal = new Stopwatch();
                 swTotal.Start();
-                var kvs = BuildKeyValuePairs(iterations, 1024);
+                var kvs = BuildKeyValuePairs(iterations, valueLength);
                 swTotal.Stop();
                 Console.WriteLine($"Preparing data elapsed: {swTotal.Elapsed}");
 
@@ -91,19 +99,19 @@ namespace LmdbLightTest
                     sw.Start();
                     var addRet = client.TryAdd(new[] {testKey}, (k, s) => s.Write(testValue, 0, testValue.Length), DateTimeOffset.UtcNow.AddSeconds(500));
                     sw.Stop();
-//                    Console.WriteLine($"Write {kv.Value.Item1} elapsed: {sw.Elapsed}");
+                    Console.WriteLine($"Write {kv.Value.Item1} elapsed: {sw.Elapsed}");
                     totalWrite += sw.Elapsed;
 
                     Assert.AreEqual(1, addRet.Count);
                     Assert.AreEqual(testKey, addRet.First());
 
-                    var readBuffer = new byte[1000000];
+                    var readBuffer = new byte[valueLength];
                     int readBytes = -1;
                     sw = new Stopwatch();
                     sw.Start();
                     var getRet = client.TryGet(new[] {testKey}, (k, s) => readBytes = s.Read(readBuffer, 0, readBuffer.Length));
                     sw.Stop();
-//                    Console.WriteLine($"Read {kv.Value.Item1} elapsed: {sw.Elapsed}");
+                    Console.WriteLine($"Read {kv.Value.Item1} elapsed: {sw.Elapsed}");
                     totalRead += sw.Elapsed;
 
                     Assert.AreEqual(1, getRet.Count);
@@ -120,20 +128,20 @@ namespace LmdbLightTest
         }
 
         [Test]
-        public void TestAddGetMany([Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory, [Values(1, 10, 100, 1000, 10000, 100000)] int iterations)
+        public void TestAddGetMany(
+            [Values(false, true)] bool asyncStore,
+            [Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory, 
+            [Values(1, 10, 100, 1000, 10000, 100000)] int iterations)
         {
-            using (var client = CreateClient(clientFactory, Config))
-            {
-                //var kvs = Enumerable.Range(0, iterations).ToDictionary(i => Enumerable.Range(0, 20).Aggregate("", (s, _) => s + "test key  ") + i, i =>
-                //{
-                //    var testValue = Enumerable.Range(0, 20).Aggregate("", (s, _) => s + "test value ") + i;
-                //    var testValueBytes = Encoding.UTF8.GetBytes(testValue);
-                //    return (testValue, testValueBytes);
-                //});
+            var config = Config;
+            config.AsyncStore = asyncStore;
 
+            using (var client = CreateClient(clientFactory, config))
+            {
+                var valueLength = 1024;
                 var sw = new Stopwatch();
                 sw.Start();
-                var kvs = BuildKeyValuePairs(iterations, 1024);
+                var kvs = BuildKeyValuePairs(iterations, valueLength);
                 sw.Stop();
                 Console.WriteLine($"Preparing data elapsed: {sw.Elapsed}");
 
@@ -143,7 +151,7 @@ namespace LmdbLightTest
                     {
                         var buffer = kvs[k].Item2;
                         s.Write(buffer, 0, buffer.Length);
-                    }, DateTimeOffset.Now.AddSeconds(50));
+                    }, DateTimeOffset.Now.AddSeconds(500));
                 sw.Stop();
                 Console.WriteLine($"Write elapsed: {sw.Elapsed}");
 
@@ -155,10 +163,11 @@ namespace LmdbLightTest
                 sw.Start();
                 var getRet = client.TryGet(kvs.Keys, (k, s) =>
                 {
-                    var readBuffer = new byte[1000000];
+                    var readBuffer = new byte[valueLength];
                     var readBytes = s.Read(readBuffer, 0, readBuffer.Length);
                     getDict[k] = readBuffer.Take(readBytes).ToArray();
                 });
+                sw.Stop();
                 Console.WriteLine($"Read elapsed: {sw.Elapsed}");
 
                 Assert.AreEqual(kvs.Keys.Count, getRet.Count);
@@ -188,7 +197,7 @@ namespace LmdbLightTest
         {
             using (var client = CreateClient(clientFactory, Config))
             {
-                var kvs = Enumerable.Range(0, iterations).ToDictionary(i => Enumerable.Range(0, 20).Aggregate("", (s, _) => s + "test key  ") + i, i =>
+                var kvs = Enumerable.Range(0, iterations).ToDictionary(i => Enumerable.Range(0, 102).Aggregate("", (s, _) => s + "test key  ") + i, i =>
                 {
                     var testValue = Enumerable.Range(0, 20).Aggregate("", (s, _) => s + "test value ") + i;
                     var testValueBytes = Encoding.UTF8.GetBytes(testValue);
@@ -199,7 +208,7 @@ namespace LmdbLightTest
                 {
                     var buffer = kvs[k].Item2;
                     s.Write(buffer, 0, buffer.Length);
-                }, DateTimeOffset.Now.AddSeconds(5));
+                }, DateTimeOffset.Now.AddSeconds(50));
 
                 var sw = new Stopwatch();
                 sw.Start();
