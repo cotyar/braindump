@@ -12,6 +12,8 @@ service LmdbCacheService {
 
   rpc Add(AddRequest) returns (AddResponse) {}
 
+  rpc AddStream(stream AddStreamRequest) returns (AddResponse) {}
+
   rpc Delete(DeleteRequest) returns (DeleteResponse) {}
 
   rpc Copy(CopyRequest) returns (CopyResponse) {}
@@ -73,6 +75,21 @@ message AddResponse {
     FAILURE             = 3;
   }
   repeated AddResult results = 1;
+}
+
+message AddStreamRequest {
+  message Header {
+    bool overrideExisting = 1;
+    uint32 chunksCount    = 2;
+  }
+  message DataChunk {
+    uint32 index                      = 1;
+    AddRequest.AddRequestEntry entry  = 2; 
+  }
+  oneof msg {
+    Header header   = 1;
+    DataChunk chunk = 2;
+  }
 }
 
 message DeleteRequest {

@@ -29,9 +29,9 @@ namespace LmdbCacheServer
             _clock = clock;
         }
 
-        public override async Task<AddResponse> Add(AddRequest request, ServerCallContext context)
+        public async Task<AddResponse> Add(IEnumerable<AddRequest.Types.AddRequestEntry> entries, bool overrideExisting)
         {
-            var batch = request.Entries.
+            var batch = entries.
                 Select(ks => (new KvKey(ks.Key), new KvMetadata
                 {
                     Status = Active,
@@ -41,14 +41,53 @@ namespace LmdbCacheServer
                 }, new KvValue(ks.Value))).
                 ToArray();
 
-            var ret = await (request.OverrideExisting ? _kvTable.AddOrUpdate(batch) : _kvTable.Add(batch));
+            var ret = await (overrideExisting ? _kvTable.AddOrUpdate(batch) : _kvTable.Add(batch));
             var response = new AddResponse();
-            var addResults = ret.Select(kv => kv.Item2 
-                ? (request.OverrideExisting ? AddResult.KeyUpdated : AddResult.KeyAdded) // TODO: Recheck statuses
-                : (request.OverrideExisting ? AddResult.Failure : AddResult.KeyAlreadyExists));
+            var addResults = ret.Select(kv => kv.Item2
+                ? (overrideExisting ? AddResult.KeyUpdated : AddResult.KeyAdded) // TODO: Recheck statuses
+                : (overrideExisting ? AddResult.Failure : AddResult.KeyAlreadyExists));
             response.Results.AddRange(addResults);
 
             return response;
+        }
+
+        public override Task<AddResponse> Add(AddRequest request, ServerCallContext context) => Add(request.Entries, request.OverrideExisting);
+
+        public override async Task<AddResponse> AddStream(IAsyncStreamReader<AddStreamRequest> requestStream, ServerCallContext context)
+        {
+            if (!await requestStream.MoveNext() ||
+                requestStream.Current.MsgCase != AddStreamRequest.MsgOneofCase.Header)
+            {
+                Console.Error.WriteLine($"AddStream unexpected message type: {requestStream.Current.MsgCase}. 'Header' message expected");
+                throw new MessageFormatException("Header expected");
+            }
+
+            var overrideExisting = requestStream.Current.Header.OverrideExisting;
+            var chunksCount = requestStream.Current.Header.ChunksCount;
+
+            var entries = new List<AddRequest.Types.AddRequestEntry>((int)chunksCount);
+            for (uint index = 0; await requestStream.MoveNext(); index++)
+            {
+                if (requestStream.Current.MsgCase != AddStreamRequest.MsgOneofCase.Chunk)
+                {
+                    var message = $"AddStream unexpected message type: {requestStream.Current.MsgCase}. 'DataChunk' message expected";
+                    Console.Error.WriteLine(message);
+                    throw new MessageFormatException(message);
+                }
+
+                if (requestStream.Current.Chunk.Index != index)
+                {
+                    var message = $"AddStream incorrect Chunk index. Expected: {index}, received {requestStream.Current.Chunk.Index}.";
+                    Console.Error.WriteLine(message);
+                    throw new MessageFormatException(message);
+                }
+
+                entries.Add(requestStream.Current.Chunk.Entry);
+            }
+
+//            Console.WriteLine($"Stream was fully written for key: {key}");
+
+            return await Add(entries, overrideExisting);
         }
 
         public override Task<ContainsKeysResponse> ContainsKeys(GetRequest request, ServerCallContext context)

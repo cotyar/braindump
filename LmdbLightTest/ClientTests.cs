@@ -30,7 +30,8 @@ namespace LmdbLightTest
         }
 
 
-        private const string TestDir = "./client_testdb";
+//        private const string TestDir = "./client_testdb";
+        private const string TestDir = @"D:\CacheTest\client_testdb";
 
         public static LightningConfig Config =>
             new LightningConfig { Name = TestDir, MaxTables = 20, StorageLimit = 1, WriteBatchMaxDelegates = 100, WriteBatchTimeoutMilliseconds = 1 };
@@ -61,10 +62,17 @@ namespace LmdbLightTest
         {
             using (var client = CreateClient(clientFactory))
             {
+                var totalWrite = new TimeSpan();
+                var totalRead = new TimeSpan();
+
                 var swTotal = new Stopwatch();
                 swTotal.Start();
+                var kvs = BuildKeyValuePairs(iterations, 10240);
+                swTotal.Stop();
+                Console.WriteLine($"Preparing data elapsed: {swTotal.Elapsed}");
 
-                var kvs = BuildKeyValuePairs(iterations);
+                swTotal = new Stopwatch();
+                swTotal.Start();
 
                 foreach (var kv in kvs)
                 {
@@ -76,17 +84,20 @@ namespace LmdbLightTest
                     sw.Start();
                     var addRet = client.TryAdd(new[] {testKey}, (k, s) => s.Write(testValueBytes, 0, testValueBytes.Length), DateTimeOffset.UtcNow.AddSeconds(500));
                     sw.Stop();
-                    Console.WriteLine($"Write {kv.Value.Item1} elapsed: {sw.Elapsed}");
+//                    Console.WriteLine($"Write {kv.Value.Item1} elapsed: {sw.Elapsed}");
+                    totalWrite += sw.Elapsed;
 
                     Assert.AreEqual(1, addRet.Count);
                     Assert.AreEqual(testKey, addRet.First());
 
-                    var readBuffer = new byte[10000];
+                    var readBuffer = new byte[1000000];
                     int readBytes = -1;
                     sw = new Stopwatch();
                     sw.Start();
                     var getRet = client.TryGet(new[] {testKey}, (k, s) => readBytes = s.Read(readBuffer, 0, readBuffer.Length));
-                    Console.WriteLine($"Read {kv.Value.Item1} elapsed: {sw.Elapsed}");
+                    sw.Stop();
+//                    Console.WriteLine($"Read {kv.Value.Item1} elapsed: {sw.Elapsed}");
+                    totalRead += sw.Elapsed;
 
                     Assert.AreEqual(1, getRet.Count);
                     Assert.AreEqual(testKey, getRet.First());
@@ -95,7 +106,9 @@ namespace LmdbLightTest
                 }
 
                 swTotal.Stop();
-                Console.WriteLine($"Total te elapsed total: {swTotal.Elapsed}");
+                Console.WriteLine($"Elapsed total: {swTotal.Elapsed}");
+                Console.WriteLine($"Elapsed total Write: {totalWrite}");
+                Console.WriteLine($"Elapsed total Read: {totalRead}");
             }
         }
 
@@ -111,15 +124,19 @@ namespace LmdbLightTest
                 //    return (testValue, testValueBytes);
                 //});
 
-                var kvs = BuildKeyValuePairs(iterations);
-
                 var sw = new Stopwatch();
+                sw.Start();
+                var kvs = BuildKeyValuePairs(iterations, 10240);
+                sw.Stop();
+                Console.WriteLine($"Preparing data elapsed: {sw.Elapsed}");
+
+                sw = new Stopwatch();
                 sw.Start();
                 var addRet = client.TryAdd(kvs.Keys, (k, s) =>
                     {
                         var buffer = kvs[k].Item3;
                         s.Write(buffer, 0, buffer.Length);
-                    }, DateTimeOffset.Now.AddSeconds(5));
+                    }, DateTimeOffset.Now.AddSeconds(50));
                 sw.Stop();
                 Console.WriteLine($"Write elapsed: {sw.Elapsed}");
 
@@ -131,7 +148,7 @@ namespace LmdbLightTest
                 sw.Start();
                 var getRet = client.TryGet(kvs.Keys, (k, s) =>
                 {
-                    var readBuffer = new byte[100000];
+                    var readBuffer = new byte[1000000];
                     var readBytes = s.Read(readBuffer, 0, readBuffer.Length);
                     getDict[k] = readBuffer.Take(readBytes).ToArray();
                 });
@@ -148,12 +165,12 @@ namespace LmdbLightTest
             }
         }
 
-        private static Dictionary<string, (int, string, byte[])> BuildKeyValuePairs(int iterations)
+        private static Dictionary<string, (int, string, byte[])> BuildKeyValuePairs(int iterations, int length)
         {
             return Enumerable.Range(0, iterations).ToDictionary(i => Guid.NewGuid().ToString(), i =>
             {
                 var rnd = new Random();
-                var testValue = Enumerable.Range(0, 1024).Aggregate("", (s, _) => s + rnd.Next(16).ToString("X"));
+                var testValue = Enumerable.Range(0, length).Aggregate("", (s, _) => s + rnd.Next(16).ToString("X"));
                 var testValueBytes = Encoding.UTF8.GetBytes(testValue);
                 return (i, testValue, testValueBytes);
             });

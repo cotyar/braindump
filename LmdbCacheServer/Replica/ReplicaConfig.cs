@@ -10,7 +10,7 @@ namespace LmdbCacheServer.Replica
         public string ReplicaId;
         public string HostName;
         public int Port;
-        public int ReplicationPort;
+        public int? ReplicationPort;
         public uint? ReplicationPageSize;
 
         public string MasterNode;

@@ -10,18 +10,42 @@ using Google.Protobuf.Collections;
 using Grpc.Core;
 using LmdbCache;
 using LmdbCache.Domain;
+using static LmdbCache.AddRequest.Types;
+using static LmdbCache.AddStreamRequest.Types;
 
 namespace LmdbCacheClient
 {
     public class LightClient : IClient, IDisposable
     {
         private readonly Channel _channel;
+        private readonly bool _useStreaming;
         private readonly LmdbCacheService.LmdbCacheServiceClient _lightClient;
 
-        public LightClient(Channel channel)
+        public LightClient(Channel channel, bool useStreaming)
         {
             _channel = channel;
+            _useStreaming = useStreaming;
             _lightClient = new LmdbCacheService.LmdbCacheServiceClient(channel);
+        }
+
+        private async Task<AddResponse> AddStreaming(AddRequestEntry[] entries, bool allowOverride)
+        {
+            using (var call = _lightClient.AddStream())
+            {
+                var header = new AddStreamRequest { Header = new Header { OverrideExisting = allowOverride, ChunksCount = (uint)entries.Length } };
+                await call.RequestStream.WriteAsync(header);
+
+                for (var i = 0; i < entries.Length; i++)
+                {
+                    var entry = entries[i];
+                    var chunk = new AddStreamRequest { Chunk = new DataChunk { Entry = entry, Index = (uint) i } };
+                    await call.RequestStream.WriteAsync(chunk);
+                }
+
+                await call.RequestStream.CompleteAsync();
+
+                return await call.ResponseAsync;
+            }
         }
 
         private HashSet<string> TryAdd(IEnumerable<string> keys, Action<string, Stream> streamWriter, bool allowOverride,
@@ -38,12 +62,20 @@ namespace LmdbCacheClient
             }
 
             var preparedBatch = batch.
-                Select(ks => new AddRequest.Types.AddRequestEntry { Key = ks.Item1, Expiry = expiry.ToTimestamp(), Value = ByteString.FromStream(ks.Item2)}).
+                Select(ks => new AddRequestEntry { Key = ks.Item1, Expiry = expiry.ToTimestamp(), Value = ByteString.FromStream(ks.Item2)}).
                 ToArray();
 
-            var request = new AddRequest {OverrideExisting = allowOverride};
-            request.Entries.Add(preparedBatch);
-            var addResponse = _lightClient.Add(request);
+            AddResponse addResponse;
+            if (_useStreaming)
+            {
+                addResponse = AddStreaming(preparedBatch, allowOverride).Result;
+            }
+            else
+            {
+                var request = new AddRequest { OverrideExisting = allowOverride };
+                request.Entries.Add(preparedBatch);
+                addResponse = _lightClient.Add(request);
+            }
 
             return addResponse.Results.
                     Select((r, i) => (r, i)).

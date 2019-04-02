@@ -43,53 +43,60 @@ namespace LmdbCache {
             "bnNlEjEKB3Jlc3VsdHMYASADKA4yIC5MbWRiQ2FjaGUuQWRkUmVzcG9uc2Uu",
             "QWRkUmVzdWx0IlAKCUFkZFJlc3VsdBINCglLRVlfQURERUQQABIPCgtLRVlf",
             "VVBEQVRFRBABEhYKEktFWV9BTFJFQURZX0VYSVNUUxACEgsKB0ZBSUxVUkUQ",
-            "AyIdCg1EZWxldGVSZXF1ZXN0EgwKBGtleXMYASADKAkiggEKDkRlbGV0ZVJl",
-            "c3BvbnNlEjcKB3Jlc3VsdHMYASADKA4yJi5MbWRiQ2FjaGUuRGVsZXRlUmVz",
-            "cG9uc2UuRGVsZXRlUmVzdWx0IjcKDERlbGV0ZVJlc3VsdBILCgdTVUNDRVNT",
-            "EAASDQoJTk9UX0ZPVU5EEAESCwoHRkFJTFVSRRACIhoKCkdldFJlcXVlc3QS",
-            "DAoEa2V5cxgBIAMoCSLkAQoLR2V0UmVzcG9uc2USOAoHcmVzdWx0cxgBIAMo",
-            "CzInLkxtZGJDYWNoZS5HZXRSZXNwb25zZS5HZXRSZXNwb25zZUVudHJ5GpoB",
-            "ChBHZXRSZXNwb25zZUVudHJ5EkEKBnJlc3VsdBgBIAEoDjIxLkxtZGJDYWNo",
-            "ZS5HZXRSZXNwb25zZS5HZXRSZXNwb25zZUVudHJ5LkdldFJlc3VsdBINCgV2",
-            "YWx1ZRgCIAMoDCI0CglHZXRSZXN1bHQSCwoHU1VDQ0VTUxAAEg0KCU5PVF9G",
-            "T1VORBABEgsKB0ZBSUxVUkUQAiInChRDb250YWluc0tleXNSZXNwb25zZRIP",
-            "CgdyZXN1bHRzGAEgAygIIqEBCgtDb3B5UmVxdWVzdBI4CgdlbnRyaWVzGAEg",
-            "AygLMicuTG1kYkNhY2hlLkNvcHlSZXF1ZXN0LkNvcHlSZXF1ZXN0RW50cnka",
-            "WAoQQ29weVJlcXVlc3RFbnRyeRIPCgdrZXlGcm9tGAEgASgJEiQKBmV4cGly",
-            "eRgCIAEoCzIULkxtZGJDYWNoZS5UaW1lc3RhbXASDQoFa2V5VG8YAyABKAki",
-            "lgEKDENvcHlSZXNwb25zZRIzCgdyZXN1bHRzGAEgAygOMiIuTG1kYkNhY2hl",
-            "LkNvcHlSZXNwb25zZS5Db3B5UmVzdWx0IlEKCkNvcHlSZXN1bHQSCwoHU1VD",
-            "Q0VTUxAAEhYKEkZST01fS0VZX05PVF9GT1VORBABEhEKDVRPX0tFWV9FWElT",
-            "VFMQAhILCgdGQUlMVVJFEAMiQwoOS2V5TGlzdFJlcXVlc3QSEQoJa2V5UHJl",
-            "Zml4GAEgASgJEhAKCHBhZ2VTaXplGAIgASgNEgwKBHBhZ2UYAyABKA0iHgoP",
-            "S2V5TGlzdFJlc3BvbnNlEgsKA2tleRgBIAEoCSIyChRLZXlWYWx1ZUxpc3RS",
-            "ZXNwb25zZRILCgNrZXkYASABKAkSDQoFdmFsdWUYAyABKAwiogIKDVdyaXRl",
-            "TG9nRXZlbnQSJQoFY2xvY2sYASABKAsyFi5MbWRiQ2FjaGUuVmVjdG9yQ2xv",
-            "Y2sSOgoHdXBkYXRlZBgFIAEoCzInLkxtZGJDYWNoZS5Xcml0ZUxvZ0V2ZW50",
-            "LkFkZGVkT3JVcGRhdGVkSAASMwoHZGVsZXRlZBgHIAEoCzIgLkxtZGJDYWNo",
-            "ZS5Xcml0ZUxvZ0V2ZW50LkRlbGV0ZWRIABpSCg5BZGRlZE9yVXBkYXRlZBIL",
-            "CgNrZXkYASABKAkSJAoGZXhwaXJ5GAIgASgLMhQuTG1kYkNhY2hlLlRpbWVz",
-            "dGFtcBINCgV2YWx1ZRgDIAEoDBoWCgdEZWxldGVkEgsKA2tleRgBIAEoCUIN",
-            "Cgtsb2dnZWRFdmVudCIpChRHZXRSZXBsaWNhSWRSZXNwb25zZRIRCglyZXBs",
-            "aWNhSWQYASABKAkiUAoUU3luY1N1YnNjcmliZVJlcXVlc3QSEQoJcmVwbGlj",
-            "YUlkGAEgASgJEiUKBXNpbmNlGAIgASgLMhYuTG1kYkNhY2hlLlZlY3RvckNs",
-            "b2NrIjoKDFN5bmNSZXNwb25zZRIqCghsb2dFdmVudBgBIAEoCzIYLkxtZGJD",
-            "YWNoZS5Xcml0ZUxvZ0V2ZW50MuADChBMbWRiQ2FjaGVTZXJ2aWNlEjYKA0Fk",
-            "ZBIVLkxtZGJDYWNoZS5BZGRSZXF1ZXN0GhYuTG1kYkNhY2hlLkFkZFJlc3Bv",
-            "bnNlIgASPwoGRGVsZXRlEhguTG1kYkNhY2hlLkRlbGV0ZVJlcXVlc3QaGS5M",
-            "bWRiQ2FjaGUuRGVsZXRlUmVzcG9uc2UiABI5CgRDb3B5EhYuTG1kYkNhY2hl",
-            "LkNvcHlSZXF1ZXN0GhcuTG1kYkNhY2hlLkNvcHlSZXNwb25zZSIAEjYKA0dl",
-            "dBIVLkxtZGJDYWNoZS5HZXRSZXF1ZXN0GhYuTG1kYkNhY2hlLkdldFJlc3Bv",
-            "bnNlIgASSAoMQ29udGFpbnNLZXlzEhUuTG1kYkNhY2hlLkdldFJlcXVlc3Qa",
-            "Hy5MbWRiQ2FjaGUuQ29udGFpbnNLZXlzUmVzcG9uc2UiABJFCghMaXN0S2V5",
-            "cxIZLkxtZGJDYWNoZS5LZXlMaXN0UmVxdWVzdBoaLkxtZGJDYWNoZS5LZXlM",
-            "aXN0UmVzcG9uc2UiADABEk8KDUxpc3RLZXlWYWx1ZXMSGS5MbWRiQ2FjaGUu",
-            "S2V5TGlzdFJlcXVlc3QaHy5MbWRiQ2FjaGUuS2V5VmFsdWVMaXN0UmVzcG9u",
-            "c2UiADABMp0BCgtTeW5jU2VydmljZRJDCgxHZXRSZXBsaWNhSWQSEC5MbWRi",
-            "Q2FjaGUuRW1wdHkaHy5MbWRiQ2FjaGUuR2V0UmVwbGljYUlkUmVzcG9uc2Ui",
-            "ABJJCglTdWJzY3JpYmUSHy5MbWRiQ2FjaGUuU3luY1N1YnNjcmliZVJlcXVl",
-            "c3QaFy5MbWRiQ2FjaGUuU3luY1Jlc3BvbnNlIgAwAUIMqgIJTG1kYkNhY2hl",
-            "YgZwcm90bzM="));
+            "AyKSAgoQQWRkU3RyZWFtUmVxdWVzdBI0CgZoZWFkZXIYASABKAsyIi5MbWRi",
+            "Q2FjaGUuQWRkU3RyZWFtUmVxdWVzdC5IZWFkZXJIABI2CgVjaHVuaxgCIAEo",
+            "CzIlLkxtZGJDYWNoZS5BZGRTdHJlYW1SZXF1ZXN0LkRhdGFDaHVua0gAGjcK",
+            "BkhlYWRlchIYChBvdmVycmlkZUV4aXN0aW5nGAEgASgIEhMKC2NodW5rc0Nv",
+            "dW50GAIgASgNGlAKCURhdGFDaHVuaxINCgVpbmRleBgBIAEoDRI0CgVlbnRy",
+            "eRgCIAEoCzIlLkxtZGJDYWNoZS5BZGRSZXF1ZXN0LkFkZFJlcXVlc3RFbnRy",
+            "eUIFCgNtc2ciHQoNRGVsZXRlUmVxdWVzdBIMCgRrZXlzGAEgAygJIoIBCg5E",
+            "ZWxldGVSZXNwb25zZRI3CgdyZXN1bHRzGAEgAygOMiYuTG1kYkNhY2hlLkRl",
+            "bGV0ZVJlc3BvbnNlLkRlbGV0ZVJlc3VsdCI3CgxEZWxldGVSZXN1bHQSCwoH",
+            "U1VDQ0VTUxAAEg0KCU5PVF9GT1VORBABEgsKB0ZBSUxVUkUQAiIaCgpHZXRS",
+            "ZXF1ZXN0EgwKBGtleXMYASADKAki5AEKC0dldFJlc3BvbnNlEjgKB3Jlc3Vs",
+            "dHMYASADKAsyJy5MbWRiQ2FjaGUuR2V0UmVzcG9uc2UuR2V0UmVzcG9uc2VF",
+            "bnRyeRqaAQoQR2V0UmVzcG9uc2VFbnRyeRJBCgZyZXN1bHQYASABKA4yMS5M",
+            "bWRiQ2FjaGUuR2V0UmVzcG9uc2UuR2V0UmVzcG9uc2VFbnRyeS5HZXRSZXN1",
+            "bHQSDQoFdmFsdWUYAiADKAwiNAoJR2V0UmVzdWx0EgsKB1NVQ0NFU1MQABIN",
+            "CglOT1RfRk9VTkQQARILCgdGQUlMVVJFEAIiJwoUQ29udGFpbnNLZXlzUmVz",
+            "cG9uc2USDwoHcmVzdWx0cxgBIAMoCCKhAQoLQ29weVJlcXVlc3QSOAoHZW50",
+            "cmllcxgBIAMoCzInLkxtZGJDYWNoZS5Db3B5UmVxdWVzdC5Db3B5UmVxdWVz",
+            "dEVudHJ5GlgKEENvcHlSZXF1ZXN0RW50cnkSDwoHa2V5RnJvbRgBIAEoCRIk",
+            "CgZleHBpcnkYAiABKAsyFC5MbWRiQ2FjaGUuVGltZXN0YW1wEg0KBWtleVRv",
+            "GAMgASgJIpYBCgxDb3B5UmVzcG9uc2USMwoHcmVzdWx0cxgBIAMoDjIiLkxt",
+            "ZGJDYWNoZS5Db3B5UmVzcG9uc2UuQ29weVJlc3VsdCJRCgpDb3B5UmVzdWx0",
+            "EgsKB1NVQ0NFU1MQABIWChJGUk9NX0tFWV9OT1RfRk9VTkQQARIRCg1UT19L",
+            "RVlfRVhJU1RTEAISCwoHRkFJTFVSRRADIkMKDktleUxpc3RSZXF1ZXN0EhEK",
+            "CWtleVByZWZpeBgBIAEoCRIQCghwYWdlU2l6ZRgCIAEoDRIMCgRwYWdlGAMg",
+            "ASgNIh4KD0tleUxpc3RSZXNwb25zZRILCgNrZXkYASABKAkiMgoUS2V5VmFs",
+            "dWVMaXN0UmVzcG9uc2USCwoDa2V5GAEgASgJEg0KBXZhbHVlGAMgASgMIqIC",
+            "Cg1Xcml0ZUxvZ0V2ZW50EiUKBWNsb2NrGAEgASgLMhYuTG1kYkNhY2hlLlZl",
+            "Y3RvckNsb2NrEjoKB3VwZGF0ZWQYBSABKAsyJy5MbWRiQ2FjaGUuV3JpdGVM",
+            "b2dFdmVudC5BZGRlZE9yVXBkYXRlZEgAEjMKB2RlbGV0ZWQYByABKAsyIC5M",
+            "bWRiQ2FjaGUuV3JpdGVMb2dFdmVudC5EZWxldGVkSAAaUgoOQWRkZWRPclVw",
+            "ZGF0ZWQSCwoDa2V5GAEgASgJEiQKBmV4cGlyeRgCIAEoCzIULkxtZGJDYWNo",
+            "ZS5UaW1lc3RhbXASDQoFdmFsdWUYAyABKAwaFgoHRGVsZXRlZBILCgNrZXkY",
+            "ASABKAlCDQoLbG9nZ2VkRXZlbnQiKQoUR2V0UmVwbGljYUlkUmVzcG9uc2US",
+            "EQoJcmVwbGljYUlkGAEgASgJIlAKFFN5bmNTdWJzY3JpYmVSZXF1ZXN0EhEK",
+            "CXJlcGxpY2FJZBgBIAEoCRIlCgVzaW5jZRgCIAEoCzIWLkxtZGJDYWNoZS5W",
+            "ZWN0b3JDbG9jayI6CgxTeW5jUmVzcG9uc2USKgoIbG9nRXZlbnQYASABKAsy",
+            "GC5MbWRiQ2FjaGUuV3JpdGVMb2dFdmVudDKmBAoQTG1kYkNhY2hlU2Vydmlj",
+            "ZRI2CgNBZGQSFS5MbWRiQ2FjaGUuQWRkUmVxdWVzdBoWLkxtZGJDYWNoZS5B",
+            "ZGRSZXNwb25zZSIAEkQKCUFkZFN0cmVhbRIbLkxtZGJDYWNoZS5BZGRTdHJl",
+            "YW1SZXF1ZXN0GhYuTG1kYkNhY2hlLkFkZFJlc3BvbnNlIgAoARI/CgZEZWxl",
+            "dGUSGC5MbWRiQ2FjaGUuRGVsZXRlUmVxdWVzdBoZLkxtZGJDYWNoZS5EZWxl",
+            "dGVSZXNwb25zZSIAEjkKBENvcHkSFi5MbWRiQ2FjaGUuQ29weVJlcXVlc3Qa",
+            "Fy5MbWRiQ2FjaGUuQ29weVJlc3BvbnNlIgASNgoDR2V0EhUuTG1kYkNhY2hl",
+            "LkdldFJlcXVlc3QaFi5MbWRiQ2FjaGUuR2V0UmVzcG9uc2UiABJICgxDb250",
+            "YWluc0tleXMSFS5MbWRiQ2FjaGUuR2V0UmVxdWVzdBofLkxtZGJDYWNoZS5D",
+            "b250YWluc0tleXNSZXNwb25zZSIAEkUKCExpc3RLZXlzEhkuTG1kYkNhY2hl",
+            "LktleUxpc3RSZXF1ZXN0GhouTG1kYkNhY2hlLktleUxpc3RSZXNwb25zZSIA",
+            "MAESTwoNTGlzdEtleVZhbHVlcxIZLkxtZGJDYWNoZS5LZXlMaXN0UmVxdWVz",
+            "dBofLkxtZGJDYWNoZS5LZXlWYWx1ZUxpc3RSZXNwb25zZSIAMAEynQEKC1N5",
+            "bmNTZXJ2aWNlEkMKDEdldFJlcGxpY2FJZBIQLkxtZGJDYWNoZS5FbXB0eRof",
+            "LkxtZGJDYWNoZS5HZXRSZXBsaWNhSWRSZXNwb25zZSIAEkkKCVN1YnNjcmli",
+            "ZRIfLkxtZGJDYWNoZS5TeW5jU3Vic2NyaWJlUmVxdWVzdBoXLkxtZGJDYWNo",
+            "ZS5TeW5jUmVzcG9uc2UiADABQgyqAglMbWRiQ2FjaGViBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -99,6 +106,8 @@ namespace LmdbCache {
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.KvMetadata), global::LmdbCache.KvMetadata.Parser, new[]{ "Status", "Expiry", "Updated", "Action" }, null, new[]{ typeof(global::LmdbCache.KvMetadata.Types.Status), typeof(global::LmdbCache.KvMetadata.Types.UpdateAction) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddRequest), global::LmdbCache.AddRequest.Parser, new[]{ "OverrideExisting", "Entries" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddRequest.Types.AddRequestEntry), global::LmdbCache.AddRequest.Types.AddRequestEntry.Parser, new[]{ "Key", "Expiry", "Value" }, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddResponse), global::LmdbCache.AddResponse.Parser, new[]{ "Results" }, null, new[]{ typeof(global::LmdbCache.AddResponse.Types.AddResult) }, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddStreamRequest), global::LmdbCache.AddStreamRequest.Parser, new[]{ "Header", "Chunk" }, new[]{ "Msg" }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddStreamRequest.Types.Header), global::LmdbCache.AddStreamRequest.Types.Header.Parser, new[]{ "OverrideExisting", "ChunksCount" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddStreamRequest.Types.DataChunk), global::LmdbCache.AddStreamRequest.Types.DataChunk.Parser, new[]{ "Index", "Entry" }, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.DeleteRequest), global::LmdbCache.DeleteRequest.Parser, new[]{ "Keys" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.DeleteResponse), global::LmdbCache.DeleteResponse.Parser, new[]{ "Results" }, null, new[]{ typeof(global::LmdbCache.DeleteResponse.Types.DeleteResult) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.GetRequest), global::LmdbCache.GetRequest.Parser, new[]{ "Keys" }, null, null, null),
@@ -1232,6 +1241,537 @@ namespace LmdbCache {
 
   }
 
+  public sealed partial class AddStreamRequest : pb::IMessage<AddStreamRequest> {
+    private static readonly pb::MessageParser<AddStreamRequest> _parser = new pb::MessageParser<AddStreamRequest>(() => new AddStreamRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<AddStreamRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[6]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public AddStreamRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public AddStreamRequest(AddStreamRequest other) : this() {
+      switch (other.MsgCase) {
+        case MsgOneofCase.Header:
+          Header = other.Header.Clone();
+          break;
+        case MsgOneofCase.Chunk:
+          Chunk = other.Chunk.Clone();
+          break;
+      }
+
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public AddStreamRequest Clone() {
+      return new AddStreamRequest(this);
+    }
+
+    /// <summary>Field number for the "header" field.</summary>
+    public const int HeaderFieldNumber = 1;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::LmdbCache.AddStreamRequest.Types.Header Header {
+      get { return msgCase_ == MsgOneofCase.Header ? (global::LmdbCache.AddStreamRequest.Types.Header) msg_ : null; }
+      set {
+        msg_ = value;
+        msgCase_ = value == null ? MsgOneofCase.None : MsgOneofCase.Header;
+      }
+    }
+
+    /// <summary>Field number for the "chunk" field.</summary>
+    public const int ChunkFieldNumber = 2;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::LmdbCache.AddStreamRequest.Types.DataChunk Chunk {
+      get { return msgCase_ == MsgOneofCase.Chunk ? (global::LmdbCache.AddStreamRequest.Types.DataChunk) msg_ : null; }
+      set {
+        msg_ = value;
+        msgCase_ = value == null ? MsgOneofCase.None : MsgOneofCase.Chunk;
+      }
+    }
+
+    private object msg_;
+    /// <summary>Enum of possible cases for the "msg" oneof.</summary>
+    public enum MsgOneofCase {
+      None = 0,
+      Header = 1,
+      Chunk = 2,
+    }
+    private MsgOneofCase msgCase_ = MsgOneofCase.None;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public MsgOneofCase MsgCase {
+      get { return msgCase_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void ClearMsg() {
+      msgCase_ = MsgOneofCase.None;
+      msg_ = null;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as AddStreamRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(AddStreamRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Header, other.Header)) return false;
+      if (!object.Equals(Chunk, other.Chunk)) return false;
+      if (MsgCase != other.MsgCase) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (msgCase_ == MsgOneofCase.Header) hash ^= Header.GetHashCode();
+      if (msgCase_ == MsgOneofCase.Chunk) hash ^= Chunk.GetHashCode();
+      hash ^= (int) msgCase_;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (msgCase_ == MsgOneofCase.Header) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Header);
+      }
+      if (msgCase_ == MsgOneofCase.Chunk) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Chunk);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (msgCase_ == MsgOneofCase.Header) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Header);
+      }
+      if (msgCase_ == MsgOneofCase.Chunk) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Chunk);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(AddStreamRequest other) {
+      if (other == null) {
+        return;
+      }
+      switch (other.MsgCase) {
+        case MsgOneofCase.Header:
+          if (Header == null) {
+            Header = new global::LmdbCache.AddStreamRequest.Types.Header();
+          }
+          Header.MergeFrom(other.Header);
+          break;
+        case MsgOneofCase.Chunk:
+          if (Chunk == null) {
+            Chunk = new global::LmdbCache.AddStreamRequest.Types.DataChunk();
+          }
+          Chunk.MergeFrom(other.Chunk);
+          break;
+      }
+
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            global::LmdbCache.AddStreamRequest.Types.Header subBuilder = new global::LmdbCache.AddStreamRequest.Types.Header();
+            if (msgCase_ == MsgOneofCase.Header) {
+              subBuilder.MergeFrom(Header);
+            }
+            input.ReadMessage(subBuilder);
+            Header = subBuilder;
+            break;
+          }
+          case 18: {
+            global::LmdbCache.AddStreamRequest.Types.DataChunk subBuilder = new global::LmdbCache.AddStreamRequest.Types.DataChunk();
+            if (msgCase_ == MsgOneofCase.Chunk) {
+              subBuilder.MergeFrom(Chunk);
+            }
+            input.ReadMessage(subBuilder);
+            Chunk = subBuilder;
+            break;
+          }
+        }
+      }
+    }
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the AddStreamRequest message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      public sealed partial class Header : pb::IMessage<Header> {
+        private static readonly pb::MessageParser<Header> _parser = new pb::MessageParser<Header>(() => new Header());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<Header> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::LmdbCache.AddStreamRequest.Descriptor.NestedTypes[0]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Header() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Header(Header other) : this() {
+          overrideExisting_ = other.overrideExisting_;
+          chunksCount_ = other.chunksCount_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Header Clone() {
+          return new Header(this);
+        }
+
+        /// <summary>Field number for the "overrideExisting" field.</summary>
+        public const int OverrideExistingFieldNumber = 1;
+        private bool overrideExisting_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool OverrideExisting {
+          get { return overrideExisting_; }
+          set {
+            overrideExisting_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "chunksCount" field.</summary>
+        public const int ChunksCountFieldNumber = 2;
+        private uint chunksCount_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public uint ChunksCount {
+          get { return chunksCount_; }
+          set {
+            chunksCount_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other) {
+          return Equals(other as Header);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(Header other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (OverrideExisting != other.OverrideExisting) return false;
+          if (ChunksCount != other.ChunksCount) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (OverrideExisting != false) hash ^= OverrideExisting.GetHashCode();
+          if (ChunksCount != 0) hash ^= ChunksCount.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output) {
+          if (OverrideExisting != false) {
+            output.WriteRawTag(8);
+            output.WriteBool(OverrideExisting);
+          }
+          if (ChunksCount != 0) {
+            output.WriteRawTag(16);
+            output.WriteUInt32(ChunksCount);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize() {
+          int size = 0;
+          if (OverrideExisting != false) {
+            size += 1 + 1;
+          }
+          if (ChunksCount != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeUInt32Size(ChunksCount);
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(Header other) {
+          if (other == null) {
+            return;
+          }
+          if (other.OverrideExisting != false) {
+            OverrideExisting = other.OverrideExisting;
+          }
+          if (other.ChunksCount != 0) {
+            ChunksCount = other.ChunksCount;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 8: {
+                OverrideExisting = input.ReadBool();
+                break;
+              }
+              case 16: {
+                ChunksCount = input.ReadUInt32();
+                break;
+              }
+            }
+          }
+        }
+
+      }
+
+      public sealed partial class DataChunk : pb::IMessage<DataChunk> {
+        private static readonly pb::MessageParser<DataChunk> _parser = new pb::MessageParser<DataChunk>(() => new DataChunk());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<DataChunk> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::LmdbCache.AddStreamRequest.Descriptor.NestedTypes[1]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public DataChunk() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public DataChunk(DataChunk other) : this() {
+          index_ = other.index_;
+          entry_ = other.entry_ != null ? other.entry_.Clone() : null;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public DataChunk Clone() {
+          return new DataChunk(this);
+        }
+
+        /// <summary>Field number for the "index" field.</summary>
+        public const int IndexFieldNumber = 1;
+        private uint index_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public uint Index {
+          get { return index_; }
+          set {
+            index_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "entry" field.</summary>
+        public const int EntryFieldNumber = 2;
+        private global::LmdbCache.AddRequest.Types.AddRequestEntry entry_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public global::LmdbCache.AddRequest.Types.AddRequestEntry Entry {
+          get { return entry_; }
+          set {
+            entry_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other) {
+          return Equals(other as DataChunk);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(DataChunk other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (Index != other.Index) return false;
+          if (!object.Equals(Entry, other.Entry)) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (Index != 0) hash ^= Index.GetHashCode();
+          if (entry_ != null) hash ^= Entry.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output) {
+          if (Index != 0) {
+            output.WriteRawTag(8);
+            output.WriteUInt32(Index);
+          }
+          if (entry_ != null) {
+            output.WriteRawTag(18);
+            output.WriteMessage(Entry);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize() {
+          int size = 0;
+          if (Index != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Index);
+          }
+          if (entry_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(Entry);
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(DataChunk other) {
+          if (other == null) {
+            return;
+          }
+          if (other.Index != 0) {
+            Index = other.Index;
+          }
+          if (other.entry_ != null) {
+            if (entry_ == null) {
+              entry_ = new global::LmdbCache.AddRequest.Types.AddRequestEntry();
+            }
+            Entry.MergeFrom(other.Entry);
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 8: {
+                Index = input.ReadUInt32();
+                break;
+              }
+              case 18: {
+                if (entry_ == null) {
+                  entry_ = new global::LmdbCache.AddRequest.Types.AddRequestEntry();
+                }
+                input.ReadMessage(entry_);
+                break;
+              }
+            }
+          }
+        }
+
+      }
+
+    }
+    #endregion
+
+  }
+
   public sealed partial class DeleteRequest : pb::IMessage<DeleteRequest> {
     private static readonly pb::MessageParser<DeleteRequest> _parser = new pb::MessageParser<DeleteRequest>(() => new DeleteRequest());
     private pb::UnknownFieldSet _unknownFields;
@@ -1240,7 +1780,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[6]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1361,7 +1901,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[7]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1496,7 +2036,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[8]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1617,7 +2157,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[9]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[10]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1907,7 +2447,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[10]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[11]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2029,7 +2569,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[11]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[12]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2348,7 +2888,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[12]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[13]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2484,7 +3024,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[13]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[14]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2669,7 +3209,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[14]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[15]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2801,7 +3341,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[15]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[16]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2961,7 +3501,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[16]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[17]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3532,7 +4072,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[17]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[18]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3661,7 +4201,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[18]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[19]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3824,7 +4364,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[19]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[20]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

@@ -97,14 +97,15 @@ namespace LmdbCacheServer.Replica
                     }); 
             }
 
+            var replicationPort = ReplicaConfig.ReplicationPort ?? ReplicaConfig.Port + 2000;
             _serverReplication = new Server
             {
                 Services = { SyncService.BindService(new ReplicatorMaster(_lmdb, replicaConfig.ReplicaId, _wlTable, replicaConfig.ReplicationPageSize ?? 1000u)) },
-                Ports = { new ServerPort(ReplicaConfig.HostName ?? "127.0.0.1", ReplicaConfig.ReplicationPort, ServerCredentials.Insecure) }
+                Ports = { new ServerPort(ReplicaConfig.HostName ?? "127.0.0.1", replicationPort, ServerCredentials.Insecure) }
             };
             _serverReplication.Start();
 
-            Console.WriteLine("Replication server started listening on port " + ReplicaConfig.Port);
+            Console.WriteLine("Replication server started listening on port " + replicationPort);
 
             _server = new Server
             {

@@ -17,6 +17,7 @@ namespace LmdbCache {
 
     static readonly grpc::Marshaller<global::LmdbCache.AddRequest> __Marshaller_LmdbCache_AddRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.AddRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.AddResponse> __Marshaller_LmdbCache_AddResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.AddResponse.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::LmdbCache.AddStreamRequest> __Marshaller_LmdbCache_AddStreamRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.AddStreamRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.DeleteRequest> __Marshaller_LmdbCache_DeleteRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.DeleteRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.DeleteResponse> __Marshaller_LmdbCache_DeleteResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.DeleteResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.CopyRequest> __Marshaller_LmdbCache_CopyRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.CopyRequest.Parser.ParseFrom);
@@ -33,6 +34,13 @@ namespace LmdbCache {
         __ServiceName,
         "Add",
         __Marshaller_LmdbCache_AddRequest,
+        __Marshaller_LmdbCache_AddResponse);
+
+    static readonly grpc::Method<global::LmdbCache.AddStreamRequest, global::LmdbCache.AddResponse> __Method_AddStream = new grpc::Method<global::LmdbCache.AddStreamRequest, global::LmdbCache.AddResponse>(
+        grpc::MethodType.ClientStreaming,
+        __ServiceName,
+        "AddStream",
+        __Marshaller_LmdbCache_AddStreamRequest,
         __Marshaller_LmdbCache_AddResponse);
 
     static readonly grpc::Method<global::LmdbCache.DeleteRequest, global::LmdbCache.DeleteResponse> __Method_Delete = new grpc::Method<global::LmdbCache.DeleteRequest, global::LmdbCache.DeleteResponse>(
@@ -87,6 +95,11 @@ namespace LmdbCache {
     public abstract partial class LmdbCacheServiceBase
     {
       public virtual global::System.Threading.Tasks.Task<global::LmdbCache.AddResponse> Add(global::LmdbCache.AddRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      public virtual global::System.Threading.Tasks.Task<global::LmdbCache.AddResponse> AddStream(grpc::IAsyncStreamReader<global::LmdbCache.AddStreamRequest> requestStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -161,6 +174,14 @@ namespace LmdbCache {
       public virtual grpc::AsyncUnaryCall<global::LmdbCache.AddResponse> AddAsync(global::LmdbCache.AddRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_Add, null, options, request);
+      }
+      public virtual grpc::AsyncClientStreamingCall<global::LmdbCache.AddStreamRequest, global::LmdbCache.AddResponse> AddStream(grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return AddStream(new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual grpc::AsyncClientStreamingCall<global::LmdbCache.AddStreamRequest, global::LmdbCache.AddResponse> AddStream(grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncClientStreamingCall(__Method_AddStream, null, options);
       }
       public virtual global::LmdbCache.DeleteResponse Delete(global::LmdbCache.DeleteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
@@ -255,6 +276,7 @@ namespace LmdbCache {
     {
       return grpc::ServerServiceDefinition.CreateBuilder()
           .AddMethod(__Method_Add, serviceImpl.Add)
+          .AddMethod(__Method_AddStream, serviceImpl.AddStream)
           .AddMethod(__Method_Delete, serviceImpl.Delete)
           .AddMethod(__Method_Copy, serviceImpl.Copy)
           .AddMethod(__Method_Get, serviceImpl.Get)

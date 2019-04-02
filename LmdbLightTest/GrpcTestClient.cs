@@ -38,9 +38,7 @@ namespace LmdbLightTest
                 LightningConfig = lightningConfig
             });
 
-            Console.WriteLine("Cache server listening on port " + port);
-
-            _client = new LightClient(new Channel($"127.0.0.1:{port}", ChannelCredentials.Insecure));
+            _client = new LightClient(new Channel($"127.0.0.1:{port}", ChannelCredentials.Insecure), true);
         }
 
         public HashSet<string> Contains(IEnumerable<string> keys) => _client.Contains(keys);
