@@ -63,16 +63,23 @@ message KvMetadata {
   VectorClock updated     = 3;
   UpdateAction action     = 4;
   Compression compression = 5;
+  uint32 valueSize        = 6;
+  string correlationId    = 7;
 }
 
 message AddRequest {
+  message Header {
+    bool overrideExisting               = 1;
+    KvMetadata.Compression compression  = 2;    
+    string correlationId                = 3;
+    uint32 chunksCount                  = 4;
+  }
   message AddRequestEntry {
     string    key    = 1;
     Timestamp expiry = 2; 
     bytes     value  = 3;
   }
-  bool overrideExisting               = 1;
-  KvMetadata.Compression compression  = 2;        
+  Header header   = 1;
   repeated AddRequestEntry entries    = 5;
 }
 
@@ -87,22 +94,19 @@ message AddResponse {
 }
 
 message AddStreamRequest {
-  message Header {
-    bool overrideExisting = 1;
-    uint32 chunksCount    = 2;
-  }
   message DataChunk {
     uint32 index                      = 1;
     AddRequest.AddRequestEntry entry  = 2; 
   }
   oneof msg {
-    Header header   = 1;
-    DataChunk chunk = 2;
+    AddRequest.Header header   = 1;
+    DataChunk chunk            = 2;
   }
 }
 
 message DeleteRequest {
-  repeated string keys   = 1;
+  string correlationId   = 1;
+  repeated string keys   = 2;
 }
 
 message DeleteResponse {
@@ -115,7 +119,8 @@ message DeleteResponse {
 }
 
 message GetRequest {
-  repeated string keys    = 1;
+  string correlationId    = 1;
+  repeated string keys    = 2;
 }
 
 message GetResponse {
@@ -147,7 +152,8 @@ message CopyRequest {
     Timestamp expiry  = 2; 
     string    keyTo   = 3;
   }
-  repeated CopyRequestEntry entries = 1;
+  string correlationId              = 1;
+  repeated CopyRequestEntry entries = 2;
 }
 
 message CopyResponse {
@@ -161,9 +167,10 @@ message CopyResponse {
 }
 
 message KeyListRequest {
-  string keyPrefix = 1;
-  uint32 pageSize  = 2;
-  uint32 page      = 3;
+  string keyPrefix      = 1;
+  uint32 pageSize       = 2;
+  uint32 page           = 3;
+  string correlationId  = 4;
 }
 
 message KeyListResponse {
@@ -202,7 +209,8 @@ message WriteLogEvent {
   //   string      key     = 1;
   // }
 
-  VectorClock clock   = 1; 
+  VectorClock clock        = 1; 
+  string correlationId     = 2;
   oneof loggedEvent {
     AddedOrUpdated updated = 5;
     Deleted deleted        = 7;

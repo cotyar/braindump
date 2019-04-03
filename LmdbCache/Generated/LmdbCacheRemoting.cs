@@ -29,106 +29,110 @@ namespace LmdbCache {
             "ZWN0b3JDbG9jaxI2CghyZXBsaWNhcxgBIAMoCzIkLkxtZGJDYWNoZS5WZWN0",
             "b3JDbG9jay5SZXBsaWNhc0VudHJ5EhYKDnRpY2tzT2Zmc2V0VXRjGAIgASgE",
             "Gi8KDVJlcGxpY2FzRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgE",
-            "OgI4ASKJAwoKS3ZNZXRhZGF0YRIsCgZzdGF0dXMYASABKA4yHC5MbWRiQ2Fj",
+            "OgI4ASKzAwoKS3ZNZXRhZGF0YRIsCgZzdGF0dXMYASABKA4yHC5MbWRiQ2Fj",
             "aGUuS3ZNZXRhZGF0YS5TdGF0dXMSJAoGZXhwaXJ5GAIgASgLMhQuTG1kYkNh",
             "Y2hlLlRpbWVzdGFtcBInCgd1cGRhdGVkGAMgASgLMhYuTG1kYkNhY2hlLlZl",
             "Y3RvckNsb2NrEjIKBmFjdGlvbhgEIAEoDjIiLkxtZGJDYWNoZS5Ldk1ldGFk",
             "YXRhLlVwZGF0ZUFjdGlvbhI2Cgtjb21wcmVzc2lvbhgFIAEoDjIhLkxtZGJD",
-            "YWNoZS5Ldk1ldGFkYXRhLkNvbXByZXNzaW9uIi4KBlN0YXR1cxIKCgZBQ1RJ",
-            "VkUQABILCgdERUxFVEVEEAESCwoHRVhQSVJFRBACIjYKDFVwZGF0ZUFjdGlv",
-            "bhIJCgVBRERFRBAAEgsKB1VQREFURUQQARIOCgpSRVBMSUNBVEVEEAIiKgoL",
-            "Q29tcHJlc3Npb24SCAoETk9ORRAAEgcKA0xaNBABEggKBEdaSVAQAiLrAQoK",
-            "QWRkUmVxdWVzdBIYChBvdmVycmlkZUV4aXN0aW5nGAEgASgIEjYKC2NvbXBy",
-            "ZXNzaW9uGAIgASgOMiEuTG1kYkNhY2hlLkt2TWV0YWRhdGEuQ29tcHJlc3Np",
-            "b24SNgoHZW50cmllcxgFIAMoCzIlLkxtZGJDYWNoZS5BZGRSZXF1ZXN0LkFk",
-            "ZFJlcXVlc3RFbnRyeRpTCg9BZGRSZXF1ZXN0RW50cnkSCwoDa2V5GAEgASgJ",
-            "EiQKBmV4cGlyeRgCIAEoCzIULkxtZGJDYWNoZS5UaW1lc3RhbXASDQoFdmFs",
-            "dWUYAyABKAwikgEKC0FkZFJlc3BvbnNlEjEKB3Jlc3VsdHMYASADKA4yIC5M",
-            "bWRiQ2FjaGUuQWRkUmVzcG9uc2UuQWRkUmVzdWx0IlAKCUFkZFJlc3VsdBIN",
-            "CglLRVlfQURERUQQABIPCgtLRVlfVVBEQVRFRBABEhYKEktFWV9BTFJFQURZ",
-            "X0VYSVNUUxACEgsKB0ZBSUxVUkUQAyKSAgoQQWRkU3RyZWFtUmVxdWVzdBI0",
-            "CgZoZWFkZXIYASABKAsyIi5MbWRiQ2FjaGUuQWRkU3RyZWFtUmVxdWVzdC5I",
-            "ZWFkZXJIABI2CgVjaHVuaxgCIAEoCzIlLkxtZGJDYWNoZS5BZGRTdHJlYW1S",
-            "ZXF1ZXN0LkRhdGFDaHVua0gAGjcKBkhlYWRlchIYChBvdmVycmlkZUV4aXN0",
-            "aW5nGAEgASgIEhMKC2NodW5rc0NvdW50GAIgASgNGlAKCURhdGFDaHVuaxIN",
-            "CgVpbmRleBgBIAEoDRI0CgVlbnRyeRgCIAEoCzIlLkxtZGJDYWNoZS5BZGRS",
-            "ZXF1ZXN0LkFkZFJlcXVlc3RFbnRyeUIFCgNtc2ciHQoNRGVsZXRlUmVxdWVz",
-            "dBIMCgRrZXlzGAEgAygJIoIBCg5EZWxldGVSZXNwb25zZRI3CgdyZXN1bHRz",
-            "GAEgAygOMiYuTG1kYkNhY2hlLkRlbGV0ZVJlc3BvbnNlLkRlbGV0ZVJlc3Vs",
-            "dCI3CgxEZWxldGVSZXN1bHQSCwoHU1VDQ0VTUxAAEg0KCU5PVF9GT1VORBAB",
-            "EgsKB0ZBSUxVUkUQAiIaCgpHZXRSZXF1ZXN0EgwKBGtleXMYASADKAkiqwIK",
-            "C0dldFJlc3BvbnNlEjgKB3Jlc3VsdHMYASADKAsyJy5MbWRiQ2FjaGUuR2V0",
-            "UmVzcG9uc2UuR2V0UmVzcG9uc2VFbnRyeRrhAQoQR2V0UmVzcG9uc2VFbnRy",
-            "eRJBCgZyZXN1bHQYASABKA4yMS5MbWRiQ2FjaGUuR2V0UmVzcG9uc2UuR2V0",
-            "UmVzcG9uc2VFbnRyeS5HZXRSZXN1bHQSDQoFaW5kZXgYAiABKA0SNgoLY29t",
-            "cHJlc3Npb24YAyABKA4yIS5MbWRiQ2FjaGUuS3ZNZXRhZGF0YS5Db21wcmVz",
-            "c2lvbhINCgV2YWx1ZRgFIAEoDCI0CglHZXRSZXN1bHQSCwoHU1VDQ0VTUxAA",
-            "Eg0KCU5PVF9GT1VORBABEgsKB0ZBSUxVUkUQAiJMChFHZXRTdHJlYW1SZXNw",
-            "b25zZRI3CgZyZXN1bHQYASABKAsyJy5MbWRiQ2FjaGUuR2V0UmVzcG9uc2Uu",
-            "R2V0UmVzcG9uc2VFbnRyeSInChRDb250YWluc0tleXNSZXNwb25zZRIPCgdy",
-            "ZXN1bHRzGAEgAygIIqEBCgtDb3B5UmVxdWVzdBI4CgdlbnRyaWVzGAEgAygL",
-            "MicuTG1kYkNhY2hlLkNvcHlSZXF1ZXN0LkNvcHlSZXF1ZXN0RW50cnkaWAoQ",
-            "Q29weVJlcXVlc3RFbnRyeRIPCgdrZXlGcm9tGAEgASgJEiQKBmV4cGlyeRgC",
-            "IAEoCzIULkxtZGJDYWNoZS5UaW1lc3RhbXASDQoFa2V5VG8YAyABKAkilgEK",
-            "DENvcHlSZXNwb25zZRIzCgdyZXN1bHRzGAEgAygOMiIuTG1kYkNhY2hlLkNv",
-            "cHlSZXNwb25zZS5Db3B5UmVzdWx0IlEKCkNvcHlSZXN1bHQSCwoHU1VDQ0VT",
-            "UxAAEhYKEkZST01fS0VZX05PVF9GT1VORBABEhEKDVRPX0tFWV9FWElTVFMQ",
-            "AhILCgdGQUlMVVJFEAMiQwoOS2V5TGlzdFJlcXVlc3QSEQoJa2V5UHJlZml4",
-            "GAEgASgJEhAKCHBhZ2VTaXplGAIgASgNEgwKBHBhZ2UYAyABKA0iHgoPS2V5",
-            "TGlzdFJlc3BvbnNlEgsKA2tleRgBIAEoCSIyChRLZXlWYWx1ZUxpc3RSZXNw",
-            "b25zZRILCgNrZXkYASABKAkSDQoFdmFsdWUYAyABKAwiogIKDVdyaXRlTG9n",
-            "RXZlbnQSJQoFY2xvY2sYASABKAsyFi5MbWRiQ2FjaGUuVmVjdG9yQ2xvY2sS",
-            "OgoHdXBkYXRlZBgFIAEoCzInLkxtZGJDYWNoZS5Xcml0ZUxvZ0V2ZW50LkFk",
-            "ZGVkT3JVcGRhdGVkSAASMwoHZGVsZXRlZBgHIAEoCzIgLkxtZGJDYWNoZS5X",
-            "cml0ZUxvZ0V2ZW50LkRlbGV0ZWRIABpSCg5BZGRlZE9yVXBkYXRlZBILCgNr",
+            "YWNoZS5Ldk1ldGFkYXRhLkNvbXByZXNzaW9uEhEKCXZhbHVlU2l6ZRgGIAEo",
+            "DRIVCg1jb3JyZWxhdGlvbklkGAcgASgJIi4KBlN0YXR1cxIKCgZBQ1RJVkUQ",
+            "ABILCgdERUxFVEVEEAESCwoHRVhQSVJFRBACIjYKDFVwZGF0ZUFjdGlvbhIJ",
+            "CgVBRERFRBAAEgsKB1VQREFURUQQARIOCgpSRVBMSUNBVEVEEAIiKgoLQ29t",
+            "cHJlc3Npb24SCAoETk9ORRAAEgcKA0xaNBABEggKBEdaSVAQAiLQAgoKQWRk",
+            "UmVxdWVzdBIsCgZoZWFkZXIYASABKAsyHC5MbWRiQ2FjaGUuQWRkUmVxdWVz",
+            "dC5IZWFkZXISNgoHZW50cmllcxgFIAMoCzIlLkxtZGJDYWNoZS5BZGRSZXF1",
+            "ZXN0LkFkZFJlcXVlc3RFbnRyeRqGAQoGSGVhZGVyEhgKEG92ZXJyaWRlRXhp",
+            "c3RpbmcYASABKAgSNgoLY29tcHJlc3Npb24YAiABKA4yIS5MbWRiQ2FjaGUu",
+            "S3ZNZXRhZGF0YS5Db21wcmVzc2lvbhIVCg1jb3JyZWxhdGlvbklkGAMgASgJ",
+            "EhMKC2NodW5rc0NvdW50GAQgASgNGlMKD0FkZFJlcXVlc3RFbnRyeRILCgNr",
             "ZXkYASABKAkSJAoGZXhwaXJ5GAIgASgLMhQuTG1kYkNhY2hlLlRpbWVzdGFt",
-            "cBINCgV2YWx1ZRgDIAEoDBoWCgdEZWxldGVkEgsKA2tleRgBIAEoCUINCgts",
-            "b2dnZWRFdmVudCIpChRHZXRSZXBsaWNhSWRSZXNwb25zZRIRCglyZXBsaWNh",
-            "SWQYASABKAkiUAoUU3luY1N1YnNjcmliZVJlcXVlc3QSEQoJcmVwbGljYUlk",
-            "GAEgASgJEiUKBXNpbmNlGAIgASgLMhYuTG1kYkNhY2hlLlZlY3RvckNsb2Nr",
-            "IjoKDFN5bmNSZXNwb25zZRIqCghsb2dFdmVudBgBIAEoCzIYLkxtZGJDYWNo",
-            "ZS5Xcml0ZUxvZ0V2ZW50MuwEChBMbWRiQ2FjaGVTZXJ2aWNlEjYKA0FkZBIV",
-            "LkxtZGJDYWNoZS5BZGRSZXF1ZXN0GhYuTG1kYkNhY2hlLkFkZFJlc3BvbnNl",
-            "IgASRAoJQWRkU3RyZWFtEhsuTG1kYkNhY2hlLkFkZFN0cmVhbVJlcXVlc3Qa",
-            "Fi5MbWRiQ2FjaGUuQWRkUmVzcG9uc2UiACgBEj8KBkRlbGV0ZRIYLkxtZGJD",
-            "YWNoZS5EZWxldGVSZXF1ZXN0GhkuTG1kYkNhY2hlLkRlbGV0ZVJlc3BvbnNl",
-            "IgASOQoEQ29weRIWLkxtZGJDYWNoZS5Db3B5UmVxdWVzdBoXLkxtZGJDYWNo",
-            "ZS5Db3B5UmVzcG9uc2UiABI2CgNHZXQSFS5MbWRiQ2FjaGUuR2V0UmVxdWVz",
-            "dBoWLkxtZGJDYWNoZS5HZXRSZXNwb25zZSIAEkQKCUdldFN0cmVhbRIVLkxt",
-            "ZGJDYWNoZS5HZXRSZXF1ZXN0GhwuTG1kYkNhY2hlLkdldFN0cmVhbVJlc3Bv",
-            "bnNlIgAwARJICgxDb250YWluc0tleXMSFS5MbWRiQ2FjaGUuR2V0UmVxdWVz",
-            "dBofLkxtZGJDYWNoZS5Db250YWluc0tleXNSZXNwb25zZSIAEkUKCExpc3RL",
-            "ZXlzEhkuTG1kYkNhY2hlLktleUxpc3RSZXF1ZXN0GhouTG1kYkNhY2hlLktl",
-            "eUxpc3RSZXNwb25zZSIAMAESTwoNTGlzdEtleVZhbHVlcxIZLkxtZGJDYWNo",
-            "ZS5LZXlMaXN0UmVxdWVzdBofLkxtZGJDYWNoZS5LZXlWYWx1ZUxpc3RSZXNw",
-            "b25zZSIAMAEynQEKC1N5bmNTZXJ2aWNlEkMKDEdldFJlcGxpY2FJZBIQLkxt",
-            "ZGJDYWNoZS5FbXB0eRofLkxtZGJDYWNoZS5HZXRSZXBsaWNhSWRSZXNwb25z",
-            "ZSIAEkkKCVN1YnNjcmliZRIfLkxtZGJDYWNoZS5TeW5jU3Vic2NyaWJlUmVx",
-            "dWVzdBoXLkxtZGJDYWNoZS5TeW5jUmVzcG9uc2UiADABQgyqAglMbWRiQ2Fj",
-            "aGViBnByb3RvMw=="));
+            "cBINCgV2YWx1ZRgDIAEoDCKSAQoLQWRkUmVzcG9uc2USMQoHcmVzdWx0cxgB",
+            "IAMoDjIgLkxtZGJDYWNoZS5BZGRSZXNwb25zZS5BZGRSZXN1bHQiUAoJQWRk",
+            "UmVzdWx0Eg0KCUtFWV9BRERFRBAAEg8KC0tFWV9VUERBVEVEEAESFgoSS0VZ",
+            "X0FMUkVBRFlfRVhJU1RTEAISCwoHRkFJTFVSRRADItMBChBBZGRTdHJlYW1S",
+            "ZXF1ZXN0Ei4KBmhlYWRlchgBIAEoCzIcLkxtZGJDYWNoZS5BZGRSZXF1ZXN0",
+            "LkhlYWRlckgAEjYKBWNodW5rGAIgASgLMiUuTG1kYkNhY2hlLkFkZFN0cmVh",
+            "bVJlcXVlc3QuRGF0YUNodW5rSAAaUAoJRGF0YUNodW5rEg0KBWluZGV4GAEg",
+            "ASgNEjQKBWVudHJ5GAIgASgLMiUuTG1kYkNhY2hlLkFkZFJlcXVlc3QuQWRk",
+            "UmVxdWVzdEVudHJ5QgUKA21zZyI0Cg1EZWxldGVSZXF1ZXN0EhUKDWNvcnJl",
+            "bGF0aW9uSWQYASABKAkSDAoEa2V5cxgCIAMoCSKCAQoORGVsZXRlUmVzcG9u",
+            "c2USNwoHcmVzdWx0cxgBIAMoDjImLkxtZGJDYWNoZS5EZWxldGVSZXNwb25z",
+            "ZS5EZWxldGVSZXN1bHQiNwoMRGVsZXRlUmVzdWx0EgsKB1NVQ0NFU1MQABIN",
+            "CglOT1RfRk9VTkQQARILCgdGQUlMVVJFEAIiMQoKR2V0UmVxdWVzdBIVCg1j",
+            "b3JyZWxhdGlvbklkGAEgASgJEgwKBGtleXMYAiADKAkiqwIKC0dldFJlc3Bv",
+            "bnNlEjgKB3Jlc3VsdHMYASADKAsyJy5MbWRiQ2FjaGUuR2V0UmVzcG9uc2Uu",
+            "R2V0UmVzcG9uc2VFbnRyeRrhAQoQR2V0UmVzcG9uc2VFbnRyeRJBCgZyZXN1",
+            "bHQYASABKA4yMS5MbWRiQ2FjaGUuR2V0UmVzcG9uc2UuR2V0UmVzcG9uc2VF",
+            "bnRyeS5HZXRSZXN1bHQSDQoFaW5kZXgYAiABKA0SNgoLY29tcHJlc3Npb24Y",
+            "AyABKA4yIS5MbWRiQ2FjaGUuS3ZNZXRhZGF0YS5Db21wcmVzc2lvbhINCgV2",
+            "YWx1ZRgFIAEoDCI0CglHZXRSZXN1bHQSCwoHU1VDQ0VTUxAAEg0KCU5PVF9G",
+            "T1VORBABEgsKB0ZBSUxVUkUQAiJMChFHZXRTdHJlYW1SZXNwb25zZRI3CgZy",
+            "ZXN1bHQYASABKAsyJy5MbWRiQ2FjaGUuR2V0UmVzcG9uc2UuR2V0UmVzcG9u",
+            "c2VFbnRyeSInChRDb250YWluc0tleXNSZXNwb25zZRIPCgdyZXN1bHRzGAEg",
+            "AygIIrgBCgtDb3B5UmVxdWVzdBIVCg1jb3JyZWxhdGlvbklkGAEgASgJEjgK",
+            "B2VudHJpZXMYAiADKAsyJy5MbWRiQ2FjaGUuQ29weVJlcXVlc3QuQ29weVJl",
+            "cXVlc3RFbnRyeRpYChBDb3B5UmVxdWVzdEVudHJ5Eg8KB2tleUZyb20YASAB",
+            "KAkSJAoGZXhwaXJ5GAIgASgLMhQuTG1kYkNhY2hlLlRpbWVzdGFtcBINCgVr",
+            "ZXlUbxgDIAEoCSKWAQoMQ29weVJlc3BvbnNlEjMKB3Jlc3VsdHMYASADKA4y",
+            "Ii5MbWRiQ2FjaGUuQ29weVJlc3BvbnNlLkNvcHlSZXN1bHQiUQoKQ29weVJl",
+            "c3VsdBILCgdTVUNDRVNTEAASFgoSRlJPTV9LRVlfTk9UX0ZPVU5EEAESEQoN",
+            "VE9fS0VZX0VYSVNUUxACEgsKB0ZBSUxVUkUQAyJaCg5LZXlMaXN0UmVxdWVz",
+            "dBIRCglrZXlQcmVmaXgYASABKAkSEAoIcGFnZVNpemUYAiABKA0SDAoEcGFn",
+            "ZRgDIAEoDRIVCg1jb3JyZWxhdGlvbklkGAQgASgJIh4KD0tleUxpc3RSZXNw",
+            "b25zZRILCgNrZXkYASABKAkiMgoUS2V5VmFsdWVMaXN0UmVzcG9uc2USCwoD",
+            "a2V5GAEgASgJEg0KBXZhbHVlGAMgASgMIrkCCg1Xcml0ZUxvZ0V2ZW50EiUK",
+            "BWNsb2NrGAEgASgLMhYuTG1kYkNhY2hlLlZlY3RvckNsb2NrEhUKDWNvcnJl",
+            "bGF0aW9uSWQYAiABKAkSOgoHdXBkYXRlZBgFIAEoCzInLkxtZGJDYWNoZS5X",
+            "cml0ZUxvZ0V2ZW50LkFkZGVkT3JVcGRhdGVkSAASMwoHZGVsZXRlZBgHIAEo",
+            "CzIgLkxtZGJDYWNoZS5Xcml0ZUxvZ0V2ZW50LkRlbGV0ZWRIABpSCg5BZGRl",
+            "ZE9yVXBkYXRlZBILCgNrZXkYASABKAkSJAoGZXhwaXJ5GAIgASgLMhQuTG1k",
+            "YkNhY2hlLlRpbWVzdGFtcBINCgV2YWx1ZRgDIAEoDBoWCgdEZWxldGVkEgsK",
+            "A2tleRgBIAEoCUINCgtsb2dnZWRFdmVudCIpChRHZXRSZXBsaWNhSWRSZXNw",
+            "b25zZRIRCglyZXBsaWNhSWQYASABKAkiUAoUU3luY1N1YnNjcmliZVJlcXVl",
+            "c3QSEQoJcmVwbGljYUlkGAEgASgJEiUKBXNpbmNlGAIgASgLMhYuTG1kYkNh",
+            "Y2hlLlZlY3RvckNsb2NrIjoKDFN5bmNSZXNwb25zZRIqCghsb2dFdmVudBgB",
+            "IAEoCzIYLkxtZGJDYWNoZS5Xcml0ZUxvZ0V2ZW50MuwEChBMbWRiQ2FjaGVT",
+            "ZXJ2aWNlEjYKA0FkZBIVLkxtZGJDYWNoZS5BZGRSZXF1ZXN0GhYuTG1kYkNh",
+            "Y2hlLkFkZFJlc3BvbnNlIgASRAoJQWRkU3RyZWFtEhsuTG1kYkNhY2hlLkFk",
+            "ZFN0cmVhbVJlcXVlc3QaFi5MbWRiQ2FjaGUuQWRkUmVzcG9uc2UiACgBEj8K",
+            "BkRlbGV0ZRIYLkxtZGJDYWNoZS5EZWxldGVSZXF1ZXN0GhkuTG1kYkNhY2hl",
+            "LkRlbGV0ZVJlc3BvbnNlIgASOQoEQ29weRIWLkxtZGJDYWNoZS5Db3B5UmVx",
+            "dWVzdBoXLkxtZGJDYWNoZS5Db3B5UmVzcG9uc2UiABI2CgNHZXQSFS5MbWRi",
+            "Q2FjaGUuR2V0UmVxdWVzdBoWLkxtZGJDYWNoZS5HZXRSZXNwb25zZSIAEkQK",
+            "CUdldFN0cmVhbRIVLkxtZGJDYWNoZS5HZXRSZXF1ZXN0GhwuTG1kYkNhY2hl",
+            "LkdldFN0cmVhbVJlc3BvbnNlIgAwARJICgxDb250YWluc0tleXMSFS5MbWRi",
+            "Q2FjaGUuR2V0UmVxdWVzdBofLkxtZGJDYWNoZS5Db250YWluc0tleXNSZXNw",
+            "b25zZSIAEkUKCExpc3RLZXlzEhkuTG1kYkNhY2hlLktleUxpc3RSZXF1ZXN0",
+            "GhouTG1kYkNhY2hlLktleUxpc3RSZXNwb25zZSIAMAESTwoNTGlzdEtleVZh",
+            "bHVlcxIZLkxtZGJDYWNoZS5LZXlMaXN0UmVxdWVzdBofLkxtZGJDYWNoZS5L",
+            "ZXlWYWx1ZUxpc3RSZXNwb25zZSIAMAEynQEKC1N5bmNTZXJ2aWNlEkMKDEdl",
+            "dFJlcGxpY2FJZBIQLkxtZGJDYWNoZS5FbXB0eRofLkxtZGJDYWNoZS5HZXRS",
+            "ZXBsaWNhSWRSZXNwb25zZSIAEkkKCVN1YnNjcmliZRIfLkxtZGJDYWNoZS5T",
+            "eW5jU3Vic2NyaWJlUmVxdWVzdBoXLkxtZGJDYWNoZS5TeW5jUmVzcG9uc2Ui",
+            "ADABQgyqAglMbWRiQ2FjaGViBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.Empty), global::LmdbCache.Empty.Parser, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.Timestamp), global::LmdbCache.Timestamp.Parser, new[]{ "TicksOffsetUtc" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.VectorClock), global::LmdbCache.VectorClock.Parser, new[]{ "Replicas", "TicksOffsetUtc" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.KvMetadata), global::LmdbCache.KvMetadata.Parser, new[]{ "Status", "Expiry", "Updated", "Action", "Compression" }, null, new[]{ typeof(global::LmdbCache.KvMetadata.Types.Status), typeof(global::LmdbCache.KvMetadata.Types.UpdateAction), typeof(global::LmdbCache.KvMetadata.Types.Compression) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddRequest), global::LmdbCache.AddRequest.Parser, new[]{ "OverrideExisting", "Compression", "Entries" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddRequest.Types.AddRequestEntry), global::LmdbCache.AddRequest.Types.AddRequestEntry.Parser, new[]{ "Key", "Expiry", "Value" }, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.KvMetadata), global::LmdbCache.KvMetadata.Parser, new[]{ "Status", "Expiry", "Updated", "Action", "Compression", "ValueSize", "CorrelationId" }, null, new[]{ typeof(global::LmdbCache.KvMetadata.Types.Status), typeof(global::LmdbCache.KvMetadata.Types.UpdateAction), typeof(global::LmdbCache.KvMetadata.Types.Compression) }, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddRequest), global::LmdbCache.AddRequest.Parser, new[]{ "Header", "Entries" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddRequest.Types.Header), global::LmdbCache.AddRequest.Types.Header.Parser, new[]{ "OverrideExisting", "Compression", "CorrelationId", "ChunksCount" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddRequest.Types.AddRequestEntry), global::LmdbCache.AddRequest.Types.AddRequestEntry.Parser, new[]{ "Key", "Expiry", "Value" }, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddResponse), global::LmdbCache.AddResponse.Parser, new[]{ "Results" }, null, new[]{ typeof(global::LmdbCache.AddResponse.Types.AddResult) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddStreamRequest), global::LmdbCache.AddStreamRequest.Parser, new[]{ "Header", "Chunk" }, new[]{ "Msg" }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddStreamRequest.Types.Header), global::LmdbCache.AddStreamRequest.Types.Header.Parser, new[]{ "OverrideExisting", "ChunksCount" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddStreamRequest.Types.DataChunk), global::LmdbCache.AddStreamRequest.Types.DataChunk.Parser, new[]{ "Index", "Entry" }, null, null, null)}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.DeleteRequest), global::LmdbCache.DeleteRequest.Parser, new[]{ "Keys" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddStreamRequest), global::LmdbCache.AddStreamRequest.Parser, new[]{ "Header", "Chunk" }, new[]{ "Msg" }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.AddStreamRequest.Types.DataChunk), global::LmdbCache.AddStreamRequest.Types.DataChunk.Parser, new[]{ "Index", "Entry" }, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.DeleteRequest), global::LmdbCache.DeleteRequest.Parser, new[]{ "CorrelationId", "Keys" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.DeleteResponse), global::LmdbCache.DeleteResponse.Parser, new[]{ "Results" }, null, new[]{ typeof(global::LmdbCache.DeleteResponse.Types.DeleteResult) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.GetRequest), global::LmdbCache.GetRequest.Parser, new[]{ "Keys" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.GetRequest), global::LmdbCache.GetRequest.Parser, new[]{ "CorrelationId", "Keys" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.GetResponse), global::LmdbCache.GetResponse.Parser, new[]{ "Results" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.GetResponse.Types.GetResponseEntry), global::LmdbCache.GetResponse.Types.GetResponseEntry.Parser, new[]{ "Result", "Index", "Compression", "Value" }, null, new[]{ typeof(global::LmdbCache.GetResponse.Types.GetResponseEntry.Types.GetResult) }, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.GetStreamResponse), global::LmdbCache.GetStreamResponse.Parser, new[]{ "Result" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.ContainsKeysResponse), global::LmdbCache.ContainsKeysResponse.Parser, new[]{ "Results" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.CopyRequest), global::LmdbCache.CopyRequest.Parser, new[]{ "Entries" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.CopyRequest.Types.CopyRequestEntry), global::LmdbCache.CopyRequest.Types.CopyRequestEntry.Parser, new[]{ "KeyFrom", "Expiry", "KeyTo" }, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.CopyRequest), global::LmdbCache.CopyRequest.Parser, new[]{ "CorrelationId", "Entries" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.CopyRequest.Types.CopyRequestEntry), global::LmdbCache.CopyRequest.Types.CopyRequestEntry.Parser, new[]{ "KeyFrom", "Expiry", "KeyTo" }, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.CopyResponse), global::LmdbCache.CopyResponse.Parser, new[]{ "Results" }, null, new[]{ typeof(global::LmdbCache.CopyResponse.Types.CopyResult) }, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.KeyListRequest), global::LmdbCache.KeyListRequest.Parser, new[]{ "KeyPrefix", "PageSize", "Page" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.KeyListRequest), global::LmdbCache.KeyListRequest.Parser, new[]{ "KeyPrefix", "PageSize", "Page", "CorrelationId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.KeyListResponse), global::LmdbCache.KeyListResponse.Parser, new[]{ "Key" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.KeyValueListResponse), global::LmdbCache.KeyValueListResponse.Parser, new[]{ "Key", "Value" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.WriteLogEvent), global::LmdbCache.WriteLogEvent.Parser, new[]{ "Clock", "Updated", "Deleted" }, new[]{ "LoggedEvent" }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.WriteLogEvent.Types.AddedOrUpdated), global::LmdbCache.WriteLogEvent.Types.AddedOrUpdated.Parser, new[]{ "Key", "Expiry", "Value" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.WriteLogEvent), global::LmdbCache.WriteLogEvent.Parser, new[]{ "Clock", "CorrelationId", "Updated", "Deleted" }, new[]{ "LoggedEvent" }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.WriteLogEvent.Types.AddedOrUpdated), global::LmdbCache.WriteLogEvent.Types.AddedOrUpdated.Parser, new[]{ "Key", "Expiry", "Value" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.WriteLogEvent.Types.Deleted), global::LmdbCache.WriteLogEvent.Types.Deleted.Parser, new[]{ "Key" }, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.GetReplicaIdResponse), global::LmdbCache.GetReplicaIdResponse.Parser, new[]{ "ReplicaId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.SyncSubscribeRequest), global::LmdbCache.SyncSubscribeRequest.Parser, new[]{ "ReplicaId", "Since" }, null, null, null),
@@ -551,6 +555,8 @@ namespace LmdbCache {
       updated_ = other.updated_ != null ? other.updated_.Clone() : null;
       action_ = other.action_;
       compression_ = other.compression_;
+      valueSize_ = other.valueSize_;
+      correlationId_ = other.correlationId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -614,6 +620,28 @@ namespace LmdbCache {
       }
     }
 
+    /// <summary>Field number for the "valueSize" field.</summary>
+    public const int ValueSizeFieldNumber = 6;
+    private uint valueSize_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint ValueSize {
+      get { return valueSize_; }
+      set {
+        valueSize_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "correlationId" field.</summary>
+    public const int CorrelationIdFieldNumber = 7;
+    private string correlationId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string CorrelationId {
+      get { return correlationId_; }
+      set {
+        correlationId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as KvMetadata);
@@ -632,6 +660,8 @@ namespace LmdbCache {
       if (!object.Equals(Updated, other.Updated)) return false;
       if (Action != other.Action) return false;
       if (Compression != other.Compression) return false;
+      if (ValueSize != other.ValueSize) return false;
+      if (CorrelationId != other.CorrelationId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -643,6 +673,8 @@ namespace LmdbCache {
       if (updated_ != null) hash ^= Updated.GetHashCode();
       if (Action != 0) hash ^= Action.GetHashCode();
       if (Compression != 0) hash ^= Compression.GetHashCode();
+      if (ValueSize != 0) hash ^= ValueSize.GetHashCode();
+      if (CorrelationId.Length != 0) hash ^= CorrelationId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -676,6 +708,14 @@ namespace LmdbCache {
         output.WriteRawTag(40);
         output.WriteEnum((int) Compression);
       }
+      if (ValueSize != 0) {
+        output.WriteRawTag(48);
+        output.WriteUInt32(ValueSize);
+      }
+      if (CorrelationId.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(CorrelationId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -698,6 +738,12 @@ namespace LmdbCache {
       }
       if (Compression != 0) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Compression);
+      }
+      if (ValueSize != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(ValueSize);
+      }
+      if (CorrelationId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(CorrelationId);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -730,6 +776,12 @@ namespace LmdbCache {
       }
       if (other.Compression != 0) {
         Compression = other.Compression;
+      }
+      if (other.ValueSize != 0) {
+        ValueSize = other.ValueSize;
+      }
+      if (other.CorrelationId.Length != 0) {
+        CorrelationId = other.CorrelationId;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -766,6 +818,14 @@ namespace LmdbCache {
           }
           case 40: {
             compression_ = (global::LmdbCache.KvMetadata.Types.Compression) input.ReadEnum();
+            break;
+          }
+          case 48: {
+            ValueSize = input.ReadUInt32();
+            break;
+          }
+          case 58: {
+            CorrelationId = input.ReadString();
             break;
           }
         }
@@ -827,8 +887,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public AddRequest(AddRequest other) : this() {
-      overrideExisting_ = other.overrideExisting_;
-      compression_ = other.compression_;
+      header_ = other.header_ != null ? other.header_.Clone() : null;
       entries_ = other.entries_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -838,25 +897,14 @@ namespace LmdbCache {
       return new AddRequest(this);
     }
 
-    /// <summary>Field number for the "overrideExisting" field.</summary>
-    public const int OverrideExistingFieldNumber = 1;
-    private bool overrideExisting_;
+    /// <summary>Field number for the "header" field.</summary>
+    public const int HeaderFieldNumber = 1;
+    private global::LmdbCache.AddRequest.Types.Header header_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool OverrideExisting {
-      get { return overrideExisting_; }
+    public global::LmdbCache.AddRequest.Types.Header Header {
+      get { return header_; }
       set {
-        overrideExisting_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "compression" field.</summary>
-    public const int CompressionFieldNumber = 2;
-    private global::LmdbCache.KvMetadata.Types.Compression compression_ = 0;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::LmdbCache.KvMetadata.Types.Compression Compression {
-      get { return compression_; }
-      set {
-        compression_ = value;
+        header_ = value;
       }
     }
 
@@ -883,8 +931,7 @@ namespace LmdbCache {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (OverrideExisting != other.OverrideExisting) return false;
-      if (Compression != other.Compression) return false;
+      if (!object.Equals(Header, other.Header)) return false;
       if(!entries_.Equals(other.entries_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -892,8 +939,7 @@ namespace LmdbCache {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (OverrideExisting != false) hash ^= OverrideExisting.GetHashCode();
-      if (Compression != 0) hash ^= Compression.GetHashCode();
+      if (header_ != null) hash ^= Header.GetHashCode();
       hash ^= entries_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -908,13 +954,9 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (OverrideExisting != false) {
-        output.WriteRawTag(8);
-        output.WriteBool(OverrideExisting);
-      }
-      if (Compression != 0) {
-        output.WriteRawTag(16);
-        output.WriteEnum((int) Compression);
+      if (header_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Header);
       }
       entries_.WriteTo(output, _repeated_entries_codec);
       if (_unknownFields != null) {
@@ -925,11 +967,8 @@ namespace LmdbCache {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (OverrideExisting != false) {
-        size += 1 + 1;
-      }
-      if (Compression != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Compression);
+      if (header_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Header);
       }
       size += entries_.CalculateSize(_repeated_entries_codec);
       if (_unknownFields != null) {
@@ -943,11 +982,11 @@ namespace LmdbCache {
       if (other == null) {
         return;
       }
-      if (other.OverrideExisting != false) {
-        OverrideExisting = other.OverrideExisting;
-      }
-      if (other.Compression != 0) {
-        Compression = other.Compression;
+      if (other.header_ != null) {
+        if (header_ == null) {
+          header_ = new global::LmdbCache.AddRequest.Types.Header();
+        }
+        Header.MergeFrom(other.Header);
       }
       entries_.Add(other.entries_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -961,12 +1000,11 @@ namespace LmdbCache {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 8: {
-            OverrideExisting = input.ReadBool();
-            break;
-          }
-          case 16: {
-            compression_ = (global::LmdbCache.KvMetadata.Types.Compression) input.ReadEnum();
+          case 10: {
+            if (header_ == null) {
+              header_ = new global::LmdbCache.AddRequest.Types.Header();
+            }
+            input.ReadMessage(header_);
             break;
           }
           case 42: {
@@ -981,6 +1019,219 @@ namespace LmdbCache {
     /// <summary>Container for nested types declared in the AddRequest message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static partial class Types {
+      public sealed partial class Header : pb::IMessage<Header> {
+        private static readonly pb::MessageParser<Header> _parser = new pb::MessageParser<Header>(() => new Header());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<Header> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::LmdbCache.AddRequest.Descriptor.NestedTypes[0]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Header() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Header(Header other) : this() {
+          overrideExisting_ = other.overrideExisting_;
+          compression_ = other.compression_;
+          correlationId_ = other.correlationId_;
+          chunksCount_ = other.chunksCount_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Header Clone() {
+          return new Header(this);
+        }
+
+        /// <summary>Field number for the "overrideExisting" field.</summary>
+        public const int OverrideExistingFieldNumber = 1;
+        private bool overrideExisting_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool OverrideExisting {
+          get { return overrideExisting_; }
+          set {
+            overrideExisting_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "compression" field.</summary>
+        public const int CompressionFieldNumber = 2;
+        private global::LmdbCache.KvMetadata.Types.Compression compression_ = 0;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public global::LmdbCache.KvMetadata.Types.Compression Compression {
+          get { return compression_; }
+          set {
+            compression_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "correlationId" field.</summary>
+        public const int CorrelationIdFieldNumber = 3;
+        private string correlationId_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string CorrelationId {
+          get { return correlationId_; }
+          set {
+            correlationId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        /// <summary>Field number for the "chunksCount" field.</summary>
+        public const int ChunksCountFieldNumber = 4;
+        private uint chunksCount_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public uint ChunksCount {
+          get { return chunksCount_; }
+          set {
+            chunksCount_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other) {
+          return Equals(other as Header);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(Header other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (OverrideExisting != other.OverrideExisting) return false;
+          if (Compression != other.Compression) return false;
+          if (CorrelationId != other.CorrelationId) return false;
+          if (ChunksCount != other.ChunksCount) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (OverrideExisting != false) hash ^= OverrideExisting.GetHashCode();
+          if (Compression != 0) hash ^= Compression.GetHashCode();
+          if (CorrelationId.Length != 0) hash ^= CorrelationId.GetHashCode();
+          if (ChunksCount != 0) hash ^= ChunksCount.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output) {
+          if (OverrideExisting != false) {
+            output.WriteRawTag(8);
+            output.WriteBool(OverrideExisting);
+          }
+          if (Compression != 0) {
+            output.WriteRawTag(16);
+            output.WriteEnum((int) Compression);
+          }
+          if (CorrelationId.Length != 0) {
+            output.WriteRawTag(26);
+            output.WriteString(CorrelationId);
+          }
+          if (ChunksCount != 0) {
+            output.WriteRawTag(32);
+            output.WriteUInt32(ChunksCount);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize() {
+          int size = 0;
+          if (OverrideExisting != false) {
+            size += 1 + 1;
+          }
+          if (Compression != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Compression);
+          }
+          if (CorrelationId.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(CorrelationId);
+          }
+          if (ChunksCount != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeUInt32Size(ChunksCount);
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(Header other) {
+          if (other == null) {
+            return;
+          }
+          if (other.OverrideExisting != false) {
+            OverrideExisting = other.OverrideExisting;
+          }
+          if (other.Compression != 0) {
+            Compression = other.Compression;
+          }
+          if (other.CorrelationId.Length != 0) {
+            CorrelationId = other.CorrelationId;
+          }
+          if (other.ChunksCount != 0) {
+            ChunksCount = other.ChunksCount;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 8: {
+                OverrideExisting = input.ReadBool();
+                break;
+              }
+              case 16: {
+                compression_ = (global::LmdbCache.KvMetadata.Types.Compression) input.ReadEnum();
+                break;
+              }
+              case 26: {
+                CorrelationId = input.ReadString();
+                break;
+              }
+              case 32: {
+                ChunksCount = input.ReadUInt32();
+                break;
+              }
+            }
+          }
+        }
+
+      }
+
       public sealed partial class AddRequestEntry : pb::IMessage<AddRequestEntry> {
         private static readonly pb::MessageParser<AddRequestEntry> _parser = new pb::MessageParser<AddRequestEntry>(() => new AddRequestEntry());
         private pb::UnknownFieldSet _unknownFields;
@@ -989,7 +1240,7 @@ namespace LmdbCache {
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::LmdbCache.AddRequest.Descriptor.NestedTypes[0]; }
+          get { return global::LmdbCache.AddRequest.Descriptor.NestedTypes[1]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1358,8 +1609,8 @@ namespace LmdbCache {
     /// <summary>Field number for the "header" field.</summary>
     public const int HeaderFieldNumber = 1;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::LmdbCache.AddStreamRequest.Types.Header Header {
-      get { return msgCase_ == MsgOneofCase.Header ? (global::LmdbCache.AddStreamRequest.Types.Header) msg_ : null; }
+    public global::LmdbCache.AddRequest.Types.Header Header {
+      get { return msgCase_ == MsgOneofCase.Header ? (global::LmdbCache.AddRequest.Types.Header) msg_ : null; }
       set {
         msg_ = value;
         msgCase_ = value == null ? MsgOneofCase.None : MsgOneofCase.Header;
@@ -1470,7 +1721,7 @@ namespace LmdbCache {
       switch (other.MsgCase) {
         case MsgOneofCase.Header:
           if (Header == null) {
-            Header = new global::LmdbCache.AddStreamRequest.Types.Header();
+            Header = new global::LmdbCache.AddRequest.Types.Header();
           }
           Header.MergeFrom(other.Header);
           break;
@@ -1494,7 +1745,7 @@ namespace LmdbCache {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            global::LmdbCache.AddStreamRequest.Types.Header subBuilder = new global::LmdbCache.AddStreamRequest.Types.Header();
+            global::LmdbCache.AddRequest.Types.Header subBuilder = new global::LmdbCache.AddRequest.Types.Header();
             if (msgCase_ == MsgOneofCase.Header) {
               subBuilder.MergeFrom(Header);
             }
@@ -1519,163 +1770,6 @@ namespace LmdbCache {
     /// <summary>Container for nested types declared in the AddStreamRequest message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static partial class Types {
-      public sealed partial class Header : pb::IMessage<Header> {
-        private static readonly pb::MessageParser<Header> _parser = new pb::MessageParser<Header>(() => new Header());
-        private pb::UnknownFieldSet _unknownFields;
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public static pb::MessageParser<Header> Parser { get { return _parser; } }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public static pbr::MessageDescriptor Descriptor {
-          get { return global::LmdbCache.AddStreamRequest.Descriptor.NestedTypes[0]; }
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        pbr::MessageDescriptor pb::IMessage.Descriptor {
-          get { return Descriptor; }
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public Header() {
-          OnConstruction();
-        }
-
-        partial void OnConstruction();
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public Header(Header other) : this() {
-          overrideExisting_ = other.overrideExisting_;
-          chunksCount_ = other.chunksCount_;
-          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public Header Clone() {
-          return new Header(this);
-        }
-
-        /// <summary>Field number for the "overrideExisting" field.</summary>
-        public const int OverrideExistingFieldNumber = 1;
-        private bool overrideExisting_;
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public bool OverrideExisting {
-          get { return overrideExisting_; }
-          set {
-            overrideExisting_ = value;
-          }
-        }
-
-        /// <summary>Field number for the "chunksCount" field.</summary>
-        public const int ChunksCountFieldNumber = 2;
-        private uint chunksCount_;
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public uint ChunksCount {
-          get { return chunksCount_; }
-          set {
-            chunksCount_ = value;
-          }
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public override bool Equals(object other) {
-          return Equals(other as Header);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public bool Equals(Header other) {
-          if (ReferenceEquals(other, null)) {
-            return false;
-          }
-          if (ReferenceEquals(other, this)) {
-            return true;
-          }
-          if (OverrideExisting != other.OverrideExisting) return false;
-          if (ChunksCount != other.ChunksCount) return false;
-          return Equals(_unknownFields, other._unknownFields);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public override int GetHashCode() {
-          int hash = 1;
-          if (OverrideExisting != false) hash ^= OverrideExisting.GetHashCode();
-          if (ChunksCount != 0) hash ^= ChunksCount.GetHashCode();
-          if (_unknownFields != null) {
-            hash ^= _unknownFields.GetHashCode();
-          }
-          return hash;
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public override string ToString() {
-          return pb::JsonFormatter.ToDiagnosticString(this);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void WriteTo(pb::CodedOutputStream output) {
-          if (OverrideExisting != false) {
-            output.WriteRawTag(8);
-            output.WriteBool(OverrideExisting);
-          }
-          if (ChunksCount != 0) {
-            output.WriteRawTag(16);
-            output.WriteUInt32(ChunksCount);
-          }
-          if (_unknownFields != null) {
-            _unknownFields.WriteTo(output);
-          }
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public int CalculateSize() {
-          int size = 0;
-          if (OverrideExisting != false) {
-            size += 1 + 1;
-          }
-          if (ChunksCount != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeUInt32Size(ChunksCount);
-          }
-          if (_unknownFields != null) {
-            size += _unknownFields.CalculateSize();
-          }
-          return size;
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void MergeFrom(Header other) {
-          if (other == null) {
-            return;
-          }
-          if (other.OverrideExisting != false) {
-            OverrideExisting = other.OverrideExisting;
-          }
-          if (other.ChunksCount != 0) {
-            ChunksCount = other.ChunksCount;
-          }
-          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void MergeFrom(pb::CodedInputStream input) {
-          uint tag;
-          while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
-              default:
-                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-                break;
-              case 8: {
-                OverrideExisting = input.ReadBool();
-                break;
-              }
-              case 16: {
-                ChunksCount = input.ReadUInt32();
-                break;
-              }
-            }
-          }
-        }
-
-      }
-
       public sealed partial class DataChunk : pb::IMessage<DataChunk> {
         private static readonly pb::MessageParser<DataChunk> _parser = new pb::MessageParser<DataChunk>(() => new DataChunk());
         private pb::UnknownFieldSet _unknownFields;
@@ -1684,7 +1778,7 @@ namespace LmdbCache {
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::LmdbCache.AddStreamRequest.Descriptor.NestedTypes[1]; }
+          get { return global::LmdbCache.AddStreamRequest.Descriptor.NestedTypes[0]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1869,6 +1963,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public DeleteRequest(DeleteRequest other) : this() {
+      correlationId_ = other.correlationId_;
       keys_ = other.keys_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -1878,10 +1973,21 @@ namespace LmdbCache {
       return new DeleteRequest(this);
     }
 
+    /// <summary>Field number for the "correlationId" field.</summary>
+    public const int CorrelationIdFieldNumber = 1;
+    private string correlationId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string CorrelationId {
+      get { return correlationId_; }
+      set {
+        correlationId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     /// <summary>Field number for the "keys" field.</summary>
-    public const int KeysFieldNumber = 1;
+    public const int KeysFieldNumber = 2;
     private static readonly pb::FieldCodec<string> _repeated_keys_codec
-        = pb::FieldCodec.ForString(10);
+        = pb::FieldCodec.ForString(18);
     private readonly pbc::RepeatedField<string> keys_ = new pbc::RepeatedField<string>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<string> Keys {
@@ -1901,6 +2007,7 @@ namespace LmdbCache {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (CorrelationId != other.CorrelationId) return false;
       if(!keys_.Equals(other.keys_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -1908,6 +2015,7 @@ namespace LmdbCache {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
+      if (CorrelationId.Length != 0) hash ^= CorrelationId.GetHashCode();
       hash ^= keys_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -1922,6 +2030,10 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
+      if (CorrelationId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(CorrelationId);
+      }
       keys_.WriteTo(output, _repeated_keys_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1931,6 +2043,9 @@ namespace LmdbCache {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
+      if (CorrelationId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(CorrelationId);
+      }
       size += keys_.CalculateSize(_repeated_keys_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1942,6 +2057,9 @@ namespace LmdbCache {
     public void MergeFrom(DeleteRequest other) {
       if (other == null) {
         return;
+      }
+      if (other.CorrelationId.Length != 0) {
+        CorrelationId = other.CorrelationId;
       }
       keys_.Add(other.keys_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -1956,6 +2074,10 @@ namespace LmdbCache {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
+            CorrelationId = input.ReadString();
+            break;
+          }
+          case 18: {
             keys_.AddEntriesFrom(input, _repeated_keys_codec);
             break;
           }
@@ -2125,6 +2247,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetRequest(GetRequest other) : this() {
+      correlationId_ = other.correlationId_;
       keys_ = other.keys_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -2134,10 +2257,21 @@ namespace LmdbCache {
       return new GetRequest(this);
     }
 
+    /// <summary>Field number for the "correlationId" field.</summary>
+    public const int CorrelationIdFieldNumber = 1;
+    private string correlationId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string CorrelationId {
+      get { return correlationId_; }
+      set {
+        correlationId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     /// <summary>Field number for the "keys" field.</summary>
-    public const int KeysFieldNumber = 1;
+    public const int KeysFieldNumber = 2;
     private static readonly pb::FieldCodec<string> _repeated_keys_codec
-        = pb::FieldCodec.ForString(10);
+        = pb::FieldCodec.ForString(18);
     private readonly pbc::RepeatedField<string> keys_ = new pbc::RepeatedField<string>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<string> Keys {
@@ -2157,6 +2291,7 @@ namespace LmdbCache {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (CorrelationId != other.CorrelationId) return false;
       if(!keys_.Equals(other.keys_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -2164,6 +2299,7 @@ namespace LmdbCache {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
+      if (CorrelationId.Length != 0) hash ^= CorrelationId.GetHashCode();
       hash ^= keys_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -2178,6 +2314,10 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
+      if (CorrelationId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(CorrelationId);
+      }
       keys_.WriteTo(output, _repeated_keys_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -2187,6 +2327,9 @@ namespace LmdbCache {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
+      if (CorrelationId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(CorrelationId);
+      }
       size += keys_.CalculateSize(_repeated_keys_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2198,6 +2341,9 @@ namespace LmdbCache {
     public void MergeFrom(GetRequest other) {
       if (other == null) {
         return;
+      }
+      if (other.CorrelationId.Length != 0) {
+        CorrelationId = other.CorrelationId;
       }
       keys_.Add(other.keys_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -2212,6 +2358,10 @@ namespace LmdbCache {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
+            CorrelationId = input.ReadString();
+            break;
+          }
+          case 18: {
             keys_.AddEntriesFrom(input, _repeated_keys_codec);
             break;
           }
@@ -2857,6 +3007,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CopyRequest(CopyRequest other) : this() {
+      correlationId_ = other.correlationId_;
       entries_ = other.entries_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -2866,10 +3017,21 @@ namespace LmdbCache {
       return new CopyRequest(this);
     }
 
+    /// <summary>Field number for the "correlationId" field.</summary>
+    public const int CorrelationIdFieldNumber = 1;
+    private string correlationId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string CorrelationId {
+      get { return correlationId_; }
+      set {
+        correlationId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     /// <summary>Field number for the "entries" field.</summary>
-    public const int EntriesFieldNumber = 1;
+    public const int EntriesFieldNumber = 2;
     private static readonly pb::FieldCodec<global::LmdbCache.CopyRequest.Types.CopyRequestEntry> _repeated_entries_codec
-        = pb::FieldCodec.ForMessage(10, global::LmdbCache.CopyRequest.Types.CopyRequestEntry.Parser);
+        = pb::FieldCodec.ForMessage(18, global::LmdbCache.CopyRequest.Types.CopyRequestEntry.Parser);
     private readonly pbc::RepeatedField<global::LmdbCache.CopyRequest.Types.CopyRequestEntry> entries_ = new pbc::RepeatedField<global::LmdbCache.CopyRequest.Types.CopyRequestEntry>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::LmdbCache.CopyRequest.Types.CopyRequestEntry> Entries {
@@ -2889,6 +3051,7 @@ namespace LmdbCache {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (CorrelationId != other.CorrelationId) return false;
       if(!entries_.Equals(other.entries_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -2896,6 +3059,7 @@ namespace LmdbCache {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
+      if (CorrelationId.Length != 0) hash ^= CorrelationId.GetHashCode();
       hash ^= entries_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -2910,6 +3074,10 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
+      if (CorrelationId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(CorrelationId);
+      }
       entries_.WriteTo(output, _repeated_entries_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -2919,6 +3087,9 @@ namespace LmdbCache {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
+      if (CorrelationId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(CorrelationId);
+      }
       size += entries_.CalculateSize(_repeated_entries_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2930,6 +3101,9 @@ namespace LmdbCache {
     public void MergeFrom(CopyRequest other) {
       if (other == null) {
         return;
+      }
+      if (other.CorrelationId.Length != 0) {
+        CorrelationId = other.CorrelationId;
       }
       entries_.Add(other.entries_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -2944,6 +3118,10 @@ namespace LmdbCache {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
+            CorrelationId = input.ReadString();
+            break;
+          }
+          case 18: {
             entries_.AddEntriesFrom(input, _repeated_entries_codec);
             break;
           }
@@ -3315,6 +3493,7 @@ namespace LmdbCache {
       keyPrefix_ = other.keyPrefix_;
       pageSize_ = other.pageSize_;
       page_ = other.page_;
+      correlationId_ = other.correlationId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -3356,6 +3535,17 @@ namespace LmdbCache {
       }
     }
 
+    /// <summary>Field number for the "correlationId" field.</summary>
+    public const int CorrelationIdFieldNumber = 4;
+    private string correlationId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string CorrelationId {
+      get { return correlationId_; }
+      set {
+        correlationId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as KeyListRequest);
@@ -3372,6 +3562,7 @@ namespace LmdbCache {
       if (KeyPrefix != other.KeyPrefix) return false;
       if (PageSize != other.PageSize) return false;
       if (Page != other.Page) return false;
+      if (CorrelationId != other.CorrelationId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -3381,6 +3572,7 @@ namespace LmdbCache {
       if (KeyPrefix.Length != 0) hash ^= KeyPrefix.GetHashCode();
       if (PageSize != 0) hash ^= PageSize.GetHashCode();
       if (Page != 0) hash ^= Page.GetHashCode();
+      if (CorrelationId.Length != 0) hash ^= CorrelationId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3406,6 +3598,10 @@ namespace LmdbCache {
         output.WriteRawTag(24);
         output.WriteUInt32(Page);
       }
+      if (CorrelationId.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(CorrelationId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -3422,6 +3618,9 @@ namespace LmdbCache {
       }
       if (Page != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Page);
+      }
+      if (CorrelationId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(CorrelationId);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3442,6 +3641,9 @@ namespace LmdbCache {
       }
       if (other.Page != 0) {
         Page = other.Page;
+      }
+      if (other.CorrelationId.Length != 0) {
+        CorrelationId = other.CorrelationId;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -3464,6 +3666,10 @@ namespace LmdbCache {
           }
           case 24: {
             Page = input.ReadUInt32();
+            break;
+          }
+          case 34: {
+            CorrelationId = input.ReadString();
             break;
           }
         }
@@ -3790,6 +3996,7 @@ namespace LmdbCache {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public WriteLogEvent(WriteLogEvent other) : this() {
       clock_ = other.clock_ != null ? other.clock_.Clone() : null;
+      correlationId_ = other.correlationId_;
       switch (other.LoggedEventCase) {
         case LoggedEventOneofCase.Updated:
           Updated = other.Updated.Clone();
@@ -3815,6 +4022,17 @@ namespace LmdbCache {
       get { return clock_; }
       set {
         clock_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "correlationId" field.</summary>
+    public const int CorrelationIdFieldNumber = 2;
+    private string correlationId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string CorrelationId {
+      get { return correlationId_; }
+      set {
+        correlationId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -3876,6 +4094,7 @@ namespace LmdbCache {
         return true;
       }
       if (!object.Equals(Clock, other.Clock)) return false;
+      if (CorrelationId != other.CorrelationId) return false;
       if (!object.Equals(Updated, other.Updated)) return false;
       if (!object.Equals(Deleted, other.Deleted)) return false;
       if (LoggedEventCase != other.LoggedEventCase) return false;
@@ -3886,6 +4105,7 @@ namespace LmdbCache {
     public override int GetHashCode() {
       int hash = 1;
       if (clock_ != null) hash ^= Clock.GetHashCode();
+      if (CorrelationId.Length != 0) hash ^= CorrelationId.GetHashCode();
       if (loggedEventCase_ == LoggedEventOneofCase.Updated) hash ^= Updated.GetHashCode();
       if (loggedEventCase_ == LoggedEventOneofCase.Deleted) hash ^= Deleted.GetHashCode();
       hash ^= (int) loggedEventCase_;
@@ -3906,6 +4126,10 @@ namespace LmdbCache {
         output.WriteRawTag(10);
         output.WriteMessage(Clock);
       }
+      if (CorrelationId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(CorrelationId);
+      }
       if (loggedEventCase_ == LoggedEventOneofCase.Updated) {
         output.WriteRawTag(42);
         output.WriteMessage(Updated);
@@ -3924,6 +4148,9 @@ namespace LmdbCache {
       int size = 0;
       if (clock_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Clock);
+      }
+      if (CorrelationId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(CorrelationId);
       }
       if (loggedEventCase_ == LoggedEventOneofCase.Updated) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Updated);
@@ -3947,6 +4174,9 @@ namespace LmdbCache {
           clock_ = new global::LmdbCache.VectorClock();
         }
         Clock.MergeFrom(other.Clock);
+      }
+      if (other.CorrelationId.Length != 0) {
+        CorrelationId = other.CorrelationId;
       }
       switch (other.LoggedEventCase) {
         case LoggedEventOneofCase.Updated:
@@ -3979,6 +4209,10 @@ namespace LmdbCache {
               clock_ = new global::LmdbCache.VectorClock();
             }
             input.ReadMessage(clock_);
+            break;
+          }
+          case 18: {
+            CorrelationId = input.ReadString();
             break;
           }
           case 42: {

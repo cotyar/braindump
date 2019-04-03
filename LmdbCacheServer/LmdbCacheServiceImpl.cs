@@ -9,6 +9,7 @@ using Grpc.Core.Utils;
 using LmdbCache;
 using LmdbCacheServer.Tables;
 using LmdbLight;
+using static LmdbCache.AddRequest.Types;
 using static LmdbCache.AddResponse.Types;
 using static LmdbCache.DeleteResponse.Types;
 using static LmdbCache.GetResponse.Types;
@@ -30,7 +31,7 @@ namespace LmdbCacheServer
             _clock = clock;
         }
 
-        public async Task<AddResponse> Add(IEnumerable<AddRequest.Types.AddRequestEntry> entries, bool overrideExisting)
+        public async Task<AddResponse> Add(IEnumerable<AddRequestEntry> entries, Header header)
         {
             var batch = entries.
                 Select(ks => (new KvKey(ks.Key), new KvMetadata
@@ -39,21 +40,22 @@ namespace LmdbCacheServer
                     Expiry = ks.Expiry,
                     Action = Added,
                     Updated = _clock(),
-                    Compression = Compression.None
+                    Compression = header.Compression,
+                    CorrelationId = header.CorrelationId
                 }, new KvValue(ks.Value))).
                 ToArray();
 
-            var ret = await (overrideExisting ? _kvTable.AddOrUpdate(batch) : _kvTable.Add(batch));
+            var ret = await (header.OverrideExisting ? _kvTable.AddOrUpdate(batch) : _kvTable.Add(batch));
             var response = new AddResponse();
             var addResults = ret.Select(kv => kv.Item2
-                ? (overrideExisting ? AddResult.KeyUpdated : AddResult.KeyAdded) // TODO: Recheck statuses
-                : (overrideExisting ? AddResult.Failure : AddResult.KeyAlreadyExists));
+                ? (header.OverrideExisting ? AddResult.KeyUpdated : AddResult.KeyAdded) // TODO: Recheck statuses
+                : (header.OverrideExisting ? AddResult.Failure : AddResult.KeyAlreadyExists));
             response.Results.AddRange(addResults);
 
             return response;
         }
 
-        public override Task<AddResponse> Add(AddRequest request, ServerCallContext context) => Add(request.Entries, request.OverrideExisting);
+        public override Task<AddResponse> Add(AddRequest request, ServerCallContext context) => Add(request.Entries, request.Header);
 
         public override async Task<AddResponse> AddStream(IAsyncStreamReader<AddStreamRequest> requestStream, ServerCallContext context)
         {
@@ -64,10 +66,9 @@ namespace LmdbCacheServer
                 throw new MessageFormatException("Header expected");
             }
 
-            var overrideExisting = requestStream.Current.Header.OverrideExisting;
-            var chunksCount = requestStream.Current.Header.ChunksCount;
+            var header = requestStream.Current.Header;
 
-            var entries = new List<AddRequest.Types.AddRequestEntry>((int)chunksCount);
+            var entries = new List<AddRequestEntry>((int)header.ChunksCount);
             for (uint index = 0; await requestStream.MoveNext(); index++)
             {
                 if (requestStream.Current.MsgCase != AddStreamRequest.MsgOneofCase.Chunk)
@@ -89,7 +90,7 @@ namespace LmdbCacheServer
 
 //            Console.WriteLine($"Stream was fully written for key: {key}");
 
-            return await Add(entries, overrideExisting);
+            return await Add(entries, header);
         }
 
         public override Task<ContainsKeysResponse> ContainsKeys(GetRequest request, ServerCallContext context)
@@ -114,7 +115,8 @@ namespace LmdbCacheServer
                     Status = Deleted,
                     Expiry = currentClock.TicksOffsetUtc.ToTimestamp(),
                     Action = Added,
-                    Updated = currentClock
+                    Updated = currentClock,
+                    CorrelationId = request.CorrelationId
                 });
             }).ToArray();
             var kvs = await _kvTable.Delete(keys);

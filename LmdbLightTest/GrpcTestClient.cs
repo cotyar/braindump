@@ -20,6 +20,8 @@ namespace LmdbLightTest
         private readonly IClient _client;
         private readonly Replica _server;
 
+        public readonly ReplicaConfig ReplicaConfig;
+
         public GrpcTestClient(LightningConfig lightningConfig)
         {
             var port = Interlocked.Increment(ref _startingPort);
@@ -30,13 +32,14 @@ namespace LmdbLightTest
                 Directory.Delete(lightningConfig.Name, true);
             }
 
-            _server = new Replica(new ReplicaConfig
+            ReplicaConfig = new ReplicaConfig
             {
                 ReplicaId = "replica_1",
                 Port = port,
                 ReplicationPort = port + 2000,
                 LightningConfig = lightningConfig
-            });
+            };
+            _server = new Replica(ReplicaConfig);
 
             _client = new LightClient(new Channel($"127.0.0.1:{port}", ChannelCredentials.Insecure), true);
         }

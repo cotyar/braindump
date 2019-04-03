@@ -13,27 +13,39 @@ using LmdbCache.Domain;
 using static LmdbCache.AddRequest.Types;
 using static LmdbCache.AddStreamRequest.Types;
 using static LmdbCache.GetResponse.Types;
+using static LmdbCache.KvMetadata.Types;
+using static LmdbCache.KvMetadata.Types.Compression;
 
 namespace LmdbCacheClient
 {
-    public class LightClient : IClient, IDisposable
+    public class LightClient : IClient
     {
         private readonly Channel _channel;
         private readonly bool _useStreaming;
+        private readonly Compression _compression;
         private readonly LmdbCacheService.LmdbCacheServiceClient _lightClient;
+        private readonly string _correlationId;
 
-        public LightClient(Channel channel, bool useStreaming)
+        public LightClient(Channel channel, bool useStreaming, Compression compression = None)
         {
             _channel = channel;
             _useStreaming = useStreaming;
+            _compression = compression;
             _lightClient = new LmdbCacheService.LmdbCacheServiceClient(channel);
+            _correlationId = Guid.NewGuid().ToString("N");
         }
 
         private async Task<AddResponse> AddStreaming(AddRequestEntry[] entries, bool allowOverride)
         {
             using (var call = _lightClient.AddStream())
             {
-                var header = new AddStreamRequest { Header = new Header { OverrideExisting = allowOverride, ChunksCount = (uint)entries.Length } };
+                var header = new AddStreamRequest { Header = new Header
+                    {
+                        OverrideExisting = allowOverride,
+                        Compression = _compression,
+                        CorrelationId = _correlationId, 
+                        ChunksCount = (uint)entries.Length
+                    } };
                 await call.RequestStream.WriteAsync(header);
 
                 for (var i = 0; i < entries.Length; i++)
@@ -73,7 +85,16 @@ namespace LmdbCacheClient
             }
             else
             {
-                var request = new AddRequest { OverrideExisting = allowOverride };
+                var request = new AddRequest
+                    {
+                    Header = new Header
+                    {
+                        OverrideExisting = allowOverride,
+                        Compression = _compression,
+                        CorrelationId = _correlationId,
+                        ChunksCount = (uint)preparedBatch.Length
+                    }
+                };
                 request.Entries.Add(preparedBatch);
                 addResponse = _lightClient.Add(request);
             }
@@ -108,7 +129,7 @@ namespace LmdbCacheClient
         {
             var keysCopied = keys.ToArray();
 
-            var request = new GetRequest();
+            var request = new GetRequest { CorrelationId = _correlationId };
             request.Keys.AddRange(keysCopied);
             var results = _useStreaming
                 ? GetStream(request).Result
@@ -129,7 +150,7 @@ namespace LmdbCacheClient
         {
             var keysCopied = keyCopies.ToArray();
 
-            var request = new CopyRequest();
+            var request = new CopyRequest { CorrelationId = _correlationId };
             request.Entries.AddRange(keysCopied.Select(kv => new CopyRequest.Types.CopyRequestEntry{ Expiry = expiry.ToTimestamp()}));
             var copyResponse = _lightClient.Copy(request);
 
@@ -164,7 +185,7 @@ namespace LmdbCacheClient
         {
             var keysCopied = keys.ToArray();
 
-            var request = new GetRequest();
+            var request = new GetRequest { CorrelationId = _correlationId };
             request.Keys.AddRange(keysCopied);
             var containsKeys = _lightClient.ContainsKeys(request);
 
@@ -181,7 +202,7 @@ namespace LmdbCacheClient
         {
             var keysCopied = keys.ToArray();
 
-            var request = new DeleteRequest();
+            var request = new DeleteRequest { CorrelationId = _correlationId };
             request.Keys.AddRange(keysCopied);
             var containsKeys = _lightClient.Delete(request);
 
@@ -191,7 +212,13 @@ namespace LmdbCacheClient
         private async Task<IList<string>> SearchByPrefixAsync(string keyPrefix)
         {
             var ret = new List<string>();
-            using (var reply = _lightClient.ListKeys(new KeyListRequest { KeyPrefix = keyPrefix }))
+            using (var reply = _lightClient.ListKeys(new KeyListRequest
+            {
+                KeyPrefix = keyPrefix,
+                CorrelationId = _correlationId,
+                Page = 0,
+                PageSize = 1000 // TODO: Replace this with continuous streaming with a continuation token 
+            }))
             {
                 var responseStream = reply.ResponseStream;
                 while (await responseStream.MoveNext())
