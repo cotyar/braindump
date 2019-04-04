@@ -303,7 +303,7 @@ namespace LmdbLightTest
 
                 var swAll = new Stopwatch();
                 swAll.Start();
-                Parallel.For(0, writeStreams, i =>
+                Parallel.For(0, writeStreams, new ParallelOptions { MaxDegreeOfParallelism = writeStreams }, i =>
                 {
                     var kvs = kvsAll.Skip(i * iterations).Take(iterations).ToDictionary(kv => kv.Key, kv => kv.Value);
 
@@ -330,7 +330,7 @@ namespace LmdbLightTest
 
                 swAll = new Stopwatch();
                 swAll.Start();
-                Parallel.For(0, readStreams, i =>
+                Parallel.For(0, readStreams, new ParallelOptions { MaxDegreeOfParallelism = readStreams }, i =>
                 {
                     var kvs = kvsAll.Skip((i % writeStreams) * iterations).Take(iterations).ToDictionary(kv => kv.Key, kv => kv.Value);
 

@@ -93,14 +93,18 @@ namespace LmdbCacheServer
             return await Add(entries, header);
         }
 
-        public override Task<ContainsKeysResponse> ContainsKeys(GetRequest request, ServerCallContext context)
+        public override async Task<ContainsKeysResponse> ContainsKeys(GetRequest request, ServerCallContext context)
         {
-            var ret = _kvTable.ContainsKeys(request.Keys.Select(k => new KvKey(k)).ToArray());
+            return await Task.Run(() =>
+            {
 
-            var response = new ContainsKeysResponse();
-            response.Results.AddRange(ret.Select(kv => kv.Item2));
+                var ret = _kvTable.ContainsKeys(request.Keys.Select(k => new KvKey(k)).ToArray());
 
-            return Task.FromResult(response);
+                var response = new ContainsKeysResponse();
+                response.Results.AddRange(ret.Select(kv => kv.Item2));
+
+                return response;
+            });
         }
 
         public override async Task<CopyResponse> Copy(CopyRequest request, ServerCallContext context) => await _kvTable.Copy(request);
@@ -128,14 +132,16 @@ namespace LmdbCacheServer
             return response;
         }
 
-        public override Task<GetResponse> Get(GetRequest request, ServerCallContext context)
+        public override async Task<GetResponse> Get(GetRequest request, ServerCallContext context)
         {
-            var ret = _kvTable.Get(request.Keys.Select(k => new KvKey(k)));
+            return await Task.Run(() =>
+            {
+                var ret = _kvTable.Get(request.Keys.Select(k => new KvKey(k)));
 
-            var response = new GetResponse();
-            var getResponseEntries = ret.Select((kv, i) =>
+                var response = new GetResponse();
+                var getResponseEntries = ret.Select((kv, i) =>
                 {
-                    if (!kv.Item3.HasValue) return new GetResponseEntry { Result = GetResult.NotFound, Index = (uint) i };
+                    if (!kv.Item3.HasValue) return new GetResponseEntry {Result = GetResult.NotFound, Index = (uint) i};
 
                     var gre = new GetResponseEntry
                     {
@@ -146,16 +152,16 @@ namespace LmdbCacheServer
                     };
                     return gre;
                 });
-            response.Results.AddRange(getResponseEntries);
-
-            return Task.FromResult(response);
+                response.Results.AddRange(getResponseEntries);
+                return response;
+            });
         }
 
         public override async Task GetStream(GetRequest request, IServerStreamWriter<GetStreamResponse> responseStream, ServerCallContext context)
         {
-            var kvs = _kvTable.Get(request.Keys.Select(k => new KvKey(k)));
+            var kvs = await Task.Run(() => _kvTable.Get(request.Keys.Select(k => new KvKey(k))));
 
-            for (var i = 0; i < kvs.Length; i++)
+            for (var i = 0; i < kvs.Length; i++) // TODO: Move this loop inside Task.Run
             {
                 var kv = kvs[i];
                 var gre = kv.Item3.HasValue
@@ -165,16 +171,22 @@ namespace LmdbCacheServer
             }
         }
 
-        public override Task ListKeys(KeyListRequest request, IServerStreamWriter<KeyListResponse> responseStream, ServerCallContext context)
+        public override async Task ListKeys(KeyListRequest request, IServerStreamWriter<KeyListResponse> responseStream, ServerCallContext context)
         {
-            var ret = _kvTable.KeysByPrefix(new KvKey(request.KeyPrefix), 0, uint.MaxValue);
-            return responseStream.WriteAllAsync(ret.Select(k => new KeyListResponse { Key = k.Key }));
+            await Task.Run(async () =>
+            {
+                var ret = _kvTable.KeysByPrefix(new KvKey(request.KeyPrefix), 0, uint.MaxValue);
+                await responseStream.WriteAllAsync(ret.Select(k => new KeyListResponse {Key = k.Key}));
+            });
         }
 
-        public override Task ListKeyValues(KeyListRequest request, IServerStreamWriter<KeyValueListResponse> responseStream, ServerCallContext context)
+        public override async Task ListKeyValues(KeyListRequest request, IServerStreamWriter<KeyValueListResponse> responseStream, ServerCallContext context)
         {
-            var ret = _kvTable.PageByPrefix(new KvKey(request.KeyPrefix), 0, uint.MaxValue);
-            return responseStream.WriteAllAsync(ret.Select(k => new KeyValueListResponse { Key = k.Item1.ToString(), Value = k.Item2.Value })); // TODO: Add value streaming
+            await Task.Run(async () =>
+            {
+                var ret = _kvTable.PageByPrefix(new KvKey(request.KeyPrefix), 0, uint.MaxValue);
+                await responseStream.WriteAllAsync(ret.Select(k => new KeyValueListResponse {Key = k.Item1.ToString(), Value = k.Item2.Value})); // TODO: Add value streaming
+            });
         }
     }
 }
