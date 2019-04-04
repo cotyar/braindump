@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using LmdbCache;
@@ -109,6 +110,7 @@ namespace LmdbCacheServer.Tables
             _kvUpdateHandler = kvUpdateHandler;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void RemoveExpired(WriteTransaction txn, TableKey tableKey, Timestamp keyExpiry)
         {
             //_expirationQueue(txn, _kvTable, key, keyExpiry);
@@ -126,6 +128,7 @@ namespace LmdbCacheServer.Tables
             // _kvUpdateHandler(txn, ToDeleteLogEvent(key, metadata)); // TODO: Add EXPIRY-s to the replication log?
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool CheckAndRemoveIfExpired(KvKey key, VectorClock currentClock, KvMetadata metadataToCheck, WriteTransaction txn = null)
         {
             if (metadataToCheck == null || metadataToCheck.Status == Active && currentClock.TicksOffsetUtc < metadataToCheck.Expiry.TicksOffsetUtc)
@@ -146,17 +149,17 @@ namespace LmdbCacheServer.Tables
             return false;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private KvMetadata TryGetMetadata(AbstractTransaction txn, KvKey key) => _metadataTable.TryGet(txn, key);
 
-        private (KvKey, KvMetadata)[] TryGetMetadata(AbstractTransaction txn, IEnumerable<KvKey> keys)
-        {
-            return keys.
-                Select(key => (key, TryGetMetadata(txn, key))).
-                ToArray();
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private (KvKey, KvMetadata)[] TryGetMetadata(AbstractTransaction txn, IEnumerable<KvKey> keys) =>
+            keys.Select(key => (key, TryGetMetadata(txn, key))).ToArray();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public (KvKey, KvMetadata)[] TryGetMetadata(KvKey[] keys) => _lmdb.Read(txn => TryGetMetadata(txn, keys));
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public (KvKey, bool)[] ContainsKeys(KvKey[] keys)
         { 
             var currentTime = _currentClock();
@@ -165,37 +168,37 @@ namespace LmdbCacheServer.Tables
                 ToArray();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool ContainsKey(KvKey key) => ContainsKeys(new [] { key }) [0].Item2;
 
 
         /// <summary>
         /// NOTE: Long running keys enumerable will prevent ReadOnly transaction from closing which can affect efficiency of page reuse in the DB  
         /// </summary>
-        public (KvKey, KvMetadata, KvValue?)[] Get(IEnumerable<KvKey> keys)
-        {
-            return _lmdb.Read(txn => 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public (KvKey, KvMetadata, KvValue?)[] Get(IEnumerable<KvKey> keys) =>
+            _lmdb.Read(txn => 
+            {
+                var currentTime = _currentClock();
+                return keys.Select(key =>
                 {
-                    var currentTime = _currentClock();
-                    return keys.Select(key =>
+                    var tableKey = ToTableKey(key);
+                    var metadata = _metadataTable.TryGet(txn, tableKey);
+                    if (metadata != null && CheckAndRemoveIfExpired(key, currentTime, metadata))
                     {
-                        var tableKey = ToTableKey(key);
-                        var metadata = _metadataTable.TryGet(txn, tableKey);
-                        if (metadata != null && CheckAndRemoveIfExpired(key, currentTime, metadata))
-                        {
-                            var tableEntry = txn.TryGet(_kvTable, tableKey);
+                        var tableEntry = txn.TryGet(_kvTable, tableKey);
 
-                            if (tableEntry == null) throw new Exception($"DB inconsistency NO DATA for key: '{key}'");
+                        if (tableEntry == null) throw new Exception($"DB inconsistency NO DATA for key: '{key}'");
 
-                            var kvValue = FromTableValue(tableEntry.Value);
-                            return (key, metadata, kvValue);
-                        }
+                        var kvValue = FromTableValue(tableEntry.Value);
+                        return (key, metadata, kvValue);
+                    }
 
-                        return (key, metadata, (KvValue?) null);
-                    }).ToArray();
-                });
-        }
+                    return (key, metadata, (KvValue?) null);
+                }).ToArray();
+            });
 
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public KvKey[] KeysByPrefix(KvKey prefix, uint page, uint pageSize)
         {
             // TODO: Fix pageSize for expiry correction. Use a continuation token.
@@ -209,6 +212,7 @@ namespace LmdbCacheServer.Tables
             });
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public (KvKey, KvValue)[] PageByPrefix(KvKey prefix, uint page, uint pageSize)
         {
             // TODO: Fix pageSize for expiry correction. Use a continuation token.
@@ -222,7 +226,7 @@ namespace LmdbCacheServer.Tables
             });
         }
 
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Task<(KvKey, bool)[]> Add((KvKey, KvMetadata, KvValue)[] batch, Func<KvKey, VectorClock /*old*/, VectorClock/*new*/, bool> proceedWithUpdatePredicate) =>
             _lmdb.WriteAsync(txn =>
             {
@@ -255,22 +259,26 @@ namespace LmdbCacheServer.Tables
                     ToArray();
             }, false);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Task<(KvKey, bool)[]> Add((KvKey, KvMetadata, KvValue)[] batch) => Add(batch, (key, vcOld, vcNew) => false);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Task<(KvKey, bool)[]> AddOrUpdate((KvKey, KvMetadata, KvValue)[] batch) => Add(batch, (key, vcOld, vcNew) => vcOld.Compare(vcNew) == Ord.Lt); // TODO: Reconfirm conflict resolution
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public async Task<bool> Add(KvKey key, KvMetadata metadata, KvValue value)
         {
             var ret = await Add(new[] {(key, metadata, value)});
             return ret[0].Item2;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public async Task<bool> AddOrUpdate(KvKey key, KvMetadata metadata, KvValue value)
         {
             var ret = await AddOrUpdate(new[] {(key, metadata, value)});
             return ret[0].Item2;
         }
 
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public async Task<CopyResponse> Copy(CopyRequest request) // TODO: Redo this completely!!!
         {
             var ret = await _lmdb.WriteAsync(txn =>
@@ -300,58 +308,55 @@ namespace LmdbCacheServer.Tables
             return response;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public async Task<bool> Delete(KvKey key, KvMetadata metadata)
         {
             var ret = await Delete(new[] { (key, metadata) });
             return ret[0].Item2;
         }
 
-        public async Task<(KvKey, bool)[]> Delete((KvKey, KvMetadata)[] keys)
-        {
-            var kvResults = await _lmdb.WriteAsync(txn => 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Task<(KvKey, bool)[]> Delete((KvKey, KvMetadata)[] keys) =>
+            _lmdb.WriteAsync(txn => 
             {
                 var currentClock = _currentClock();
 
                 return keys.
                     Select(item => 
+                    {
+                        var (key, metadata) = item;
+                        var tableKey = ToTableKey(key);
+                        var exMetadata = _metadataTable.TryGet(txn, tableKey);
+                        if (exMetadata != null)
                         {
-                            var (key, metadata) = item;
-                            var tableKey = ToTableKey(key);
-                            var exMetadata = _metadataTable.TryGet(txn, tableKey);
-                            if (exMetadata != null)
+                            if (CheckAndRemoveIfExpired(key, currentClock, exMetadata, txn))
                             {
-                                if (CheckAndRemoveIfExpired(key, currentClock, exMetadata, txn))
+                                if (exMetadata.Updated.Compare(metadata.Updated) != Ord.Lt)
                                 {
-                                    if (exMetadata.Updated.Compare(metadata.Updated) != Ord.Lt)
-                                    {
-                                        return (key, false);
-                                    }
+                                    return (key, false);
                                 }
                             }
+                        }
 
-                            txn.Delete(_kvTable, tableKey); // TODO: Check and fail on not successful return codes
-                            _metadataTable.AddOrUpdate(txn, tableKey, metadata);
-                            _kvUpdateHandler(txn, ToDeleteLogEvent(key, metadata));
-                            return (key, true);
-                        }).
+                        txn.Delete(_kvTable, tableKey); // TODO: Check and fail on not successful return codes
+                        _metadataTable.AddOrUpdate(txn, tableKey, metadata);
+                        _kvUpdateHandler(txn, ToDeleteLogEvent(key, metadata));
+                        return (key, true);
+                    }).
                     ToArray();
             }, false);
 
-            return kvResults;
-        }
-
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public TableKey ToTableKey(KvKey key) => new TableKey(key.Key);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public TableValue ToTableValue(KvValue value) => new TableValue(value.Value);
-        //        public (KvExpiry, KvVectorClock) ToTableMetadata(KvMetadata metadata) => (new KvExpiry(metadata.Expiry), new KvVectorClock(metadata.VectorClock));
-        //        public KvTableEntry[] ToTableMetadataArray(KvMetadata metadata) => new KvTableEntry[] { new KvExpiry(metadata.Expiry), new KvVectorClock(metadata.VectorClock) };
-        //        public KvEntryChunk[] ToTableEntryChunk(KvValue value) => value.Value.Select((v, i) => new KvEntryChunk((uint)i, v)).ToArray();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public KvKey FromTableKey(TableKey key) => new KvKey(key.Key.ToStringUtf8());
-//        public KvMetadata FromTableMetadata(KvExpiry expiry, KvVectorClock vectorClock) => new KvMetadata(new Timestamp(expiry.Expiry), new VectorClock(vectorClock.VectorClock));
-//        public KvMetadata FromTableMetadata(KvTableEntry[] metadata) => FromTableMetadata((KvExpiry)metadata[0], (KvVectorClock)metadata[1]);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public KvValue FromTableValue(TableValue value) => new KvValue(value.Value);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public WriteLogEvent ToAddOrUpdateLogEvent(KvKey key, KvMetadata metadata, KvValue value)
         {
             //if (value.Value.Length != 1)
@@ -367,6 +372,7 @@ namespace LmdbCacheServer.Tables
                 }};
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public WriteLogEvent ToDeleteLogEvent(KvKey key, KvMetadata metadata) => 
             new WriteLogEvent
             {
@@ -375,11 +381,6 @@ namespace LmdbCacheServer.Tables
                     Key = key.Key
                 }
             };
-
-        //        new Timestamp(value[0].ItemType == KvItemType.Expiry? ((KvExpiry) value[0]).Expiry : throw new Exception("Expiry Data value corrupted")), // TODO: Introduce data consistency Exception type
-        //        new VectorClock(value[1].ItemType == KvItemType.VectorClock? ((KvVectorClock) value[1]).VectorClock : throw new Exception("VectorClock value corrupted")),
-        //        value.Skip(2).Select(v => v.ItemType == KvItemType.Data? ((KvEntryChunk) v).Value : throw new Exception("VectorClock value corrupted")).ToArray()
-
     }
 
     public struct KvKey
@@ -389,7 +390,7 @@ namespace LmdbCacheServer.Tables
             Key = key;
         }
 
-        public string Key { get; }
+        public readonly string Key; // Don't change to a property as they produce IL with callvirt (which affects performance)
     }
 
 //    public struct KvMetadata
@@ -412,6 +413,6 @@ namespace LmdbCacheServer.Tables
             Value = value;
         }
 
-        public ByteString Value { get; }
+        public readonly ByteString Value;
     }
 }

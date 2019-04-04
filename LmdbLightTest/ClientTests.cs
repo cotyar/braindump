@@ -44,7 +44,7 @@ namespace LmdbLightTest
                 StorageLimit = 10,
                 WriteBatchMaxDelegates = 100,
                 WriteBatchTimeoutMilliseconds = 0,
-                AsyncStore = false
+                SyncMode = LightningDbSyncMode.FSync
             };
 
         [SetUp]
@@ -88,12 +88,12 @@ namespace LmdbLightTest
 
         [Test]
         public void TestAddGet(
-            [Values(false, true)] bool asyncStore,
+            [Values(LightningDbSyncMode.FSync, LightningDbSyncMode.Async, LightningDbSyncMode.NoSync)] LightningDbSyncMode asyncStore,
             [Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory, 
             [Values(1, 10, 100, 1000, 10000)] int iterations)
         {
             var config = Config;
-            config.AsyncStore = asyncStore;
+            config.SyncMode = asyncStore;
 
             using (var client = CreateClient(clientFactory, config))
             {
@@ -150,12 +150,12 @@ namespace LmdbLightTest
 
         [Test]
         public void TestAddGetMany(
-            [Values(false, true)] bool asyncStore,
+            [Values(LightningDbSyncMode.FSync, LightningDbSyncMode.Async, LightningDbSyncMode.NoSync)] LightningDbSyncMode asyncStore,
             [Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory, 
             [Values(1, 10, 100, 1000, 10000, 100000)] int iterations)
         {
             var config = Config;
-            config.AsyncStore = asyncStore;
+            config.SyncMode = asyncStore;
 
             using (var client = CreateClient(clientFactory, config))
             {
@@ -206,13 +206,13 @@ namespace LmdbLightTest
         [Test]
         public void TestAddGetParallel(
             [Values(2, 3, 4)] int writeStreams,
-//            [Values(2, 3, 4)] int readStreams,
-            [Values(false, true)] bool asyncStore,
+            //            [Values(2, 3, 4)] int readStreams,
+            [Values(LightningDbSyncMode.FSync, LightningDbSyncMode.Async, LightningDbSyncMode.NoSync)] LightningDbSyncMode asyncStore,
             [Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory,
             [Values(1, 10, 100, 1000, 10000)] int iterations)
         {
             var config = Config;
-            config.AsyncStore = asyncStore;
+            config.SyncMode = asyncStore;
 
             using (var client = CreateClient(clientFactory, config))
             {
@@ -285,11 +285,11 @@ namespace LmdbLightTest
         public void TestAddGetManyParallel(
             [Values(1, 2, 3, 4)] int writeStreams,
             [Values(2, 3, 4, 10)] int readStreams,
-            [Values(false, true)] bool asyncStore,
+            [Values(LightningDbSyncMode.FSync, LightningDbSyncMode.Async, LightningDbSyncMode.NoSync)] LightningDbSyncMode asyncStore,
             [Values(1, 10, 100, 1000, 10000, 100000)] int iterations)
         {
             var config = Config;
-            config.AsyncStore = asyncStore;
+            config.SyncMode = asyncStore;
 
             using (var client = new GrpcTestClient(config))
             {

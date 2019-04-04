@@ -17,6 +17,13 @@ using LightningDB.Native;
 
 namespace LmdbLight
 {
+    public enum LightningDbSyncMode
+    {
+        FSync,
+        Async,
+        NoSync
+    }
+
     public struct LightningConfig // NOTE: GrpcTestClient does rely on LightningConfig being a struct
     {
         public string Name;
@@ -24,13 +31,14 @@ namespace LmdbLight
         public int? MaxTables;
         public int? WriteBatchTimeoutMilliseconds;
         public int? WriteBatchMaxDelegates;
-        public bool AsyncStore;
+        public LightningDbSyncMode SyncMode;
     }
 
     public struct TableKey : IEquatable<TableKey>
     {
         public ByteString Key { get; }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public TableKey(ByteString key)
         {
             Key = key;
@@ -40,12 +48,17 @@ namespace LmdbLight
         public TableKey(byte[] key) : this(ByteString.CopyFrom(key)) {}
         public TableKey(string key) : this(ByteString.CopyFromUtf8(key)) {}
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator byte[](TableKey key) => key.Key.ToByteArray();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator TableKey(byte[] key) => new TableKey(key);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator TableKey(string key) => new TableKey(key);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator TableKey(ByteString key) => new TableKey(key);
 
         private int? _hashCode;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(TableKey other) => Key.Equals(other.Key);
 
         public override bool Equals(object obj) => !ReferenceEquals(null, obj) && (obj is TableKey other && Equals(other));
@@ -71,6 +84,7 @@ namespace LmdbLight
     {
         public ByteString Value { get; }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public TableValue(ByteString value) => Value = value;
         public TableValue(byte[] value) : this(ByteString.CopyFrom(value)) {}
         public TableValue(string value) : this(ByteString.CopyFromUtf8(value)) { }
@@ -128,6 +142,7 @@ namespace LmdbLight
 
         //public TableValue Get(Table table, TableKey key) => new TableValue(Transaction.Get(table.Database, key));
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool TryGet(Table table, TableKey key, out TableValue val)
         {
             var ret = Transaction.TryGet(table.Database, key, out var v);
@@ -135,12 +150,14 @@ namespace LmdbLight
             return ret;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public TableValue? TryGet(Table table, TableKey key)
         {
             var ret = Transaction.TryGet(table.Database, key, out var v);
             return ret ? new TableValue(v) : (TableValue?) null;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public (TableKey, TableValue)? TryGetFirst(Table table)
         {
             using (var cursor = Transaction.CreateCursor(table.Database))
@@ -150,6 +167,7 @@ namespace LmdbLight
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public (TableKey, TableValue)? TryGetLast(Table table)
         {
             using (var cursor = Transaction.CreateCursor(table.Database))
@@ -159,11 +177,15 @@ namespace LmdbLight
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public long GetEntriesCount(Table table) => Transaction.GetEntriesCount(table.Database);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool ContainsKey(Table table, TableKey key) => Transaction.ContainsKey(table.Database, key);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public (TableKey, bool)[] ContainsKeys(Table table, TableKey[] keys) => keys.Select(key => (key, Transaction.ContainsKey(table.Database, key))).ToArray();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected IEnumerable<(TableKey, TableValue)> ReadPage(Table table,
             Func<byte[], TableKey> toKey, Func<byte[], TableValue> toValue,
             TableKey prefix, Func<TableKey, TableValue, bool> takeWhile, uint page, uint pageSize)
@@ -194,14 +216,17 @@ namespace LmdbLight
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected IEnumerable<(TableKey, TableValue)> ReadPage(Table table,
             Func<byte[], TableKey> toKey, Func<byte[], TableValue> toValue,
             TableKey prefix, uint page, uint pageSize) => ReadPage(table, toKey, toValue, prefix, (k, v) => true, page, pageSize);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected IEnumerable<(TableKey, TableValue)> ReadPageWhile(Table table,
             Func<byte[], TableKey> toKey, Func<byte[], TableValue> toValue,
             Func<TableKey, TableValue, bool> takeWhile, uint pageSize) => ReadPage(table, toKey, toValue, "", takeWhile, 0, pageSize);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public IEnumerable<TV> ReadDuplicatePage<TV>(
             Func<byte[], TV> toValueChunk, DupTable table,
             TableKey key, uint page, uint pageSize)
@@ -225,15 +250,18 @@ namespace LmdbLight
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public TableKey[] KeysByPrefix(Table table, TableKey prefix, uint page, uint pageSize) => 
             ReadPage(table, b => b, _ => default(TableValue), prefix, page, pageSize).Select(kv => kv.Item1).ToArray();
-        
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public (TableKey, TableValue)[] PageByPrefix(Table table, TableKey prefix, uint page, uint pageSize) =>
             ReadPage(table, b => b, b => b, prefix, page, pageSize).ToArray();
 
-//        public TableValueChunk[] GetValueChunks(DupTable table, TableKey key, uint page, uint pageSize) =>
-//            ReadDuplicatePage<TableValueChunk>(b => b, table, key, page, pageSize).ToArray();
+        //        public TableValueChunk[] GetValueChunks(DupTable table, TableKey key, uint page, uint pageSize) =>
+        //            ReadDuplicatePage<TableValueChunk>(b => b, table, key, page, pageSize).ToArray();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public TableKey[] KeysTakeWhile(Table table, Func<TableKey, TableValue, bool> takeWhile, uint pageSize) =>
             ReadPageWhile(table, b => b, _ => default(TableValue), takeWhile, pageSize).Select(kv => kv.Item1).ToArray();
 
@@ -278,7 +306,9 @@ namespace LmdbLight
 
         public WriteTransaction(LightningEnvironment env, bool autoCommit) : base(env.BeginTransaction()) => _autoCommit = autoCommit;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Commit() => Transaction.Commit();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Rollback() => Transaction.Abort();
 
         public Table OpenTable(string name) => new Table(this, name);
@@ -287,16 +317,20 @@ namespace LmdbLight
         public void TruncateTable(Table table) => Transaction.TruncateDatabase(table.Database);
         public void DropTable(Table table) => table.Database.Drop(Transaction);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Delete(Table table, TableKey key) => Transaction.Delete(table.Database, key);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Delete(Table table, TableKey[] keys)
         {
             foreach (var key in keys) Transaction.Delete(table.Database, key);
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Delete((Table, TableKey)[] keys)
         {
             foreach (var key in keys) Transaction.Delete(key.Item1.Database, key.Item2);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Add(Table table, TableKey key, TableValue value)
         {
             if (ContainsKey(table, key)) return false;
@@ -305,6 +339,7 @@ namespace LmdbLight
             return true;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool AddOrUpdate(Table table, TableKey key, TableValue value)
         {
             var ret = !ContainsKey(table, key);
@@ -312,11 +347,15 @@ namespace LmdbLight
             return ret;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public (TableKey, bool)[] AddBatch(Table table, (TableKey, TableValue)[] batch) => batch.Select(kv => (kv.Item1, Add(table, kv.Item1, kv.Item2))).ToArray();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public (TableKey, bool)[] AddOrUpdateBatch(Table table, (TableKey, TableValue)[] batch) => batch.Select(kv => (kv.Item1, AddOrUpdate(table, kv.Item1, kv.Item2))).ToArray();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddValueDuplicate(DupTable table, TableKey key, TableValue value) => Transaction.Put(table.Database, key, value, PutOptions.NoOverwrite);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void DeleteDuplicate(DupTable table, TableKey key, TableValue value)
         {
             using (var cursor = Transaction.CreateCursor(table.Database))
@@ -328,6 +367,7 @@ namespace LmdbLight
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void DeleteDuplicatesWhile(DupTable table, TableKey key, Func<TableValue, bool> predecate)
         {
             //if (!ContainsKey(table, key)) return;
@@ -342,6 +382,7 @@ namespace LmdbLight
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void DeleteAllDuplicates(DupTable table, TableKey key)
         {
             if (!ContainsKey(table, key)) return;
@@ -402,9 +443,21 @@ namespace LmdbLight
 
             Console.WriteLine($"ThreadId ctor: {Thread.CurrentThread.ManagedThreadId}");
             Env = new LightningEnvironment(_config.Name ?? "db") { MaxDatabases = _config.MaxTables ?? 20, MapSize = (_config.StorageLimit ?? 10L) * 1024 * 1024 * 1024 };
-            var envFlags = config.AsyncStore
-                ? EnvironmentOpenFlags.NoThreadLocalStorage | EnvironmentOpenFlags.WriteMap | EnvironmentOpenFlags.MapAsync
-                : EnvironmentOpenFlags.NoThreadLocalStorage;
+            EnvironmentOpenFlags envFlags;
+            switch (config.SyncMode)
+            {
+                case LightningDbSyncMode.FSync:
+                    envFlags = EnvironmentOpenFlags.NoThreadLocalStorage;
+                    break;
+                case LightningDbSyncMode.Async:
+                    envFlags = EnvironmentOpenFlags.NoThreadLocalStorage | EnvironmentOpenFlags.WriteMap | EnvironmentOpenFlags.MapAsync;
+                    break;
+                case LightningDbSyncMode.NoSync:
+                    envFlags = EnvironmentOpenFlags.NoThreadLocalStorage | EnvironmentOpenFlags.NoSync;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
 
             Env.Open(envFlags);
             _envHandle = GCHandle.Alloc(Env);
@@ -461,18 +514,22 @@ namespace LmdbLight
         }
 
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Task TruncateTable(Table table) => WriteAsync(tx => tx.TruncateTable(table), true);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Task DropTable(Table table) => WriteAsync(tx => tx.DropTable(table), true);
 
         /// <summary>
         /// NOTE: Long running keys enumerable will prevent ReadOnly transaction from closing which can affect efficiency of page reuse in the DB  
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public (TableKey, TableValue?)[] Get(Table table, IEnumerable<TableKey> keys) =>
             Read(tx => keys.Select(key => (key, tx.TryGet(table, key))).ToArray());
 
         /// <summary>
         /// NOTE: Long running keys enumerable will prevent ReadOnly transaction from closing which can affect efficiency of page reuse in the DB  
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ((Table, TableKey), TableValue?)[] Get(IEnumerable<(Table, TableKey)> keys) =>
             Read(tx => keys.Select(key => (key, tx.TryGet(key.Item1, key.Item2))).ToArray());
 
@@ -510,6 +567,7 @@ namespace LmdbLight
         /// <param name="requiresIsolation">Guarantees that the action will me executed in a separate transaction. Otherwise batches the write requests.</param>
         /// <param name="fireAndForget">If fireAndForget is true then return immediately</param>
         /// <returns>a Task to await</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Task<T> WriteAsync<T>(Func<WriteTransaction, T> writeFunction, bool requiresIsolation, bool fireAndForget = false)
         {
             TaskCompletionSource<object> tcs;
@@ -540,6 +598,7 @@ namespace LmdbLight
         /// <param name="requiresIsolation">Guarantees that the action will me executed in a separate transaction. Otherwise batches the write requests.</param>
         /// <param name="fireAndForget">If fireAndForget is true then return immediately</param>
         /// <returns>a Task to await</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Task WriteAsync(Action<WriteTransaction> writeAction, bool requiresIsolation, bool fireAndForget = false)
         {
             TaskCompletionSource<object> tcs;
@@ -569,7 +628,7 @@ namespace LmdbLight
         {
             var processedSources = new List<(TaskCompletionSource<object>, object)>();
 
-            void ReportSuccess()
+            void ReportSuccess() // TODO: Change to methods with [MethodImpl(MethodImplOptions.AggressiveInlining)]
             {
                 foreach (var (ps, v) in processedSources)
                 {
@@ -697,6 +756,7 @@ namespace LmdbLight
             ReportSuccess();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private IEnumerable<Delegates[]> DequeueBatch(BlockingCollection<Delegates> queue)
         {
             var batch = new List<Delegates>();
