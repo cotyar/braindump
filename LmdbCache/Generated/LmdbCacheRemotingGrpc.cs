@@ -419,5 +419,114 @@ namespace LmdbCache {
     }
 
   }
+  /// <summary>
+  /// Interface exported by the server.
+  /// </summary>
+  public static partial class MonitoringService
+  {
+    static readonly string __ServiceName = "LmdbCache.MonitoringService";
+
+    static readonly grpc::Marshaller<global::LmdbCache.MonitoringUpdateRequest> __Marshaller_LmdbCache_MonitoringUpdateRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.MonitoringUpdateRequest.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::LmdbCache.MonitoringUpdateResponse> __Marshaller_LmdbCache_MonitoringUpdateResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.MonitoringUpdateResponse.Parser.ParseFrom);
+
+    static readonly grpc::Method<global::LmdbCache.MonitoringUpdateRequest, global::LmdbCache.MonitoringUpdateResponse> __Method_GetStatus = new grpc::Method<global::LmdbCache.MonitoringUpdateRequest, global::LmdbCache.MonitoringUpdateResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetStatus",
+        __Marshaller_LmdbCache_MonitoringUpdateRequest,
+        __Marshaller_LmdbCache_MonitoringUpdateResponse);
+
+    static readonly grpc::Method<global::LmdbCache.MonitoringUpdateRequest, global::LmdbCache.MonitoringUpdateResponse> __Method_Subscribe = new grpc::Method<global::LmdbCache.MonitoringUpdateRequest, global::LmdbCache.MonitoringUpdateResponse>(
+        grpc::MethodType.ServerStreaming,
+        __ServiceName,
+        "Subscribe",
+        __Marshaller_LmdbCache_MonitoringUpdateRequest,
+        __Marshaller_LmdbCache_MonitoringUpdateResponse);
+
+    /// <summary>Service descriptor</summary>
+    public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
+    {
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.Services[2]; }
+    }
+
+    /// <summary>Base class for server-side implementations of MonitoringService</summary>
+    public abstract partial class MonitoringServiceBase
+    {
+      public virtual global::System.Threading.Tasks.Task<global::LmdbCache.MonitoringUpdateResponse> GetStatus(global::LmdbCache.MonitoringUpdateRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      public virtual global::System.Threading.Tasks.Task Subscribe(global::LmdbCache.MonitoringUpdateRequest request, grpc::IServerStreamWriter<global::LmdbCache.MonitoringUpdateResponse> responseStream, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+    }
+
+    /// <summary>Client for MonitoringService</summary>
+    public partial class MonitoringServiceClient : grpc::ClientBase<MonitoringServiceClient>
+    {
+      /// <summary>Creates a new client for MonitoringService</summary>
+      /// <param name="channel">The channel to use to make remote calls.</param>
+      public MonitoringServiceClient(grpc::Channel channel) : base(channel)
+      {
+      }
+      /// <summary>Creates a new client for MonitoringService that uses a custom <c>CallInvoker</c>.</summary>
+      /// <param name="callInvoker">The callInvoker to use to make remote calls.</param>
+      public MonitoringServiceClient(grpc::CallInvoker callInvoker) : base(callInvoker)
+      {
+      }
+      /// <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      protected MonitoringServiceClient() : base()
+      {
+      }
+      /// <summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <param name="configuration">The client configuration.</param>
+      protected MonitoringServiceClient(ClientBaseConfiguration configuration) : base(configuration)
+      {
+      }
+
+      public virtual global::LmdbCache.MonitoringUpdateResponse GetStatus(global::LmdbCache.MonitoringUpdateRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetStatus(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual global::LmdbCache.MonitoringUpdateResponse GetStatus(global::LmdbCache.MonitoringUpdateRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetStatus, null, options, request);
+      }
+      public virtual grpc::AsyncUnaryCall<global::LmdbCache.MonitoringUpdateResponse> GetStatusAsync(global::LmdbCache.MonitoringUpdateRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetStatusAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual grpc::AsyncUnaryCall<global::LmdbCache.MonitoringUpdateResponse> GetStatusAsync(global::LmdbCache.MonitoringUpdateRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetStatus, null, options, request);
+      }
+      public virtual grpc::AsyncServerStreamingCall<global::LmdbCache.MonitoringUpdateResponse> Subscribe(global::LmdbCache.MonitoringUpdateRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return Subscribe(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual grpc::AsyncServerStreamingCall<global::LmdbCache.MonitoringUpdateResponse> Subscribe(global::LmdbCache.MonitoringUpdateRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncServerStreamingCall(__Method_Subscribe, null, options, request);
+      }
+      /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
+      protected override MonitoringServiceClient NewInstance(ClientBaseConfiguration configuration)
+      {
+        return new MonitoringServiceClient(configuration);
+      }
+    }
+
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    public static grpc::ServerServiceDefinition BindService(MonitoringServiceBase serviceImpl)
+    {
+      return grpc::ServerServiceDefinition.CreateBuilder()
+          .AddMethod(__Method_GetStatus, serviceImpl.GetStatus)
+          .AddMethod(__Method_Subscribe, serviceImpl.Subscribe).Build();
+    }
+
+  }
 }
 #endregion

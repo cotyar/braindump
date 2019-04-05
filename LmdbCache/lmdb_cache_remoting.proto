@@ -230,3 +230,59 @@ message SyncSubscribeRequest {
 message SyncResponse {
   WriteLogEvent logEvent = 1;
 }
+
+
+///////////////////////////////
+
+// Interface exported by the server.
+service MonitoringService {
+  //rpc GetReplicaId(Empty) returns (GetReplicaIdResponse) {}
+
+  rpc GetStatus(MonitoringUpdateRequest) returns (MonitoringUpdateResponse) {} 
+  rpc Subscribe(MonitoringUpdateRequest) returns (stream MonitoringUpdateResponse) {} 
+}
+
+///////////////////////////////
+
+// Monitoring types.
+
+message MonitoringUpdateRequest {
+  string correlationId = 1;
+}
+
+message MonitoringUpdateResponse {
+  ReplicaStatus status = 1;
+}
+
+message ReplicaStatus {
+  string replicaId                      = 1;
+  ReplicaConnectionInfo connectionInfo  = 2;
+  Timestamp started                     = 3;
+  VectorClock currentClock              = 4;
+
+  ReplicaCounters counters              = 5;
+  ClusterStatus clusterStatus           = 10;
+}
+
+message ClusterStatus {
+  map<string, ReplicaConnectionInfo> replicas = 1;
+}
+
+message ReplicaConnectionInfo {
+  string host = 1;
+  uint32 port = 2;
+  // Some other metadata?
+}
+
+message ReplicaCounters {
+  // uint64 nonExpiredKeysCounter = 10;
+  // uint64 allKeysCounter        = 11;
+
+  uint64 addsCounter      = 12;
+  uint64 deletesCounter   = 13;
+  uint64 getCounter       = 14;
+  uint64 containsCounter  = 15;
+  uint64 keySearchCounter = 16;
+
+  uint64 largestValueSeen = 20;
+}

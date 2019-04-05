@@ -36,7 +36,7 @@ namespace LmdbCacheServer
             txn.PageByPrefix(_table, ToClockTableKey(""), 0, uint.MaxValue).Select(kv => (FromClockTableKey(kv.Item1), FromClockTableValue(kv.Item2))).ToArray();
 
         public bool SetLastClock(WriteTransaction txn, string replicaId, VectorClock clock) => 
-            txn.Add(_table, ToClockTableKey(replicaId), ToClockTableValue(clock));
+            txn.AddOrUpdate(_table, ToClockTableKey(replicaId), ToClockTableValue(clock));
 
         public TableKey ToClockTableKey(string replicaId) => new TableKey(/*KEY_CLOCK + */replicaId);
         public TableValue ToClockTableValue(VectorClock clock) => clock.ToByteArray();
