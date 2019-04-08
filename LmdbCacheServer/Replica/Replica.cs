@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Grpc.Core;
 using LmdbCache;
 using LmdbCacheServer.Tables;
+using LmdbCacheWeb;
 using LmdbLight;
 using static LmdbCache.KvMetadata.Types;
 using static LmdbCache.KvMetadata.Types.Status;
@@ -28,13 +30,24 @@ namespace LmdbCacheServer.Replica
         private readonly WriteLogTable _wlTable;
         private readonly Server _server;
         private readonly Server _serverReplication;
+        private readonly Task _webServerCompletion;
+        private readonly CancellationTokenSource _shutdownCancellationTokenSource;
 
         private readonly Replicator _replicator;
         private Task _syncProcessTask;
+        private readonly string _ownHost;
+        private readonly int _webUiPort;
+        private readonly int _replicationPort;
 
         public Replica(ReplicaConfig replicaConfig, VectorClock clock = null)
         {
+            _shutdownCancellationTokenSource = new CancellationTokenSource();
+
             ReplicaConfig = replicaConfig;
+            _ownHost = ReplicaConfig.HostName ?? "127.0.0.1";
+            _webUiPort = ReplicaConfig.WebUIPort ?? ReplicaConfig.Port + 1000;
+            _replicationPort = ReplicaConfig.ReplicationPort ?? ReplicaConfig.Port + 2000;
+
             _clock = clock ?? VectorClockHelper.Create(ReplicaConfig.ReplicaId, 0);
             LightningConfig = replicaConfig.LightningConfig;
 
@@ -99,21 +112,22 @@ namespace LmdbCacheServer.Replica
                     }); 
             }
 
-            var replicationPort = ReplicaConfig.ReplicationPort ?? ReplicaConfig.Port + 2000;
+            _webServerCompletion = WebServer.StartWebServer(_shutdownCancellationTokenSource.Token, _ownHost, _webUiPort);
+
             _serverReplication = new Server
             {
                 Services = { SyncService.BindService(new ReplicatorMaster(_lmdb, replicaConfig.ReplicaId, _wlTable, replicaConfig.ReplicationPageSize ?? 1000u)) },
-                Ports = { new ServerPort(ReplicaConfig.HostName ?? "127.0.0.1", replicationPort, ServerCredentials.Insecure) }
+                Ports = { new ServerPort(_ownHost, _replicationPort, ServerCredentials.Insecure) }
             };
             _serverReplication.Start();
 
-            Console.WriteLine("Replication server started listening on port " + replicationPort);
+            Console.WriteLine("Replication server started listening on port " + _replicationPort);
 
             _server = new Server
             {
                 //Services = { LmdbCacheService.BindService(new InMemoryCacheServiceImpl()) },
                 Services = { LmdbCacheService.BindService(new LmdbCacheServiceImpl(_kvTable, CurrentClock)) },
-                Ports = { new ServerPort(ReplicaConfig.HostName ?? "127.0.0.1", ReplicaConfig.Port, ServerCredentials.Insecure) }
+                Ports = { new ServerPort(_ownHost, ReplicaConfig.Port, ServerCredentials.Insecure) }
             };
             _server.Start();
 

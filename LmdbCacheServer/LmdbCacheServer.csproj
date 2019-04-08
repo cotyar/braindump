@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LmdbCacheWeb\LmdbCacheWeb.fsproj" />
     <ProjectReference Include="..\LmdbCache\LmdbCache.csproj" />
     <ProjectReference Include="..\LmdbLight\LmdbLight.csproj" />
   </ItemGroup>
