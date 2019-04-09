@@ -24,7 +24,7 @@ namespace LmdbCacheServer
                 StorageLimit = 10,
                 WriteBatchMaxDelegates = 100,
                 WriteBatchTimeoutMilliseconds = 0,
-                SyncMode = LightningDbSyncMode.FSync
+                SyncMode = LightningDbSyncMode.Fsync
             }; 
 
             var replicaConfig = new ReplicaConfig

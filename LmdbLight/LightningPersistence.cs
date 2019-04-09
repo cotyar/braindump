@@ -14,25 +14,27 @@ using System.Threading.Tasks;
 using LightningDB;
 using Google.Protobuf;
 using LightningDB.Native;
+using LmdbCache;
 
 namespace LmdbLight
 {
-    public enum LightningDbSyncMode
-    {
-        FSync,
-        Async,
-        NoSync
-    }
-
-    public struct LightningConfig // NOTE: GrpcTestClient does rely on LightningConfig being a struct
-    {
-        public string Name;
-        public long? StorageLimit;
-        public int? MaxTables;
-        public int? WriteBatchTimeoutMilliseconds;
-        public int? WriteBatchMaxDelegates;
-        public LightningDbSyncMode SyncMode;
-    }
+//    public enum LightningDbSyncMode
+//    {
+//        FSync,  // SAFE
+//        Async,  // SANE
+//        NoSync, // INSANE
+//        ReadOnly
+//    }
+//
+//    public struct LightningConfig // NOTE: GrpcTestClient does rely on LightningConfig being a struct
+//    {
+//        public string Name;
+//        public long? StorageLimit;
+//        public int? MaxTables;
+//        public int? WriteBatchTimeoutMilliseconds;
+//        public int? WriteBatchMaxDelegates;
+//        public LightningDbSyncMode SyncMode;
+//    }
 
     public struct TableKey : IEquatable<TableKey>
     {
@@ -438,15 +440,19 @@ namespace LmdbLight
 
         public LightningPersistence(LightningConfig config)
         {
-            _config = config;
+            _config = config.Clone();
             _cts = new CancellationTokenSource();
 
             Console.WriteLine($"ThreadId ctor: {Thread.CurrentThread.ManagedThreadId}");
-            Env = new LightningEnvironment(_config.Name ?? "db") { MaxDatabases = _config.MaxTables ?? 20, MapSize = (_config.StorageLimit ?? 10L) * 1024 * 1024 * 1024 };
+            Env = new LightningEnvironment(_config.Name ?? "db")
+            {
+                MaxDatabases = _config.MaxTables > 0u ? (int) _config.MaxTables : 20,
+                MapSize = (_config.StorageLimit > 0L ? (long) _config.StorageLimit : 10L) * 1024 * 1024 * 1024
+            };
             EnvironmentOpenFlags envFlags;
             switch (config.SyncMode)
             {
-                case LightningDbSyncMode.FSync:
+                case LightningDbSyncMode.Fsync:
                     envFlags = EnvironmentOpenFlags.NoThreadLocalStorage;
                     break;
                 case LightningDbSyncMode.Async:
@@ -454,6 +460,9 @@ namespace LmdbLight
                     break;
                 case LightningDbSyncMode.NoSync:
                     envFlags = EnvironmentOpenFlags.NoThreadLocalStorage | EnvironmentOpenFlags.NoSync;
+                    break;
+                case LightningDbSyncMode.ReadOnly:
+                    envFlags = EnvironmentOpenFlags.NoThreadLocalStorage | EnvironmentOpenFlags.ReadOnly;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -759,6 +768,9 @@ namespace LmdbLight
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private IEnumerable<Delegates[]> DequeueBatch(BlockingCollection<Delegates> queue)
         {
+            var millisecondsTimeout = _config.WriteBatchTimeoutMilliseconds > 0 ? (int) _config.WriteBatchTimeoutMilliseconds : 10;
+            var writeBatchMaxDelegates = _config.WriteBatchMaxDelegates > 0 ? _config.WriteBatchMaxDelegates : 1000;
+
             var batch = new List<Delegates>();
             while (!queue.IsCompleted)
             {
@@ -768,7 +780,7 @@ namespace LmdbLight
                 try
                 {
                     // BLOCKING
-                    success = queue.TryTake(out item, _config.WriteBatchTimeoutMilliseconds ?? 10, _cts.Token);
+                    success = queue.TryTake(out item, millisecondsTimeout, _cts.Token);
                 }
                 catch (InvalidOperationException e)
                 {
@@ -790,7 +802,7 @@ namespace LmdbLight
                     else
                     {
                         batch.Add(item);
-                        if (batch.Count >= (_config.WriteBatchMaxDelegates ?? 1000))
+                        if (batch.Count >= writeBatchMaxDelegates)
                         {
                             yield return batch.ToArray();
                             batch = new List<Delegates>();

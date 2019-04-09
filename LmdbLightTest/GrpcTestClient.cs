@@ -24,7 +24,7 @@ namespace LmdbLightTest
 
         public GrpcTestClient(LightningConfig lightningConfig)
         {
-            var port = Interlocked.Increment(ref _startingPort);
+            var port = (uint) Interlocked.Increment(ref _startingPort);
             lightningConfig.Name = $"{lightningConfig.Name ?? "db"}_{port}"; // It is safe to do as LightningConfig is a struct
 
             if (Directory.Exists(lightningConfig.Name))

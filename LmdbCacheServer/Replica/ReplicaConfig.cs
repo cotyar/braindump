@@ -5,17 +5,17 @@ using LmdbLight;
 
 namespace LmdbCacheServer.Replica
 {
-    public struct ReplicaConfig
-    {
-        public string ReplicaId;
-        public string HostName;
-        public int Port;
-        public int? WebUIPort;
-        public int? ReplicationPort;
-        public uint? ReplicationPageSize;
-
-        public string MasterNode;
-
-        public LightningConfig LightningConfig;
-    }
+//    public struct ReplicaConfig
+//    {
+//        public string ReplicaId;
+//        public string HostName;
+//        public int Port;
+//        public int? WebUIPort;
+//        public int? ReplicationPort;
+//        public uint? ReplicationPageSize;
+//
+//        public string MasterNode;
+//
+//        public LightningConfig LightningConfig;
+//    }
 }

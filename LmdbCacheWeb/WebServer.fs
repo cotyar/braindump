@@ -7,13 +7,13 @@ module WebServer =
     open Suave.Operators
     open System.Threading
 
-    let StartWebServer (cts: CancellationToken) ip port =
+    let StartWebServer (cts: CancellationToken) ip (port : uint32) =
         let config =
           { defaultConfig with 
                 homeFolder = Some (Path.GetFullPath "./public")
                 cancellationToken = cts
                 //logger =  
-                bindings = [ HttpBinding.createSimple HTTP ip port ] }
+                bindings = [ HttpBinding.createSimple HTTP ip (int port) ] }
         let app : WebPart =
             choose [
                 //GET >=> path "/" >=> Successful.OK "101010" 

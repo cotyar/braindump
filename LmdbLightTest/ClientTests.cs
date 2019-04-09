@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Grpc.Core;
+using LmdbCache;
 using LmdbCache.Domain;
 using LmdbCacheClient;
 using LmdbCacheServer;
@@ -44,7 +45,7 @@ namespace LmdbLightTest
                 StorageLimit = 10,
                 WriteBatchMaxDelegates = 100,
                 WriteBatchTimeoutMilliseconds = 0,
-                SyncMode = LightningDbSyncMode.FSync
+                SyncMode = LightningDbSyncMode.Fsync
             };
 
         [SetUp]
@@ -88,7 +89,7 @@ namespace LmdbLightTest
 
         [Test]
         public void TestAddGet(
-            [Values(LightningDbSyncMode.FSync, LightningDbSyncMode.Async, LightningDbSyncMode.NoSync)] LightningDbSyncMode asyncStore,
+            [Values(LightningDbSyncMode.Fsync, LightningDbSyncMode.Async, LightningDbSyncMode.NoSync)] LightningDbSyncMode asyncStore,
             [Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory, 
             [Values(1, 10, 100, 1000, 10000)] int iterations)
         {
@@ -150,7 +151,7 @@ namespace LmdbLightTest
 
         [Test]
         public void TestAddGetMany(
-            [Values(LightningDbSyncMode.FSync, LightningDbSyncMode.Async, LightningDbSyncMode.NoSync)] LightningDbSyncMode asyncStore,
+            [Values(LightningDbSyncMode.Fsync, LightningDbSyncMode.Async, LightningDbSyncMode.NoSync)] LightningDbSyncMode asyncStore,
             [Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory, 
             [Values(1, 10, 100, 1000, 10000, 100000)] int iterations)
         {
@@ -207,7 +208,7 @@ namespace LmdbLightTest
         public void TestAddGetParallel(
             [Values(2, 3, 4)] int writeStreams,
             //            [Values(2, 3, 4)] int readStreams,
-            [Values(LightningDbSyncMode.FSync, LightningDbSyncMode.Async, LightningDbSyncMode.NoSync)] LightningDbSyncMode asyncStore,
+            [Values(LightningDbSyncMode.Fsync, LightningDbSyncMode.Async, LightningDbSyncMode.NoSync)] LightningDbSyncMode asyncStore,
             [Values(typeof(LocalClientFactory), typeof(GrpcClientFactory))] Type clientFactory,
             [Values(1, 10, 100, 1000, 10000)] int iterations)
         {
@@ -285,7 +286,7 @@ namespace LmdbLightTest
         public void TestAddGetManyParallel(
             [Values(1, 2, 3, 4)] int writeStreams,
             [Values(2, 3, 4, 10)] int readStreams,
-            [Values(LightningDbSyncMode.FSync, LightningDbSyncMode.Async, LightningDbSyncMode.NoSync)] LightningDbSyncMode asyncStore,
+            [Values(LightningDbSyncMode.Fsync, LightningDbSyncMode.Async, LightningDbSyncMode.NoSync)] LightningDbSyncMode asyncStore,
             [Values(1, 10, 100, 1000, 10000, 100000)] int iterations)
         {
             var config = Config;

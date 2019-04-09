@@ -7,6 +7,35 @@ option csharp_namespace = "LmdbCache";
 //import "google/protobuf/empty.proto";
 // import "google/protobuf/timestamp.proto";
 
+enum LightningDbSyncMode {
+    FSync    = 0;  // SAFE
+    Async    = 1;  // SANE
+    NoSync   = 2; // INSANE
+    ReadOnly = 3;
+}
+
+message LightningConfig {
+    string Name                           = 1;
+    uint64 StorageLimit                   = 2;
+    uint32 MaxTables                      = 3;
+    uint32 WriteBatchTimeoutMilliseconds  = 4;
+    uint32 WriteBatchMaxDelegates         = 5;
+    LightningDbSyncMode SyncMode          = 6;
+}
+
+message ReplicaConfig {
+    string ReplicaId                = 1;
+    string HostName                 = 2;
+    uint32 Port                     = 3;
+    uint32 WebUIPort                = 4;
+    uint32 ReplicationPort          = 5;
+    uint32 ReplicationPageSize      = 6;
+
+    string MasterNode               = 7;
+
+    LightningConfig LightningConfig = 8;
+}
+
 // Interface exported by the server.
 service LmdbCacheService {
 
@@ -189,7 +218,9 @@ message KeyValueListResponse {
 // Interface exported by the server.
 service SyncService {
   rpc GetReplicaId(Empty) returns (GetReplicaIdResponse) {}
+  rpc SyncFrom(SyncFromRequest) returns (stream SyncResponse) {} 
   rpc Subscribe(SyncSubscribeRequest) returns (stream SyncResponse) {} // TODO: Add Acks streaming
+  rpc Ack(stream SyncAckRequest) returns (Empty) {} // TODO: Add Acks streaming
 }
 
 ///////////////////////////////
@@ -209,17 +240,24 @@ message WriteLogEvent {
   //   string      key     = 1;
   // }
 
-  VectorClock clock        = 1; 
-  string correlationId     = 2;
+  VectorClock clock          = 1; 
+  string correlationId       = 2;
+  string originatorReplicaId = 3;
   oneof loggedEvent {
-    AddedOrUpdated updated = 5;
-    Deleted deleted        = 7;
+    AddedOrUpdated updated   = 5;
+    Deleted deleted          = 7;
     //Expired expired   = 8; 
   }
 }
 
 message GetReplicaIdResponse {
   string replicaId   = 1;
+}
+
+message SyncFromRequest {
+  string replicaId   = 1; 
+  bool includeMine   = 2;
+  bool includeAcked  = 3;
 }
 
 message SyncSubscribeRequest {
@@ -229,6 +267,10 @@ message SyncSubscribeRequest {
 
 message SyncResponse {
   WriteLogEvent logEvent = 1;
+}
+
+message SyncAckRequest {
+  uint64 eventId = 1;
 }
 
 
