@@ -318,8 +318,9 @@ namespace LmdbCache {
     static readonly grpc::Marshaller<global::LmdbCache.Empty> __Marshaller_LmdbCache_Empty = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.Empty.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.GetReplicaIdResponse> __Marshaller_LmdbCache_GetReplicaIdResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.GetReplicaIdResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.SyncFromRequest> __Marshaller_LmdbCache_SyncFromRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.SyncFromRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::LmdbCache.SyncResponse> __Marshaller_LmdbCache_SyncResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.SyncResponse.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::LmdbCache.SyncFromResponse> __Marshaller_LmdbCache_SyncFromResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.SyncFromResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.SyncSubscribeRequest> __Marshaller_LmdbCache_SyncSubscribeRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.SyncSubscribeRequest.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::LmdbCache.SyncSubscribeResponse> __Marshaller_LmdbCache_SyncSubscribeResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.SyncSubscribeResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.SyncAckRequest> __Marshaller_LmdbCache_SyncAckRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.SyncAckRequest.Parser.ParseFrom);
 
     static readonly grpc::Method<global::LmdbCache.Empty, global::LmdbCache.GetReplicaIdResponse> __Method_GetReplicaId = new grpc::Method<global::LmdbCache.Empty, global::LmdbCache.GetReplicaIdResponse>(
@@ -329,19 +330,19 @@ namespace LmdbCache {
         __Marshaller_LmdbCache_Empty,
         __Marshaller_LmdbCache_GetReplicaIdResponse);
 
-    static readonly grpc::Method<global::LmdbCache.SyncFromRequest, global::LmdbCache.SyncResponse> __Method_SyncFrom = new grpc::Method<global::LmdbCache.SyncFromRequest, global::LmdbCache.SyncResponse>(
+    static readonly grpc::Method<global::LmdbCache.SyncFromRequest, global::LmdbCache.SyncFromResponse> __Method_SyncFrom = new grpc::Method<global::LmdbCache.SyncFromRequest, global::LmdbCache.SyncFromResponse>(
         grpc::MethodType.ServerStreaming,
         __ServiceName,
         "SyncFrom",
         __Marshaller_LmdbCache_SyncFromRequest,
-        __Marshaller_LmdbCache_SyncResponse);
+        __Marshaller_LmdbCache_SyncFromResponse);
 
-    static readonly grpc::Method<global::LmdbCache.SyncSubscribeRequest, global::LmdbCache.SyncResponse> __Method_Subscribe = new grpc::Method<global::LmdbCache.SyncSubscribeRequest, global::LmdbCache.SyncResponse>(
+    static readonly grpc::Method<global::LmdbCache.SyncSubscribeRequest, global::LmdbCache.SyncSubscribeResponse> __Method_Subscribe = new grpc::Method<global::LmdbCache.SyncSubscribeRequest, global::LmdbCache.SyncSubscribeResponse>(
         grpc::MethodType.ServerStreaming,
         __ServiceName,
         "Subscribe",
         __Marshaller_LmdbCache_SyncSubscribeRequest,
-        __Marshaller_LmdbCache_SyncResponse);
+        __Marshaller_LmdbCache_SyncSubscribeResponse);
 
     static readonly grpc::Method<global::LmdbCache.SyncAckRequest, global::LmdbCache.Empty> __Method_Ack = new grpc::Method<global::LmdbCache.SyncAckRequest, global::LmdbCache.Empty>(
         grpc::MethodType.ClientStreaming,
@@ -364,12 +365,12 @@ namespace LmdbCache {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
 
-      public virtual global::System.Threading.Tasks.Task SyncFrom(global::LmdbCache.SyncFromRequest request, grpc::IServerStreamWriter<global::LmdbCache.SyncResponse> responseStream, grpc::ServerCallContext context)
+      public virtual global::System.Threading.Tasks.Task SyncFrom(global::LmdbCache.SyncFromRequest request, grpc::IServerStreamWriter<global::LmdbCache.SyncFromResponse> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
 
-      public virtual global::System.Threading.Tasks.Task Subscribe(global::LmdbCache.SyncSubscribeRequest request, grpc::IServerStreamWriter<global::LmdbCache.SyncResponse> responseStream, grpc::ServerCallContext context)
+      public virtual global::System.Threading.Tasks.Task Subscribe(global::LmdbCache.SyncSubscribeRequest request, grpc::IServerStreamWriter<global::LmdbCache.SyncSubscribeResponse> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -420,19 +421,19 @@ namespace LmdbCache {
       {
         return CallInvoker.AsyncUnaryCall(__Method_GetReplicaId, null, options, request);
       }
-      public virtual grpc::AsyncServerStreamingCall<global::LmdbCache.SyncResponse> SyncFrom(global::LmdbCache.SyncFromRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual grpc::AsyncServerStreamingCall<global::LmdbCache.SyncFromResponse> SyncFrom(global::LmdbCache.SyncFromRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return SyncFrom(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
-      public virtual grpc::AsyncServerStreamingCall<global::LmdbCache.SyncResponse> SyncFrom(global::LmdbCache.SyncFromRequest request, grpc::CallOptions options)
+      public virtual grpc::AsyncServerStreamingCall<global::LmdbCache.SyncFromResponse> SyncFrom(global::LmdbCache.SyncFromRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncServerStreamingCall(__Method_SyncFrom, null, options, request);
       }
-      public virtual grpc::AsyncServerStreamingCall<global::LmdbCache.SyncResponse> Subscribe(global::LmdbCache.SyncSubscribeRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual grpc::AsyncServerStreamingCall<global::LmdbCache.SyncSubscribeResponse> Subscribe(global::LmdbCache.SyncSubscribeRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return Subscribe(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
-      public virtual grpc::AsyncServerStreamingCall<global::LmdbCache.SyncResponse> Subscribe(global::LmdbCache.SyncSubscribeRequest request, grpc::CallOptions options)
+      public virtual grpc::AsyncServerStreamingCall<global::LmdbCache.SyncSubscribeResponse> Subscribe(global::LmdbCache.SyncSubscribeRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncServerStreamingCall(__Method_Subscribe, null, options, request);
       }
