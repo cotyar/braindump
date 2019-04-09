@@ -15,25 +15,26 @@ enum LightningDbSyncMode {
 }
 
 message LightningConfig {
-    string Name                           = 1;
-    uint64 StorageLimit                   = 2;
-    uint32 MaxTables                      = 3;
-    uint32 WriteBatchTimeoutMilliseconds  = 4;
-    uint32 WriteBatchMaxDelegates         = 5;
-    LightningDbSyncMode SyncMode          = 6;
+    string name                           = 1;
+    uint64 storageLimit                   = 2;
+    uint32 maxTables                      = 3;
+    uint32 writeBatchTimeoutMilliseconds  = 4;
+    uint32 writeBatchMaxDelegates         = 5;
+    LightningDbSyncMode syncMode          = 6;
 }
 
 message ReplicaConfig {
-    string ReplicaId                = 1;
-    string HostName                 = 2;
-    uint32 Port                     = 3;
-    uint32 WebUIPort                = 4;
-    uint32 ReplicationPort          = 5;
-    uint32 ReplicationPageSize      = 6;
+    string replicaId                = 1;
+    string hostName                 = 2;
+    uint32 port                     = 3;
+    uint32 webUIPort                = 4;
+    uint32 replicationPort          = 5;
+    uint32 replicationPageSize      = 6;
+    uint32 monitoringPort           = 7;
 
-    string MasterNode               = 7;
+    string masterNode               = 10;
 
-    LightningConfig LightningConfig = 8;
+    LightningConfig lightningConfig = 15;
 }
 
 // Interface exported by the server.
@@ -300,10 +301,11 @@ message ReplicaStatus {
   string replicaId                      = 1;
   ReplicaConnectionInfo connectionInfo  = 2;
   Timestamp started                     = 3;
-  VectorClock currentClock              = 4;
+  ReplicaConfig replicaConfig           = 4;
+  VectorClock currentClock              = 5;
 
-  ReplicaCounters counters              = 5;
-  ClusterStatus clusterStatus           = 10;
+  ReplicaCounters counters              = 10;
+  ClusterStatus clusterStatus           = 11;
 }
 
 message ClusterStatus {
