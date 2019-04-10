@@ -36,7 +36,6 @@ namespace LmdbCacheServer
         public Task<AddResponse> Add(IEnumerable<AddRequestEntry> entries, Header header) =>
             Task.Run(async () =>
             {
-
                 var batch = entries.Select(ks => (new KvKey(ks.Key), new KvMetadata
                 {
                     Status = Active,
@@ -57,7 +56,8 @@ namespace LmdbCacheServer
                 return response;
             });
 
-        public override Task<AddResponse> Add(AddRequest request, ServerCallContext context) => Add(request.Entries, request.Header);
+        public override Task<AddResponse> Add(AddRequest request, ServerCallContext context) =>
+            Task.Run(() => Add(request.Entries, request.Header));
 
         public override Task<AddResponse> AddStream(IAsyncStreamReader<AddStreamRequest> requestStream, ServerCallContext context) =>
             Task.Run(async () =>
@@ -111,7 +111,8 @@ namespace LmdbCacheServer
                 return response;
             });
 
-        public override Task<CopyResponse> Copy(CopyRequest request, ServerCallContext context) => _kvTable.Copy(request);
+        public override Task<CopyResponse> Copy(CopyRequest request, ServerCallContext context) =>
+            Task.Run(() =>_kvTable.Copy(request));
 
         public override Task<DeleteResponse> Delete(DeleteRequest request, ServerCallContext context) =>
             Task.Run(async () =>

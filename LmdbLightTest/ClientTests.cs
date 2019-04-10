@@ -250,8 +250,8 @@ namespace LmdbLightTest
                         Console.WriteLine($"{i}. Write {kv.Value.Item1} elapsed: {sw.Elapsed}");
                         totalWrite += sw.Elapsed;
 
-                        Assert.AreEqual(1, addRet.Count);
-                        Assert.AreEqual(testKey, addRet.First());
+//                        Assert.AreEqual(1, addRet.Count);
+//                        Assert.AreEqual(testKey, addRet.First());
 
                         var readBuffer = new byte[valueLength];
                         int readBytes = -1;
@@ -263,10 +263,10 @@ namespace LmdbLightTest
                         Console.WriteLine($"{i}. Read {kv.Value.Item1} elapsed: {sw.Elapsed}");
                         totalRead += sw.Elapsed;
 
-                        Assert.AreEqual(1, getRet.Count);
-                        Assert.AreEqual(testKey, getRet.First());
-                        Assert.AreEqual(testValue.Length, readBytes);
-                        CollectionAssert.AreEqual(testValue, readBuffer.Take(readBytes).ToArray());
+//                        Assert.AreEqual(1, getRet.Count);
+//                        Assert.AreEqual(testKey, getRet.First());
+//                        Assert.AreEqual(testValue.Length, readBytes);
+//                        CollectionAssert.AreEqual(testValue, readBuffer.Take(readBytes).ToArray());
                     }
 
                     swTotal.Stop();
@@ -365,8 +365,6 @@ namespace LmdbLightTest
 
             }
         }
-
-
 
         private static Dictionary<string, (int, byte[])> BuildKeyValuePairs(int iterations, int length)
         {

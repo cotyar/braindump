@@ -65,7 +65,6 @@ namespace LmdbCacheClient
             DateTimeOffset expiry, AvailabilityLevel requiredAvailabilityLevel)
         {
             // TODO: Add reactions to other AvailabilityLevels
-            // TODO: Deal with expiration
             var batch = keys.Select(k => (k, new MemoryStream())).ToArray();
 
             foreach (var ks in batch)
@@ -78,26 +77,26 @@ namespace LmdbCacheClient
                 Select(ks => new AddRequestEntry { Key = ks.Item1, Expiry = expiry.ToTimestamp(), Value = ByteString.FromStream(ks.Item2)}).
                 ToArray();
 
-            AddResponse addResponse;
-            if (_useStreaming)
-            {
-                addResponse = AddStreaming(preparedBatch, allowOverride).Result;
-            }
-            else
-            {
-                var request = new AddRequest
+            var addResponse = Task.Run(async () =>
+                {
+                    if (_useStreaming)
                     {
-                    Header = new Header
-                    {
-                        OverrideExisting = allowOverride,
-                        Compression = _compression,
-                        CorrelationId = _correlationId,
-                        ChunksCount = (uint)preparedBatch.Length
+                        return await AddStreaming(preparedBatch, allowOverride);
                     }
-                };
-                request.Entries.Add(preparedBatch);
-                addResponse = _lightClient.Add(request);
-            }
+
+                    var request = new AddRequest
+                    {
+                        Header = new Header
+                        {
+                            OverrideExisting = allowOverride,
+                            Compression = _compression,
+                            CorrelationId = _correlationId,
+                            ChunksCount = (uint)preparedBatch.Length
+                        }
+                    };
+                    request.Entries.Add(preparedBatch);
+                    return await _lightClient.AddAsync(request);
+                }).GetAwaiter().GetResult();
 
             return addResponse.Results.
                     Select((r, i) => (r, i)).
@@ -131,9 +130,10 @@ namespace LmdbCacheClient
 
             var request = new GetRequest { CorrelationId = _correlationId };
             request.Keys.AddRange(keysCopied);
-            var results = _useStreaming
-                ? GetStream(request).Result
-                : _lightClient.Get(request).Results;
+            var results = Task.Run(async () => _useStreaming
+                ? await GetStream(request)
+                : (await _lightClient.GetAsync(request)).Results
+            ).GetAwaiter().GetResult();
 
             var ret = results.Where(res => res.Result == GetResponseEntry.Types.GetResult.Success).ToArray();
 
@@ -152,7 +152,7 @@ namespace LmdbCacheClient
 
             var request = new CopyRequest { CorrelationId = _correlationId };
             request.Entries.AddRange(keysCopied.Select(kv => new CopyRequest.Types.CopyRequestEntry{ Expiry = expiry.ToTimestamp()}));
-            var copyResponse = _lightClient.Copy(request);
+            var copyResponse = Task.Run(async () => await _lightClient.CopyAsync(request)).GetAwaiter().GetResult();
 
             var ret = copyResponse.Results.
                 Select((r, i) => (r, i)).
@@ -187,7 +187,7 @@ namespace LmdbCacheClient
 
             var request = new GetRequest { CorrelationId = _correlationId };
             request.Keys.AddRange(keysCopied);
-            var containsKeys = _lightClient.ContainsKeys(request);
+            var containsKeys = Task.Run(async () => await _lightClient.ContainsKeysAsync(request)).GetAwaiter().GetResult();
 
             return containsKeys.Results.Select((r, i) => (r, i)).Where(res => res.Item1).Select(res => keysCopied[res.Item2]).ToHashSet();
         }
@@ -204,7 +204,7 @@ namespace LmdbCacheClient
 
             var request = new DeleteRequest { CorrelationId = _correlationId };
             request.Keys.AddRange(keysCopied);
-            var containsKeys = _lightClient.Delete(request);
+            var containsKeys = Task.Run(async () => await _lightClient.DeleteAsync(request)).GetAwaiter().GetResult();
 
             return containsKeys.Results.Select((r, i) => (r, i)).Where(res => res.Item1 == DeleteResponse.Types.DeleteResult.Success).Select(res => keysCopied[res.Item2]).ToHashSet();
         }
@@ -236,7 +236,7 @@ namespace LmdbCacheClient
             // TODO: Deal with depth and delimiter
             // TODO: Rethink pagination
 
-            return SearchByPrefixAsync(keyPrefix).Result.ToHashSet();
+            return Task.Run(async () => await SearchByPrefixAsync(keyPrefix)).GetAwaiter().GetResult().ToHashSet();
         }
 
         public IDictionary<string, HashSet<string>> SearchManyByPrefix(IEnumerable<string> keysPrefixes, int? depthIndex = null, string delimiter = null)
@@ -244,7 +244,7 @@ namespace LmdbCacheClient
             var tasks = keysPrefixes.Select(keyPrefix => (keyPrefix, Task.Run(() => SearchByPrefixAsync(keyPrefix)))).ToArray();
             Task.WaitAll(tasks.Select(kv => kv.Item2 as Task).ToArray());
 
-            return tasks.ToDictionary(t => t.Item1, t => t.Item2.Result.ToHashSet());
+            return tasks.ToDictionary(t => t.Item1, t => t.Item2.GetAwaiter().GetResult().ToHashSet());
         }
 
         public void Dispose()
