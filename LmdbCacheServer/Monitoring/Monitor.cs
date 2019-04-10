@@ -30,6 +30,7 @@ namespace LmdbCacheServer.Monitoring
         public override Task Subscribe(MonitoringUpdateRequest request, IServerStreamWriter<MonitoringUpdateResponse> responseStream, ServerCallContext context) =>
             Task.Run(async () =>
             {
+                Console.WriteLine($"Peer: {context.Peer}, host: {context.Host}");
                 await responseStream.WriteAsync(new MonitoringUpdateResponse {Status = await _collectStatus()});
                 var tcs = new TaskCompletionSource<int>();
                 if (!_subscriptions.TryAdd(request.CorrelationId, (responseStream, tcs)))

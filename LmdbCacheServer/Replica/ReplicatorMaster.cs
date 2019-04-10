@@ -57,7 +57,7 @@ namespace LmdbCacheServer.Replica
 
         public override Task<Empty> Ack(IAsyncStreamReader<SyncAckRequest> requestStream, ServerCallContext context)
         {
-            return base.Ack(requestStream, context);
+            return base.Ack(requestStream, context); // TODO: Override when state replication is implemented
         }
 
         public override async Task Subscribe(SyncSubscribeRequest request, IServerStreamWriter<SyncSubscribeResponse> responseStream, ServerCallContext context)

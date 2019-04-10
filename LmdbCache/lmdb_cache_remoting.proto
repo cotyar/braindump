@@ -219,9 +219,15 @@ message KeyValueListResponse {
 // Interface exported by the server.
 service SyncService {
   rpc GetReplicaId(Empty) returns (GetReplicaIdResponse) {}
+
+  // Pull sync
   rpc SyncFrom(SyncFromRequest) returns (stream SyncFromResponse) {} 
   rpc Subscribe(SyncSubscribeRequest) returns (stream SyncSubscribeResponse) {} // TODO: Add Acks streaming
   rpc Ack(stream SyncAckRequest) returns (Empty) {} // TODO: Add Acks streaming
+
+  // Push sync
+  rpc SyncTo(SyncToRequest) returns (SyncFromRequest) {} 
+  rpc Publish(stream SyncSubscribeResponse) returns (stream SyncAckRequest) {} 
 }
 
 ///////////////////////////////
@@ -290,6 +296,9 @@ message SyncAckRequest {
   uint64 eventId = 1;
 }
 
+message SyncToRequest {
+  string replicaId   = 1;
+}
 
 ///////////////////////////////
 

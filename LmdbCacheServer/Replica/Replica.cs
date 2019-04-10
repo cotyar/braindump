@@ -39,7 +39,7 @@ namespace LmdbCacheServer.Replica
         private readonly CancellationTokenSource _shutdownCancellationTokenSource;
         private readonly Timestamp _started;
 
-        private readonly Replicator _replicator;
+        private readonly ReplicatorSlave _replicatorSlave;
         private Task _syncProcessTask;
         private readonly Monitor _monitor;
 
@@ -74,13 +74,14 @@ namespace LmdbCacheServer.Replica
             {
                 // TODO: Add supervision
 
-                _replicator = new Replicator(ReplicaConfig.ReplicaId, new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure), s => VectorClockHelper.CreateEmpty());
-                _syncProcessTask = _replicator.StartSync(async syncEvent =>
+                _replicatorSlave = new ReplicatorSlave(ReplicaConfig.ReplicaId, new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure), s => -1);
+                _syncProcessTask = _replicatorSlave.StartSync(async syncEvent =>
                     {
-                        switch (syncEvent.LogEvent.LoggedEventCase)
+                        // TODO: Update last pos
+                        switch (syncEvent.Item2.LoggedEventCase)
                         {
                             case WriteLogEvent.LoggedEventOneofCase.Updated:
-                                var addedOrUpdated = syncEvent.LogEvent.Updated;
+                                var addedOrUpdated = syncEvent.Item2.Updated;
                                 var addMetadata = new KvMetadata
                                 {
                                     Status = Active,
@@ -95,7 +96,7 @@ namespace LmdbCacheServer.Replica
                                 // TODO: Should we do anything if the value wasn't updated? Maybe logging?                                
                                 break;
                             case WriteLogEvent.LoggedEventOneofCase.Deleted:
-                                var deleted = syncEvent.LogEvent.Deleted;
+                                var deleted = syncEvent.Item2.Deleted;
                                 var currentClock = IncrementClock();
                                 var delMetadata = new KvMetadata
                                 {
@@ -108,7 +109,7 @@ namespace LmdbCacheServer.Replica
                                 // TODO: Should we do anything if the value wasn't updated? Maybe logging?
                                 break;
                             case WriteLogEvent.LoggedEventOneofCase.None:
-                                throw new ArgumentException("syncEvent", $"Unexpected LogEvent case: {syncEvent.LogEvent.LoggedEventCase}");
+                                throw new ArgumentException("syncEvent", $"Unexpected LogEvent case: {syncEvent.Item2.LoggedEventCase}");
                             default:
                                 throw new ArgumentOutOfRangeException();
                         }
