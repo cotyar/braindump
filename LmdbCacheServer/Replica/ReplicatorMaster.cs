@@ -34,26 +34,35 @@ namespace LmdbCacheServer.Replica
         public override Task<GetReplicaIdResponse> GetReplicaId(Empty request, ServerCallContext context) => 
             Task.FromResult(new GetReplicaIdResponse { ReplicaId = _ownReplicaId} );
 
-        public override async Task SyncFrom(SyncFromRequest request, IServerStreamWriter<SyncFromResponse> responseStream, ServerCallContext context)
-        {
-            var lastPos = request.Since;
-            while (!_cts.Token.IsCancellationRequested)
+        public override Task SyncFrom(SyncFromRequest request, IServerStreamWriter<SyncFromResponse> responseStream, ServerCallContext context) =>
+            Task.Run(async () =>
             {
-                var page = _lmdb.Read(txn => _wlTable.GetLogPage(txn, request.Since, _syncPageSize));
+                var lastPos = request.Since;
+                Console.WriteLine($"Received replication request to sync from {lastPos}");
 
-                if (page.Length == 0) break;
-
-                foreach (var wlEvent in page)
+                while (!_cts.Token.IsCancellationRequested)
                 {
-                    if (!_cts.Token.IsCancellationRequested
-                        && (request.IncludeMine || wlEvent.Item2.OriginatorReplicaId != _ownReplicaId)) // TODO: Add check for IncludeAcked
-                        await responseStream.WriteAsync(new SyncFromResponse { Item = { Pos = wlEvent.Item1, LogEvent = wlEvent.Item2 }});
-                    lastPos = wlEvent.Item1;
-                }
+                    var page = _lmdb.Read(txn => _wlTable.GetLogPage(txn, request.Since, _syncPageSize));
 
-                await responseStream.WriteAsync(new SyncFromResponse { Footer = { LastPos = lastPos } });
-            }
-        }
+                    if (page.Length == 0) break;
+
+                    foreach (var wlEvent in page)
+                    {
+                        if (!_cts.Token.IsCancellationRequested
+                            && (request.IncludeMine || wlEvent.Item2.OriginatorReplicaId != _ownReplicaId)
+                        ) // TODO: Add check for IncludeAcked
+                        {
+                            Console.WriteLine($"Writing replication page");
+                            responseStream.WriteAsync(new SyncFromResponse { Item = { Pos = wlEvent.Item1, LogEvent = wlEvent.Item2 }});
+                            Console.WriteLine($"Replication page has been written");
+                        }
+                        lastPos = wlEvent.Item1;
+                    }
+
+                    Console.WriteLine($"Writing replication footer");
+                    await responseStream.WriteAsync(new SyncFromResponse { Footer = { LastPos = lastPos } });
+                }
+            });
 
         public override Task<Empty> Ack(IAsyncStreamReader<SyncAckRequest> requestStream, ServerCallContext context)
         {

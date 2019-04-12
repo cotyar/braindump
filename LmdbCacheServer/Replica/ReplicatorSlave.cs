@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Grpc.Core;
+using Grpc.Core.Utils;
 using LmdbCache;
 using LmdbLight;
 
@@ -56,9 +57,9 @@ namespace LmdbCacheServer.Replica
             using (var callFrom = _syncService.SyncFrom(
                 new SyncFromRequest { ReplicaId = _ownReplicaId, Since = syncStartPos, IncludeMine = false, IncludeAcked = false }))
             {
-                while (await callFrom.ResponseStream.MoveNext())
+                await callFrom.ResponseStream.ForEachAsync(async response =>
                 {
-                    var response = callFrom.ResponseStream.Current;
+                    Console.WriteLine($"Response received");
                     switch (response.ResponseCase)
                     {
                         case SyncFromResponse.ResponseOneofCase.Item:
@@ -74,7 +75,7 @@ namespace LmdbCacheServer.Replica
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
-                }
+                });
             }
             Console.WriteLine($"Synchronized '{itemsCount}' items");
             return (itemsCount, lastPos);

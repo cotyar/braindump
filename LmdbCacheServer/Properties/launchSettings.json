@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LmdbCacheServer": {
+      "commandName": "Project",
+      "commandLineArgs": "sss"
+    }
+  }
+}

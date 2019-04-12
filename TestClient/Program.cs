@@ -92,7 +92,7 @@ namespace TestClient
 
         static void Main(string[] args)
         {
-            TestAddGetManyParallel("127.0.0.1", 40051, 1, 1, 10000);
+            TestAddGetManyParallel("127.0.0.1", 40051, 20, 20, 10000);
 
             Console.ReadLine();
         }

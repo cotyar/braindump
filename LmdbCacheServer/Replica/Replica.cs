@@ -45,6 +45,8 @@ namespace LmdbCacheServer.Replica
 
         public Replica(ReplicaConfig replicaConfig, VectorClock clock = null)
         {
+            //GrpcEnvironment.SetCompletionQueueCount(1);
+
             _started = DateTimeOffset.UtcNow.ToTimestamp();
             _shutdownCancellationTokenSource = new CancellationTokenSource();
 
@@ -75,7 +77,7 @@ namespace LmdbCacheServer.Replica
                 // TODO: Add supervision
 
                 _replicatorSlave = new ReplicatorSlave(ReplicaConfig.ReplicaId, new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure), s => -1);
-                _syncProcessTask = _replicatorSlave.StartSync(async syncEvent =>
+                _syncProcessTask = Task.Run(() => _replicatorSlave.StartSync(async syncEvent =>
                     {
                         // TODO: Update last pos
                         switch (syncEvent.Item2.LoggedEventCase)
@@ -88,7 +90,7 @@ namespace LmdbCacheServer.Replica
                                     Expiry = addedOrUpdated.Expiry,
                                     Action = Replicated,
                                     Updated = IncrementClock(),
-                                    Compression = Compression.None
+                                    Compression = Compression.None // TODO: Use correct compression mode
                                 };
                                 var wasUpdated = await _kvTable.AddOrUpdate(new KvKey(addedOrUpdated.Key),
                                     addMetadata,
@@ -113,7 +115,7 @@ namespace LmdbCacheServer.Replica
                             default:
                                 throw new ArgumentOutOfRangeException();
                         }
-                    }); 
+                    })); 
             }
 
             _webServerCompletion = WebServer.StartWebServer(_shutdownCancellationTokenSource.Token, ReplicaConfig.HostName, ReplicaConfig.WebUIPort);

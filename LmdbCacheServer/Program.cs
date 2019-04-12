@@ -17,9 +17,9 @@ namespace LmdbCacheServer
 
         static void Main(string[] args)
         {
-            LightningConfig lightningConfig = new LightningConfig
+            var lightningConfig = new LightningConfig
             {
-                Name = "TestDir",
+                Name = @"C:\Work2\braindump\LmdbCacheServer\TestDir",
                 MaxTables = 20,
                 StorageLimit = 10,
                 WriteBatchMaxDelegates = 100,
@@ -27,7 +27,7 @@ namespace LmdbCacheServer
                 SyncMode = LightningDbSyncMode.Fsync
             }; 
 
-            var replicaConfig = new ReplicaConfig
+            var replicaConfigMaster = new ReplicaConfig
             {
                 ReplicaId = "replica_1",
                 Port = Port,
@@ -35,7 +35,19 @@ namespace LmdbCacheServer
                 LightningConfig = lightningConfig
             };
 
-            using (var server = new Replica.Replica(replicaConfig))
+            var lightningConfigSlave = lightningConfig.Clone();
+            lightningConfigSlave.Name = @"C:\Work2\braindump\LmdbCacheServer\TestDir_Slave";
+            var replicaConfigSlave = new ReplicaConfig
+            {
+                ReplicaId = "replica_2",
+                MasterNode = $"{"127.0.0.1"}:{replicaConfigMaster.ReplicationPort}",
+                ReplicationPageSize = 1000,
+                Port = Port + 500,
+                ReplicationPort = Port + 500 + 2000,
+                LightningConfig = lightningConfigSlave
+            };
+
+            using (var server = new Replica.Replica(args.Length == 0 ? replicaConfigMaster : replicaConfigSlave))
             {
 
                 Console.WriteLine("Cache server started on port " + Port);
