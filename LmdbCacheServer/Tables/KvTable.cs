@@ -182,21 +182,27 @@ namespace LmdbCacheServer.Tables
                 var currentTime = _currentClock();
                 return keys.Select(key =>
                 {
-                    var tableKey = ToTableKey(key);
-                    var metadata = _metadataTable.TryGet(txn, tableKey);
-                    if (metadata != null && CheckAndRemoveIfExpired(key, currentTime, metadata))
-                    {
-                        var tableEntry = txn.TryGet(_kvTable, tableKey);
-
-                        if (tableEntry == null) throw new Exception($"DB inconsistency NO DATA for key: '{key}'");
-
-                        var kvValue = FromTableValue(tableEntry.Value);
-                        return (key, metadata, kvValue);
-                    }
-
-                    return (key, metadata, (KvValue?) null);
+                    var (metadata, value) = TryGet(txn, key, currentTime);
+                    return (key, metadata, value);
                 }).ToArray();
             });
+
+        public (KvMetadata, KvValue?) TryGet(AbstractTransaction txn, KvKey key, VectorClock currentTime = null)
+        {
+            var tableKey = ToTableKey(key);
+            var metadata = _metadataTable.TryGet(txn, tableKey);
+            if (metadata != null && (currentTime == null || CheckAndRemoveIfExpired(key, currentTime, metadata)))
+            {
+                var tableEntry = txn.TryGet(_kvTable, tableKey);
+
+                if (tableEntry == null) throw new Exception($"DB inconsistency NO DATA for key: '{key}'");
+
+                var kvValue = FromTableValue(tableEntry.Value);
+                return (metadata, kvValue);
+            }
+
+            return (metadata, (KvValue?) null);
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public KvKey[] KeysByPrefix(KvKey prefix, uint page, uint pageSize)

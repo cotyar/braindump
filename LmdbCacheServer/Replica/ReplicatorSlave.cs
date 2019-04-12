@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Grpc.Core;
@@ -59,14 +60,17 @@ namespace LmdbCacheServer.Replica
             {
                 await callFrom.ResponseStream.ForEachAsync(async response =>
                 {
-                    Console.WriteLine($"Response received");
+//                    Console.WriteLine($"Response received");
                     switch (response.ResponseCase)
                     {
-                        case SyncFromResponse.ResponseOneofCase.Item:
-                            lastPos = response.Item.Pos;
-                            Console.WriteLine($"Received: '{response}'");
-                            await syncHandler((response.Item.Pos, response.Item.LogEvent));
-                            itemsCount++;
+                        case SyncFromResponse.ResponseOneofCase.Items:
+//                            Console.WriteLine($"Received: '{response}'");
+                            foreach (var responseItem in response.Items.Batch)
+                            {
+                                await syncHandler((responseItem.Pos, responseItem.LogEvent));
+                                itemsCount++;
+                            }
+                            lastPos = response.Items.Batch.Last().Pos;
                             break;
                         case SyncFromResponse.ResponseOneofCase.Footer:
                             lastPos = response.Footer.LastPos;

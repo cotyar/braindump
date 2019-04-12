@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Grpc.Core;
 using LmdbCache;
+using static LmdbCache.Helper;
 
 namespace LmdbCacheServer.Monitoring
 {
@@ -24,11 +25,11 @@ namespace LmdbCacheServer.Monitoring
             _monitoringTimer = new Timer(_ => MonitoringTimerTick().Wait(), null, TimeSpan.FromMilliseconds(_monitoringInterval), TimeSpan.FromMilliseconds(_monitoringInterval));
         }
 
-        public override Task<MonitoringUpdateResponse> GetStatus(MonitoringUpdateRequest request, ServerCallContext context) => 
-            Task.Run(async () => new MonitoringUpdateResponse { Status = await _collectStatus() });
+        public override Task<MonitoringUpdateResponse> GetStatus(MonitoringUpdateRequest request, ServerCallContext context) =>
+            GrpcSafeHandler(async () => new MonitoringUpdateResponse { Status = await _collectStatus() });
 
         public override Task Subscribe(MonitoringUpdateRequest request, IServerStreamWriter<MonitoringUpdateResponse> responseStream, ServerCallContext context) =>
-            Task.Run(async () =>
+            GrpcSafeHandler(async () =>
             {
                 Console.WriteLine($"Peer: {context.Peer}, host: {context.Host}");
                 await responseStream.WriteAsync(new MonitoringUpdateResponse {Status = await _collectStatus()});

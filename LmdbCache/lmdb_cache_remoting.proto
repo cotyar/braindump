@@ -273,12 +273,15 @@ message SyncFromResponse {
     uint64 pos             = 1;
     WriteLogEvent logEvent = 2;
   }
+  message Items {
+    repeated Item batch    = 1;
+  }
   message Footer {
     uint64 lastPos         = 1;
   }
   
   oneof response {
-    Item item     = 1;
+    Items items   = 1;
     Footer footer = 2;
   }
 }

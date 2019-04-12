@@ -8,6 +8,7 @@ using LmdbCache;
 using LmdbCacheServer.Tables;
 using LmdbCacheWeb;
 using LmdbLight;
+using static LmdbCache.Helper;
 using static LmdbCache.KvMetadata.Types;
 using static LmdbCache.KvMetadata.Types.Status;
 using static LmdbCache.KvMetadata.Types.UpdateAction;
@@ -77,7 +78,7 @@ namespace LmdbCacheServer.Replica
                 // TODO: Add supervision
 
                 _replicatorSlave = new ReplicatorSlave(ReplicaConfig.ReplicaId, new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure), s => -1);
-                _syncProcessTask = Task.Run(() => _replicatorSlave.StartSync(async syncEvent =>
+                _syncProcessTask = GrpcSafeHandler(() => _replicatorSlave.StartSync(async syncEvent =>
                     {
                         // TODO: Update last pos
                         switch (syncEvent.Item2.LoggedEventCase)
@@ -132,7 +133,8 @@ namespace LmdbCacheServer.Replica
 
             _serverReplication = new Server
             {
-                Services = { SyncService.BindService(new ReplicatorMaster(_lmdb, replicaConfig.ReplicaId, _wlTable, ReplicaConfig.ReplicationPageSize)) },
+                Services = { SyncService.BindService(new ReplicatorMaster(_lmdb, replicaConfig.ReplicaId, 
+                    (txn, key) => _kvTable.TryGet(txn, new KvKey(key)).Item2?.Value, _wlTable, ReplicaConfig.ReplicationPageSize)) },
                 Ports = { new ServerPort(ReplicaConfig.HostName, (int)ReplicaConfig.ReplicationPort, ServerCredentials.Insecure) }
             };
             _serverReplication.Start();

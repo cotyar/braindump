@@ -22,9 +22,9 @@ namespace LmdbCacheServer
                 Name = @"C:\Work2\braindump\LmdbCacheServer\TestDir",
                 MaxTables = 20,
                 StorageLimit = 10,
-                WriteBatchMaxDelegates = 100,
-                WriteBatchTimeoutMilliseconds = 0,
-                SyncMode = LightningDbSyncMode.Fsync
+                WriteBatchMaxDelegates = 1000,
+                WriteBatchTimeoutMilliseconds = 1,
+                SyncMode = LightningDbSyncMode.NoSync
             }; 
 
             var replicaConfigMaster = new ReplicaConfig
@@ -37,6 +37,8 @@ namespace LmdbCacheServer
 
             var lightningConfigSlave = lightningConfig.Clone();
             lightningConfigSlave.Name = @"C:\Work2\braindump\LmdbCacheServer\TestDir_Slave";
+            lightningConfigSlave.WriteBatchMaxDelegates = 10000;
+            lightningConfigSlave.WriteBatchTimeoutMilliseconds = 50;
             var replicaConfigSlave = new ReplicaConfig
             {
                 ReplicaId = "replica_2",

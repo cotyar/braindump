@@ -10,6 +10,7 @@ using Grpc.Core.Utils;
 using LmdbCache;
 using LmdbCacheServer.Tables;
 using LmdbLight;
+using static LmdbCache.Helper;
 using static LmdbCache.AddRequest.Types;
 using static LmdbCache.AddResponse.Types;
 using static LmdbCache.DeleteResponse.Types;
@@ -34,7 +35,7 @@ namespace LmdbCacheServer
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Task<AddResponse> Add(IEnumerable<AddRequestEntry> entries, Header header) =>
-            Task.Run(async () =>
+            GrpcSafeHandler(async () =>
             {
                 var batch = entries.Select(ks => (new KvKey(ks.Key), new KvMetadata
                 {
@@ -57,10 +58,10 @@ namespace LmdbCacheServer
             });
 
         public override Task<AddResponse> Add(AddRequest request, ServerCallContext context) =>
-            Task.Run(() => Add(request.Entries, request.Header));
+            GrpcSafeHandler(() => Add(request.Entries, request.Header));
 
         public override Task<AddResponse> AddStream(IAsyncStreamReader<AddStreamRequest> requestStream, ServerCallContext context) =>
-            Task.Run(async () =>
+            GrpcSafeHandler(async () =>
             {
 
                 if (!await requestStream.MoveNext() ||
@@ -101,7 +102,7 @@ namespace LmdbCacheServer
             });
 
         public override Task<ContainsKeysResponse> ContainsKeys(GetRequest request, ServerCallContext context) =>
-            Task.Run(() =>
+            GrpcSafeHandler(() =>
             {
                 var ret = _kvTable.ContainsKeys(request.Keys.Select(k => new KvKey(k)).ToArray());
 
@@ -112,10 +113,10 @@ namespace LmdbCacheServer
             });
 
         public override Task<CopyResponse> Copy(CopyRequest request, ServerCallContext context) =>
-            Task.Run(() =>_kvTable.Copy(request));
+            GrpcSafeHandler(() =>_kvTable.Copy(request));
 
         public override Task<DeleteResponse> Delete(DeleteRequest request, ServerCallContext context) =>
-            Task.Run(async () =>
+            GrpcSafeHandler(async () =>
             {
                 var keys = request.Keys.Select(k =>
                 {
@@ -139,7 +140,7 @@ namespace LmdbCacheServer
             });
 
         public override Task<GetResponse> Get(GetRequest request, ServerCallContext context) =>
-            Task.Run(() =>
+            GrpcSafeHandler(() =>
             {
                 var ret = _kvTable.Get(request.Keys.Select(k => new KvKey(k)));
 
@@ -162,11 +163,11 @@ namespace LmdbCacheServer
             });
 
         public override Task GetStream(GetRequest request, IServerStreamWriter<GetStreamResponse> responseStream, ServerCallContext context) =>
-            Task.Run(async () =>
+            GrpcSafeHandler(async () =>
             {
-                var kvs = await Task.Run(() => _kvTable.Get(request.Keys.Select(k => new KvKey(k))));
+                var kvs = _kvTable.Get(request.Keys.Select(k => new KvKey(k)));
 
-                for (var i = 0; i < kvs.Length; i++) // TODO: Move this loop inside Task.Run
+                for (var i = 0; i < kvs.Length; i++) 
                 {
                     var kv = kvs[i];
                     var gre = kv.Item3.HasValue
@@ -181,14 +182,14 @@ namespace LmdbCacheServer
             });
 
         public override Task ListKeys(KeyListRequest request, IServerStreamWriter<KeyListResponse> responseStream, ServerCallContext context) =>
-            Task.Run(async () =>
+            GrpcSafeHandler(async () =>
             {
                 var ret = _kvTable.KeysByPrefix(new KvKey(request.KeyPrefix), 0, uint.MaxValue);
                 await responseStream.WriteAllAsync(ret.Select(k => new KeyListResponse {Key = k.Key}));
             });
 
         public override Task ListKeyValues(KeyListRequest request, IServerStreamWriter<KeyValueListResponse> responseStream, ServerCallContext context) =>
-            Task.Run(async () =>
+            GrpcSafeHandler(async () =>
             {
                 var ret = _kvTable.PageByPrefix(new KvKey(request.KeyPrefix), 0, uint.MaxValue);
                 await responseStream.WriteAllAsync(ret.Select(k => new KeyValueListResponse {Key = k.Item1.ToString(), Value = k.Item2.Value})); // TODO: Add value streaming
