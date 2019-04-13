@@ -50,7 +50,7 @@ namespace LmdbCacheServer.Replica
                 {
                     var page = _lmdb.Read(txn =>
                     {
-                        var logPage = _wlTable.GetLogPage(txn, request.Since, _syncPageSize).
+                        var logPage = _wlTable.GetLogPage(txn, lastPos, _syncPageSize).
                             Where(logItem => (request.IncludeMine || logItem.Item2.OriginatorReplicaId != _ownReplicaId)). // TODO: Add check for IncludeAcked
                             ToArray();
 

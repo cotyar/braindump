@@ -9,9 +9,6 @@ using LmdbCacheServer.Tables;
 using LmdbCacheWeb;
 using LmdbLight;
 using static LmdbCache.Helper;
-using static LmdbCache.KvMetadata.Types;
-using static LmdbCache.KvMetadata.Types.Status;
-using static LmdbCache.KvMetadata.Types.UpdateAction;
 using Monitor = LmdbCacheServer.Monitoring.Monitor;
 
 namespace LmdbCacheServer.Replica
@@ -77,46 +74,8 @@ namespace LmdbCacheServer.Replica
             {
                 // TODO: Add supervision
 
-                _replicatorSlave = new ReplicatorSlave(ReplicaConfig.ReplicaId, new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure), s => -1);
-                _syncProcessTask = GrpcSafeHandler(() => _replicatorSlave.StartSync(async syncEvent =>
-                    {
-                        // TODO: Update last pos
-                        switch (syncEvent.Item2.LoggedEventCase)
-                        {
-                            case WriteLogEvent.LoggedEventOneofCase.Updated:
-                                var addedOrUpdated = syncEvent.Item2.Updated;
-                                var addMetadata = new KvMetadata
-                                {
-                                    Status = Active,
-                                    Expiry = addedOrUpdated.Expiry,
-                                    Action = Replicated,
-                                    Updated = IncrementClock(),
-                                    Compression = Compression.None // TODO: Use correct compression mode
-                                };
-                                var wasUpdated = await _kvTable.AddOrUpdate(new KvKey(addedOrUpdated.Key),
-                                    addMetadata,
-                                    new KvValue(addedOrUpdated.Value));
-                                // TODO: Should we do anything if the value wasn't updated? Maybe logging?                                
-                                break;
-                            case WriteLogEvent.LoggedEventOneofCase.Deleted:
-                                var deleted = syncEvent.Item2.Deleted;
-                                var currentClock = IncrementClock();
-                                var delMetadata = new KvMetadata
-                                {
-                                    Status = Deleted,
-                                    Expiry = currentClock.TicksOffsetUtc.ToTimestamp(),
-                                    Action = Replicated,
-                                    Updated = currentClock
-                                };
-                                var wasDeleted = await _kvTable.Delete(new KvKey(deleted.Key), delMetadata);
-                                // TODO: Should we do anything if the value wasn't updated? Maybe logging?
-                                break;
-                            case WriteLogEvent.LoggedEventOneofCase.None:
-                                throw new ArgumentException("syncEvent", $"Unexpected LogEvent case: {syncEvent.Item2.LoggedEventCase}");
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
-                    })); 
+                _replicatorSlave = new ReplicatorSlave(ReplicaConfig.ReplicaId, new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure), _kvTable, IncrementClock, s => -1);
+                _syncProcessTask = GrpcSafeHandler(() => _replicatorSlave.StartSync()); 
             }
 
             _webServerCompletion = WebServer.StartWebServer(_shutdownCancellationTokenSource.Token, ReplicaConfig.HostName, ReplicaConfig.WebUIPort);

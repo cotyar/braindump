@@ -32,18 +32,20 @@ namespace LmdbCacheServer
                 ReplicaId = "replica_1",
                 Port = Port,
                 ReplicationPort = Port + 2000,
+                ReplicationPageSize = 10000,
                 LightningConfig = lightningConfig
             };
 
             var lightningConfigSlave = lightningConfig.Clone();
             lightningConfigSlave.Name = @"C:\Work2\braindump\LmdbCacheServer\TestDir_Slave";
             lightningConfigSlave.WriteBatchMaxDelegates = 10000;
-            lightningConfigSlave.WriteBatchTimeoutMilliseconds = 50;
+            lightningConfigSlave.WriteBatchTimeoutMilliseconds = 1;
+            lightningConfigSlave.SyncMode = LightningDbSyncMode.NoSync;
             var replicaConfigSlave = new ReplicaConfig
             {
                 ReplicaId = "replica_2",
                 MasterNode = $"{"127.0.0.1"}:{replicaConfigMaster.ReplicationPort}",
-                ReplicationPageSize = 1000,
+                ReplicationPageSize = 10000,
                 Port = Port + 500,
                 ReplicationPort = Port + 500 + 2000,
                 LightningConfig = lightningConfigSlave
