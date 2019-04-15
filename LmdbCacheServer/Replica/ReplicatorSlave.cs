@@ -125,6 +125,7 @@ namespace LmdbCacheServer.Replica
                             addMetadata.Updated,
                             (key, vcOld, vcNew) => vcOld.Earlier(vcNew));
                         _replicationTable.SetLastPos(txn, _targetReplicaId, syncEvent.Item1);
+                        _kvTable.StatusTable.IncrementCounters(txn, replicatedAdds: 1);
                         // TODO: Should we do anything if the value wasn't updated? Maybe logging?        
                     }, false);
                     break;
@@ -144,6 +145,7 @@ namespace LmdbCacheServer.Replica
                         var kvKey = new KvKey(deleted.Key);
                         _kvTable.Delete(txn, kvKey, delMetadata);
                         _replicationTable.SetLastPos(txn, _targetReplicaId, syncEvent.Item1);
+                        _kvTable.StatusTable.IncrementCounters(txn, replicatedDeletes: 1);
                         // TODO: Should we do anything if the value wasn't updated? Maybe logging?
                     }, false);
                     break;

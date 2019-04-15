@@ -350,11 +350,17 @@ message ReplicaCounters {
   // uint64 nonExpiredKeysCounter = 10;
   // uint64 allKeysCounter        = 11;
 
-  uint64 addsCounter      = 12;
-  uint64 deletesCounter   = 13;
-  uint64 getCounter       = 14;
-  uint64 containsCounter  = 15;
-  uint64 keySearchCounter = 16;
+  uint64 addsCounter       = 12;
+  uint64 deletesCounter    = 13;
+  uint64 copysCounter      = 14;
+  uint64 getCounter        = 15;
+  uint64 containsCounter   = 16;
+  uint64 keySearchCounter  = 17;
+  uint64 pageSearchCounter = 18;
 
-  uint64 largestValueSeen = 20;
+  uint32 largestKeySize    = 20;
+  uint32 largestValueSize  = 21;
+
+  uint64 replicatedAdds    = 25;
+  uint64 replicatedDeletes = 26;
 }

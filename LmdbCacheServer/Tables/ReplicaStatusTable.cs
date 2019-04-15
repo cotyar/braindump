@@ -76,32 +76,48 @@ namespace LmdbCacheServer
         /// <param name="deletesCounter"></param>
         /// <param name="getCounter"></param>
         /// <param name="containsCounter"></param>
+        /// <param name="copysCounter"></param>
         /// <param name="keySearchCounter"></param>
-        /// <param name="largestValueSeen"></param>
+        /// <param name="pageSearchCounter"></param>
+        /// <param name="largestKeySize"></param>
+        /// <param name="largestValueSize"></param>
+        /// <param name="replicatedAdds"></param>
+        /// <param name="replicatedDeletes"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool IncrementCounters(WriteTransaction txn,
-            uint addsCounter = 0, uint deletesCounter = 0, uint getCounter = 0,
-            uint containsCounter = 0, uint keySearchCounter = 0, uint largestValueSeen = 0)
+            uint addsCounter = 0, uint deletesCounter = 0, uint copysCounter = 0, 
+            uint getCounter = 0, uint containsCounter = 0, uint keySearchCounter = 0, uint pageSearchCounter = 0, 
+            uint largestKeySize = 0, uint largestValueSize = 0,
+            uint replicatedAdds = 0, uint replicatedDeletes = 0)
         {
             var counters = GetCounters(txn);
 
             if (addsCounter != 0) counters.AddsCounter += addsCounter;
             if (deletesCounter != 0) counters.DeletesCounter += deletesCounter;
+            if (copysCounter != 0) counters.CopysCounter += copysCounter;
+
             if (getCounter != 0) counters.GetCounter += getCounter;
             if (containsCounter != 0) counters.ContainsCounter += containsCounter;
             if (keySearchCounter != 0) counters.KeySearchCounter += keySearchCounter;
-            if (largestValueSeen != 0) counters.LargestValueSeen += largestValueSeen;
+            if (pageSearchCounter != 0) counters.PageSearchCounter += pageSearchCounter;
+
+            if (largestKeySize != 0) counters.LargestKeySize += largestKeySize;
+            if (largestValueSize != 0) counters.LargestValueSize += largestValueSize;
+
+            if (replicatedAdds != 0) counters.ReplicatedAdds += replicatedAdds;
+            if (replicatedDeletes != 0) counters.ReplicatedDeletes += replicatedDeletes;
 
             return SetCounters(txn, counters);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Increment(WriteTransaction txn, Func<VectorClock, VectorClock> clock = null,
-            uint addsCounter = 0, uint deletesCounter = 0, uint getCounter = 0,
-            uint containsCounter = 0, uint keySearchCounter = 0, uint largestValueSeen = 0) =>
-            IncrementClock(txn, clock) && 
-            IncrementCounters(txn, addsCounter, deletesCounter, getCounter, containsCounter, keySearchCounter, largestValueSeen);
+        public bool IncrementCounters(WriteTransaction txn, Action<ReplicaCounters> countersUpdater)
+        {
+            var counters = GetCounters(txn);
+            countersUpdater(counters);
+            return SetCounters(txn, counters);
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public TableValue ToClockTableValue(VectorClock clock) => clock.ToByteArray();

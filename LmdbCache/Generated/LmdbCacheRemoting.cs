@@ -126,41 +126,43 @@ namespace LmdbCache {
             "UmVwbGljYXNFbnRyeRpRCg1SZXBsaWNhc0VudHJ5EgsKA2tleRgBIAEoCRIv",
             "CgV2YWx1ZRgCIAEoCzIgLkxtZGJDYWNoZS5SZXBsaWNhQ29ubmVjdGlvbklu",
             "Zm86AjgBIjMKFVJlcGxpY2FDb25uZWN0aW9uSW5mbxIMCgRob3N0GAEgASgJ",
-            "EgwKBHBvcnQYAiABKA0inwEKD1JlcGxpY2FDb3VudGVycxITCgthZGRzQ291",
-            "bnRlchgMIAEoBBIWCg5kZWxldGVzQ291bnRlchgNIAEoBBISCgpnZXRDb3Vu",
-            "dGVyGA4gASgEEhcKD2NvbnRhaW5zQ291bnRlchgPIAEoBBIYChBrZXlTZWFy",
-            "Y2hDb3VudGVyGBAgASgEEhgKEGxhcmdlc3RWYWx1ZVNlZW4YFCABKAQqRQoT",
-            "TGlnaHRuaW5nRGJTeW5jTW9kZRIJCgVGU3luYxAAEgkKBUFzeW5jEAESCgoG",
-            "Tm9TeW5jEAISDAoIUmVhZE9ubHkQAzLsBAoQTG1kYkNhY2hlU2VydmljZRI2",
-            "CgNBZGQSFS5MbWRiQ2FjaGUuQWRkUmVxdWVzdBoWLkxtZGJDYWNoZS5BZGRS",
-            "ZXNwb25zZSIAEkQKCUFkZFN0cmVhbRIbLkxtZGJDYWNoZS5BZGRTdHJlYW1S",
-            "ZXF1ZXN0GhYuTG1kYkNhY2hlLkFkZFJlc3BvbnNlIgAoARI/CgZEZWxldGUS",
-            "GC5MbWRiQ2FjaGUuRGVsZXRlUmVxdWVzdBoZLkxtZGJDYWNoZS5EZWxldGVS",
-            "ZXNwb25zZSIAEjkKBENvcHkSFi5MbWRiQ2FjaGUuQ29weVJlcXVlc3QaFy5M",
-            "bWRiQ2FjaGUuQ29weVJlc3BvbnNlIgASNgoDR2V0EhUuTG1kYkNhY2hlLkdl",
-            "dFJlcXVlc3QaFi5MbWRiQ2FjaGUuR2V0UmVzcG9uc2UiABJECglHZXRTdHJl",
-            "YW0SFS5MbWRiQ2FjaGUuR2V0UmVxdWVzdBocLkxtZGJDYWNoZS5HZXRTdHJl",
-            "YW1SZXNwb25zZSIAMAESSAoMQ29udGFpbnNLZXlzEhUuTG1kYkNhY2hlLkdl",
-            "dFJlcXVlc3QaHy5MbWRiQ2FjaGUuQ29udGFpbnNLZXlzUmVzcG9uc2UiABJF",
-            "CghMaXN0S2V5cxIZLkxtZGJDYWNoZS5LZXlMaXN0UmVxdWVzdBoaLkxtZGJD",
-            "YWNoZS5LZXlMaXN0UmVzcG9uc2UiADABEk8KDUxpc3RLZXlWYWx1ZXMSGS5M",
-            "bWRiQ2FjaGUuS2V5TGlzdFJlcXVlc3QaHy5MbWRiQ2FjaGUuS2V5VmFsdWVM",
-            "aXN0UmVzcG9uc2UiADABMrcDCgtTeW5jU2VydmljZRJDCgxHZXRSZXBsaWNh",
-            "SWQSEC5MbWRiQ2FjaGUuRW1wdHkaHy5MbWRiQ2FjaGUuR2V0UmVwbGljYUlk",
-            "UmVzcG9uc2UiABJHCghTeW5jRnJvbRIaLkxtZGJDYWNoZS5TeW5jRnJvbVJl",
-            "cXVlc3QaGy5MbWRiQ2FjaGUuU3luY0Zyb21SZXNwb25zZSIAMAESUgoJU3Vi",
-            "c2NyaWJlEh8uTG1kYkNhY2hlLlN5bmNTdWJzY3JpYmVSZXF1ZXN0GiAuTG1k",
-            "YkNhY2hlLlN5bmNTdWJzY3JpYmVSZXNwb25zZSIAMAESNgoDQWNrEhkuTG1k",
-            "YkNhY2hlLlN5bmNBY2tSZXF1ZXN0GhAuTG1kYkNhY2hlLkVtcHR5IgAoARJA",
-            "CgZTeW5jVG8SGC5MbWRiQ2FjaGUuU3luY1RvUmVxdWVzdBoaLkxtZGJDYWNo",
-            "ZS5TeW5jRnJvbVJlcXVlc3QiABJMCgdQdWJsaXNoEiAuTG1kYkNhY2hlLlN5",
-            "bmNTdWJzY3JpYmVSZXNwb25zZRoZLkxtZGJDYWNoZS5TeW5jQWNrUmVxdWVz",
-            "dCIAKAEwATLFAQoRTW9uaXRvcmluZ1NlcnZpY2USVgoJR2V0U3RhdHVzEiIu",
-            "TG1kYkNhY2hlLk1vbml0b3JpbmdVcGRhdGVSZXF1ZXN0GiMuTG1kYkNhY2hl",
-            "Lk1vbml0b3JpbmdVcGRhdGVSZXNwb25zZSIAElgKCVN1YnNjcmliZRIiLkxt",
-            "ZGJDYWNoZS5Nb25pdG9yaW5nVXBkYXRlUmVxdWVzdBojLkxtZGJDYWNoZS5N",
-            "b25pdG9yaW5nVXBkYXRlUmVzcG9uc2UiADABQgyqAglMbWRiQ2FjaGViBnBy",
-            "b3RvMw=="));
+            "EgwKBHBvcnQYAiABKA0imwIKD1JlcGxpY2FDb3VudGVycxITCgthZGRzQ291",
+            "bnRlchgMIAEoBBIWCg5kZWxldGVzQ291bnRlchgNIAEoBBIUCgxjb3B5c0Nv",
+            "dW50ZXIYDiABKAQSEgoKZ2V0Q291bnRlchgPIAEoBBIXCg9jb250YWluc0Nv",
+            "dW50ZXIYECABKAQSGAoQa2V5U2VhcmNoQ291bnRlchgRIAEoBBIZChFwYWdl",
+            "U2VhcmNoQ291bnRlchgSIAEoBBIWCg5sYXJnZXN0S2V5U2l6ZRgUIAEoDRIY",
+            "ChBsYXJnZXN0VmFsdWVTaXplGBUgASgNEhYKDnJlcGxpY2F0ZWRBZGRzGBkg",
+            "ASgEEhkKEXJlcGxpY2F0ZWREZWxldGVzGBogASgEKkUKE0xpZ2h0bmluZ0Ri",
+            "U3luY01vZGUSCQoFRlN5bmMQABIJCgVBc3luYxABEgoKBk5vU3luYxACEgwK",
+            "CFJlYWRPbmx5EAMy7AQKEExtZGJDYWNoZVNlcnZpY2USNgoDQWRkEhUuTG1k",
+            "YkNhY2hlLkFkZFJlcXVlc3QaFi5MbWRiQ2FjaGUuQWRkUmVzcG9uc2UiABJE",
+            "CglBZGRTdHJlYW0SGy5MbWRiQ2FjaGUuQWRkU3RyZWFtUmVxdWVzdBoWLkxt",
+            "ZGJDYWNoZS5BZGRSZXNwb25zZSIAKAESPwoGRGVsZXRlEhguTG1kYkNhY2hl",
+            "LkRlbGV0ZVJlcXVlc3QaGS5MbWRiQ2FjaGUuRGVsZXRlUmVzcG9uc2UiABI5",
+            "CgRDb3B5EhYuTG1kYkNhY2hlLkNvcHlSZXF1ZXN0GhcuTG1kYkNhY2hlLkNv",
+            "cHlSZXNwb25zZSIAEjYKA0dldBIVLkxtZGJDYWNoZS5HZXRSZXF1ZXN0GhYu",
+            "TG1kYkNhY2hlLkdldFJlc3BvbnNlIgASRAoJR2V0U3RyZWFtEhUuTG1kYkNh",
+            "Y2hlLkdldFJlcXVlc3QaHC5MbWRiQ2FjaGUuR2V0U3RyZWFtUmVzcG9uc2Ui",
+            "ADABEkgKDENvbnRhaW5zS2V5cxIVLkxtZGJDYWNoZS5HZXRSZXF1ZXN0Gh8u",
+            "TG1kYkNhY2hlLkNvbnRhaW5zS2V5c1Jlc3BvbnNlIgASRQoITGlzdEtleXMS",
+            "GS5MbWRiQ2FjaGUuS2V5TGlzdFJlcXVlc3QaGi5MbWRiQ2FjaGUuS2V5TGlz",
+            "dFJlc3BvbnNlIgAwARJPCg1MaXN0S2V5VmFsdWVzEhkuTG1kYkNhY2hlLktl",
+            "eUxpc3RSZXF1ZXN0Gh8uTG1kYkNhY2hlLktleVZhbHVlTGlzdFJlc3BvbnNl",
+            "IgAwATK3AwoLU3luY1NlcnZpY2USQwoMR2V0UmVwbGljYUlkEhAuTG1kYkNh",
+            "Y2hlLkVtcHR5Gh8uTG1kYkNhY2hlLkdldFJlcGxpY2FJZFJlc3BvbnNlIgAS",
+            "RwoIU3luY0Zyb20SGi5MbWRiQ2FjaGUuU3luY0Zyb21SZXF1ZXN0GhsuTG1k",
+            "YkNhY2hlLlN5bmNGcm9tUmVzcG9uc2UiADABElIKCVN1YnNjcmliZRIfLkxt",
+            "ZGJDYWNoZS5TeW5jU3Vic2NyaWJlUmVxdWVzdBogLkxtZGJDYWNoZS5TeW5j",
+            "U3Vic2NyaWJlUmVzcG9uc2UiADABEjYKA0FjaxIZLkxtZGJDYWNoZS5TeW5j",
+            "QWNrUmVxdWVzdBoQLkxtZGJDYWNoZS5FbXB0eSIAKAESQAoGU3luY1RvEhgu",
+            "TG1kYkNhY2hlLlN5bmNUb1JlcXVlc3QaGi5MbWRiQ2FjaGUuU3luY0Zyb21S",
+            "ZXF1ZXN0IgASTAoHUHVibGlzaBIgLkxtZGJDYWNoZS5TeW5jU3Vic2NyaWJl",
+            "UmVzcG9uc2UaGS5MbWRiQ2FjaGUuU3luY0Fja1JlcXVlc3QiACgBMAEyxQEK",
+            "EU1vbml0b3JpbmdTZXJ2aWNlElYKCUdldFN0YXR1cxIiLkxtZGJDYWNoZS5N",
+            "b25pdG9yaW5nVXBkYXRlUmVxdWVzdBojLkxtZGJDYWNoZS5Nb25pdG9yaW5n",
+            "VXBkYXRlUmVzcG9uc2UiABJYCglTdWJzY3JpYmUSIi5MbWRiQ2FjaGUuTW9u",
+            "aXRvcmluZ1VwZGF0ZVJlcXVlc3QaIy5MbWRiQ2FjaGUuTW9uaXRvcmluZ1Vw",
+            "ZGF0ZVJlc3BvbnNlIgAwAUIMqgIJTG1kYkNhY2hlYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::LmdbCache.LightningDbSyncMode), }, new pbr::GeneratedClrTypeInfo[] {
@@ -201,7 +203,7 @@ namespace LmdbCache {
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.ReplicaStatus), global::LmdbCache.ReplicaStatus.Parser, new[]{ "ReplicaId", "ConnectionInfo", "Started", "ReplicaConfig", "CurrentClock", "Counters", "ClusterStatus" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.ClusterStatus), global::LmdbCache.ClusterStatus.Parser, new[]{ "Replicas" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.ReplicaConnectionInfo), global::LmdbCache.ReplicaConnectionInfo.Parser, new[]{ "Host", "Port" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.ReplicaCounters), global::LmdbCache.ReplicaCounters.Parser, new[]{ "AddsCounter", "DeletesCounter", "GetCounter", "ContainsCounter", "KeySearchCounter", "LargestValueSeen" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.ReplicaCounters), global::LmdbCache.ReplicaCounters.Parser, new[]{ "AddsCounter", "DeletesCounter", "CopysCounter", "GetCounter", "ContainsCounter", "KeySearchCounter", "PageSearchCounter", "LargestKeySize", "LargestValueSize", "ReplicatedAdds", "ReplicatedDeletes" }, null, null, null)
           }));
     }
     #endregion
@@ -7737,10 +7739,15 @@ namespace LmdbCache {
     public ReplicaCounters(ReplicaCounters other) : this() {
       addsCounter_ = other.addsCounter_;
       deletesCounter_ = other.deletesCounter_;
+      copysCounter_ = other.copysCounter_;
       getCounter_ = other.getCounter_;
       containsCounter_ = other.containsCounter_;
       keySearchCounter_ = other.keySearchCounter_;
-      largestValueSeen_ = other.largestValueSeen_;
+      pageSearchCounter_ = other.pageSearchCounter_;
+      largestKeySize_ = other.largestKeySize_;
+      largestValueSize_ = other.largestValueSize_;
+      replicatedAdds_ = other.replicatedAdds_;
+      replicatedDeletes_ = other.replicatedDeletes_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -7771,8 +7778,19 @@ namespace LmdbCache {
       }
     }
 
+    /// <summary>Field number for the "copysCounter" field.</summary>
+    public const int CopysCounterFieldNumber = 14;
+    private ulong copysCounter_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong CopysCounter {
+      get { return copysCounter_; }
+      set {
+        copysCounter_ = value;
+      }
+    }
+
     /// <summary>Field number for the "getCounter" field.</summary>
-    public const int GetCounterFieldNumber = 14;
+    public const int GetCounterFieldNumber = 15;
     private ulong getCounter_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public ulong GetCounter {
@@ -7783,7 +7801,7 @@ namespace LmdbCache {
     }
 
     /// <summary>Field number for the "containsCounter" field.</summary>
-    public const int ContainsCounterFieldNumber = 15;
+    public const int ContainsCounterFieldNumber = 16;
     private ulong containsCounter_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public ulong ContainsCounter {
@@ -7794,7 +7812,7 @@ namespace LmdbCache {
     }
 
     /// <summary>Field number for the "keySearchCounter" field.</summary>
-    public const int KeySearchCounterFieldNumber = 16;
+    public const int KeySearchCounterFieldNumber = 17;
     private ulong keySearchCounter_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public ulong KeySearchCounter {
@@ -7804,14 +7822,58 @@ namespace LmdbCache {
       }
     }
 
-    /// <summary>Field number for the "largestValueSeen" field.</summary>
-    public const int LargestValueSeenFieldNumber = 20;
-    private ulong largestValueSeen_;
+    /// <summary>Field number for the "pageSearchCounter" field.</summary>
+    public const int PageSearchCounterFieldNumber = 18;
+    private ulong pageSearchCounter_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ulong LargestValueSeen {
-      get { return largestValueSeen_; }
+    public ulong PageSearchCounter {
+      get { return pageSearchCounter_; }
       set {
-        largestValueSeen_ = value;
+        pageSearchCounter_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "largestKeySize" field.</summary>
+    public const int LargestKeySizeFieldNumber = 20;
+    private uint largestKeySize_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint LargestKeySize {
+      get { return largestKeySize_; }
+      set {
+        largestKeySize_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "largestValueSize" field.</summary>
+    public const int LargestValueSizeFieldNumber = 21;
+    private uint largestValueSize_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint LargestValueSize {
+      get { return largestValueSize_; }
+      set {
+        largestValueSize_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "replicatedAdds" field.</summary>
+    public const int ReplicatedAddsFieldNumber = 25;
+    private ulong replicatedAdds_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong ReplicatedAdds {
+      get { return replicatedAdds_; }
+      set {
+        replicatedAdds_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "replicatedDeletes" field.</summary>
+    public const int ReplicatedDeletesFieldNumber = 26;
+    private ulong replicatedDeletes_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong ReplicatedDeletes {
+      get { return replicatedDeletes_; }
+      set {
+        replicatedDeletes_ = value;
       }
     }
 
@@ -7830,10 +7892,15 @@ namespace LmdbCache {
       }
       if (AddsCounter != other.AddsCounter) return false;
       if (DeletesCounter != other.DeletesCounter) return false;
+      if (CopysCounter != other.CopysCounter) return false;
       if (GetCounter != other.GetCounter) return false;
       if (ContainsCounter != other.ContainsCounter) return false;
       if (KeySearchCounter != other.KeySearchCounter) return false;
-      if (LargestValueSeen != other.LargestValueSeen) return false;
+      if (PageSearchCounter != other.PageSearchCounter) return false;
+      if (LargestKeySize != other.LargestKeySize) return false;
+      if (LargestValueSize != other.LargestValueSize) return false;
+      if (ReplicatedAdds != other.ReplicatedAdds) return false;
+      if (ReplicatedDeletes != other.ReplicatedDeletes) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -7842,10 +7909,15 @@ namespace LmdbCache {
       int hash = 1;
       if (AddsCounter != 0UL) hash ^= AddsCounter.GetHashCode();
       if (DeletesCounter != 0UL) hash ^= DeletesCounter.GetHashCode();
+      if (CopysCounter != 0UL) hash ^= CopysCounter.GetHashCode();
       if (GetCounter != 0UL) hash ^= GetCounter.GetHashCode();
       if (ContainsCounter != 0UL) hash ^= ContainsCounter.GetHashCode();
       if (KeySearchCounter != 0UL) hash ^= KeySearchCounter.GetHashCode();
-      if (LargestValueSeen != 0UL) hash ^= LargestValueSeen.GetHashCode();
+      if (PageSearchCounter != 0UL) hash ^= PageSearchCounter.GetHashCode();
+      if (LargestKeySize != 0) hash ^= LargestKeySize.GetHashCode();
+      if (LargestValueSize != 0) hash ^= LargestValueSize.GetHashCode();
+      if (ReplicatedAdds != 0UL) hash ^= ReplicatedAdds.GetHashCode();
+      if (ReplicatedDeletes != 0UL) hash ^= ReplicatedDeletes.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -7867,21 +7939,41 @@ namespace LmdbCache {
         output.WriteRawTag(104);
         output.WriteUInt64(DeletesCounter);
       }
-      if (GetCounter != 0UL) {
+      if (CopysCounter != 0UL) {
         output.WriteRawTag(112);
+        output.WriteUInt64(CopysCounter);
+      }
+      if (GetCounter != 0UL) {
+        output.WriteRawTag(120);
         output.WriteUInt64(GetCounter);
       }
       if (ContainsCounter != 0UL) {
-        output.WriteRawTag(120);
+        output.WriteRawTag(128, 1);
         output.WriteUInt64(ContainsCounter);
       }
       if (KeySearchCounter != 0UL) {
-        output.WriteRawTag(128, 1);
+        output.WriteRawTag(136, 1);
         output.WriteUInt64(KeySearchCounter);
       }
-      if (LargestValueSeen != 0UL) {
+      if (PageSearchCounter != 0UL) {
+        output.WriteRawTag(144, 1);
+        output.WriteUInt64(PageSearchCounter);
+      }
+      if (LargestKeySize != 0) {
         output.WriteRawTag(160, 1);
-        output.WriteUInt64(LargestValueSeen);
+        output.WriteUInt32(LargestKeySize);
+      }
+      if (LargestValueSize != 0) {
+        output.WriteRawTag(168, 1);
+        output.WriteUInt32(LargestValueSize);
+      }
+      if (ReplicatedAdds != 0UL) {
+        output.WriteRawTag(200, 1);
+        output.WriteUInt64(ReplicatedAdds);
+      }
+      if (ReplicatedDeletes != 0UL) {
+        output.WriteRawTag(208, 1);
+        output.WriteUInt64(ReplicatedDeletes);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -7897,17 +7989,32 @@ namespace LmdbCache {
       if (DeletesCounter != 0UL) {
         size += 1 + pb::CodedOutputStream.ComputeUInt64Size(DeletesCounter);
       }
+      if (CopysCounter != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(CopysCounter);
+      }
       if (GetCounter != 0UL) {
         size += 1 + pb::CodedOutputStream.ComputeUInt64Size(GetCounter);
       }
       if (ContainsCounter != 0UL) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(ContainsCounter);
+        size += 2 + pb::CodedOutputStream.ComputeUInt64Size(ContainsCounter);
       }
       if (KeySearchCounter != 0UL) {
         size += 2 + pb::CodedOutputStream.ComputeUInt64Size(KeySearchCounter);
       }
-      if (LargestValueSeen != 0UL) {
-        size += 2 + pb::CodedOutputStream.ComputeUInt64Size(LargestValueSeen);
+      if (PageSearchCounter != 0UL) {
+        size += 2 + pb::CodedOutputStream.ComputeUInt64Size(PageSearchCounter);
+      }
+      if (LargestKeySize != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeUInt32Size(LargestKeySize);
+      }
+      if (LargestValueSize != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeUInt32Size(LargestValueSize);
+      }
+      if (ReplicatedAdds != 0UL) {
+        size += 2 + pb::CodedOutputStream.ComputeUInt64Size(ReplicatedAdds);
+      }
+      if (ReplicatedDeletes != 0UL) {
+        size += 2 + pb::CodedOutputStream.ComputeUInt64Size(ReplicatedDeletes);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -7926,6 +8033,9 @@ namespace LmdbCache {
       if (other.DeletesCounter != 0UL) {
         DeletesCounter = other.DeletesCounter;
       }
+      if (other.CopysCounter != 0UL) {
+        CopysCounter = other.CopysCounter;
+      }
       if (other.GetCounter != 0UL) {
         GetCounter = other.GetCounter;
       }
@@ -7935,8 +8045,20 @@ namespace LmdbCache {
       if (other.KeySearchCounter != 0UL) {
         KeySearchCounter = other.KeySearchCounter;
       }
-      if (other.LargestValueSeen != 0UL) {
-        LargestValueSeen = other.LargestValueSeen;
+      if (other.PageSearchCounter != 0UL) {
+        PageSearchCounter = other.PageSearchCounter;
+      }
+      if (other.LargestKeySize != 0) {
+        LargestKeySize = other.LargestKeySize;
+      }
+      if (other.LargestValueSize != 0) {
+        LargestValueSize = other.LargestValueSize;
+      }
+      if (other.ReplicatedAdds != 0UL) {
+        ReplicatedAdds = other.ReplicatedAdds;
+      }
+      if (other.ReplicatedDeletes != 0UL) {
+        ReplicatedDeletes = other.ReplicatedDeletes;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -7958,19 +8080,39 @@ namespace LmdbCache {
             break;
           }
           case 112: {
-            GetCounter = input.ReadUInt64();
+            CopysCounter = input.ReadUInt64();
             break;
           }
           case 120: {
-            ContainsCounter = input.ReadUInt64();
+            GetCounter = input.ReadUInt64();
             break;
           }
           case 128: {
+            ContainsCounter = input.ReadUInt64();
+            break;
+          }
+          case 136: {
             KeySearchCounter = input.ReadUInt64();
             break;
           }
+          case 144: {
+            PageSearchCounter = input.ReadUInt64();
+            break;
+          }
           case 160: {
-            LargestValueSeen = input.ReadUInt64();
+            LargestKeySize = input.ReadUInt32();
+            break;
+          }
+          case 168: {
+            LargestValueSize = input.ReadUInt32();
+            break;
+          }
+          case 200: {
+            ReplicatedAdds = input.ReadUInt64();
+            break;
+          }
+          case 208: {
+            ReplicatedDeletes = input.ReadUInt64();
             break;
           }
         }

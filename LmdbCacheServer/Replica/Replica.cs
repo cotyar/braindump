@@ -20,13 +20,13 @@ namespace LmdbCacheServer.Replica
         public ReplicaConfig ReplicaConfig { get; }
         public LightningConfig LightningConfig { get; }
 
-        public VectorClock CurrentClock() => _lmdb.Read(txn => _replicaStatusTable.GetLastClock(txn)).SetTimeNow();
+        public VectorClock CurrentClock() => _lmdb.Read(txn => _statusTable.GetLastClock(txn)).SetTimeNow();
 
         private readonly LightningPersistence _lmdb;
 
         private readonly KvMetadataTable _kvMetadataTable;
         private readonly ExpiryTable _kvExpiryTable;
-        private readonly ReplicaStatusTable _replicaStatusTable;
+        private readonly ReplicaStatusTable _statusTable;
         private readonly ReplicationTable _replicationTable;
         private readonly KvTable _kvTable;
         private readonly WriteLogTable _wlTable;
@@ -56,11 +56,11 @@ namespace LmdbCacheServer.Replica
             _lmdb = new LightningPersistence(LightningConfig);
             _kvMetadataTable = new KvMetadataTable(_lmdb, "kvmetadata");
             _kvExpiryTable = new ExpiryTable(_lmdb, "kvexpiry");
-            _replicaStatusTable = new ReplicaStatusTable(_lmdb, "replicastatus", ReplicaConfig.ReplicaId);
+            _statusTable = new ReplicaStatusTable(_lmdb, "replicastatus", ReplicaConfig.ReplicaId);
             _replicationTable = new ReplicationTable(_lmdb, "replication");
             _wlTable = new WriteLogTable(_lmdb, "writelog", ReplicaConfig.ReplicaId);
 
-            _kvTable = new KvTable(_lmdb, "kv", _kvExpiryTable, _kvMetadataTable,
+            _kvTable = new KvTable(_lmdb, "kv", _statusTable, _kvExpiryTable, _kvMetadataTable,
                 CurrentClock, IncrementClock, (txn, wle) =>
                 {
                     wle.Clock = IncrementClock(txn);
@@ -128,8 +128,8 @@ namespace LmdbCacheServer.Replica
 
         private VectorClock IncrementClock(WriteTransaction txn)
         {
-            var clock = _replicaStatusTable.GetLastClock(txn).Increment(ReplicaConfig.ReplicaId);
-            _replicaStatusTable.SetLastClock(txn, clock);
+            var clock = _statusTable.GetLastClock(txn).Increment(ReplicaConfig.ReplicaId);
+            _statusTable.SetLastClock(txn, clock);
             return clock;
         }
 
@@ -143,7 +143,7 @@ namespace LmdbCacheServer.Replica
                 ReplicaConfig = ReplicaConfig,
                 CurrentClock = CurrentClock(),
 
-                Counters = _lmdb.Read(txn => _replicaStatusTable.GetCounters(txn)),
+                Counters = _lmdb.Read(txn => _statusTable.GetCounters(txn)),
                 ClusterStatus = null
             };
 

@@ -603,6 +603,17 @@ namespace LmdbLight
         /// <summary>
         /// Queue a write action and spin until it is completed unless fireAndForget is true.
         /// </summary>
+        /// <param name="writeFunction">Function to be executed</param>
+        /// <param name="requiresIsolation">Guarantees that the action will me executed in a separate transaction. Otherwise batches the write requests.</param>
+        /// <param name="fireAndForget">If fireAndForget is true then return immediately</param>
+        /// <returns>The value</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public T Write<T>(Func<WriteTransaction, T> writeFunction, bool requiresIsolation, bool fireAndForget = false) => 
+            WriteAsync(writeFunction, requiresIsolation, fireAndForget).GetAwaiter().GetResult();
+
+        /// <summary>
+        /// Queue a write action and spin until it is completed unless fireAndForget is true.
+        /// </summary>
         /// <param name="writeAction">Function to be executed</param>
         /// <param name="requiresIsolation">Guarantees that the action will me executed in a separate transaction. Otherwise batches the write requests.</param>
         /// <param name="fireAndForget">If fireAndForget is true then return immediately</param>
@@ -630,6 +641,16 @@ namespace LmdbLight
 
             return fireAndForget ? Task.CompletedTask : tcs.Task;
         }
+
+        /// <summary>
+        /// Queue a write action and spin until it is completed unless fireAndForget is true.
+        /// </summary>
+        /// <param name="writeAction">Function to be executed</param>
+        /// <param name="requiresIsolation">Guarantees that the action will me executed in a separate transaction. Otherwise batches the write requests.</param>
+        /// <param name="fireAndForget">If fireAndForget is true then return immediately</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Write(Action<WriteTransaction> writeAction, bool requiresIsolation, bool fireAndForget = false) =>
+            WriteAsync(writeAction, requiresIsolation, fireAndForget);
 
         #region Write Queue Setup
 

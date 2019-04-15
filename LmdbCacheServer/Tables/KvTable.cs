@@ -100,11 +100,14 @@ namespace LmdbCacheServer.Tables
         private readonly Action<WriteTransaction, WriteLogEvent> _kvUpdateHandler;
         private readonly Table _kvTable;
 
-        public KvTable(LightningPersistence lmdb, string kvTableName, ExpiryTable expiryTable, KvMetadataTable metadataTable, 
+        public ReplicaStatusTable StatusTable { get; }
+
+        public KvTable(LightningPersistence lmdb, string kvTableName, ReplicaStatusTable statusTable, ExpiryTable expiryTable, KvMetadataTable metadataTable, 
             Func<VectorClock> currentClock, Func<WriteTransaction, VectorClock> incrementClock,
             Action<WriteTransaction, WriteLogEvent> kvUpdateHandler)
         {
             _lmdb = lmdb;
+            StatusTable = statusTable;
             _kvTable = _lmdb.OpenTable(kvTableName);
             _expiryTable = expiryTable;
             _metadataTable = metadataTable;
@@ -166,9 +169,13 @@ namespace LmdbCacheServer.Tables
         public (KvKey, bool)[] ContainsKeys(KvKey[] keys)
         { 
             var currentTime = _currentClock();
-            return TryGetMetadata(keys).
+            var ret = TryGetMetadata(keys).
                 Select(km => (km.Item1, km.Item2 != null && CheckAndRemoveIfExpired(km.Item1, currentTime, km.Item2))).
                 ToArray();
+
+            _lmdb.Write(txn => StatusTable.IncrementCounters(txn, containsCounter: 1), false, true);
+
+            return ret;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -179,8 +186,9 @@ namespace LmdbCacheServer.Tables
         /// NOTE: Long running keys enumerable will prevent ReadOnly transaction from closing which can affect efficiency of page reuse in the DB  
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public (KvKey, KvMetadata, KvValue?)[] Get(IEnumerable<KvKey> keys) =>
-            _lmdb.Read(txn => 
+        public (KvKey, KvMetadata, KvValue?)[] Get(IEnumerable<KvKey> keys)
+        {
+            var ret = _lmdb.Read(txn =>
             {
                 var currentTime = _currentClock();
                 return keys.Select(key =>
@@ -189,6 +197,12 @@ namespace LmdbCacheServer.Tables
                     return (key, metadata, value);
                 }).ToArray();
             });
+
+            _lmdb.Write(txn => StatusTable.IncrementCounters(txn, getCounter: 1), false, true);
+
+            return ret;
+        }
+
 
         public (KvMetadata, KvValue?) TryGet(AbstractTransaction txn, KvKey key, VectorClock currentTime = null)
         {
@@ -211,7 +225,7 @@ namespace LmdbCacheServer.Tables
         public KvKey[] KeysByPrefix(KvKey prefix, uint page, uint pageSize)
         {
             // TODO: Fix pageSize for expiry correction. Use a continuation token.
-            return _lmdb.Read(txn =>
+            var ret = _lmdb.Read(txn =>
             {
                 var currentTime = _currentClock();
                 return _metadataTable.PageByPrefix(txn, prefix, page, pageSize).
@@ -219,13 +233,17 @@ namespace LmdbCacheServer.Tables
                     Select(ke => ke.Item1).
                     ToArray();
             });
+
+            _lmdb.Write(txn => StatusTable.IncrementCounters(txn, keySearchCounter: 1), false, true);
+
+            return ret;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public (KvKey, KvValue)[] PageByPrefix(KvKey prefix, uint page, uint pageSize)
         {
             // TODO: Fix pageSize for expiry correction. Use a continuation token.
-            return _lmdb.Read(txn =>
+            var ret = _lmdb.Read(txn =>
             {
                 var currentTime = _currentClock();
                 return _metadataTable.PageByPrefix(txn, prefix, page, pageSize).
@@ -233,6 +251,10 @@ namespace LmdbCacheServer.Tables
                     Select(ke => (ke.Item1, FromTableValue(txn.TryGet(_kvTable, ToTableKey(ke.Item1)).Value))). // TODO: Do better exception handling on DB inconsistency
                     ToArray();
             });
+
+            _lmdb.Write(txn => StatusTable.IncrementCounters(txn, pageSearchCounter: 1), false, true);
+
+            return ret;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -260,6 +282,12 @@ namespace LmdbCacheServer.Tables
             _metadataTable.AddOrUpdate(txn, tableKey, metadata);
             _expiryTable.AddExpiryRecords(txn, new[] { (metadata.Expiry, tableKey) });
             _kvUpdateHandler(txn, ToAddOrUpdateLogEvent(key, metadata, value));
+            StatusTable.IncrementCounters(txn, rc =>
+            {
+                rc.AddsCounter += 1;
+                if (rc.LargestKeySize < (uint)key.Key.Length) rc.LargestKeySize = (uint)key.Key.Length;
+                if (rc.LargestValueSize < (uint)value.Value.Length) rc.LargestValueSize = (uint)value.Value.Length;
+            });
             return true;
         }
 
@@ -319,6 +347,8 @@ namespace LmdbCacheServer.Tables
                     }
                     
                     txn.Add(_kvTable, to, val.Value);
+                    StatusTable.IncrementCounters(txn, copysCounter: 1);
+
                     return CopyResponse.Types.CopyResult.Success;
                 }).ToArray(), false);
 
@@ -366,6 +396,7 @@ namespace LmdbCacheServer.Tables
                         txn.Delete(_kvTable, tableKey); // TODO: Check and fail on not successful return codes
                         _metadataTable.AddOrUpdate(txn, tableKey, metadata);
                         _kvUpdateHandler(txn, ToDeleteLogEvent(key, metadata));
+                        StatusTable.IncrementCounters(txn, deletesCounter: 1);
                         return (key, true);
                     }).
                     ToArray();
@@ -382,6 +413,7 @@ namespace LmdbCacheServer.Tables
                 txn.Delete(_kvTable, tableKey);
                 _metadataTable.AddOrUpdate(txn, tableKey, metadata);
                 _kvUpdateHandler(txn, ToDeleteLogEvent(key, metadata));
+                StatusTable.IncrementCounters(txn, deletesCounter: 1);
             }
         }
 
