@@ -24,13 +24,11 @@ namespace LmdbCacheServer
 {
     public class LmdbCacheServiceImpl : LmdbCacheService.LmdbCacheServiceBase
     {
-        private readonly Func<VectorClock> _clock;
         private readonly KvTable _kvTable;
 
-        public LmdbCacheServiceImpl(KvTable kvTable, Func<VectorClock> clock) 
+        public LmdbCacheServiceImpl(KvTable kvTable) 
         {
             _kvTable = kvTable;
-            _clock = clock;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -42,7 +40,6 @@ namespace LmdbCacheServer
                     Status = Active,
                     Expiry = ks.Expiry,
                     Action = Added,
-                    Updated = _clock(),
                     Compression = header.Compression,
                     CorrelationId = header.CorrelationId
                 }, new KvValue(ks.Value))).ToArray();
@@ -118,18 +115,13 @@ namespace LmdbCacheServer
         public override Task<DeleteResponse> Delete(DeleteRequest request, ServerCallContext context) =>
             GrpcSafeHandler(async () =>
             {
-                var keys = request.Keys.Select(k =>
-                {
-                    var currentClock = _clock();
-                    return (new KvKey(k), new KvMetadata
-                    {
-                        Status = Deleted,
-                        Expiry = currentClock.TicksOffsetUtc.ToTimestamp(),
-                        Action = Added,
-                        Updated = currentClock,
-                        CorrelationId = request.CorrelationId
-                    });
-                }).ToArray();
+                var keys = request.Keys.Select(k => 
+                    (new KvKey(k), new KvMetadata
+                        {
+                            Status = Deleted,
+                            Action = Added,
+                            CorrelationId = request.CorrelationId
+                        })).ToArray();
                 var kvs = await _kvTable.Delete(keys);
 
                 var response = new DeleteResponse();

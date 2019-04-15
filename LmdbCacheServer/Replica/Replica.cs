@@ -15,18 +15,19 @@ namespace LmdbCacheServer.Replica
 {
     public class Replica : IDisposable
     {
-        private volatile VectorClock _clock;
+        //private volatile VectorClock _clock;
 
         public ReplicaConfig ReplicaConfig { get; }
         public LightningConfig LightningConfig { get; }
 
-        public VectorClock CurrentClock() => _clock.SetTimeNow();
+        public VectorClock CurrentClock() => _lmdb.Read(txn => _replicaStatusTable.GetLastClock(txn)).SetTimeNow();
 
         private readonly LightningPersistence _lmdb;
 
         private readonly KvMetadataTable _kvMetadataTable;
         private readonly ExpiryTable _kvExpiryTable;
         private readonly ReplicaStatusTable _replicaStatusTable;
+        private readonly ReplicationTable _replicationTable;
         private readonly KvTable _kvTable;
         private readonly WriteLogTable _wlTable;
 
@@ -50,19 +51,19 @@ namespace LmdbCacheServer.Replica
 
             ReplicaConfig = AdjustConfig(replicaConfig);
 
-            _clock = clock ?? VectorClockHelper.Create(ReplicaConfig.ReplicaId, 0);
             LightningConfig = ReplicaConfig.LightningConfig;
 
             _lmdb = new LightningPersistence(LightningConfig);
             _kvMetadataTable = new KvMetadataTable(_lmdb, "kvmetadata");
             _kvExpiryTable = new ExpiryTable(_lmdb, "kvexpiry");
             _replicaStatusTable = new ReplicaStatusTable(_lmdb, "replicastatus", ReplicaConfig.ReplicaId);
+            _replicationTable = new ReplicationTable(_lmdb, "replication");
             _wlTable = new WriteLogTable(_lmdb, "writelog", ReplicaConfig.ReplicaId);
 
             _kvTable = new KvTable(_lmdb, "kv", _kvExpiryTable, _kvMetadataTable,
-                CurrentClock, (txn, wle) =>
+                CurrentClock, IncrementClock, (txn, wle) =>
                 {
-                    wle.Clock = IncrementClock();
+                    wle.Clock = IncrementClock(txn);
 
                     if (!_wlTable.AddLogEvents(txn, wle))
                     {
@@ -74,7 +75,8 @@ namespace LmdbCacheServer.Replica
             {
                 // TODO: Add supervision
 
-                _replicatorSlave = new ReplicatorSlave(ReplicaConfig.ReplicaId, new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure), _kvTable, IncrementClock, s => -1);
+                _replicatorSlave = new ReplicatorSlave(_lmdb, ReplicaConfig.ReplicaId, new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure), 
+                    _kvTable, _replicationTable, IncrementClock);
                 _syncProcessTask = GrpcSafeHandler(() => _replicatorSlave.StartSync()); 
             }
 
@@ -103,7 +105,7 @@ namespace LmdbCacheServer.Replica
             _server = new Server
             {
                 //Services = { LmdbCacheService.BindService(new InMemoryCacheServiceImpl()) },
-                Services = { LmdbCacheService.BindService(new LmdbCacheServiceImpl(_kvTable, CurrentClock)) },
+                Services = { LmdbCacheService.BindService(new LmdbCacheServiceImpl(_kvTable)) },
                 Ports = { new ServerPort(ReplicaConfig.HostName, (int)ReplicaConfig.Port, ServerCredentials.Insecure) }
             };
             _server.Start();
@@ -124,7 +126,12 @@ namespace LmdbCacheServer.Replica
             return config;
         }
 
-        private VectorClock IncrementClock() => _clock = _clock.Increment(ReplicaConfig.ReplicaId);
+        private VectorClock IncrementClock(WriteTransaction txn)
+        {
+            var clock = _replicaStatusTable.GetLastClock(txn).Increment(ReplicaConfig.ReplicaId);
+            _replicaStatusTable.SetLastClock(txn, clock);
+            return clock;
+        }
 
         private Task<ReplicaStatus> CollectStats()
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using LmdbCache;
 
@@ -16,12 +17,16 @@ namespace LmdbCacheServer
 
     public static class VectorClockHelper
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static VectorClock CreateEmpty() => new VectorClock();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static VectorClock Create(string replicaId, ulong replicaValue) => new VectorClock().SetReplicaValue(replicaId, replicaValue);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static VectorClock Create(IEnumerable<(string, ulong)> replicaValues) => new VectorClock().SetReplicaValues(replicaValues);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static VectorClock Increment(this VectorClock oldVectorClock, string replicaId)
         {
             var newVectorClock = oldVectorClock.SetTimeNow();
@@ -38,6 +43,7 @@ namespace LmdbCacheServer
             return newVectorClock;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static VectorClock SetReplicaValue(this VectorClock oldVectorClock, string replicaId, ulong replicaValue)
         {
             var newVectorClock = oldVectorClock.Clone();
@@ -45,6 +51,7 @@ namespace LmdbCacheServer
             return newVectorClock;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static VectorClock SetTime(this VectorClock oldVectorClock, Timestamp timestamp)
         {
             var newVectorClock = oldVectorClock.Clone();
@@ -52,8 +59,10 @@ namespace LmdbCacheServer
             return newVectorClock;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static VectorClock SetTimeNow(this VectorClock oldVectorClock) => oldVectorClock.SetTime(DateTimeOffset.UtcNow.ToTimestamp());
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static VectorClock SetReplicaValues(this VectorClock oldVectorClock, IEnumerable<(string, ulong)> replicaValues)
         {
             var newVectorClock = oldVectorClock.Clone();
@@ -64,11 +73,13 @@ namespace LmdbCacheServer
             return newVectorClock;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong? GetReplicaValue(this VectorClock oldVectorClock, string replicaId) => 
             oldVectorClock.Replicas.TryGetValue(replicaId, out var replicaValue)
                 ? replicaValue
                 : (ulong?) null;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static VectorClock Merge(this VectorClock left, VectorClock right) // TODO: Performance critical. Optimize for performance. 
         {
             var newVectorClock = CreateEmpty();
@@ -84,6 +95,7 @@ namespace LmdbCacheServer
             return newVectorClock;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Ord Compare(this VectorClock left, VectorClock right) // TODO: Performance critical. Optimize for performance.
         {
             var ordLt = true;
@@ -115,5 +127,8 @@ namespace LmdbCacheServer
 
             return Ord.Eq; 
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Earlier(this VectorClock left, VectorClock right) => left.Compare(right) == Ord.Lt;
     }
 }

@@ -57,7 +57,7 @@ namespace LmdbCacheServer
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool SetLastClock(WriteTransaction txn, VectorClock clock) =>
-            txn.AddOrUpdate(_table, _countersKey, ToClockTableValue(clock));
+            txn.AddOrUpdate(_table, _clockKey, ToClockTableValue(clock));
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
