@@ -22,10 +22,8 @@ namespace LmdbCacheServer.Replica
         private readonly Func<AbstractTransaction, string, ByteString> _getValue;
         private readonly WriteLogTable _wlTable;
         private readonly ReplicationConfig _replicationConfig;
-        private readonly uint _syncPageSize;
         private readonly ConcurrentDictionary<string, (IServerStreamWriter<SyncSubscribeResponse>, TaskCompletionSource<bool>)> _slaves;
         private readonly CancellationTokenSource _cts;
-        private ByteString latestValue;
 
         public ReplicatorMaster(LightningPersistence lmdb, string ownReplicaId, Func<AbstractTransaction, string, ByteString> getValue, WriteLogTable wlTable, ReplicationConfig replicationConfig)
         {
@@ -47,11 +45,11 @@ namespace LmdbCacheServer.Replica
                 var lastPos = request.Since;
                 Console.WriteLine($"Received replication request to sync from {lastPos}");
 
-                while (!_cts.Token.IsCancellationRequested)
+                if (!_cts.Token.IsCancellationRequested)
                 {
                     var page = _lmdb.Read(txn =>
                     {
-                        var logPage = _wlTable.GetLogPage(txn, lastPos, _syncPageSize).
+                        var logPage = _wlTable.GetLogPage(txn, lastPos, _replicationConfig.PageSize).
                             Where(logItem => (request.IncludeMine || logItem.Item2.OriginatorReplicaId != _ownReplicaId)). // TODO: Add check for IncludeAcked
                             ToArray();
 
@@ -60,7 +58,7 @@ namespace LmdbCacheServer.Replica
                             if (logItem.Item2.LoggedEventCase == WriteLogEvent.LoggedEventOneofCase.Updated
                                 && (logItem.Item2.Updated.Value == null || logItem.Item2.Updated.Value.IsEmpty))
                             {
-                                latestValue = _getValue(txn, logItem.Item2.Updated.Key);
+                                var latestValue = _getValue(txn, logItem.Item2.Updated.Key);
                                 if (latestValue != null)
                                 {
                                     logItem.Item2.Updated.Value = latestValue; // TODO: Handle "Value not found"
@@ -74,57 +72,59 @@ namespace LmdbCacheServer.Replica
                         return logPage;
                     });
 
-                    if (page.Length == 0) break;
-
-                    if (_replicationConfig.UseBatching)
+                    if (page.Length > 0)
                     {
-                        var batches = page.Aggregate((0, new List<List<Item>>()), (acc, logItem) =>
+                        if (_replicationConfig.UseBatching)
                         {
-                            var (lastBatchBytes, currentBatches) = acc;
-                            var itemSize = logItem.Item2.LoggedEventCase == WriteLogEvent.LoggedEventOneofCase.Updated
-                                ? logItem.Item2.Updated.Value.Length
-                                : 100;
-                            if (currentBatches.Count == 0 ||
-                                lastBatchBytes + itemSize > 3 * 1024 * 1024)
+                            var batches = page.Aggregate((0, new List<List<Item>>()), (acc, logItem) =>
                             {
-                                currentBatches.Add(new List<Item>
-                                    {new Item {Pos = logItem.Item1, LogEvent = logItem.Item2}});
-                                return (itemSize, currentBatches);
-                            }
+                                var (lastBatchBytes, currentBatches) = acc;
+                                var itemSize = logItem.Item2.LoggedEventCase == WriteLogEvent.LoggedEventOneofCase.Updated
+                                    ? logItem.Item2.Updated.Value.Length
+                                    : 100;
+                                if (currentBatches.Count == 0 ||
+                                    lastBatchBytes + itemSize > 3 * 1024 * 1024)
+                                {
+                                    currentBatches.Add(new List<Item>
+                                        {new Item {Pos = logItem.Item1, LogEvent = logItem.Item2}});
+                                    return (itemSize, currentBatches);
+                                }
 
-                            currentBatches.Last().Add(new Item {Pos = logItem.Item1, LogEvent = logItem.Item2});
-                            return (lastBatchBytes + itemSize, currentBatches);
-                        }).Item2;
+                                currentBatches.Last().Add(new Item {Pos = logItem.Item1, LogEvent = logItem.Item2});
+                                return (lastBatchBytes + itemSize, currentBatches);
+                            }).Item2;
 
-                        foreach (var batch in batches)
-                        {
-                            if (!_cts.Token.IsCancellationRequested)
+                            foreach (var batch in batches)
                             {
-//                            Console.WriteLine($"Writing replication page");
-                                var items = new Items();
-                                items.Batch.AddRange(batch);
-                                await responseStream.WriteAsync(new SyncFromResponse {Items = items});
-                                lastPos = batch.Last().Pos;
-//                            Console.WriteLine($"Replication page has been written");
+                                if (!_cts.Token.IsCancellationRequested)
+                                {
+    //                            Console.WriteLine($"Writing replication page");
+                                    var items = new Items();
+                                    items.Batch.AddRange(batch);
+                                    await responseStream.WriteAsync(new SyncFromResponse {Items = items});
+                                    lastPos = batch.Last().Pos;
+    //                            Console.WriteLine($"Replication page has been written");
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        foreach (var pageItem in page)
+                        else
                         {
-                            var (pos, item) = pageItem;
-                            if (!_cts.Token.IsCancellationRequested)
+                            foreach (var pageItem in page)
                             {
-                                await responseStream.WriteAsync(new SyncFromResponse {Item = new Item { Pos = pos, LogEvent = item }});
-                                lastPos = pos;
+                                var (pos, item) = pageItem;
+                                if (!_cts.Token.IsCancellationRequested)
+                                {
+                                    await responseStream.WriteAsync(new SyncFromResponse {Item = new Item { Pos = pos, LogEvent = item }});
+                                    lastPos = pos;
+                                }
                             }
                         }
                     }
 
                     await responseStream.WriteAsync(new SyncFromResponse { Footer = new Footer { LastPos = lastPos } });
-                    Console.WriteLine($"Page replicated. Last pos: {lastPos}");
                 }
+
+                Console.WriteLine($"Page replicated. Last pos: {lastPos}");
             });
 
         public override Task<Empty> Ack(IAsyncStreamReader<SyncAckRequest> requestStream, ServerCallContext context)

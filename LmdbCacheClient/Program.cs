@@ -20,7 +20,7 @@ namespace LmdbCacheClient
             var channel = new Channel("127.0.0.1:40051", ChannelCredentials.Insecure);
             var client = new LmdbCacheService.LmdbCacheServiceClient(channel);
 
-            var monitoringChannel = new Channel("127.0.0.1:43051", ChannelCredentials.Insecure);
+            var monitoringChannel = new Channel("127.0.0.1:43551", ChannelCredentials.Insecure);
             var monitoringClient = new MonitoringService.MonitoringServiceClient(monitoringChannel);
 
             Console.WriteLine($"Status: {monitoringClient.GetStatus(new MonitoringUpdateRequest { CorrelationId = "Client monitor 1" })}");

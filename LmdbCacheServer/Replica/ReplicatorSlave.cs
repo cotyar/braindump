@@ -75,11 +75,10 @@ namespace LmdbCacheServer.Replica
             {
                 await callFrom.ResponseStream.ForEachAsync(async response =>
                 {
-                    Console.WriteLine($"Response received");
                     switch (response.ResponseCase)
                     {
                         case SyncFromResponse.ResponseOneofCase.Items:
-//                            Console.WriteLine($"Received: '{response}'");
+                            Console.WriteLine($"Received batch: '{response.Items.Batch.Count}'");
                             foreach (var responseItem in response.Items.Batch)
                             {
                                 await SyncHandler((responseItem.Pos, responseItem.LogEvent));
@@ -91,7 +90,9 @@ namespace LmdbCacheServer.Replica
                             //                            Console.WriteLine($"Received: '{response}'");
                             await SyncHandler((response.Item.Pos, response.Item.LogEvent));
                             itemsCount++;
-                            lastPos = response.Items.Batch.Last().Pos;
+                            if (itemsCount % 1000 == 0)
+                                Console.WriteLine($"Received streamed: '{itemsCount}'");
+                            lastPos = response.Item.Pos;
                             break;
                         case SyncFromResponse.ResponseOneofCase.Footer:
                             lastPos = response.Footer.LastPos;
@@ -134,7 +135,7 @@ namespace LmdbCacheServer.Replica
                         _replicationTable.SetLastPos(txn, _targetReplicaId, syncEvent.Item1);
                         _kvTable.StatusTable.IncrementCounters(txn, replicatedAdds: 1);
                         // TODO: Should we do anything if the value wasn't updated? Maybe logging?        
-                    }, false);
+                    }, false, true);
                     break;
                 case WriteLogEvent.LoggedEventOneofCase.Deleted:
                     var deleted = syncEvent.Item2.Deleted;
@@ -154,7 +155,7 @@ namespace LmdbCacheServer.Replica
                         _replicationTable.SetLastPos(txn, _targetReplicaId, syncEvent.Item1);
                         _kvTable.StatusTable.IncrementCounters(txn, replicatedDeletes: 1);
                         // TODO: Should we do anything if the value wasn't updated? Maybe logging?
-                    }, false);
+                    }, false, true);
                     break;
                 case WriteLogEvent.LoggedEventOneofCase.None:
                     throw new ArgumentException("syncEvent", $"Unexpected LogEvent case: {syncEvent.Item2.LoggedEventCase}");

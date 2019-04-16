@@ -32,7 +32,7 @@ namespace LmdbCacheServer
                 ReplicaId = "replica_1",
                 Port = Port,
                 MonitoringInterval = 10000,
-                Replication = new ReplicationConfig { Port = Port + 2000, PageSize = 10000, UseBatching = true },
+                Replication = new ReplicationConfig { Port = Port + 2000, PageSize = 10000, UseBatching = false },
                 Persistence = lightningConfig
             };
 
@@ -45,7 +45,7 @@ namespace LmdbCacheServer
             {
                 ReplicaId = "replica_2",
                 MasterNode = $"{"127.0.0.1"}:{replicaConfigMaster.Replication.Port}",
-                Replication = new ReplicationConfig { Port = Port + 2500, PageSize = 10000, UseBatching = true },
+                Replication = new ReplicationConfig { Port = Port + 2500, PageSize = 10000, UseBatching = false },
                 Port = Port + 500,
                 MonitoringInterval = 10000,
                 Persistence = lightningConfigSlave
