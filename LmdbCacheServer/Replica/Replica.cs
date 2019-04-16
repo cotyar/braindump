@@ -51,7 +51,7 @@ namespace LmdbCacheServer.Replica
 
             ReplicaConfig = AdjustConfig(replicaConfig);
 
-            LightningConfig = ReplicaConfig.LightningConfig;
+            LightningConfig = ReplicaConfig.Persistence;
 
             _lmdb = new LightningPersistence(LightningConfig);
             _kvMetadataTable = new KvMetadataTable(_lmdb, "kvmetadata");
@@ -82,7 +82,7 @@ namespace LmdbCacheServer.Replica
 
             _webServerCompletion = WebServer.StartWebServer(_shutdownCancellationTokenSource.Token, ReplicaConfig.HostName, ReplicaConfig.WebUIPort);
 
-            _monitor = new Monitor(CollectStats, 10000);
+            _monitor = new Monitor(CollectStats, ReplicaConfig.MonitoringInterval);
             _serverMonitoring = new Server
             {
                 Services = { MonitoringService.BindService(_monitor) },
@@ -95,12 +95,12 @@ namespace LmdbCacheServer.Replica
             _serverReplication = new Server
             {
                 Services = { SyncService.BindService(new ReplicatorMaster(_lmdb, replicaConfig.ReplicaId, 
-                    (txn, key) => _kvTable.TryGet(txn, new KvKey(key)).Item2?.Value, _wlTable, ReplicaConfig.ReplicationPageSize)) },
-                Ports = { new ServerPort(ReplicaConfig.HostName, (int)ReplicaConfig.ReplicationPort, ServerCredentials.Insecure) }
+                    (txn, key) => _kvTable.TryGet(txn, new KvKey(key)).Item2?.Value, _wlTable, ReplicaConfig.Replication)) },
+                Ports = { new ServerPort(ReplicaConfig.HostName, (int)ReplicaConfig.Replication.Port, ServerCredentials.Insecure) }
             };
             _serverReplication.Start();
 
-            Console.WriteLine("Replication server started listening on port " + ReplicaConfig.ReplicationPort);
+            Console.WriteLine("Replication server started listening on port " + ReplicaConfig.Replication.Port);
 
             _server = new Server
             {
@@ -119,9 +119,12 @@ namespace LmdbCacheServer.Replica
 
             if (string.IsNullOrWhiteSpace(config.HostName)) config.HostName = "127.0.0.1";
             if (config.WebUIPort == 0) config.WebUIPort = config.Port + 1000;
-            if (config.ReplicationPort == 0) config.ReplicationPort = config.Port + 2000;
+
+            if (config.Replication.Port == 0) config.Replication.Port = config.Port + 2000;
+            if (config.Replication.PageSize == 0) config.Replication.PageSize = 1000u;
+
             if (config.MonitoringPort == 0) config.MonitoringPort = config.Port + 3000;
-            if (config.ReplicationPageSize == 0) config.ReplicationPageSize = 1000u;
+            if (config.MonitoringInterval == 0) config.MonitoringInterval = 10000u;
 
             return config;
         }
@@ -135,6 +138,34 @@ namespace LmdbCacheServer.Replica
 
         private Task<ReplicaStatus> CollectStats()
         {
+            var (counters, collectedStats) = _lmdb.Read(txn =>
+            {
+                var stats = new CollectedStats();
+                foreach (var (key, metadata) in _kvTable.MetadataByPrefix(txn, new KvKey(""), 0, uint.MaxValue))
+                {
+                    switch (metadata.Status)
+                    {
+                        case KvMetadata.Types.Status.Active:
+                            stats.ActiveKeys++;
+                            stats.NonExpiredKeys++;
+                            break;
+                        case KvMetadata.Types.Status.Deleted:
+                            stats.DeletedKeys++;
+                            stats.NonExpiredKeys++;
+                            break;
+                        case KvMetadata.Types.Status.Expired:
+                            stats.ExpiredKeys++;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
+                    stats.AllKeys++;
+                }
+
+                return (_statusTable.GetCounters(txn), stats);
+            });
+
             var status = new ReplicaStatus
             {
                 ReplicaId = ReplicaConfig.ReplicaId,
@@ -143,7 +174,8 @@ namespace LmdbCacheServer.Replica
                 ReplicaConfig = ReplicaConfig,
                 CurrentClock = CurrentClock(),
 
-                Counters = _lmdb.Read(txn => _statusTable.GetCounters(txn)),
+                Counters = counters,
+                CollectedStats = collectedStats,
                 ClusterStatus = null
             };
 

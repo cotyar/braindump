@@ -41,7 +41,8 @@ namespace LmdbCacheServer.Replica
 
         public async Task StartSync()
         {
-            var lastPos = _replicationTable.GetLastPos(_targetReplicaId) ?? 0 + 1; 
+            var lastPos = _replicationTable.GetLastPos(_targetReplicaId) ?? 0;
+            if (lastPos > 0) lastPos++;
 
             int itemsCount;
             do
@@ -84,6 +85,12 @@ namespace LmdbCacheServer.Replica
                                 await SyncHandler((responseItem.Pos, responseItem.LogEvent));
                                 itemsCount++;
                             }
+                            lastPos = response.Items.Batch.Last().Pos;
+                            break;
+                        case SyncFromResponse.ResponseOneofCase.Item:
+                            //                            Console.WriteLine($"Received: '{response}'");
+                            await SyncHandler((response.Item.Pos, response.Item.LogEvent));
+                            itemsCount++;
                             lastPos = response.Items.Batch.Last().Pos;
                             break;
                         case SyncFromResponse.ResponseOneofCase.Footer:

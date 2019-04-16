@@ -31,9 +31,9 @@ namespace LmdbCacheServer
             {
                 ReplicaId = "replica_1",
                 Port = Port,
-                ReplicationPort = Port + 2000,
-                ReplicationPageSize = 10000,
-                LightningConfig = lightningConfig
+                MonitoringInterval = 10000,
+                Replication = new ReplicationConfig { Port = Port + 2000, PageSize = 10000, UseBatching = true },
+                Persistence = lightningConfig
             };
 
             var lightningConfigSlave = lightningConfig.Clone();
@@ -44,11 +44,11 @@ namespace LmdbCacheServer
             var replicaConfigSlave = new ReplicaConfig
             {
                 ReplicaId = "replica_2",
-                MasterNode = $"{"127.0.0.1"}:{replicaConfigMaster.ReplicationPort}",
-                ReplicationPageSize = 10000,
+                MasterNode = $"{"127.0.0.1"}:{replicaConfigMaster.Replication.Port}",
+                Replication = new ReplicationConfig { Port = Port + 2500, PageSize = 10000, UseBatching = true },
                 Port = Port + 500,
-                ReplicationPort = Port + 500 + 2000,
-                LightningConfig = lightningConfigSlave
+                MonitoringInterval = 10000,
+                Persistence = lightningConfigSlave
             };
 
             using (var server = new Replica.Replica(args.Length == 0 ? replicaConfigMaster : replicaConfigSlave))

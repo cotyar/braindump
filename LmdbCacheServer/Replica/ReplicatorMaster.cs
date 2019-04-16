@@ -21,18 +21,19 @@ namespace LmdbCacheServer.Replica
         private readonly string _ownReplicaId;
         private readonly Func<AbstractTransaction, string, ByteString> _getValue;
         private readonly WriteLogTable _wlTable;
+        private readonly ReplicationConfig _replicationConfig;
         private readonly uint _syncPageSize;
         private readonly ConcurrentDictionary<string, (IServerStreamWriter<SyncSubscribeResponse>, TaskCompletionSource<bool>)> _slaves;
         private readonly CancellationTokenSource _cts;
         private ByteString latestValue;
 
-        public ReplicatorMaster(LightningPersistence lmdb, string ownReplicaId, Func<AbstractTransaction, string, ByteString> getValue, WriteLogTable wlTable, uint syncPageSize)
+        public ReplicatorMaster(LightningPersistence lmdb, string ownReplicaId, Func<AbstractTransaction, string, ByteString> getValue, WriteLogTable wlTable, ReplicationConfig replicationConfig)
         {
             _lmdb = lmdb;
             _ownReplicaId = ownReplicaId;
             _getValue = getValue;
             _wlTable = wlTable;
-            _syncPageSize = syncPageSize;
+            _replicationConfig = replicationConfig;
             _cts = new CancellationTokenSource();
             _slaves = new ConcurrentDictionary<string, (IServerStreamWriter<SyncSubscribeResponse>, TaskCompletionSource<bool>)>();
         }
@@ -75,7 +76,9 @@ namespace LmdbCacheServer.Replica
 
                     if (page.Length == 0) break;
 
-                    var batches = page.Aggregate((0, new List<List<Item>>()), (acc, logItem) =>
+                    if (_replicationConfig.UseBatching)
+                    {
+                        var batches = page.Aggregate((0, new List<List<Item>>()), (acc, logItem) =>
                         {
                             var (lastBatchBytes, currentBatches) = acc;
                             var itemSize = logItem.Item2.LoggedEventCase == WriteLogEvent.LoggedEventOneofCase.Updated
@@ -84,25 +87,39 @@ namespace LmdbCacheServer.Replica
                             if (currentBatches.Count == 0 ||
                                 lastBatchBytes + itemSize > 3 * 1024 * 1024)
                             {
-                                currentBatches.Add(new List<Item> { new Item { Pos = logItem.Item1, LogEvent = logItem.Item2 } });
+                                currentBatches.Add(new List<Item>
+                                    {new Item {Pos = logItem.Item1, LogEvent = logItem.Item2}});
                                 return (itemSize, currentBatches);
                             }
 
-                            currentBatches.Last().Add(new Item { Pos = logItem.Item1, LogEvent = logItem.Item2 });
+                            currentBatches.Last().Add(new Item {Pos = logItem.Item1, LogEvent = logItem.Item2});
                             return (lastBatchBytes + itemSize, currentBatches);
                         }).Item2;
 
-                    foreach (var batch in batches)
-                    {
-                        if (!_cts.Token.IsCancellationRequested) 
+                        foreach (var batch in batches)
                         {
+                            if (!_cts.Token.IsCancellationRequested)
+                            {
 //                            Console.WriteLine($"Writing replication page");
-                            var items = new Items();
-                            items.Batch.AddRange(batch);
-                            await responseStream.WriteAsync(new SyncFromResponse { Items = items });
+                                var items = new Items();
+                                items.Batch.AddRange(batch);
+                                await responseStream.WriteAsync(new SyncFromResponse {Items = items});
+                                lastPos = batch.Last().Pos;
 //                            Console.WriteLine($"Replication page has been written");
+                            }
                         }
-                        lastPos = batch.Last().Pos;
+                    }
+                    else
+                    {
+                        foreach (var pageItem in page)
+                        {
+                            var (pos, item) = pageItem;
+                            if (!_cts.Token.IsCancellationRequested)
+                            {
+                                await responseStream.WriteAsync(new SyncFromResponse {Item = new Item { Pos = pos, LogEvent = item }});
+                                lastPos = pos;
+                            }
+                        }
                     }
 
                     await responseStream.WriteAsync(new SyncFromResponse { Footer = new Footer { LastPos = lastPos } });

@@ -78,6 +78,7 @@ namespace LmdbCacheServer
         /// <param name="containsCounter"></param>
         /// <param name="copysCounter"></param>
         /// <param name="keySearchCounter"></param>
+        /// <param name="metadataSearchCounter"></param>
         /// <param name="pageSearchCounter"></param>
         /// <param name="largestKeySize"></param>
         /// <param name="largestValueSize"></param>
@@ -87,7 +88,8 @@ namespace LmdbCacheServer
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool IncrementCounters(WriteTransaction txn,
             uint addsCounter = 0, uint deletesCounter = 0, uint copysCounter = 0, 
-            uint getCounter = 0, uint containsCounter = 0, uint keySearchCounter = 0, uint pageSearchCounter = 0, 
+            uint getCounter = 0, uint containsCounter = 0, 
+            uint keySearchCounter = 0, uint metadataSearchCounter = 0, uint pageSearchCounter = 0,
             uint largestKeySize = 0, uint largestValueSize = 0,
             uint replicatedAdds = 0, uint replicatedDeletes = 0)
         {
@@ -101,6 +103,7 @@ namespace LmdbCacheServer
             if (containsCounter != 0) counters.ContainsCounter += containsCounter;
             if (keySearchCounter != 0) counters.KeySearchCounter += keySearchCounter;
             if (pageSearchCounter != 0) counters.PageSearchCounter += pageSearchCounter;
+            if (metadataSearchCounter != 0) counters.MetadataSearchCounter += metadataSearchCounter;
 
             if (largestKeySize != 0) counters.LargestKeySize += largestKeySize;
             if (largestValueSize != 0) counters.LargestValueSize += largestValueSize;

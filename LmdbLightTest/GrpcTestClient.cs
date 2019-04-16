@@ -36,8 +36,8 @@ namespace LmdbLightTest
             {
                 ReplicaId = "replica_1",
                 Port = port,
-                ReplicationPort = port + 2000,
-                LightningConfig = lightningConfig
+                Replication = new ReplicationConfig { Port = port + 2000, PageSize = 10000, UseBatching = false },
+                Persistence = lightningConfig
             };
             _server = new Replica(ReplicaConfig);
 

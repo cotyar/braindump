@@ -199,7 +199,7 @@ namespace LmdbLight
             using (var cursor = Transaction.CreateCursor(table.Database))
             {
                 var keyBytes = prefix;
-                if (!cursor.MoveToFirstAfter(keyBytes)) yield break;
+                if (!(keyBytes.Key.IsEmpty ? cursor.MoveToFirst() : cursor.MoveToFirstAfter(keyBytes))) yield break;
 
                 var pageStart = page * pageSize;
                 var pageEnd = pageStart + pageSize;
