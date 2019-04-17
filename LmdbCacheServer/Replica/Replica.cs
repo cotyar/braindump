@@ -76,7 +76,7 @@ namespace LmdbCacheServer.Replica
                 // TODO: Add supervision
 
                 _replicatorSlave = new ReplicatorSlave(_lmdb, ReplicaConfig.ReplicaId, new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure), 
-                    _kvTable, _replicationTable, IncrementClock);
+                    _kvTable, _replicationTable, IncrementClockWithRemoteUpdate);
                 _syncProcessTask = GrpcSafeHandler(() => _replicatorSlave.StartSync()); 
             }
 
@@ -132,6 +132,18 @@ namespace LmdbCacheServer.Replica
         private VectorClock IncrementClock(WriteTransaction txn)
         {
             var clock = _statusTable.GetLastClock(txn).Increment(ReplicaConfig.ReplicaId);
+            _statusTable.SetLastClock(txn, clock);
+            return clock;
+        }
+
+        private VectorClock IncrementClockWithRemoteUpdate(WriteTransaction txn, string remoteReplica, ulong remotePos)
+        {
+            var clock = _statusTable.GetLastClock(txn).Increment(ReplicaConfig.ReplicaId);
+            var oldRemotePos = clock.GetReplicaValue(remoteReplica);
+            if (oldRemotePos < remotePos)
+            {
+                clock = clock.SetReplicaValue(remoteReplica, remotePos);
+            }
             _statusTable.SetLastClock(txn, clock);
             return clock;
         }

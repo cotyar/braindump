@@ -21,13 +21,13 @@ namespace LmdbCacheServer.Replica
         private readonly string _ownReplicaId;
         private readonly KvTable _kvTable;
         private readonly ReplicationTable _replicationTable;
-        private readonly Func<WriteTransaction, VectorClock> _incrementClock;
+        private readonly Func<WriteTransaction, string, ulong, VectorClock> _incrementClock;
         private readonly string _targetReplicaId;
         private readonly SyncService.SyncServiceClient _syncService;
 
         public ReplicatorSlave(LightningPersistence lmdb, string ownReplicaId, Channel syncChannel, 
             KvTable kvTable, ReplicationTable replicationTable,
-            Func<WriteTransaction, VectorClock> incrementClock) // TODO: Add ACKs streaming
+            Func<WriteTransaction, string, ulong, VectorClock> incrementClock) // TODO: Add ACKs streaming
         {
             _lmdb = lmdb;
             _ownReplicaId = ownReplicaId;
@@ -68,7 +68,7 @@ namespace LmdbCacheServer.Replica
         private async Task<(int, ulong)> SyncWriteLog(ulong syncStartPos)
         {
             Console.WriteLine($"Started WriteLog Sync");
-            ulong lastPos = syncStartPos;
+            var lastPos = syncStartPos;
             var itemsCount = 0;
             using (var callFrom = _syncService.SyncFrom(
                 new SyncFromRequest { ReplicaId = _ownReplicaId, Since = syncStartPos, IncludeMine = false, IncludeAcked = false }))
@@ -121,7 +121,7 @@ namespace LmdbCacheServer.Replica
                             Status = Active,
                             Expiry = addedOrUpdated.Expiry,
                             Action = Replicated,
-                            Updated = _incrementClock(txn),
+                            Updated = _incrementClock(txn, _targetReplicaId, syncEvent.Item1),
                             Compression = Compression.None // TODO: Use correct compression mode
                         };
 
@@ -141,7 +141,7 @@ namespace LmdbCacheServer.Replica
                     var deleted = syncEvent.Item2.Deleted;
                     await _lmdb.WriteAsync(txn =>
                     {
-                        var currentClock = _incrementClock(txn);
+                        var currentClock = _incrementClock(txn, _targetReplicaId, syncEvent.Item1);
                         var delMetadata = new KvMetadata
                         {
                             Status = KvMetadata.Types.Status.Deleted,
