@@ -11,6 +11,7 @@ using LmdbLight;
 using static LmdbCache.KvMetadata.Types;
 using static LmdbCache.KvMetadata.Types.Status;
 using static LmdbCache.KvMetadata.Types.UpdateAction;
+using static LmdbCache.SyncPacket.PacketOneofCase;
 using static LmdbCache.WriteLogEvent.Types;
 
 namespace LmdbCacheServer.Replica
@@ -60,7 +61,7 @@ namespace LmdbCacheServer.Replica
                 {
                     var response = callSubscribe.ResponseStream.Current;
                     Console.WriteLine($"Sync Received: '{response}'");
-                    await SyncHandler((response.Pos, response.LogEvent));
+                    await ProcessSyncPacket(response);
                 }
             }
         }
@@ -70,41 +71,41 @@ namespace LmdbCacheServer.Replica
             Console.WriteLine($"Started WriteLog Sync");
             var lastPos = syncStartPos;
             var itemsCount = 0;
+
             using (var callFrom = _syncService.SyncFrom(
                 new SyncFromRequest { ReplicaId = _ownReplicaId, Since = syncStartPos, IncludeMine = false, IncludeAcked = false }))
             {
-                await callFrom.ResponseStream.ForEachAsync(async response =>
-                {
-                    switch (response.ResponseCase)
-                    {
-                        case SyncFromResponse.ResponseOneofCase.Items:
-                            Console.WriteLine($"Received batch: '{response.Items.Batch.Count}'");
-                            foreach (var responseItem in response.Items.Batch)
-                            {
-                                await SyncHandler((responseItem.Pos, responseItem.LogEvent));
-                                itemsCount++;
-                            }
-                            lastPos = response.Items.Batch.Last().Pos;
-                            break;
-                        case SyncFromResponse.ResponseOneofCase.Item:
-                            //                            Console.WriteLine($"Received: '{response}'");
-                            await SyncHandler((response.Item.Pos, response.Item.LogEvent));
-                            itemsCount++;
-                            if (itemsCount % 1000 == 0)
-                                Console.WriteLine($"Received streamed: '{itemsCount}'");
-                            lastPos = response.Item.Pos;
-                            break;
-                        case SyncFromResponse.ResponseOneofCase.Footer:
-                            lastPos = response.Footer.LastPos;
-                            break;
-                        case SyncFromResponse.ResponseOneofCase.None:
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                });
+                await callFrom.ResponseStream.ForEachAsync(ProcessSyncPacket);
             }
             Console.WriteLine($"Synchronized '{itemsCount}' items");
             return (itemsCount, lastPos);
+        }
+
+        private async Task ProcessSyncPacket(SyncPacket response)
+        {
+            switch (response.PacketCase)
+            {
+                case Items:
+                    Console.WriteLine($"Received batch: '{response.Items.Batch.Count}'");
+                    foreach (var responseItem in response.Items.Batch)
+                    {
+                        await SyncHandler((responseItem.Pos, responseItem.LogEvent));
+                    }
+                    break;
+                case Item:
+                    //                            Console.WriteLine($"Received: '{response}'");
+                    await SyncHandler((response.Item.Pos, response.Item.LogEvent));
+                    break;
+                case Footer:
+                    await _lmdb.WriteAsync(txn =>
+                    {
+                        _replicationTable.SetLastPos(txn, _targetReplicaId, response.Footer.LastPos);
+                    }, false, true);
+                    break;
+                case None:
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private async Task SyncHandler((ulong, WriteLogEvent) syncEvent)

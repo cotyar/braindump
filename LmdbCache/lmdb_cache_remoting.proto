@@ -227,13 +227,13 @@ service SyncService {
   rpc GetReplicaId(Empty) returns (GetReplicaIdResponse) {}
 
   // Pull sync
-  rpc SyncFrom(SyncFromRequest) returns (stream SyncFromResponse) {} 
-  rpc Subscribe(SyncSubscribeRequest) returns (stream SyncSubscribeResponse) {} // TODO: Add Acks streaming
+  rpc SyncFrom(SyncFromRequest) returns (stream SyncPacket) {} 
+  rpc Subscribe(SyncSubscribeRequest) returns (stream SyncPacket) {} // TODO: Add Acks streaming
   rpc Ack(stream SyncAckRequest) returns (Empty) {} // TODO: Add Acks streaming
 
   // Push sync
   rpc SyncTo(SyncToRequest) returns (SyncFromRequest) {} 
-  rpc Publish(stream SyncSubscribeResponse) returns (stream SyncAckRequest) {} 
+  rpc Publish(stream SyncPacket) returns (stream SyncAckRequest) {} 
 }
 
 ///////////////////////////////
@@ -274,7 +274,7 @@ message SyncFromRequest {
   bool includeAcked  = 4;
 }
 
-message SyncFromResponse {
+message SyncPacket {
   message Item {
     uint64 pos             = 1;
     WriteLogEvent logEvent = 2;
@@ -286,7 +286,7 @@ message SyncFromResponse {
     uint64 lastPos         = 1;
   }
   
-  oneof response {
+  oneof packet {
     Items items   = 1;
     Item  item    = 2;
     Footer footer = 5;
@@ -297,10 +297,10 @@ message SyncSubscribeRequest {
   string replicaId   = 1;
 }
 
-message SyncSubscribeResponse {
-  uint64 pos             = 1;
-  WriteLogEvent logEvent = 2;
-}
+// message SyncSubscribeResponse {
+//   uint64 pos             = 1;
+//   WriteLogEvent logEvent = 2;
+// }
 
 message SyncAckRequest {
   uint64 eventId = 1;

@@ -10,7 +10,7 @@ using Google.Protobuf;
 using Grpc.Core;
 using LmdbCache;
 using LmdbLight;
-using static LmdbCache.SyncFromResponse.Types;
+using static LmdbCache.SyncPacket.Types;
 using static LmdbCache.Helper;
 
 namespace LmdbCacheServer.Replica
@@ -22,7 +22,7 @@ namespace LmdbCacheServer.Replica
         private readonly Func<AbstractTransaction, string, ByteString> _getValue;
         private readonly WriteLogTable _wlTable;
         private readonly ReplicationConfig _replicationConfig;
-        private readonly ConcurrentDictionary<string, (IServerStreamWriter<SyncSubscribeResponse>, TaskCompletionSource<bool>)> _slaves;
+        private readonly ConcurrentDictionary<string, (IServerStreamWriter<SyncPacket>, TaskCompletionSource<bool>)> _slaves;
         private readonly CancellationTokenSource _cts;
 
         public ReplicatorMaster(LightningPersistence lmdb, string ownReplicaId, Func<AbstractTransaction, string, ByteString> getValue, WriteLogTable wlTable, ReplicationConfig replicationConfig)
@@ -33,13 +33,13 @@ namespace LmdbCacheServer.Replica
             _wlTable = wlTable;
             _replicationConfig = replicationConfig;
             _cts = new CancellationTokenSource();
-            _slaves = new ConcurrentDictionary<string, (IServerStreamWriter<SyncSubscribeResponse>, TaskCompletionSource<bool>)>();
+            _slaves = new ConcurrentDictionary<string, (IServerStreamWriter<SyncPacket>, TaskCompletionSource<bool>)>();
         }
 
         public override Task<GetReplicaIdResponse> GetReplicaId(Empty request, ServerCallContext context) => 
             Task.FromResult(new GetReplicaIdResponse { ReplicaId = _ownReplicaId} );
 
-        public override Task SyncFrom(SyncFromRequest request, IServerStreamWriter<SyncFromResponse> responseStream, ServerCallContext context) =>
+        public override Task SyncFrom(SyncFromRequest request, IServerStreamWriter<SyncPacket> responseStream, ServerCallContext context) =>
             GrpcSafeHandler(async () =>
             {
                 var lastPos = request.Since;
@@ -101,7 +101,7 @@ namespace LmdbCacheServer.Replica
     //                            Console.WriteLine($"Writing replication page");
                                     var items = new Items();
                                     items.Batch.AddRange(batch);
-                                    await responseStream.WriteAsync(new SyncFromResponse {Items = items});
+                                    await responseStream.WriteAsync(new SyncPacket {Items = items});
                                     lastPos = batch.Last().Pos;
     //                            Console.WriteLine($"Replication page has been written");
                                 }
@@ -114,14 +114,14 @@ namespace LmdbCacheServer.Replica
                                 var (pos, item) = pageItem;
                                 if (!_cts.Token.IsCancellationRequested)
                                 {
-                                    await responseStream.WriteAsync(new SyncFromResponse {Item = new Item { Pos = pos, LogEvent = item }});
+                                    await responseStream.WriteAsync(new SyncPacket {Item = new Item { Pos = pos, LogEvent = item }});
                                     lastPos = pos;
                                 }
                             }
                         }
                     }
 
-                    await responseStream.WriteAsync(new SyncFromResponse { Footer = new Footer { LastPos = lastPos } });
+                    await responseStream.WriteAsync(new SyncPacket { Footer = new Footer { LastPos = lastPos } });
                 }
 
                 Console.WriteLine($"Page replicated. Last pos: {lastPos}");
@@ -132,7 +132,7 @@ namespace LmdbCacheServer.Replica
             return base.Ack(requestStream, context); // TODO: Override when state replication is implemented
         }
 
-        public override Task Subscribe(SyncSubscribeRequest request, IServerStreamWriter<SyncSubscribeResponse> responseStream, ServerCallContext context) =>
+        public override Task Subscribe(SyncSubscribeRequest request, IServerStreamWriter<SyncPacket> responseStream, ServerCallContext context) =>
             GrpcSafeHandler(async () =>
             {
                 var tcs = new TaskCompletionSource<bool>();
@@ -143,7 +143,7 @@ namespace LmdbCacheServer.Replica
             });
 
         public Task PostWriteLogEvent(ulong pos, WriteLogEvent wle) => 
-            Task.WhenAll(_slaves.Values.Select(slave => slave.Item1.WriteAsync(new SyncSubscribeResponse { LogEvent = wle }))); // TODO: Add "write to 'm of n'" support 
+            Task.WhenAll(_slaves.Values.Select(slave => slave.Item1.WriteAsync(new SyncPacket { Item = new Item { Pos = pos, LogEvent = wle } }))); // TODO: Add "write to 'm of n'" support 
 
         public Task TerminateSync(string replicaId)
         {

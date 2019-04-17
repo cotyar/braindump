@@ -53,12 +53,11 @@ goog.exportSymbol('proto.LmdbCache.ReplicaStatus', null, global);
 goog.exportSymbol('proto.LmdbCache.ReplicationConfig', null, global);
 goog.exportSymbol('proto.LmdbCache.SyncAckRequest', null, global);
 goog.exportSymbol('proto.LmdbCache.SyncFromRequest', null, global);
-goog.exportSymbol('proto.LmdbCache.SyncFromResponse', null, global);
-goog.exportSymbol('proto.LmdbCache.SyncFromResponse.Footer', null, global);
-goog.exportSymbol('proto.LmdbCache.SyncFromResponse.Item', null, global);
-goog.exportSymbol('proto.LmdbCache.SyncFromResponse.Items', null, global);
+goog.exportSymbol('proto.LmdbCache.SyncPacket', null, global);
+goog.exportSymbol('proto.LmdbCache.SyncPacket.Footer', null, global);
+goog.exportSymbol('proto.LmdbCache.SyncPacket.Item', null, global);
+goog.exportSymbol('proto.LmdbCache.SyncPacket.Items', null, global);
 goog.exportSymbol('proto.LmdbCache.SyncSubscribeRequest', null, global);
-goog.exportSymbol('proto.LmdbCache.SyncSubscribeResponse', null, global);
 goog.exportSymbol('proto.LmdbCache.SyncToRequest', null, global);
 goog.exportSymbol('proto.LmdbCache.Timestamp', null, global);
 goog.exportSymbol('proto.LmdbCache.VectorClock', null, global);
@@ -6513,12 +6512,12 @@ proto.LmdbCache.SyncFromRequest.prototype.setIncludeacked = function(value) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.LmdbCache.SyncFromResponse = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.LmdbCache.SyncFromResponse.oneofGroups_);
+proto.LmdbCache.SyncPacket = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.LmdbCache.SyncPacket.oneofGroups_);
 };
-goog.inherits(proto.LmdbCache.SyncFromResponse, jspb.Message);
+goog.inherits(proto.LmdbCache.SyncPacket, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
-  proto.LmdbCache.SyncFromResponse.displayName = 'proto.LmdbCache.SyncFromResponse';
+  proto.LmdbCache.SyncPacket.displayName = 'proto.LmdbCache.SyncPacket';
 }
 /**
  * Oneof group definitions for this message. Each group defines the field
@@ -6528,23 +6527,23 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.LmdbCache.SyncFromResponse.oneofGroups_ = [[1,2,5]];
+proto.LmdbCache.SyncPacket.oneofGroups_ = [[1,2,5]];
 
 /**
  * @enum {number}
  */
-proto.LmdbCache.SyncFromResponse.ResponseCase = {
-  RESPONSE_NOT_SET: 0,
+proto.LmdbCache.SyncPacket.PacketCase = {
+  PACKET_NOT_SET: 0,
   ITEMS: 1,
   ITEM: 2,
   FOOTER: 5
 };
 
 /**
- * @return {proto.LmdbCache.SyncFromResponse.ResponseCase}
+ * @return {proto.LmdbCache.SyncPacket.PacketCase}
  */
-proto.LmdbCache.SyncFromResponse.prototype.getResponseCase = function() {
-  return /** @type {proto.LmdbCache.SyncFromResponse.ResponseCase} */(jspb.Message.computeOneofCase(this, proto.LmdbCache.SyncFromResponse.oneofGroups_[0]));
+proto.LmdbCache.SyncPacket.prototype.getPacketCase = function() {
+  return /** @type {proto.LmdbCache.SyncPacket.PacketCase} */(jspb.Message.computeOneofCase(this, proto.LmdbCache.SyncPacket.oneofGroups_[0]));
 };
 
 
@@ -6560,8 +6559,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     for transitional soy proto support: http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.LmdbCache.SyncFromResponse.prototype.toObject = function(opt_includeInstance) {
-  return proto.LmdbCache.SyncFromResponse.toObject(opt_includeInstance, this);
+proto.LmdbCache.SyncPacket.prototype.toObject = function(opt_includeInstance) {
+  return proto.LmdbCache.SyncPacket.toObject(opt_includeInstance, this);
 };
 
 
@@ -6570,15 +6569,15 @@ proto.LmdbCache.SyncFromResponse.prototype.toObject = function(opt_includeInstan
  * @param {boolean|undefined} includeInstance Whether to include the JSPB
  *     instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.LmdbCache.SyncFromResponse} msg The msg instance to transform.
+ * @param {!proto.LmdbCache.SyncPacket} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.LmdbCache.SyncFromResponse.toObject = function(includeInstance, msg) {
+proto.LmdbCache.SyncPacket.toObject = function(includeInstance, msg) {
   var f, obj = {
-    items: (f = msg.getItems()) && proto.LmdbCache.SyncFromResponse.Items.toObject(includeInstance, f),
-    item: (f = msg.getItem()) && proto.LmdbCache.SyncFromResponse.Item.toObject(includeInstance, f),
-    footer: (f = msg.getFooter()) && proto.LmdbCache.SyncFromResponse.Footer.toObject(includeInstance, f)
+    items: (f = msg.getItems()) && proto.LmdbCache.SyncPacket.Items.toObject(includeInstance, f),
+    item: (f = msg.getItem()) && proto.LmdbCache.SyncPacket.Item.toObject(includeInstance, f),
+    footer: (f = msg.getFooter()) && proto.LmdbCache.SyncPacket.Footer.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -6592,23 +6591,23 @@ proto.LmdbCache.SyncFromResponse.toObject = function(includeInstance, msg) {
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.LmdbCache.SyncFromResponse}
+ * @return {!proto.LmdbCache.SyncPacket}
  */
-proto.LmdbCache.SyncFromResponse.deserializeBinary = function(bytes) {
+proto.LmdbCache.SyncPacket.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.LmdbCache.SyncFromResponse;
-  return proto.LmdbCache.SyncFromResponse.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.LmdbCache.SyncPacket;
+  return proto.LmdbCache.SyncPacket.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.LmdbCache.SyncFromResponse} msg The message object to deserialize into.
+ * @param {!proto.LmdbCache.SyncPacket} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.LmdbCache.SyncFromResponse}
+ * @return {!proto.LmdbCache.SyncPacket}
  */
-proto.LmdbCache.SyncFromResponse.deserializeBinaryFromReader = function(msg, reader) {
+proto.LmdbCache.SyncPacket.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -6616,18 +6615,18 @@ proto.LmdbCache.SyncFromResponse.deserializeBinaryFromReader = function(msg, rea
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.LmdbCache.SyncFromResponse.Items;
-      reader.readMessage(value,proto.LmdbCache.SyncFromResponse.Items.deserializeBinaryFromReader);
+      var value = new proto.LmdbCache.SyncPacket.Items;
+      reader.readMessage(value,proto.LmdbCache.SyncPacket.Items.deserializeBinaryFromReader);
       msg.setItems(value);
       break;
     case 2:
-      var value = new proto.LmdbCache.SyncFromResponse.Item;
-      reader.readMessage(value,proto.LmdbCache.SyncFromResponse.Item.deserializeBinaryFromReader);
+      var value = new proto.LmdbCache.SyncPacket.Item;
+      reader.readMessage(value,proto.LmdbCache.SyncPacket.Item.deserializeBinaryFromReader);
       msg.setItem(value);
       break;
     case 5:
-      var value = new proto.LmdbCache.SyncFromResponse.Footer;
-      reader.readMessage(value,proto.LmdbCache.SyncFromResponse.Footer.deserializeBinaryFromReader);
+      var value = new proto.LmdbCache.SyncPacket.Footer;
+      reader.readMessage(value,proto.LmdbCache.SyncPacket.Footer.deserializeBinaryFromReader);
       msg.setFooter(value);
       break;
     default:
@@ -6643,9 +6642,9 @@ proto.LmdbCache.SyncFromResponse.deserializeBinaryFromReader = function(msg, rea
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.LmdbCache.SyncFromResponse.prototype.serializeBinary = function() {
+proto.LmdbCache.SyncPacket.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.LmdbCache.SyncFromResponse.serializeBinaryToWriter(this, writer);
+  proto.LmdbCache.SyncPacket.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -6653,18 +6652,18 @@ proto.LmdbCache.SyncFromResponse.prototype.serializeBinary = function() {
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.LmdbCache.SyncFromResponse} message
+ * @param {!proto.LmdbCache.SyncPacket} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.LmdbCache.SyncFromResponse.serializeBinaryToWriter = function(message, writer) {
+proto.LmdbCache.SyncPacket.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getItems();
   if (f != null) {
     writer.writeMessage(
       1,
       f,
-      proto.LmdbCache.SyncFromResponse.Items.serializeBinaryToWriter
+      proto.LmdbCache.SyncPacket.Items.serializeBinaryToWriter
     );
   }
   f = message.getItem();
@@ -6672,7 +6671,7 @@ proto.LmdbCache.SyncFromResponse.serializeBinaryToWriter = function(message, wri
     writer.writeMessage(
       2,
       f,
-      proto.LmdbCache.SyncFromResponse.Item.serializeBinaryToWriter
+      proto.LmdbCache.SyncPacket.Item.serializeBinaryToWriter
     );
   }
   f = message.getFooter();
@@ -6680,7 +6679,7 @@ proto.LmdbCache.SyncFromResponse.serializeBinaryToWriter = function(message, wri
     writer.writeMessage(
       5,
       f,
-      proto.LmdbCache.SyncFromResponse.Footer.serializeBinaryToWriter
+      proto.LmdbCache.SyncPacket.Footer.serializeBinaryToWriter
     );
   }
 };
@@ -6697,12 +6696,12 @@ proto.LmdbCache.SyncFromResponse.serializeBinaryToWriter = function(message, wri
  * @extends {jspb.Message}
  * @constructor
  */
-proto.LmdbCache.SyncFromResponse.Item = function(opt_data) {
+proto.LmdbCache.SyncPacket.Item = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
-goog.inherits(proto.LmdbCache.SyncFromResponse.Item, jspb.Message);
+goog.inherits(proto.LmdbCache.SyncPacket.Item, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
-  proto.LmdbCache.SyncFromResponse.Item.displayName = 'proto.LmdbCache.SyncFromResponse.Item';
+  proto.LmdbCache.SyncPacket.Item.displayName = 'proto.LmdbCache.SyncPacket.Item';
 }
 
 
@@ -6717,8 +6716,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     for transitional soy proto support: http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.LmdbCache.SyncFromResponse.Item.prototype.toObject = function(opt_includeInstance) {
-  return proto.LmdbCache.SyncFromResponse.Item.toObject(opt_includeInstance, this);
+proto.LmdbCache.SyncPacket.Item.prototype.toObject = function(opt_includeInstance) {
+  return proto.LmdbCache.SyncPacket.Item.toObject(opt_includeInstance, this);
 };
 
 
@@ -6727,11 +6726,11 @@ proto.LmdbCache.SyncFromResponse.Item.prototype.toObject = function(opt_includeI
  * @param {boolean|undefined} includeInstance Whether to include the JSPB
  *     instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.LmdbCache.SyncFromResponse.Item} msg The msg instance to transform.
+ * @param {!proto.LmdbCache.SyncPacket.Item} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.LmdbCache.SyncFromResponse.Item.toObject = function(includeInstance, msg) {
+proto.LmdbCache.SyncPacket.Item.toObject = function(includeInstance, msg) {
   var f, obj = {
     pos: jspb.Message.getFieldWithDefault(msg, 1, 0),
     logevent: (f = msg.getLogevent()) && proto.LmdbCache.WriteLogEvent.toObject(includeInstance, f)
@@ -6748,23 +6747,23 @@ proto.LmdbCache.SyncFromResponse.Item.toObject = function(includeInstance, msg) 
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.LmdbCache.SyncFromResponse.Item}
+ * @return {!proto.LmdbCache.SyncPacket.Item}
  */
-proto.LmdbCache.SyncFromResponse.Item.deserializeBinary = function(bytes) {
+proto.LmdbCache.SyncPacket.Item.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.LmdbCache.SyncFromResponse.Item;
-  return proto.LmdbCache.SyncFromResponse.Item.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.LmdbCache.SyncPacket.Item;
+  return proto.LmdbCache.SyncPacket.Item.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.LmdbCache.SyncFromResponse.Item} msg The message object to deserialize into.
+ * @param {!proto.LmdbCache.SyncPacket.Item} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.LmdbCache.SyncFromResponse.Item}
+ * @return {!proto.LmdbCache.SyncPacket.Item}
  */
-proto.LmdbCache.SyncFromResponse.Item.deserializeBinaryFromReader = function(msg, reader) {
+proto.LmdbCache.SyncPacket.Item.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -6793,9 +6792,9 @@ proto.LmdbCache.SyncFromResponse.Item.deserializeBinaryFromReader = function(msg
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.LmdbCache.SyncFromResponse.Item.prototype.serializeBinary = function() {
+proto.LmdbCache.SyncPacket.Item.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.LmdbCache.SyncFromResponse.Item.serializeBinaryToWriter(this, writer);
+  proto.LmdbCache.SyncPacket.Item.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -6803,11 +6802,11 @@ proto.LmdbCache.SyncFromResponse.Item.prototype.serializeBinary = function() {
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.LmdbCache.SyncFromResponse.Item} message
+ * @param {!proto.LmdbCache.SyncPacket.Item} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.LmdbCache.SyncFromResponse.Item.serializeBinaryToWriter = function(message, writer) {
+proto.LmdbCache.SyncPacket.Item.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getPos();
   if (f !== 0) {
@@ -6831,13 +6830,13 @@ proto.LmdbCache.SyncFromResponse.Item.serializeBinaryToWriter = function(message
  * optional uint64 pos = 1;
  * @return {number}
  */
-proto.LmdbCache.SyncFromResponse.Item.prototype.getPos = function() {
+proto.LmdbCache.SyncPacket.Item.prototype.getPos = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
 /** @param {number} value */
-proto.LmdbCache.SyncFromResponse.Item.prototype.setPos = function(value) {
+proto.LmdbCache.SyncPacket.Item.prototype.setPos = function(value) {
   jspb.Message.setProto3IntField(this, 1, value);
 };
 
@@ -6846,19 +6845,19 @@ proto.LmdbCache.SyncFromResponse.Item.prototype.setPos = function(value) {
  * optional WriteLogEvent logEvent = 2;
  * @return {?proto.LmdbCache.WriteLogEvent}
  */
-proto.LmdbCache.SyncFromResponse.Item.prototype.getLogevent = function() {
+proto.LmdbCache.SyncPacket.Item.prototype.getLogevent = function() {
   return /** @type{?proto.LmdbCache.WriteLogEvent} */ (
     jspb.Message.getWrapperField(this, proto.LmdbCache.WriteLogEvent, 2));
 };
 
 
 /** @param {?proto.LmdbCache.WriteLogEvent|undefined} value */
-proto.LmdbCache.SyncFromResponse.Item.prototype.setLogevent = function(value) {
+proto.LmdbCache.SyncPacket.Item.prototype.setLogevent = function(value) {
   jspb.Message.setWrapperField(this, 2, value);
 };
 
 
-proto.LmdbCache.SyncFromResponse.Item.prototype.clearLogevent = function() {
+proto.LmdbCache.SyncPacket.Item.prototype.clearLogevent = function() {
   this.setLogevent(undefined);
 };
 
@@ -6867,7 +6866,7 @@ proto.LmdbCache.SyncFromResponse.Item.prototype.clearLogevent = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.LmdbCache.SyncFromResponse.Item.prototype.hasLogevent = function() {
+proto.LmdbCache.SyncPacket.Item.prototype.hasLogevent = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
@@ -6883,19 +6882,19 @@ proto.LmdbCache.SyncFromResponse.Item.prototype.hasLogevent = function() {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.LmdbCache.SyncFromResponse.Items = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, proto.LmdbCache.SyncFromResponse.Items.repeatedFields_, null);
+proto.LmdbCache.SyncPacket.Items = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.LmdbCache.SyncPacket.Items.repeatedFields_, null);
 };
-goog.inherits(proto.LmdbCache.SyncFromResponse.Items, jspb.Message);
+goog.inherits(proto.LmdbCache.SyncPacket.Items, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
-  proto.LmdbCache.SyncFromResponse.Items.displayName = 'proto.LmdbCache.SyncFromResponse.Items';
+  proto.LmdbCache.SyncPacket.Items.displayName = 'proto.LmdbCache.SyncPacket.Items';
 }
 /**
  * List of repeated fields within this message type.
  * @private {!Array<number>}
  * @const
  */
-proto.LmdbCache.SyncFromResponse.Items.repeatedFields_ = [1];
+proto.LmdbCache.SyncPacket.Items.repeatedFields_ = [1];
 
 
 
@@ -6910,8 +6909,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     for transitional soy proto support: http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.LmdbCache.SyncFromResponse.Items.prototype.toObject = function(opt_includeInstance) {
-  return proto.LmdbCache.SyncFromResponse.Items.toObject(opt_includeInstance, this);
+proto.LmdbCache.SyncPacket.Items.prototype.toObject = function(opt_includeInstance) {
+  return proto.LmdbCache.SyncPacket.Items.toObject(opt_includeInstance, this);
 };
 
 
@@ -6920,14 +6919,14 @@ proto.LmdbCache.SyncFromResponse.Items.prototype.toObject = function(opt_include
  * @param {boolean|undefined} includeInstance Whether to include the JSPB
  *     instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.LmdbCache.SyncFromResponse.Items} msg The msg instance to transform.
+ * @param {!proto.LmdbCache.SyncPacket.Items} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.LmdbCache.SyncFromResponse.Items.toObject = function(includeInstance, msg) {
+proto.LmdbCache.SyncPacket.Items.toObject = function(includeInstance, msg) {
   var f, obj = {
     batchList: jspb.Message.toObjectList(msg.getBatchList(),
-    proto.LmdbCache.SyncFromResponse.Item.toObject, includeInstance)
+    proto.LmdbCache.SyncPacket.Item.toObject, includeInstance)
   };
 
   if (includeInstance) {
@@ -6941,23 +6940,23 @@ proto.LmdbCache.SyncFromResponse.Items.toObject = function(includeInstance, msg)
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.LmdbCache.SyncFromResponse.Items}
+ * @return {!proto.LmdbCache.SyncPacket.Items}
  */
-proto.LmdbCache.SyncFromResponse.Items.deserializeBinary = function(bytes) {
+proto.LmdbCache.SyncPacket.Items.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.LmdbCache.SyncFromResponse.Items;
-  return proto.LmdbCache.SyncFromResponse.Items.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.LmdbCache.SyncPacket.Items;
+  return proto.LmdbCache.SyncPacket.Items.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.LmdbCache.SyncFromResponse.Items} msg The message object to deserialize into.
+ * @param {!proto.LmdbCache.SyncPacket.Items} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.LmdbCache.SyncFromResponse.Items}
+ * @return {!proto.LmdbCache.SyncPacket.Items}
  */
-proto.LmdbCache.SyncFromResponse.Items.deserializeBinaryFromReader = function(msg, reader) {
+proto.LmdbCache.SyncPacket.Items.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -6965,8 +6964,8 @@ proto.LmdbCache.SyncFromResponse.Items.deserializeBinaryFromReader = function(ms
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.LmdbCache.SyncFromResponse.Item;
-      reader.readMessage(value,proto.LmdbCache.SyncFromResponse.Item.deserializeBinaryFromReader);
+      var value = new proto.LmdbCache.SyncPacket.Item;
+      reader.readMessage(value,proto.LmdbCache.SyncPacket.Item.deserializeBinaryFromReader);
       msg.addBatch(value);
       break;
     default:
@@ -6982,9 +6981,9 @@ proto.LmdbCache.SyncFromResponse.Items.deserializeBinaryFromReader = function(ms
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.LmdbCache.SyncFromResponse.Items.prototype.serializeBinary = function() {
+proto.LmdbCache.SyncPacket.Items.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.LmdbCache.SyncFromResponse.Items.serializeBinaryToWriter(this, writer);
+  proto.LmdbCache.SyncPacket.Items.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -6992,18 +6991,18 @@ proto.LmdbCache.SyncFromResponse.Items.prototype.serializeBinary = function() {
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.LmdbCache.SyncFromResponse.Items} message
+ * @param {!proto.LmdbCache.SyncPacket.Items} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.LmdbCache.SyncFromResponse.Items.serializeBinaryToWriter = function(message, writer) {
+proto.LmdbCache.SyncPacket.Items.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getBatchList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
       1,
       f,
-      proto.LmdbCache.SyncFromResponse.Item.serializeBinaryToWriter
+      proto.LmdbCache.SyncPacket.Item.serializeBinaryToWriter
     );
   }
 };
@@ -7011,31 +7010,31 @@ proto.LmdbCache.SyncFromResponse.Items.serializeBinaryToWriter = function(messag
 
 /**
  * repeated Item batch = 1;
- * @return {!Array<!proto.LmdbCache.SyncFromResponse.Item>}
+ * @return {!Array<!proto.LmdbCache.SyncPacket.Item>}
  */
-proto.LmdbCache.SyncFromResponse.Items.prototype.getBatchList = function() {
-  return /** @type{!Array<!proto.LmdbCache.SyncFromResponse.Item>} */ (
-    jspb.Message.getRepeatedWrapperField(this, proto.LmdbCache.SyncFromResponse.Item, 1));
+proto.LmdbCache.SyncPacket.Items.prototype.getBatchList = function() {
+  return /** @type{!Array<!proto.LmdbCache.SyncPacket.Item>} */ (
+    jspb.Message.getRepeatedWrapperField(this, proto.LmdbCache.SyncPacket.Item, 1));
 };
 
 
-/** @param {!Array<!proto.LmdbCache.SyncFromResponse.Item>} value */
-proto.LmdbCache.SyncFromResponse.Items.prototype.setBatchList = function(value) {
+/** @param {!Array<!proto.LmdbCache.SyncPacket.Item>} value */
+proto.LmdbCache.SyncPacket.Items.prototype.setBatchList = function(value) {
   jspb.Message.setRepeatedWrapperField(this, 1, value);
 };
 
 
 /**
- * @param {!proto.LmdbCache.SyncFromResponse.Item=} opt_value
+ * @param {!proto.LmdbCache.SyncPacket.Item=} opt_value
  * @param {number=} opt_index
- * @return {!proto.LmdbCache.SyncFromResponse.Item}
+ * @return {!proto.LmdbCache.SyncPacket.Item}
  */
-proto.LmdbCache.SyncFromResponse.Items.prototype.addBatch = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.LmdbCache.SyncFromResponse.Item, opt_index);
+proto.LmdbCache.SyncPacket.Items.prototype.addBatch = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.LmdbCache.SyncPacket.Item, opt_index);
 };
 
 
-proto.LmdbCache.SyncFromResponse.Items.prototype.clearBatchList = function() {
+proto.LmdbCache.SyncPacket.Items.prototype.clearBatchList = function() {
   this.setBatchList([]);
 };
 
@@ -7051,12 +7050,12 @@ proto.LmdbCache.SyncFromResponse.Items.prototype.clearBatchList = function() {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.LmdbCache.SyncFromResponse.Footer = function(opt_data) {
+proto.LmdbCache.SyncPacket.Footer = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
-goog.inherits(proto.LmdbCache.SyncFromResponse.Footer, jspb.Message);
+goog.inherits(proto.LmdbCache.SyncPacket.Footer, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
-  proto.LmdbCache.SyncFromResponse.Footer.displayName = 'proto.LmdbCache.SyncFromResponse.Footer';
+  proto.LmdbCache.SyncPacket.Footer.displayName = 'proto.LmdbCache.SyncPacket.Footer';
 }
 
 
@@ -7071,8 +7070,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     for transitional soy proto support: http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.LmdbCache.SyncFromResponse.Footer.prototype.toObject = function(opt_includeInstance) {
-  return proto.LmdbCache.SyncFromResponse.Footer.toObject(opt_includeInstance, this);
+proto.LmdbCache.SyncPacket.Footer.prototype.toObject = function(opt_includeInstance) {
+  return proto.LmdbCache.SyncPacket.Footer.toObject(opt_includeInstance, this);
 };
 
 
@@ -7081,11 +7080,11 @@ proto.LmdbCache.SyncFromResponse.Footer.prototype.toObject = function(opt_includ
  * @param {boolean|undefined} includeInstance Whether to include the JSPB
  *     instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.LmdbCache.SyncFromResponse.Footer} msg The msg instance to transform.
+ * @param {!proto.LmdbCache.SyncPacket.Footer} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.LmdbCache.SyncFromResponse.Footer.toObject = function(includeInstance, msg) {
+proto.LmdbCache.SyncPacket.Footer.toObject = function(includeInstance, msg) {
   var f, obj = {
     lastpos: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
@@ -7101,23 +7100,23 @@ proto.LmdbCache.SyncFromResponse.Footer.toObject = function(includeInstance, msg
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.LmdbCache.SyncFromResponse.Footer}
+ * @return {!proto.LmdbCache.SyncPacket.Footer}
  */
-proto.LmdbCache.SyncFromResponse.Footer.deserializeBinary = function(bytes) {
+proto.LmdbCache.SyncPacket.Footer.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.LmdbCache.SyncFromResponse.Footer;
-  return proto.LmdbCache.SyncFromResponse.Footer.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.LmdbCache.SyncPacket.Footer;
+  return proto.LmdbCache.SyncPacket.Footer.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.LmdbCache.SyncFromResponse.Footer} msg The message object to deserialize into.
+ * @param {!proto.LmdbCache.SyncPacket.Footer} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.LmdbCache.SyncFromResponse.Footer}
+ * @return {!proto.LmdbCache.SyncPacket.Footer}
  */
-proto.LmdbCache.SyncFromResponse.Footer.deserializeBinaryFromReader = function(msg, reader) {
+proto.LmdbCache.SyncPacket.Footer.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -7141,9 +7140,9 @@ proto.LmdbCache.SyncFromResponse.Footer.deserializeBinaryFromReader = function(m
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.LmdbCache.SyncFromResponse.Footer.prototype.serializeBinary = function() {
+proto.LmdbCache.SyncPacket.Footer.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.LmdbCache.SyncFromResponse.Footer.serializeBinaryToWriter(this, writer);
+  proto.LmdbCache.SyncPacket.Footer.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -7151,11 +7150,11 @@ proto.LmdbCache.SyncFromResponse.Footer.prototype.serializeBinary = function() {
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.LmdbCache.SyncFromResponse.Footer} message
+ * @param {!proto.LmdbCache.SyncPacket.Footer} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.LmdbCache.SyncFromResponse.Footer.serializeBinaryToWriter = function(message, writer) {
+proto.LmdbCache.SyncPacket.Footer.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getLastpos();
   if (f !== 0) {
@@ -7171,34 +7170,34 @@ proto.LmdbCache.SyncFromResponse.Footer.serializeBinaryToWriter = function(messa
  * optional uint64 lastPos = 1;
  * @return {number}
  */
-proto.LmdbCache.SyncFromResponse.Footer.prototype.getLastpos = function() {
+proto.LmdbCache.SyncPacket.Footer.prototype.getLastpos = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
 /** @param {number} value */
-proto.LmdbCache.SyncFromResponse.Footer.prototype.setLastpos = function(value) {
+proto.LmdbCache.SyncPacket.Footer.prototype.setLastpos = function(value) {
   jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
 /**
  * optional Items items = 1;
- * @return {?proto.LmdbCache.SyncFromResponse.Items}
+ * @return {?proto.LmdbCache.SyncPacket.Items}
  */
-proto.LmdbCache.SyncFromResponse.prototype.getItems = function() {
-  return /** @type{?proto.LmdbCache.SyncFromResponse.Items} */ (
-    jspb.Message.getWrapperField(this, proto.LmdbCache.SyncFromResponse.Items, 1));
+proto.LmdbCache.SyncPacket.prototype.getItems = function() {
+  return /** @type{?proto.LmdbCache.SyncPacket.Items} */ (
+    jspb.Message.getWrapperField(this, proto.LmdbCache.SyncPacket.Items, 1));
 };
 
 
-/** @param {?proto.LmdbCache.SyncFromResponse.Items|undefined} value */
-proto.LmdbCache.SyncFromResponse.prototype.setItems = function(value) {
-  jspb.Message.setOneofWrapperField(this, 1, proto.LmdbCache.SyncFromResponse.oneofGroups_[0], value);
+/** @param {?proto.LmdbCache.SyncPacket.Items|undefined} value */
+proto.LmdbCache.SyncPacket.prototype.setItems = function(value) {
+  jspb.Message.setOneofWrapperField(this, 1, proto.LmdbCache.SyncPacket.oneofGroups_[0], value);
 };
 
 
-proto.LmdbCache.SyncFromResponse.prototype.clearItems = function() {
+proto.LmdbCache.SyncPacket.prototype.clearItems = function() {
   this.setItems(undefined);
 };
 
@@ -7207,28 +7206,28 @@ proto.LmdbCache.SyncFromResponse.prototype.clearItems = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.LmdbCache.SyncFromResponse.prototype.hasItems = function() {
+proto.LmdbCache.SyncPacket.prototype.hasItems = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
 
 /**
  * optional Item item = 2;
- * @return {?proto.LmdbCache.SyncFromResponse.Item}
+ * @return {?proto.LmdbCache.SyncPacket.Item}
  */
-proto.LmdbCache.SyncFromResponse.prototype.getItem = function() {
-  return /** @type{?proto.LmdbCache.SyncFromResponse.Item} */ (
-    jspb.Message.getWrapperField(this, proto.LmdbCache.SyncFromResponse.Item, 2));
+proto.LmdbCache.SyncPacket.prototype.getItem = function() {
+  return /** @type{?proto.LmdbCache.SyncPacket.Item} */ (
+    jspb.Message.getWrapperField(this, proto.LmdbCache.SyncPacket.Item, 2));
 };
 
 
-/** @param {?proto.LmdbCache.SyncFromResponse.Item|undefined} value */
-proto.LmdbCache.SyncFromResponse.prototype.setItem = function(value) {
-  jspb.Message.setOneofWrapperField(this, 2, proto.LmdbCache.SyncFromResponse.oneofGroups_[0], value);
+/** @param {?proto.LmdbCache.SyncPacket.Item|undefined} value */
+proto.LmdbCache.SyncPacket.prototype.setItem = function(value) {
+  jspb.Message.setOneofWrapperField(this, 2, proto.LmdbCache.SyncPacket.oneofGroups_[0], value);
 };
 
 
-proto.LmdbCache.SyncFromResponse.prototype.clearItem = function() {
+proto.LmdbCache.SyncPacket.prototype.clearItem = function() {
   this.setItem(undefined);
 };
 
@@ -7237,28 +7236,28 @@ proto.LmdbCache.SyncFromResponse.prototype.clearItem = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.LmdbCache.SyncFromResponse.prototype.hasItem = function() {
+proto.LmdbCache.SyncPacket.prototype.hasItem = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
 
 /**
  * optional Footer footer = 5;
- * @return {?proto.LmdbCache.SyncFromResponse.Footer}
+ * @return {?proto.LmdbCache.SyncPacket.Footer}
  */
-proto.LmdbCache.SyncFromResponse.prototype.getFooter = function() {
-  return /** @type{?proto.LmdbCache.SyncFromResponse.Footer} */ (
-    jspb.Message.getWrapperField(this, proto.LmdbCache.SyncFromResponse.Footer, 5));
+proto.LmdbCache.SyncPacket.prototype.getFooter = function() {
+  return /** @type{?proto.LmdbCache.SyncPacket.Footer} */ (
+    jspb.Message.getWrapperField(this, proto.LmdbCache.SyncPacket.Footer, 5));
 };
 
 
-/** @param {?proto.LmdbCache.SyncFromResponse.Footer|undefined} value */
-proto.LmdbCache.SyncFromResponse.prototype.setFooter = function(value) {
-  jspb.Message.setOneofWrapperField(this, 5, proto.LmdbCache.SyncFromResponse.oneofGroups_[0], value);
+/** @param {?proto.LmdbCache.SyncPacket.Footer|undefined} value */
+proto.LmdbCache.SyncPacket.prototype.setFooter = function(value) {
+  jspb.Message.setOneofWrapperField(this, 5, proto.LmdbCache.SyncPacket.oneofGroups_[0], value);
 };
 
 
-proto.LmdbCache.SyncFromResponse.prototype.clearFooter = function() {
+proto.LmdbCache.SyncPacket.prototype.clearFooter = function() {
   this.setFooter(undefined);
 };
 
@@ -7267,7 +7266,7 @@ proto.LmdbCache.SyncFromResponse.prototype.clearFooter = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.LmdbCache.SyncFromResponse.prototype.hasFooter = function() {
+proto.LmdbCache.SyncPacket.prototype.hasFooter = function() {
   return jspb.Message.getField(this, 5) != null;
 };
 
@@ -7411,192 +7410,6 @@ proto.LmdbCache.SyncSubscribeRequest.prototype.getReplicaid = function() {
 /** @param {string} value */
 proto.LmdbCache.SyncSubscribeRequest.prototype.setReplicaid = function(value) {
   jspb.Message.setProto3StringField(this, 1, value);
-};
-
-
-
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.LmdbCache.SyncSubscribeResponse = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
-};
-goog.inherits(proto.LmdbCache.SyncSubscribeResponse, jspb.Message);
-if (goog.DEBUG && !COMPILED) {
-  proto.LmdbCache.SyncSubscribeResponse.displayName = 'proto.LmdbCache.SyncSubscribeResponse';
-}
-
-
-if (jspb.Message.GENERATE_TO_OBJECT) {
-/**
- * Creates an object representation of this proto suitable for use in Soy templates.
- * Field names that are reserved in JavaScript and will be renamed to pb_name.
- * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
- * For the list of reserved names please see:
- *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
- * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
- *     for transitional soy proto support: http://goto/soy-param-migration
- * @return {!Object}
- */
-proto.LmdbCache.SyncSubscribeResponse.prototype.toObject = function(opt_includeInstance) {
-  return proto.LmdbCache.SyncSubscribeResponse.toObject(opt_includeInstance, this);
-};
-
-
-/**
- * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Whether to include the JSPB
- *     instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @param {!proto.LmdbCache.SyncSubscribeResponse} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.LmdbCache.SyncSubscribeResponse.toObject = function(includeInstance, msg) {
-  var f, obj = {
-    pos: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    logevent: (f = msg.getLogevent()) && proto.LmdbCache.WriteLogEvent.toObject(includeInstance, f)
-  };
-
-  if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
-}
-
-
-/**
- * Deserializes binary data (in protobuf wire format).
- * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.LmdbCache.SyncSubscribeResponse}
- */
-proto.LmdbCache.SyncSubscribeResponse.deserializeBinary = function(bytes) {
-  var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.LmdbCache.SyncSubscribeResponse;
-  return proto.LmdbCache.SyncSubscribeResponse.deserializeBinaryFromReader(msg, reader);
-};
-
-
-/**
- * Deserializes binary data (in protobuf wire format) from the
- * given reader into the given message object.
- * @param {!proto.LmdbCache.SyncSubscribeResponse} msg The message object to deserialize into.
- * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.LmdbCache.SyncSubscribeResponse}
- */
-proto.LmdbCache.SyncSubscribeResponse.deserializeBinaryFromReader = function(msg, reader) {
-  while (reader.nextField()) {
-    if (reader.isEndGroup()) {
-      break;
-    }
-    var field = reader.getFieldNumber();
-    switch (field) {
-    case 1:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setPos(value);
-      break;
-    case 2:
-      var value = new proto.LmdbCache.WriteLogEvent;
-      reader.readMessage(value,proto.LmdbCache.WriteLogEvent.deserializeBinaryFromReader);
-      msg.setLogevent(value);
-      break;
-    default:
-      reader.skipField();
-      break;
-    }
-  }
-  return msg;
-};
-
-
-/**
- * Serializes the message to binary data (in protobuf wire format).
- * @return {!Uint8Array}
- */
-proto.LmdbCache.SyncSubscribeResponse.prototype.serializeBinary = function() {
-  var writer = new jspb.BinaryWriter();
-  proto.LmdbCache.SyncSubscribeResponse.serializeBinaryToWriter(this, writer);
-  return writer.getResultBuffer();
-};
-
-
-/**
- * Serializes the given message to binary data (in protobuf wire
- * format), writing to the given BinaryWriter.
- * @param {!proto.LmdbCache.SyncSubscribeResponse} message
- * @param {!jspb.BinaryWriter} writer
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.LmdbCache.SyncSubscribeResponse.serializeBinaryToWriter = function(message, writer) {
-  var f = undefined;
-  f = message.getPos();
-  if (f !== 0) {
-    writer.writeUint64(
-      1,
-      f
-    );
-  }
-  f = message.getLogevent();
-  if (f != null) {
-    writer.writeMessage(
-      2,
-      f,
-      proto.LmdbCache.WriteLogEvent.serializeBinaryToWriter
-    );
-  }
-};
-
-
-/**
- * optional uint64 pos = 1;
- * @return {number}
- */
-proto.LmdbCache.SyncSubscribeResponse.prototype.getPos = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
-};
-
-
-/** @param {number} value */
-proto.LmdbCache.SyncSubscribeResponse.prototype.setPos = function(value) {
-  jspb.Message.setProto3IntField(this, 1, value);
-};
-
-
-/**
- * optional WriteLogEvent logEvent = 2;
- * @return {?proto.LmdbCache.WriteLogEvent}
- */
-proto.LmdbCache.SyncSubscribeResponse.prototype.getLogevent = function() {
-  return /** @type{?proto.LmdbCache.WriteLogEvent} */ (
-    jspb.Message.getWrapperField(this, proto.LmdbCache.WriteLogEvent, 2));
-};
-
-
-/** @param {?proto.LmdbCache.WriteLogEvent|undefined} value */
-proto.LmdbCache.SyncSubscribeResponse.prototype.setLogevent = function(value) {
-  jspb.Message.setWrapperField(this, 2, value);
-};
-
-
-proto.LmdbCache.SyncSubscribeResponse.prototype.clearLogevent = function() {
-  this.setLogevent(undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {!boolean}
- */
-proto.LmdbCache.SyncSubscribeResponse.prototype.hasLogevent = function() {
-  return jspb.Message.getField(this, 2) != null;
 };
 
 
