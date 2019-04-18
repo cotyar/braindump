@@ -75,8 +75,8 @@ namespace LmdbCacheServer.Replica
             {
                 // TODO: Add supervision
 
-                _replicatorSlave = new ReplicatorSlave(_lmdb, ReplicaConfig.ReplicaId, new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure), 
-                    _kvTable, _replicationTable, IncrementClockWithRemoteUpdate);
+                _replicatorSlave = new ReplicatorSlave(_lmdb, ReplicaConfig.ReplicaId, new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure),
+                    _kvTable, _replicationTable, _wlTable, ReplicaConfig.Replication, IncrementClockWithRemoteUpdate);
                 _syncProcessTask = GrpcSafeHandler(() => _replicatorSlave.StartSync()); 
             }
 
@@ -95,7 +95,7 @@ namespace LmdbCacheServer.Replica
             _serverReplication = new Server
             {
                 Services = { SyncService.BindService(new ReplicatorMaster(_lmdb, replicaConfig.ReplicaId, 
-                    (txn, key) => _kvTable.TryGet(txn, new KvKey(key)).Item2?.Value, _wlTable, ReplicaConfig.Replication)) },
+                    _kvTable, _replicationTable, _wlTable, ReplicaConfig.Replication, IncrementClockWithRemoteUpdate)) },
                 Ports = { new ServerPort(ReplicaConfig.HostName, (int)ReplicaConfig.Replication.Port, ServerCredentials.Insecure) }
             };
             _serverReplication.Start();

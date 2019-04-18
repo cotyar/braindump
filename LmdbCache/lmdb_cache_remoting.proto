@@ -233,7 +233,7 @@ service SyncService {
 
   // Push sync
   rpc SyncTo(SyncToRequest) returns (SyncFromRequest) {} 
-  rpc Publish(stream SyncPacket) returns (stream SyncAckRequest) {} 
+  rpc Publish(stream SyncPacket) returns (Empty) {} //stream SyncAckRequest) {} 
 }
 
 ///////////////////////////////

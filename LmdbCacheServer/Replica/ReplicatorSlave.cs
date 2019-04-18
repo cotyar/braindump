@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Grpc.Core.Utils;
@@ -12,6 +13,7 @@ using static LmdbCache.KvMetadata.Types;
 using static LmdbCache.KvMetadata.Types.Status;
 using static LmdbCache.KvMetadata.Types.UpdateAction;
 using static LmdbCache.SyncPacket.PacketOneofCase;
+using static LmdbCache.SyncPacket.Types;
 using static LmdbCache.WriteLogEvent.Types;
 
 namespace LmdbCacheServer.Replica
@@ -22,28 +24,79 @@ namespace LmdbCacheServer.Replica
         private readonly string _ownReplicaId;
         private readonly KvTable _kvTable;
         private readonly ReplicationTable _replicationTable;
+        private readonly WriteLogTable _wlTable;
+        private readonly ReplicationConfig _replicationConfig;
         private readonly Func<WriteTransaction, string, ulong, VectorClock> _incrementClock;
+        private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly string _targetReplicaId;
         private readonly SyncService.SyncServiceClient _syncService;
+        private readonly Replicator _replicator;
+
+        private bool _started;
 
         public ReplicatorSlave(LightningPersistence lmdb, string ownReplicaId, Channel syncChannel, 
-            KvTable kvTable, ReplicationTable replicationTable,
-            Func<WriteTransaction, string, ulong, VectorClock> incrementClock) // TODO: Add ACKs streaming
+            KvTable kvTable, ReplicationTable replicationTable, WriteLogTable wlTable,
+            ReplicationConfig replicationConfig, Func<WriteTransaction, string, ulong, VectorClock> incrementClock) // TODO: Add ACKs streaming
         {
             _lmdb = lmdb;
             _ownReplicaId = ownReplicaId;
             _kvTable = kvTable;
             _replicationTable = replicationTable;
+            _wlTable = wlTable;
+            _replicationConfig = replicationConfig;
             _incrementClock = incrementClock;
+            _cancellationTokenSource = new CancellationTokenSource();
 
             _syncService = new SyncService.SyncServiceClient(syncChannel);
             _targetReplicaId = _syncService.GetReplicaId(new Empty()).ReplicaId; // TODO: Add timeouts
+            _replicator = new Replicator(_lmdb, _ownReplicaId, _targetReplicaId,
+                _kvTable, _replicationTable, _wlTable, _replicationConfig, _cancellationTokenSource.Token, _incrementClock);
         }
 
         public async Task StartSync()
         {
-            var lastPos = _replicationTable.GetLastPos(_targetReplicaId) ?? 0;
-            if (lastPos > 0) lastPos++;
+            if (_started) throw new Exception("Sync already started");
+            _started = true;
+
+            await StartPush();
+            await StartPull();
+        }
+
+        private async Task<Func<ulong, WriteLogEvent, Task>> StartPush()
+        {
+            var syncFrom = await _syncService.SyncToAsync(new SyncToRequest { ReplicaId = _ownReplicaId }); // TODO: Add timeouts
+            using (var callPublish = _syncService.Publish())
+            {
+                var itemsCount = 0;
+                var replicator = new Replicator(_lmdb, _ownReplicaId, _targetReplicaId,
+                    _kvTable, _replicationTable, _wlTable, _replicationConfig, _cancellationTokenSource.Token, _incrementClock,
+                    async packet =>
+                    {
+                        await callPublish.RequestStream.WriteAsync(packet);
+                        itemsCount++;
+                    });
+
+                var lastPos = syncFrom.Since;
+                do
+                {
+                    itemsCount = 0;
+                    await replicator.SyncFrom(lastPos, syncFrom.IncludeMine ? new string[0] : new[] { syncFrom.ReplicaId });
+                    if (itemsCount > 0) lastPos++; // avoid repeating the last item
+                } while (itemsCount > 0);
+
+                var timingRedundancyTask = Task.Run(() => replicator.SyncFrom(lastPos, syncFrom.IncludeMine ? new string[0] : new[] { syncFrom.ReplicaId }));
+
+                return async (lp, wle) =>
+                    {
+                        await timingRedundancyTask;
+                        await replicator.WriteAsync(new SyncPacket {Item = new Item {Pos = lp, LogEvent = wle}});
+                    };
+            }
+        }
+
+        private async Task StartPull()
+        {
+            var lastPos = _replicationTable.GetLastPos(_targetReplicaId) + 1 ?? 0;
 
             int itemsCount;
             do
@@ -52,17 +105,16 @@ namespace LmdbCacheServer.Replica
                 if (itemsCount > 0) lastPos++; // avoid repeating the last item
             } while (itemsCount > 0);
 
-            using (var callSubscribe = _syncService.Subscribe(new SyncSubscribeRequest { ReplicaId = _ownReplicaId }))
+            using (var callSubscribe = _syncService.Subscribe(new SyncSubscribeRequest {ReplicaId = _ownReplicaId}))
             {
                 await SyncWriteLog(lastPos);
 
                 // NOTE: Don't change the order of Subscribe and SyncFrom as it may break "at-least-one" guarantee
-                while (await callSubscribe.ResponseStream.MoveNext())
+                await callSubscribe.ResponseStream.ForEachAsync(async response =>
                 {
-                    var response = callSubscribe.ResponseStream.Current;
                     Console.WriteLine($"Sync Received: '{response}'");
-                    await ProcessSyncPacket(response);
-                }
+                    lastPos = await _replicator.ProcessSyncPacket(response) ?? lastPos;
+                });
             }
         }
 
@@ -75,99 +127,25 @@ namespace LmdbCacheServer.Replica
             using (var callFrom = _syncService.SyncFrom(
                 new SyncFromRequest { ReplicaId = _ownReplicaId, Since = syncStartPos, IncludeMine = false, IncludeAcked = false }))
             {
-                await callFrom.ResponseStream.ForEachAsync(ProcessSyncPacket);
+                await callFrom.ResponseStream.ForEachAsync(async sp =>
+                {
+                    var newLastPos = await _replicator.ProcessSyncPacket(sp);
+                    if (newLastPos.HasValue)
+                    {
+                        itemsCount++;
+                        if (newLastPos.Value > lastPos)
+                            lastPos = newLastPos.Value;
+                    }
+                });
             }
             Console.WriteLine($"Synchronized '{itemsCount}' items");
             return (itemsCount, lastPos);
         }
 
-        private async Task ProcessSyncPacket(SyncPacket response)
-        {
-            switch (response.PacketCase)
-            {
-                case Items:
-                    Console.WriteLine($"Received batch: '{response.Items.Batch.Count}'");
-                    foreach (var responseItem in response.Items.Batch)
-                    {
-                        await SyncHandler((responseItem.Pos, responseItem.LogEvent));
-                    }
-                    break;
-                case Item:
-                    //                            Console.WriteLine($"Received: '{response}'");
-                    await SyncHandler((response.Item.Pos, response.Item.LogEvent));
-                    break;
-                case Footer:
-                    await _lmdb.WriteAsync(txn =>
-                    {
-                        _replicationTable.SetLastPos(txn, _targetReplicaId, response.Footer.LastPos);
-                    }, false, true);
-                    break;
-                case None:
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        private async Task SyncHandler((ulong, WriteLogEvent) syncEvent)
-        {
-            // TODO: Update last pos
-            switch (syncEvent.Item2.LoggedEventCase)
-            {
-                case WriteLogEvent.LoggedEventOneofCase.Updated:
-                    var addedOrUpdated = syncEvent.Item2.Updated;
-                    await _lmdb.WriteAsync(txn =>
-                    {
-                        var addMetadata = new KvMetadata
-                        {
-                            Status = Active,
-                            Expiry = addedOrUpdated.Expiry,
-                            Action = Replicated,
-                            Updated = _incrementClock(txn, _targetReplicaId, syncEvent.Item1),
-                            Compression = Compression.None // TODO: Use correct compression mode
-                        };
-
-                        var wasUpdated = _kvTable.Add(
-                            txn,
-                            new KvKey(addedOrUpdated.Key),
-                            addMetadata,
-                            new KvValue(addedOrUpdated.Value),
-                            addMetadata.Updated,
-                            (key, vcOld, vcNew) => vcOld.Earlier(vcNew));
-                        _replicationTable.SetLastPos(txn, _targetReplicaId, syncEvent.Item1);
-                        _kvTable.StatusTable.IncrementCounters(txn, replicatedAdds: 1);
-                        // TODO: Should we do anything if the value wasn't updated? Maybe logging?        
-                    }, false, true);
-                    break;
-                case WriteLogEvent.LoggedEventOneofCase.Deleted:
-                    var deleted = syncEvent.Item2.Deleted;
-                    await _lmdb.WriteAsync(txn =>
-                    {
-                        var currentClock = _incrementClock(txn, _targetReplicaId, syncEvent.Item1);
-                        var delMetadata = new KvMetadata
-                        {
-                            Status = KvMetadata.Types.Status.Deleted,
-                            Expiry = currentClock.TicksOffsetUtc.ToTimestamp(),
-                            Action = Replicated,
-                            Updated = currentClock
-                        };
-
-                        var kvKey = new KvKey(deleted.Key);
-                        _kvTable.Delete(txn, kvKey, delMetadata);
-                        _replicationTable.SetLastPos(txn, _targetReplicaId, syncEvent.Item1);
-                        _kvTable.StatusTable.IncrementCounters(txn, replicatedDeletes: 1);
-                        // TODO: Should we do anything if the value wasn't updated? Maybe logging?
-                    }, false, true);
-                    break;
-                case WriteLogEvent.LoggedEventOneofCase.None:
-                    throw new ArgumentException("syncEvent", $"Unexpected LogEvent case: {syncEvent.Item2.LoggedEventCase}");
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
         public void Dispose()
         {
-            
+            _cancellationTokenSource.Cancel();
+            _replicator.Dispose();
         }
     }
 }

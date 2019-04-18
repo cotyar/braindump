@@ -11,7 +11,8 @@ module WebServer =
 
     let StartWebServer (cts: CancellationToken) ip (port : uint32) =
         // Just in order to make homeFolder the same from both VS and direct "dotnet run"
-        let homeFolder = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase.Replace("""file:\""", "")), "public") 
+        //let homeFolder = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase.Replace("""file:\""", "")), "public") 
+        let homeFolder = """C:\Work2\braindump\LmdbCacheWeb\app"""
         let config =
           { defaultConfig with 
                 homeFolder = Some homeFolder
@@ -20,7 +21,7 @@ module WebServer =
                 bindings = [ HttpBinding.createSimple HTTP ip (int port) ] }
         let app : WebPart =
             choose [
-                GET >=> path "/" >=> Files.file (Path.Combine(homeFolder, "index.html"))
+                GET >=> path "/" >=> Files.file (Path.Combine(homeFolder, "build/index.html"))
                 GET >=> Files.browseHome
                 RequestErrors.NOT_FOUND "Page not found." 
             ]

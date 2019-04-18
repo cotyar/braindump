@@ -9,6 +9,7 @@ using AsyncEnumerableExtensions;
 using Google.Protobuf;
 using Grpc.Core;
 using LmdbCache;
+using LmdbCacheServer.Tables;
 using LmdbLight;
 using static LmdbCache.SyncPacket.Types;
 using static LmdbCache.Helper;
@@ -19,22 +20,33 @@ namespace LmdbCacheServer.Replica
     {
         private readonly LightningPersistence _lmdb;
         private readonly string _ownReplicaId;
-        private readonly Func<AbstractTransaction, string, ByteString> _getValue;
+        private readonly KvTable _kvTable;
+        private readonly ReplicationTable _replicationTable;
         private readonly WriteLogTable _wlTable;
         private readonly ReplicationConfig _replicationConfig;
-        private readonly ConcurrentDictionary<string, (IServerStreamWriter<SyncPacket>, TaskCompletionSource<bool>)> _slaves;
+        private readonly Func<WriteTransaction, string, ulong, VectorClock> _incrementClock;
+        private readonly ConcurrentDictionary<string, (Replicator, TaskCompletionSource<bool>)> _slaves;
         private readonly CancellationTokenSource _cts;
 
-        public ReplicatorMaster(LightningPersistence lmdb, string ownReplicaId, Func<AbstractTransaction, string, ByteString> getValue, WriteLogTable wlTable, ReplicationConfig replicationConfig)
+        public ReplicatorMaster(LightningPersistence lmdb, string ownReplicaId, 
+            KvTable kvTable, ReplicationTable replicationTable, WriteLogTable wlTable,
+            ReplicationConfig replicationConfig, Func<WriteTransaction, string, ulong, VectorClock> incrementClock)
         {
             _lmdb = lmdb;
             _ownReplicaId = ownReplicaId;
-            _getValue = getValue;
+            _kvTable = kvTable;
+            _replicationTable = replicationTable;
             _wlTable = wlTable;
             _replicationConfig = replicationConfig;
+            _incrementClock = incrementClock;
             _cts = new CancellationTokenSource();
-            _slaves = new ConcurrentDictionary<string, (IServerStreamWriter<SyncPacket>, TaskCompletionSource<bool>)>();
+            _slaves = new ConcurrentDictionary<string, (Replicator, TaskCompletionSource<bool>)>();
+
         }
+
+        private Replicator CreateReplicator(string targetReplicaId, Func<SyncPacket, Task> responseStreamWriteAsync) =>
+            new Replicator(_lmdb, _ownReplicaId, targetReplicaId,
+                _kvTable, _replicationTable, _wlTable, _replicationConfig, _cts.Token, _incrementClock, responseStreamWriteAsync);
 
         public override Task<GetReplicaIdResponse> GetReplicaId(Empty request, ServerCallContext context) => 
             Task.FromResult(new GetReplicaIdResponse { ReplicaId = _ownReplicaId} );
@@ -42,89 +54,8 @@ namespace LmdbCacheServer.Replica
         public override Task SyncFrom(SyncFromRequest request, IServerStreamWriter<SyncPacket> responseStream, ServerCallContext context) =>
             GrpcSafeHandler(async () =>
             {
-                var lastPos = request.Since;
-                Console.WriteLine($"Received replication request to sync from {lastPos}");
-
-                if (!_cts.Token.IsCancellationRequested)
-                {
-                    var page = _lmdb.Read(txn =>
-                    {
-                        var logPage = _wlTable.GetLogPage(txn, lastPos, _replicationConfig.PageSize).
-                            Where(logItem => (request.IncludeMine || logItem.Item2.OriginatorReplicaId != _ownReplicaId)). // TODO: Add check for IncludeAcked
-                            ToArray();
-
-                        foreach (var logItem in logPage)
-                        {
-                            if (logItem.Item2.LoggedEventCase == WriteLogEvent.LoggedEventOneofCase.Updated
-                                && (logItem.Item2.Updated.Value == null || logItem.Item2.Updated.Value.IsEmpty))
-                            {
-                                var latestValue = _getValue(txn, logItem.Item2.Updated.Key);
-                                if (latestValue != null)
-                                {
-                                    logItem.Item2.Updated.Value = latestValue; // TODO: Handle "Value not found"
-                                }
-                                else
-                                {
-                                    Console.WriteLine($"No value for the key {logItem.Item2.Updated.Key}");
-                                }
-                            }
-                        }
-                        return logPage;
-                    });
-
-                    if (page.Length > 0)
-                    {
-                        if (_replicationConfig.UseBatching)
-                        {
-                            var batches = page.Aggregate((0, new List<List<Item>>()), (acc, logItem) =>
-                            {
-                                var (lastBatchBytes, currentBatches) = acc;
-                                var itemSize = logItem.Item2.LoggedEventCase == WriteLogEvent.LoggedEventOneofCase.Updated
-                                    ? logItem.Item2.Updated.Value.Length
-                                    : 100;
-                                if (currentBatches.Count == 0 ||
-                                    lastBatchBytes + itemSize > 3 * 1024 * 1024)
-                                {
-                                    currentBatches.Add(new List<Item>
-                                        {new Item {Pos = logItem.Item1, LogEvent = logItem.Item2}});
-                                    return (itemSize, currentBatches);
-                                }
-
-                                currentBatches.Last().Add(new Item {Pos = logItem.Item1, LogEvent = logItem.Item2});
-                                return (lastBatchBytes + itemSize, currentBatches);
-                            }).Item2;
-
-                            foreach (var batch in batches)
-                            {
-                                if (!_cts.Token.IsCancellationRequested)
-                                {
-    //                            Console.WriteLine($"Writing replication page");
-                                    var items = new Items();
-                                    items.Batch.AddRange(batch);
-                                    await responseStream.WriteAsync(new SyncPacket {Items = items});
-                                    lastPos = batch.Last().Pos;
-    //                            Console.WriteLine($"Replication page has been written");
-                                }
-                            }
-                        }
-                        else
-                        {
-                            foreach (var pageItem in page)
-                            {
-                                var (pos, item) = pageItem;
-                                if (!_cts.Token.IsCancellationRequested)
-                                {
-                                    await responseStream.WriteAsync(new SyncPacket {Item = new Item { Pos = pos, LogEvent = item }});
-                                    lastPos = pos;
-                                }
-                            }
-                        }
-                    }
-
-                    await responseStream.WriteAsync(new SyncPacket { Footer = new Footer { LastPos = lastPos } });
-                }
-
-                Console.WriteLine($"Page replicated. Last pos: {lastPos}");
+                var replicator = CreateReplicator(request.ReplicaId, responseStream.WriteAsync);
+                await replicator.SyncFrom(request.Since, request.IncludeMine ? new string[0] : new []{ request.ReplicaId });
             });
 
         public override Task<Empty> Ack(IAsyncStreamReader<SyncAckRequest> requestStream, ServerCallContext context)
@@ -136,8 +67,8 @@ namespace LmdbCacheServer.Replica
             GrpcSafeHandler(async () =>
             {
                 var tcs = new TaskCompletionSource<bool>();
-                _slaves.AddOrUpdate(request.ReplicaId, (responseStream, tcs),
-                    (s, writer) => throw new ReplicationIdUsedException(request.ReplicaId));
+                var replicator = CreateReplicator(request.ReplicaId, responseStream.WriteAsync);
+                _slaves.AddOrUpdate(request.ReplicaId, (replicator, tcs), (s, writer) => throw new ReplicationIdUsedException(request.ReplicaId));
 
                 await tcs.Task;
             });
@@ -149,6 +80,7 @@ namespace LmdbCacheServer.Replica
         {
             if (_slaves.TryRemove(replicaId, out var streamWriter))
             {
+                streamWriter.Item1.Dispose();
                 streamWriter.Item2.SetResult(true);
             }
 
@@ -157,9 +89,10 @@ namespace LmdbCacheServer.Replica
 
         public void Dispose()
         {
-            foreach (var slave in _slaves)
+            foreach (var (_, (replicator, tcs)) in _slaves)
             {
-                slave.Value.Item2.SetResult(true);
+                replicator.Dispose();
+                tcs.SetResult(true);
             }
         }
     }
