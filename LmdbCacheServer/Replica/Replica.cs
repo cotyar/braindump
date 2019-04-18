@@ -39,7 +39,7 @@ namespace LmdbCacheServer.Replica
         private readonly Timestamp _started;
 
         private readonly ReplicatorSlave _replicatorSlave;
-        private Task _syncProcessTask;
+        private readonly IList<IReplicator> _replicators;
         private readonly Monitor _monitor;
 
         public Replica(ReplicaConfig replicaConfig, VectorClock clock = null)
@@ -71,13 +71,16 @@ namespace LmdbCacheServer.Replica
                     }
                 });
 
+            _replicators = new List<IReplicator>();
+
             if (!string.IsNullOrWhiteSpace(ReplicaConfig.MasterNode))
             {
                 // TODO: Add supervision
 
-                _replicatorSlave = new ReplicatorSlave(_lmdb, ReplicaConfig.ReplicaId, new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure),
+                _replicatorSlave = new ReplicatorSlave(_lmdb, ReplicaConfig.ReplicaId,
                     _kvTable, _replicationTable, _wlTable, ReplicaConfig.Replication, IncrementClockWithRemoteUpdate);
-                _syncProcessTask = GrpcSafeHandler(() => _replicatorSlave.StartSync()); 
+                var added = GrpcSafeHandler(() => _replicatorSlave.StartSync(new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure))).GetAwaiter().GetResult(); 
+                _replicators.Add(_replicatorSlave);
             }
 
             _webServerCompletion = WebServer.StartWebServer(_shutdownCancellationTokenSource.Token, ReplicaConfig.HostName, ReplicaConfig.WebUIPort);
@@ -92,13 +95,15 @@ namespace LmdbCacheServer.Replica
 
             Console.WriteLine("Monitoring server started listening on port " + ReplicaConfig.MonitoringPort);
 
+            var replicatorMaster = new ReplicatorMaster(_lmdb, replicaConfig.ReplicaId, 
+                _kvTable, _replicationTable, _wlTable, ReplicaConfig.Replication, IncrementClockWithRemoteUpdate);
             _serverReplication = new Server
             {
-                Services = { SyncService.BindService(new ReplicatorMaster(_lmdb, replicaConfig.ReplicaId, 
-                    _kvTable, _replicationTable, _wlTable, ReplicaConfig.Replication, IncrementClockWithRemoteUpdate)) },
+                Services = { SyncService.BindService(replicatorMaster) },
                 Ports = { new ServerPort(ReplicaConfig.HostName, (int)ReplicaConfig.Replication.Port, ServerCredentials.Insecure) }
             };
             _serverReplication.Start();
+            _replicators.Add(replicatorMaster);
 
             Console.WriteLine("Replication server started listening on port " + ReplicaConfig.Replication.Port);
 

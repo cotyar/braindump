@@ -286,10 +286,11 @@ message SyncPacket {
     uint64 lastPos         = 1;
   }
   
+  string replicaId  = 1;
   oneof packet {
-    Items items   = 1;
-    Item  item    = 2;
-    Footer footer = 5;
+    Items items     = 5;
+    Item  item      = 6;
+    Footer footer   = 7;
   }
 }
 

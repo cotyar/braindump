@@ -103,71 +103,71 @@ namespace LmdbCache {
             "KQoUR2V0UmVwbGljYUlkUmVzcG9uc2USEQoJcmVwbGljYUlkGAEgASgJIl4K",
             "D1N5bmNGcm9tUmVxdWVzdBIRCglyZXBsaWNhSWQYASABKAkSDQoFc2luY2UY",
             "AiABKAQSEwoLaW5jbHVkZU1pbmUYAyABKAgSFAoMaW5jbHVkZUFja2VkGAQg",
-            "ASgIIrACCgpTeW5jUGFja2V0EiwKBWl0ZW1zGAEgASgLMhsuTG1kYkNhY2hl",
-            "LlN5bmNQYWNrZXQuSXRlbXNIABIqCgRpdGVtGAIgASgLMhouTG1kYkNhY2hl",
-            "LlN5bmNQYWNrZXQuSXRlbUgAEi4KBmZvb3RlchgFIAEoCzIcLkxtZGJDYWNo",
-            "ZS5TeW5jUGFja2V0LkZvb3RlckgAGj8KBEl0ZW0SCwoDcG9zGAEgASgEEioK",
-            "CGxvZ0V2ZW50GAIgASgLMhguTG1kYkNhY2hlLldyaXRlTG9nRXZlbnQaMgoF",
-            "SXRlbXMSKQoFYmF0Y2gYASADKAsyGi5MbWRiQ2FjaGUuU3luY1BhY2tldC5J",
-            "dGVtGhkKBkZvb3RlchIPCgdsYXN0UG9zGAEgASgEQggKBnBhY2tldCIpChRT",
-            "eW5jU3Vic2NyaWJlUmVxdWVzdBIRCglyZXBsaWNhSWQYASABKAkiIQoOU3lu",
-            "Y0Fja1JlcXVlc3QSDwoHZXZlbnRJZBgBIAEoBCIiCg1TeW5jVG9SZXF1ZXN0",
-            "EhEKCXJlcGxpY2FJZBgBIAEoCSIwChdNb25pdG9yaW5nVXBkYXRlUmVxdWVz",
-            "dBIVCg1jb3JyZWxhdGlvbklkGAEgASgJIkQKGE1vbml0b3JpbmdVcGRhdGVS",
-            "ZXNwb25zZRIoCgZzdGF0dXMYASABKAsyGC5MbWRiQ2FjaGUuUmVwbGljYVN0",
-            "YXR1cyL0AgoNUmVwbGljYVN0YXR1cxIRCglyZXBsaWNhSWQYASABKAkSOAoO",
-            "Y29ubmVjdGlvbkluZm8YAiABKAsyIC5MbWRiQ2FjaGUuUmVwbGljYUNvbm5l",
-            "Y3Rpb25JbmZvEiUKB3N0YXJ0ZWQYAyABKAsyFC5MbWRiQ2FjaGUuVGltZXN0",
-            "YW1wEi8KDXJlcGxpY2FDb25maWcYBCABKAsyGC5MbWRiQ2FjaGUuUmVwbGlj",
-            "YUNvbmZpZxIsCgxjdXJyZW50Q2xvY2sYBSABKAsyFi5MbWRiQ2FjaGUuVmVj",
-            "dG9yQ2xvY2sSLAoIY291bnRlcnMYCiABKAsyGi5MbWRiQ2FjaGUuUmVwbGlj",
-            "YUNvdW50ZXJzEjEKDmNvbGxlY3RlZFN0YXRzGAsgASgLMhkuTG1kYkNhY2hl",
-            "LkNvbGxlY3RlZFN0YXRzEi8KDWNsdXN0ZXJTdGF0dXMYDCABKAsyGC5MbWRi",
-            "Q2FjaGUuQ2x1c3RlclN0YXR1cyKcAQoNQ2x1c3RlclN0YXR1cxI4CghyZXBs",
-            "aWNhcxgBIAMoCzImLkxtZGJDYWNoZS5DbHVzdGVyU3RhdHVzLlJlcGxpY2Fz",
-            "RW50cnkaUQoNUmVwbGljYXNFbnRyeRILCgNrZXkYASABKAkSLwoFdmFsdWUY",
-            "AiABKAsyIC5MbWRiQ2FjaGUuUmVwbGljYUNvbm5lY3Rpb25JbmZvOgI4ASIz",
-            "ChVSZXBsaWNhQ29ubmVjdGlvbkluZm8SDAoEaG9zdBgBIAEoCRIMCgRwb3J0",
-            "GAIgASgNIroCCg9SZXBsaWNhQ291bnRlcnMSEwoLYWRkc0NvdW50ZXIYASAB",
-            "KAQSFgoOZGVsZXRlc0NvdW50ZXIYAiABKAQSFAoMY29weXNDb3VudGVyGAMg",
-            "ASgEEhIKCmdldENvdW50ZXIYBCABKAQSFwoPY29udGFpbnNDb3VudGVyGAUg",
-            "ASgEEhgKEGtleVNlYXJjaENvdW50ZXIYBiABKAQSHQoVbWV0YWRhdGFTZWFy",
-            "Y2hDb3VudGVyGAcgASgEEhkKEXBhZ2VTZWFyY2hDb3VudGVyGAggASgEEhYK",
-            "Dmxhcmdlc3RLZXlTaXplGAogASgNEhgKEGxhcmdlc3RWYWx1ZVNpemUYCyAB",
-            "KA0SFgoOcmVwbGljYXRlZEFkZHMYDyABKAQSGQoRcmVwbGljYXRlZERlbGV0",
-            "ZXMYECABKAQidwoOQ29sbGVjdGVkU3RhdHMSFgoObm9uRXhwaXJlZEtleXMY",
-            "CiABKAQSDwoHYWxsS2V5cxgLIAEoBBISCgphY3RpdmVLZXlzGAwgASgEEhMK",
-            "C2RlbGV0ZWRLZXlzGA0gASgEEhMKC2V4cGlyZWRLZXlzGA4gASgEKkUKE0xp",
-            "Z2h0bmluZ0RiU3luY01vZGUSCQoFRlN5bmMQABIJCgVBc3luYxABEgoKBk5v",
-            "U3luYxACEgwKCFJlYWRPbmx5EAMy7AQKEExtZGJDYWNoZVNlcnZpY2USNgoD",
-            "QWRkEhUuTG1kYkNhY2hlLkFkZFJlcXVlc3QaFi5MbWRiQ2FjaGUuQWRkUmVz",
-            "cG9uc2UiABJECglBZGRTdHJlYW0SGy5MbWRiQ2FjaGUuQWRkU3RyZWFtUmVx",
-            "dWVzdBoWLkxtZGJDYWNoZS5BZGRSZXNwb25zZSIAKAESPwoGRGVsZXRlEhgu",
-            "TG1kYkNhY2hlLkRlbGV0ZVJlcXVlc3QaGS5MbWRiQ2FjaGUuRGVsZXRlUmVz",
-            "cG9uc2UiABI5CgRDb3B5EhYuTG1kYkNhY2hlLkNvcHlSZXF1ZXN0GhcuTG1k",
-            "YkNhY2hlLkNvcHlSZXNwb25zZSIAEjYKA0dldBIVLkxtZGJDYWNoZS5HZXRS",
-            "ZXF1ZXN0GhYuTG1kYkNhY2hlLkdldFJlc3BvbnNlIgASRAoJR2V0U3RyZWFt",
-            "EhUuTG1kYkNhY2hlLkdldFJlcXVlc3QaHC5MbWRiQ2FjaGUuR2V0U3RyZWFt",
-            "UmVzcG9uc2UiADABEkgKDENvbnRhaW5zS2V5cxIVLkxtZGJDYWNoZS5HZXRS",
-            "ZXF1ZXN0Gh8uTG1kYkNhY2hlLkNvbnRhaW5zS2V5c1Jlc3BvbnNlIgASRQoI",
-            "TGlzdEtleXMSGS5MbWRiQ2FjaGUuS2V5TGlzdFJlcXVlc3QaGi5MbWRiQ2Fj",
-            "aGUuS2V5TGlzdFJlc3BvbnNlIgAwARJPCg1MaXN0S2V5VmFsdWVzEhkuTG1k",
-            "YkNhY2hlLktleUxpc3RSZXF1ZXN0Gh8uTG1kYkNhY2hlLktleVZhbHVlTGlz",
-            "dFJlc3BvbnNlIgAwATKQAwoLU3luY1NlcnZpY2USQwoMR2V0UmVwbGljYUlk",
-            "EhAuTG1kYkNhY2hlLkVtcHR5Gh8uTG1kYkNhY2hlLkdldFJlcGxpY2FJZFJl",
-            "c3BvbnNlIgASQQoIU3luY0Zyb20SGi5MbWRiQ2FjaGUuU3luY0Zyb21SZXF1",
-            "ZXN0GhUuTG1kYkNhY2hlLlN5bmNQYWNrZXQiADABEkcKCVN1YnNjcmliZRIf",
-            "LkxtZGJDYWNoZS5TeW5jU3Vic2NyaWJlUmVxdWVzdBoVLkxtZGJDYWNoZS5T",
-            "eW5jUGFja2V0IgAwARI2CgNBY2sSGS5MbWRiQ2FjaGUuU3luY0Fja1JlcXVl",
-            "c3QaEC5MbWRiQ2FjaGUuRW1wdHkiACgBEkAKBlN5bmNUbxIYLkxtZGJDYWNo",
-            "ZS5TeW5jVG9SZXF1ZXN0GhouTG1kYkNhY2hlLlN5bmNGcm9tUmVxdWVzdCIA",
-            "EjYKB1B1Ymxpc2gSFS5MbWRiQ2FjaGUuU3luY1BhY2tldBoQLkxtZGJDYWNo",
-            "ZS5FbXB0eSIAKAEyxQEKEU1vbml0b3JpbmdTZXJ2aWNlElYKCUdldFN0YXR1",
-            "cxIiLkxtZGJDYWNoZS5Nb25pdG9yaW5nVXBkYXRlUmVxdWVzdBojLkxtZGJD",
-            "YWNoZS5Nb25pdG9yaW5nVXBkYXRlUmVzcG9uc2UiABJYCglTdWJzY3JpYmUS",
-            "Ii5MbWRiQ2FjaGUuTW9uaXRvcmluZ1VwZGF0ZVJlcXVlc3QaIy5MbWRiQ2Fj",
-            "aGUuTW9uaXRvcmluZ1VwZGF0ZVJlc3BvbnNlIgAwAUIMqgIJTG1kYkNhY2hl",
-            "YgZwcm90bzM="));
+            "ASgIIsMCCgpTeW5jUGFja2V0EhEKCXJlcGxpY2FJZBgBIAEoCRIsCgVpdGVt",
+            "cxgFIAEoCzIbLkxtZGJDYWNoZS5TeW5jUGFja2V0Lkl0ZW1zSAASKgoEaXRl",
+            "bRgGIAEoCzIaLkxtZGJDYWNoZS5TeW5jUGFja2V0Lkl0ZW1IABIuCgZmb290",
+            "ZXIYByABKAsyHC5MbWRiQ2FjaGUuU3luY1BhY2tldC5Gb290ZXJIABo/CgRJ",
+            "dGVtEgsKA3BvcxgBIAEoBBIqCghsb2dFdmVudBgCIAEoCzIYLkxtZGJDYWNo",
+            "ZS5Xcml0ZUxvZ0V2ZW50GjIKBUl0ZW1zEikKBWJhdGNoGAEgAygLMhouTG1k",
+            "YkNhY2hlLlN5bmNQYWNrZXQuSXRlbRoZCgZGb290ZXISDwoHbGFzdFBvcxgB",
+            "IAEoBEIICgZwYWNrZXQiKQoUU3luY1N1YnNjcmliZVJlcXVlc3QSEQoJcmVw",
+            "bGljYUlkGAEgASgJIiEKDlN5bmNBY2tSZXF1ZXN0Eg8KB2V2ZW50SWQYASAB",
+            "KAQiIgoNU3luY1RvUmVxdWVzdBIRCglyZXBsaWNhSWQYASABKAkiMAoXTW9u",
+            "aXRvcmluZ1VwZGF0ZVJlcXVlc3QSFQoNY29ycmVsYXRpb25JZBgBIAEoCSJE",
+            "ChhNb25pdG9yaW5nVXBkYXRlUmVzcG9uc2USKAoGc3RhdHVzGAEgASgLMhgu",
+            "TG1kYkNhY2hlLlJlcGxpY2FTdGF0dXMi9AIKDVJlcGxpY2FTdGF0dXMSEQoJ",
+            "cmVwbGljYUlkGAEgASgJEjgKDmNvbm5lY3Rpb25JbmZvGAIgASgLMiAuTG1k",
+            "YkNhY2hlLlJlcGxpY2FDb25uZWN0aW9uSW5mbxIlCgdzdGFydGVkGAMgASgL",
+            "MhQuTG1kYkNhY2hlLlRpbWVzdGFtcBIvCg1yZXBsaWNhQ29uZmlnGAQgASgL",
+            "MhguTG1kYkNhY2hlLlJlcGxpY2FDb25maWcSLAoMY3VycmVudENsb2NrGAUg",
+            "ASgLMhYuTG1kYkNhY2hlLlZlY3RvckNsb2NrEiwKCGNvdW50ZXJzGAogASgL",
+            "MhouTG1kYkNhY2hlLlJlcGxpY2FDb3VudGVycxIxCg5jb2xsZWN0ZWRTdGF0",
+            "cxgLIAEoCzIZLkxtZGJDYWNoZS5Db2xsZWN0ZWRTdGF0cxIvCg1jbHVzdGVy",
+            "U3RhdHVzGAwgASgLMhguTG1kYkNhY2hlLkNsdXN0ZXJTdGF0dXMinAEKDUNs",
+            "dXN0ZXJTdGF0dXMSOAoIcmVwbGljYXMYASADKAsyJi5MbWRiQ2FjaGUuQ2x1",
+            "c3RlclN0YXR1cy5SZXBsaWNhc0VudHJ5GlEKDVJlcGxpY2FzRW50cnkSCwoD",
+            "a2V5GAEgASgJEi8KBXZhbHVlGAIgASgLMiAuTG1kYkNhY2hlLlJlcGxpY2FD",
+            "b25uZWN0aW9uSW5mbzoCOAEiMwoVUmVwbGljYUNvbm5lY3Rpb25JbmZvEgwK",
+            "BGhvc3QYASABKAkSDAoEcG9ydBgCIAEoDSK6AgoPUmVwbGljYUNvdW50ZXJz",
+            "EhMKC2FkZHNDb3VudGVyGAEgASgEEhYKDmRlbGV0ZXNDb3VudGVyGAIgASgE",
+            "EhQKDGNvcHlzQ291bnRlchgDIAEoBBISCgpnZXRDb3VudGVyGAQgASgEEhcK",
+            "D2NvbnRhaW5zQ291bnRlchgFIAEoBBIYChBrZXlTZWFyY2hDb3VudGVyGAYg",
+            "ASgEEh0KFW1ldGFkYXRhU2VhcmNoQ291bnRlchgHIAEoBBIZChFwYWdlU2Vh",
+            "cmNoQ291bnRlchgIIAEoBBIWCg5sYXJnZXN0S2V5U2l6ZRgKIAEoDRIYChBs",
+            "YXJnZXN0VmFsdWVTaXplGAsgASgNEhYKDnJlcGxpY2F0ZWRBZGRzGA8gASgE",
+            "EhkKEXJlcGxpY2F0ZWREZWxldGVzGBAgASgEIncKDkNvbGxlY3RlZFN0YXRz",
+            "EhYKDm5vbkV4cGlyZWRLZXlzGAogASgEEg8KB2FsbEtleXMYCyABKAQSEgoK",
+            "YWN0aXZlS2V5cxgMIAEoBBITCgtkZWxldGVkS2V5cxgNIAEoBBITCgtleHBp",
+            "cmVkS2V5cxgOIAEoBCpFChNMaWdodG5pbmdEYlN5bmNNb2RlEgkKBUZTeW5j",
+            "EAASCQoFQXN5bmMQARIKCgZOb1N5bmMQAhIMCghSZWFkT25seRADMuwEChBM",
+            "bWRiQ2FjaGVTZXJ2aWNlEjYKA0FkZBIVLkxtZGJDYWNoZS5BZGRSZXF1ZXN0",
+            "GhYuTG1kYkNhY2hlLkFkZFJlc3BvbnNlIgASRAoJQWRkU3RyZWFtEhsuTG1k",
+            "YkNhY2hlLkFkZFN0cmVhbVJlcXVlc3QaFi5MbWRiQ2FjaGUuQWRkUmVzcG9u",
+            "c2UiACgBEj8KBkRlbGV0ZRIYLkxtZGJDYWNoZS5EZWxldGVSZXF1ZXN0Ghku",
+            "TG1kYkNhY2hlLkRlbGV0ZVJlc3BvbnNlIgASOQoEQ29weRIWLkxtZGJDYWNo",
+            "ZS5Db3B5UmVxdWVzdBoXLkxtZGJDYWNoZS5Db3B5UmVzcG9uc2UiABI2CgNH",
+            "ZXQSFS5MbWRiQ2FjaGUuR2V0UmVxdWVzdBoWLkxtZGJDYWNoZS5HZXRSZXNw",
+            "b25zZSIAEkQKCUdldFN0cmVhbRIVLkxtZGJDYWNoZS5HZXRSZXF1ZXN0Ghwu",
+            "TG1kYkNhY2hlLkdldFN0cmVhbVJlc3BvbnNlIgAwARJICgxDb250YWluc0tl",
+            "eXMSFS5MbWRiQ2FjaGUuR2V0UmVxdWVzdBofLkxtZGJDYWNoZS5Db250YWlu",
+            "c0tleXNSZXNwb25zZSIAEkUKCExpc3RLZXlzEhkuTG1kYkNhY2hlLktleUxp",
+            "c3RSZXF1ZXN0GhouTG1kYkNhY2hlLktleUxpc3RSZXNwb25zZSIAMAESTwoN",
+            "TGlzdEtleVZhbHVlcxIZLkxtZGJDYWNoZS5LZXlMaXN0UmVxdWVzdBofLkxt",
+            "ZGJDYWNoZS5LZXlWYWx1ZUxpc3RSZXNwb25zZSIAMAEykAMKC1N5bmNTZXJ2",
+            "aWNlEkMKDEdldFJlcGxpY2FJZBIQLkxtZGJDYWNoZS5FbXB0eRofLkxtZGJD",
+            "YWNoZS5HZXRSZXBsaWNhSWRSZXNwb25zZSIAEkEKCFN5bmNGcm9tEhouTG1k",
+            "YkNhY2hlLlN5bmNGcm9tUmVxdWVzdBoVLkxtZGJDYWNoZS5TeW5jUGFja2V0",
+            "IgAwARJHCglTdWJzY3JpYmUSHy5MbWRiQ2FjaGUuU3luY1N1YnNjcmliZVJl",
+            "cXVlc3QaFS5MbWRiQ2FjaGUuU3luY1BhY2tldCIAMAESNgoDQWNrEhkuTG1k",
+            "YkNhY2hlLlN5bmNBY2tSZXF1ZXN0GhAuTG1kYkNhY2hlLkVtcHR5IgAoARJA",
+            "CgZTeW5jVG8SGC5MbWRiQ2FjaGUuU3luY1RvUmVxdWVzdBoaLkxtZGJDYWNo",
+            "ZS5TeW5jRnJvbVJlcXVlc3QiABI2CgdQdWJsaXNoEhUuTG1kYkNhY2hlLlN5",
+            "bmNQYWNrZXQaEC5MbWRiQ2FjaGUuRW1wdHkiACgBMsUBChFNb25pdG9yaW5n",
+            "U2VydmljZRJWCglHZXRTdGF0dXMSIi5MbWRiQ2FjaGUuTW9uaXRvcmluZ1Vw",
+            "ZGF0ZVJlcXVlc3QaIy5MbWRiQ2FjaGUuTW9uaXRvcmluZ1VwZGF0ZVJlc3Bv",
+            "bnNlIgASWAoJU3Vic2NyaWJlEiIuTG1kYkNhY2hlLk1vbml0b3JpbmdVcGRh",
+            "dGVSZXF1ZXN0GiMuTG1kYkNhY2hlLk1vbml0b3JpbmdVcGRhdGVSZXNwb25z",
+            "ZSIAMAFCDKoCCUxtZGJDYWNoZWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::LmdbCache.LightningDbSyncMode), }, new pbr::GeneratedClrTypeInfo[] {
@@ -197,7 +197,7 @@ namespace LmdbCache {
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.WriteLogEvent.Types.Deleted), global::LmdbCache.WriteLogEvent.Types.Deleted.Parser, new[]{ "Key" }, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.GetReplicaIdResponse), global::LmdbCache.GetReplicaIdResponse.Parser, new[]{ "ReplicaId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.SyncFromRequest), global::LmdbCache.SyncFromRequest.Parser, new[]{ "ReplicaId", "Since", "IncludeMine", "IncludeAcked" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.SyncPacket), global::LmdbCache.SyncPacket.Parser, new[]{ "Items", "Item", "Footer" }, new[]{ "Packet" }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.SyncPacket.Types.Item), global::LmdbCache.SyncPacket.Types.Item.Parser, new[]{ "Pos", "LogEvent" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.SyncPacket), global::LmdbCache.SyncPacket.Parser, new[]{ "ReplicaId", "Items", "Item", "Footer" }, new[]{ "Packet" }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.SyncPacket.Types.Item), global::LmdbCache.SyncPacket.Types.Item.Parser, new[]{ "Pos", "LogEvent" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.SyncPacket.Types.Items), global::LmdbCache.SyncPacket.Types.Items.Parser, new[]{ "Batch" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.SyncPacket.Types.Footer), global::LmdbCache.SyncPacket.Types.Footer.Parser, new[]{ "LastPos" }, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.SyncSubscribeRequest), global::LmdbCache.SyncSubscribeRequest.Parser, new[]{ "ReplicaId" }, null, null, null),
@@ -5878,6 +5878,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SyncPacket(SyncPacket other) : this() {
+      replicaId_ = other.replicaId_;
       switch (other.PacketCase) {
         case PacketOneofCase.Items:
           Items = other.Items.Clone();
@@ -5898,8 +5899,19 @@ namespace LmdbCache {
       return new SyncPacket(this);
     }
 
+    /// <summary>Field number for the "replicaId" field.</summary>
+    public const int ReplicaIdFieldNumber = 1;
+    private string replicaId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string ReplicaId {
+      get { return replicaId_; }
+      set {
+        replicaId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     /// <summary>Field number for the "items" field.</summary>
-    public const int ItemsFieldNumber = 1;
+    public const int ItemsFieldNumber = 5;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::LmdbCache.SyncPacket.Types.Items Items {
       get { return packetCase_ == PacketOneofCase.Items ? (global::LmdbCache.SyncPacket.Types.Items) packet_ : null; }
@@ -5910,7 +5922,7 @@ namespace LmdbCache {
     }
 
     /// <summary>Field number for the "item" field.</summary>
-    public const int ItemFieldNumber = 2;
+    public const int ItemFieldNumber = 6;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::LmdbCache.SyncPacket.Types.Item Item {
       get { return packetCase_ == PacketOneofCase.Item ? (global::LmdbCache.SyncPacket.Types.Item) packet_ : null; }
@@ -5921,7 +5933,7 @@ namespace LmdbCache {
     }
 
     /// <summary>Field number for the "footer" field.</summary>
-    public const int FooterFieldNumber = 5;
+    public const int FooterFieldNumber = 7;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::LmdbCache.SyncPacket.Types.Footer Footer {
       get { return packetCase_ == PacketOneofCase.Footer ? (global::LmdbCache.SyncPacket.Types.Footer) packet_ : null; }
@@ -5935,9 +5947,9 @@ namespace LmdbCache {
     /// <summary>Enum of possible cases for the "packet" oneof.</summary>
     public enum PacketOneofCase {
       None = 0,
-      Items = 1,
-      Item = 2,
-      Footer = 5,
+      Items = 5,
+      Item = 6,
+      Footer = 7,
     }
     private PacketOneofCase packetCase_ = PacketOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5964,6 +5976,7 @@ namespace LmdbCache {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (ReplicaId != other.ReplicaId) return false;
       if (!object.Equals(Items, other.Items)) return false;
       if (!object.Equals(Item, other.Item)) return false;
       if (!object.Equals(Footer, other.Footer)) return false;
@@ -5974,6 +5987,7 @@ namespace LmdbCache {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
+      if (ReplicaId.Length != 0) hash ^= ReplicaId.GetHashCode();
       if (packetCase_ == PacketOneofCase.Items) hash ^= Items.GetHashCode();
       if (packetCase_ == PacketOneofCase.Item) hash ^= Item.GetHashCode();
       if (packetCase_ == PacketOneofCase.Footer) hash ^= Footer.GetHashCode();
@@ -5991,16 +6005,20 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (packetCase_ == PacketOneofCase.Items) {
+      if (ReplicaId.Length != 0) {
         output.WriteRawTag(10);
+        output.WriteString(ReplicaId);
+      }
+      if (packetCase_ == PacketOneofCase.Items) {
+        output.WriteRawTag(42);
         output.WriteMessage(Items);
       }
       if (packetCase_ == PacketOneofCase.Item) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(50);
         output.WriteMessage(Item);
       }
       if (packetCase_ == PacketOneofCase.Footer) {
-        output.WriteRawTag(42);
+        output.WriteRawTag(58);
         output.WriteMessage(Footer);
       }
       if (_unknownFields != null) {
@@ -6011,6 +6029,9 @@ namespace LmdbCache {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
+      if (ReplicaId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ReplicaId);
+      }
       if (packetCase_ == PacketOneofCase.Items) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Items);
       }
@@ -6030,6 +6051,9 @@ namespace LmdbCache {
     public void MergeFrom(SyncPacket other) {
       if (other == null) {
         return;
+      }
+      if (other.ReplicaId.Length != 0) {
+        ReplicaId = other.ReplicaId;
       }
       switch (other.PacketCase) {
         case PacketOneofCase.Items:
@@ -6064,6 +6088,10 @@ namespace LmdbCache {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
+            ReplicaId = input.ReadString();
+            break;
+          }
+          case 42: {
             global::LmdbCache.SyncPacket.Types.Items subBuilder = new global::LmdbCache.SyncPacket.Types.Items();
             if (packetCase_ == PacketOneofCase.Items) {
               subBuilder.MergeFrom(Items);
@@ -6072,7 +6100,7 @@ namespace LmdbCache {
             Items = subBuilder;
             break;
           }
-          case 18: {
+          case 50: {
             global::LmdbCache.SyncPacket.Types.Item subBuilder = new global::LmdbCache.SyncPacket.Types.Item();
             if (packetCase_ == PacketOneofCase.Item) {
               subBuilder.MergeFrom(Item);
@@ -6081,7 +6109,7 @@ namespace LmdbCache {
             Item = subBuilder;
             break;
           }
-          case 42: {
+          case 58: {
             global::LmdbCache.SyncPacket.Types.Footer subBuilder = new global::LmdbCache.SyncPacket.Types.Footer();
             if (packetCase_ == PacketOneofCase.Footer) {
               subBuilder.MergeFrom(Footer);

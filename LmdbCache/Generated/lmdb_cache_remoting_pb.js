@@ -6527,16 +6527,16 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.LmdbCache.SyncPacket.oneofGroups_ = [[1,2,5]];
+proto.LmdbCache.SyncPacket.oneofGroups_ = [[5,6,7]];
 
 /**
  * @enum {number}
  */
 proto.LmdbCache.SyncPacket.PacketCase = {
   PACKET_NOT_SET: 0,
-  ITEMS: 1,
-  ITEM: 2,
-  FOOTER: 5
+  ITEMS: 5,
+  ITEM: 6,
+  FOOTER: 7
 };
 
 /**
@@ -6575,6 +6575,7 @@ proto.LmdbCache.SyncPacket.prototype.toObject = function(opt_includeInstance) {
  */
 proto.LmdbCache.SyncPacket.toObject = function(includeInstance, msg) {
   var f, obj = {
+    replicaid: jspb.Message.getFieldWithDefault(msg, 1, ""),
     items: (f = msg.getItems()) && proto.LmdbCache.SyncPacket.Items.toObject(includeInstance, f),
     item: (f = msg.getItem()) && proto.LmdbCache.SyncPacket.Item.toObject(includeInstance, f),
     footer: (f = msg.getFooter()) && proto.LmdbCache.SyncPacket.Footer.toObject(includeInstance, f)
@@ -6615,16 +6616,20 @@ proto.LmdbCache.SyncPacket.deserializeBinaryFromReader = function(msg, reader) {
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setReplicaid(value);
+      break;
+    case 5:
       var value = new proto.LmdbCache.SyncPacket.Items;
       reader.readMessage(value,proto.LmdbCache.SyncPacket.Items.deserializeBinaryFromReader);
       msg.setItems(value);
       break;
-    case 2:
+    case 6:
       var value = new proto.LmdbCache.SyncPacket.Item;
       reader.readMessage(value,proto.LmdbCache.SyncPacket.Item.deserializeBinaryFromReader);
       msg.setItem(value);
       break;
-    case 5:
+    case 7:
       var value = new proto.LmdbCache.SyncPacket.Footer;
       reader.readMessage(value,proto.LmdbCache.SyncPacket.Footer.deserializeBinaryFromReader);
       msg.setFooter(value);
@@ -6658,10 +6663,17 @@ proto.LmdbCache.SyncPacket.prototype.serializeBinary = function() {
  */
 proto.LmdbCache.SyncPacket.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getReplicaid();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
   f = message.getItems();
   if (f != null) {
     writer.writeMessage(
-      1,
+      5,
       f,
       proto.LmdbCache.SyncPacket.Items.serializeBinaryToWriter
     );
@@ -6669,7 +6681,7 @@ proto.LmdbCache.SyncPacket.serializeBinaryToWriter = function(message, writer) {
   f = message.getItem();
   if (f != null) {
     writer.writeMessage(
-      2,
+      6,
       f,
       proto.LmdbCache.SyncPacket.Item.serializeBinaryToWriter
     );
@@ -6677,7 +6689,7 @@ proto.LmdbCache.SyncPacket.serializeBinaryToWriter = function(message, writer) {
   f = message.getFooter();
   if (f != null) {
     writer.writeMessage(
-      5,
+      7,
       f,
       proto.LmdbCache.SyncPacket.Footer.serializeBinaryToWriter
     );
@@ -7182,18 +7194,33 @@ proto.LmdbCache.SyncPacket.Footer.prototype.setLastpos = function(value) {
 
 
 /**
- * optional Items items = 1;
+ * optional string replicaId = 1;
+ * @return {string}
+ */
+proto.LmdbCache.SyncPacket.prototype.getReplicaid = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/** @param {string} value */
+proto.LmdbCache.SyncPacket.prototype.setReplicaid = function(value) {
+  jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional Items items = 5;
  * @return {?proto.LmdbCache.SyncPacket.Items}
  */
 proto.LmdbCache.SyncPacket.prototype.getItems = function() {
   return /** @type{?proto.LmdbCache.SyncPacket.Items} */ (
-    jspb.Message.getWrapperField(this, proto.LmdbCache.SyncPacket.Items, 1));
+    jspb.Message.getWrapperField(this, proto.LmdbCache.SyncPacket.Items, 5));
 };
 
 
 /** @param {?proto.LmdbCache.SyncPacket.Items|undefined} value */
 proto.LmdbCache.SyncPacket.prototype.setItems = function(value) {
-  jspb.Message.setOneofWrapperField(this, 1, proto.LmdbCache.SyncPacket.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 5, proto.LmdbCache.SyncPacket.oneofGroups_[0], value);
 };
 
 
@@ -7207,23 +7234,23 @@ proto.LmdbCache.SyncPacket.prototype.clearItems = function() {
  * @return {!boolean}
  */
 proto.LmdbCache.SyncPacket.prototype.hasItems = function() {
-  return jspb.Message.getField(this, 1) != null;
+  return jspb.Message.getField(this, 5) != null;
 };
 
 
 /**
- * optional Item item = 2;
+ * optional Item item = 6;
  * @return {?proto.LmdbCache.SyncPacket.Item}
  */
 proto.LmdbCache.SyncPacket.prototype.getItem = function() {
   return /** @type{?proto.LmdbCache.SyncPacket.Item} */ (
-    jspb.Message.getWrapperField(this, proto.LmdbCache.SyncPacket.Item, 2));
+    jspb.Message.getWrapperField(this, proto.LmdbCache.SyncPacket.Item, 6));
 };
 
 
 /** @param {?proto.LmdbCache.SyncPacket.Item|undefined} value */
 proto.LmdbCache.SyncPacket.prototype.setItem = function(value) {
-  jspb.Message.setOneofWrapperField(this, 2, proto.LmdbCache.SyncPacket.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 6, proto.LmdbCache.SyncPacket.oneofGroups_[0], value);
 };
 
 
@@ -7237,23 +7264,23 @@ proto.LmdbCache.SyncPacket.prototype.clearItem = function() {
  * @return {!boolean}
  */
 proto.LmdbCache.SyncPacket.prototype.hasItem = function() {
-  return jspb.Message.getField(this, 2) != null;
+  return jspb.Message.getField(this, 6) != null;
 };
 
 
 /**
- * optional Footer footer = 5;
+ * optional Footer footer = 7;
  * @return {?proto.LmdbCache.SyncPacket.Footer}
  */
 proto.LmdbCache.SyncPacket.prototype.getFooter = function() {
   return /** @type{?proto.LmdbCache.SyncPacket.Footer} */ (
-    jspb.Message.getWrapperField(this, proto.LmdbCache.SyncPacket.Footer, 5));
+    jspb.Message.getWrapperField(this, proto.LmdbCache.SyncPacket.Footer, 7));
 };
 
 
 /** @param {?proto.LmdbCache.SyncPacket.Footer|undefined} value */
 proto.LmdbCache.SyncPacket.prototype.setFooter = function(value) {
-  jspb.Message.setOneofWrapperField(this, 5, proto.LmdbCache.SyncPacket.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 7, proto.LmdbCache.SyncPacket.oneofGroups_[0], value);
 };
 
 
@@ -7267,7 +7294,7 @@ proto.LmdbCache.SyncPacket.prototype.clearFooter = function() {
  * @return {!boolean}
  */
 proto.LmdbCache.SyncPacket.prototype.hasFooter = function() {
-  return jspb.Message.getField(this, 5) != null;
+  return jspb.Message.getField(this, 7) != null;
 };
 
 

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AsyncEnumerableExtensions;
 using Google.Protobuf;
 using Grpc.Core;
+using Grpc.Core.Utils;
 using LmdbCache;
 using LmdbCacheServer.Tables;
 using LmdbLight;
@@ -16,7 +17,7 @@ using static LmdbCache.Helper;
 
 namespace LmdbCacheServer.Replica
 {
-    public class ReplicatorMaster : SyncService.SyncServiceBase, IDisposable
+    public class ReplicatorMaster : SyncService.SyncServiceBase, IDisposable, IReplicator
     {
         private readonly LightningPersistence _lmdb;
         private readonly string _ownReplicaId;
@@ -25,7 +26,8 @@ namespace LmdbCacheServer.Replica
         private readonly WriteLogTable _wlTable;
         private readonly ReplicationConfig _replicationConfig;
         private readonly Func<WriteTransaction, string, ulong, VectorClock> _incrementClock;
-        private readonly ConcurrentDictionary<string, (Replicator, TaskCompletionSource<bool>)> _slaves;
+        private readonly ConcurrentDictionary<string, (ReplicatorSource, TaskCompletionSource<bool>)> _replicationSources;
+        private readonly ConcurrentDictionary<string, (ReplicatorSink, TaskCompletionSource<bool>)> _replicationSinks;
         private readonly CancellationTokenSource _cts;
 
         public ReplicatorMaster(LightningPersistence lmdb, string ownReplicaId, 
@@ -40,13 +42,15 @@ namespace LmdbCacheServer.Replica
             _replicationConfig = replicationConfig;
             _incrementClock = incrementClock;
             _cts = new CancellationTokenSource();
-            _slaves = new ConcurrentDictionary<string, (Replicator, TaskCompletionSource<bool>)>();
+            _replicationSources = new ConcurrentDictionary<string, (ReplicatorSource, TaskCompletionSource<bool>)>();
 
         }
 
-        private Replicator CreateReplicator(string targetReplicaId, Func<SyncPacket, Task> responseStreamWriteAsync) =>
-            new Replicator(_lmdb, _ownReplicaId, targetReplicaId,
-                _kvTable, _replicationTable, _wlTable, _replicationConfig, _cts.Token, _incrementClock, responseStreamWriteAsync);
+        private ReplicatorSource CreateReplicatorSource(Func<SyncPacket, Task> responseStreamWriteAsync) =>
+            new ReplicatorSource(_lmdb, _ownReplicaId, _kvTable, _wlTable, _replicationConfig, _cts.Token, responseStreamWriteAsync);
+
+        private ReplicatorSink CreateReplicatorSink(string targetReplicaId) =>
+            new ReplicatorSink(_lmdb, targetReplicaId, _kvTable, _replicationTable, _replicationConfig, _cts.Token, _incrementClock);
 
         public override Task<GetReplicaIdResponse> GetReplicaId(Empty request, ServerCallContext context) => 
             Task.FromResult(new GetReplicaIdResponse { ReplicaId = _ownReplicaId} );
@@ -54,31 +58,57 @@ namespace LmdbCacheServer.Replica
         public override Task SyncFrom(SyncFromRequest request, IServerStreamWriter<SyncPacket> responseStream, ServerCallContext context) =>
             GrpcSafeHandler(async () =>
             {
-                var replicator = CreateReplicator(request.ReplicaId, responseStream.WriteAsync);
+                var replicator = CreateReplicatorSource(responseStream.WriteAsync);
                 await replicator.SyncFrom(request.Since, request.IncludeMine ? new string[0] : new []{ request.ReplicaId });
             });
 
-        public override Task<Empty> Ack(IAsyncStreamReader<SyncAckRequest> requestStream, ServerCallContext context)
-        {
-            return base.Ack(requestStream, context); // TODO: Override when state replication is implemented
-        }
+        public override Task<SyncFromRequest> SyncTo(SyncToRequest request, ServerCallContext context) =>
+            GrpcSafeHandler(() => new SyncFromRequest
+            {
+                ReplicaId = _ownReplicaId,
+                Since = _replicationTable.GetLastPos(request.ReplicaId) + 1 ?? 0,
+                IncludeMine = false,
+                IncludeAcked = true // TODO: Not used yet
+            });
+
+        public override Task<Empty> Publish(IAsyncStreamReader<SyncPacket> requestStream, ServerCallContext context) =>
+            GrpcSafeHandler(async () =>
+            {
+                ReplicatorSink replicator = null;
+                await requestStream.ForEachAsync(async syncPacket =>
+                {
+                    if (replicator == null)
+                    {
+                        replicator = CreateReplicatorSink(syncPacket.ReplicaId);
+                    }
+
+                    await replicator.ProcessSyncPacket(syncPacket);
+                });
+
+                return new Empty();
+            });
+    
 
         public override Task Subscribe(SyncSubscribeRequest request, IServerStreamWriter<SyncPacket> responseStream, ServerCallContext context) =>
             GrpcSafeHandler(async () =>
             {
                 var tcs = new TaskCompletionSource<bool>();
-                var replicator = CreateReplicator(request.ReplicaId, responseStream.WriteAsync);
-                _slaves.AddOrUpdate(request.ReplicaId, (replicator, tcs), (s, writer) => throw new ReplicationIdUsedException(request.ReplicaId));
+                var replicator = CreateReplicatorSource(responseStream.WriteAsync);
+                _replicationSources.AddOrUpdate(request.ReplicaId, (replicator, tcs), (s, writer) => throw new ReplicationIdUsedException(request.ReplicaId));
 
                 await tcs.Task;
             });
 
         public Task PostWriteLogEvent(ulong pos, WriteLogEvent wle) => 
-            Task.WhenAll(_slaves.Values.Select(slave => slave.Item1.WriteAsync(new SyncPacket { Item = new Item { Pos = pos, LogEvent = wle } }))); // TODO: Add "write to 'm of n'" support 
+            Task.WhenAll(_replicationSources.Values.Select(slave => slave.Item1.WriteAsync(new SyncPacket
+            {
+                ReplicaId = _ownReplicaId,
+                Item = new Item { Pos = pos, LogEvent = wle }
+            }))); // TODO: Add "write to 'm of n'" support 
 
         public Task TerminateSync(string replicaId)
         {
-            if (_slaves.TryRemove(replicaId, out var streamWriter))
+            if (_replicationSources.TryRemove(replicaId, out var streamWriter))
             {
                 streamWriter.Item1.Dispose();
                 streamWriter.Item2.SetResult(true);
@@ -89,11 +119,16 @@ namespace LmdbCacheServer.Replica
 
         public void Dispose()
         {
-            foreach (var (_, (replicator, tcs)) in _slaves)
+            foreach (var (_, (replicator, tcs)) in _replicationSources)
             {
                 replicator.Dispose();
                 tcs.SetResult(true);
             }
+        }
+
+        public override Task<Empty> Ack(IAsyncStreamReader<SyncAckRequest> requestStream, ServerCallContext context)
+        {
+            return base.Ack(requestStream, context); // TODO: Override when state replication is implemented
         }
     }
 }

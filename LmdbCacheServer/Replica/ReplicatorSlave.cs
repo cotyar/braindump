@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ using static LmdbCache.WriteLogEvent.Types;
 
 namespace LmdbCacheServer.Replica
 {
-    public class ReplicatorSlave : IDisposable
+    public class ReplicatorSlave : IReplicator, IDisposable
     {
         private readonly LightningPersistence _lmdb;
         private readonly string _ownReplicaId;
@@ -27,14 +28,10 @@ namespace LmdbCacheServer.Replica
         private readonly WriteLogTable _wlTable;
         private readonly ReplicationConfig _replicationConfig;
         private readonly Func<WriteTransaction, string, ulong, VectorClock> _incrementClock;
-        private readonly CancellationTokenSource _cancellationTokenSource;
-        private readonly string _targetReplicaId;
-        private readonly SyncService.SyncServiceClient _syncService;
-        private readonly Replicator _replicator;
+        private readonly CancellationTokenSource _cts;
+        private readonly ConcurrentDictionary<string, (Task<Func<ulong, WriteLogEvent, Task>>, Task)> _replicators;
 
-        private bool _started;
-
-        public ReplicatorSlave(LightningPersistence lmdb, string ownReplicaId, Channel syncChannel, 
+        public ReplicatorSlave(LightningPersistence lmdb, string ownReplicaId, 
             KvTable kvTable, ReplicationTable replicationTable, WriteLogTable wlTable,
             ReplicationConfig replicationConfig, Func<WriteTransaction, string, ulong, VectorClock> incrementClock) // TODO: Add ACKs streaming
         {
@@ -45,91 +42,108 @@ namespace LmdbCacheServer.Replica
             _wlTable = wlTable;
             _replicationConfig = replicationConfig;
             _incrementClock = incrementClock;
-            _cancellationTokenSource = new CancellationTokenSource();
-
-            _syncService = new SyncService.SyncServiceClient(syncChannel);
-            _targetReplicaId = _syncService.GetReplicaId(new Empty()).ReplicaId; // TODO: Add timeouts
-            _replicator = new Replicator(_lmdb, _ownReplicaId, _targetReplicaId,
-                _kvTable, _replicationTable, _wlTable, _replicationConfig, _cancellationTokenSource.Token, _incrementClock);
+            _replicators = new ConcurrentDictionary<string, (Task<Func<ulong, WriteLogEvent, Task>>, Task)>();
+            _cts = new CancellationTokenSource();
         }
 
-        public async Task StartSync()
+        private ReplicatorSource CreateReplicatorSource(Func<SyncPacket, Task> responseStreamWriteAsync) =>
+            new ReplicatorSource(_lmdb, _ownReplicaId, _kvTable, _wlTable, _replicationConfig, _cts.Token, responseStreamWriteAsync);
+
+        private ReplicatorSink CreateReplicatorSink(string targetReplicaId) =>
+            new ReplicatorSink(_lmdb, targetReplicaId, _kvTable, _replicationTable, _replicationConfig, _cts.Token, _incrementClock);
+
+        public async Task<bool> StartSync(Channel syncChannel)
         {
-            if (_started) throw new Exception("Sync already started");
-            _started = true;
+            var syncService = new SyncService.SyncServiceClient(syncChannel);
+            var targetReplicaId = (await syncService.GetReplicaIdAsync(new Empty())).ReplicaId; // TODO: Add timeouts
 
-            await StartPush();
-            await StartPull();
-        }
-
-        private async Task<Func<ulong, WriteLogEvent, Task>> StartPush()
-        {
-            var syncFrom = await _syncService.SyncToAsync(new SyncToRequest { ReplicaId = _ownReplicaId }); // TODO: Add timeouts
-            using (var callPublish = _syncService.Publish())
-            {
-                var itemsCount = 0;
-                var replicator = new Replicator(_lmdb, _ownReplicaId, _targetReplicaId,
-                    _kvTable, _replicationTable, _wlTable, _replicationConfig, _cancellationTokenSource.Token, _incrementClock,
-                    async packet =>
-                    {
-                        await callPublish.RequestStream.WriteAsync(packet);
-                        itemsCount++;
-                    });
-
-                var lastPos = syncFrom.Since;
-                do
+            bool added = false;
+            // TODO: Assuming not many concurrent StartSync requests
+            _replicators.AddOrUpdate(targetReplicaId, _ =>
                 {
-                    itemsCount = 0;
-                    await replicator.SyncFrom(lastPos, syncFrom.IncludeMine ? new string[0] : new[] { syncFrom.ReplicaId });
-                    if (itemsCount > 0) lastPos++; // avoid repeating the last item
-                } while (itemsCount > 0);
+                    added = true;
+                    return (StartPush(syncService), StartPull(syncService, targetReplicaId));
+                }, (_, v) =>
+                {
+                    added = false;
+                    return v;
+                }
+            );
 
-                var timingRedundancyTask = Task.Run(() => replicator.SyncFrom(lastPos, syncFrom.IncludeMine ? new string[0] : new[] { syncFrom.ReplicaId }));
-
-                return async (lp, wle) =>
-                    {
-                        await timingRedundancyTask;
-                        await replicator.WriteAsync(new SyncPacket {Item = new Item {Pos = lp, LogEvent = wle}});
-                    };
-            }
+            return added;
         }
 
-        private async Task StartPull()
+        private async Task<Func<ulong, WriteLogEvent, Task>> StartPush(SyncService.SyncServiceClient syncService)
         {
-            var lastPos = _replicationTable.GetLastPos(_targetReplicaId) + 1 ?? 0;
+            var syncFrom = await syncService.SyncToAsync(new SyncToRequest { ReplicaId = _ownReplicaId }); // TODO: Add timeouts
+            var callPublish = syncService.Publish();
+
+            var itemsCount = 0;
+            var replicatorSource = CreateReplicatorSource(async packet =>
+                {
+                    await callPublish.RequestStream.WriteAsync(packet);
+                    itemsCount++;
+                });
+
+            var lastPos = syncFrom.Since;
+            do
+            {
+                itemsCount = 0;
+                await replicatorSource.SyncFrom(lastPos, syncFrom.IncludeMine ? new string[0] : new[] { syncFrom.ReplicaId });
+                if (itemsCount > 0) lastPos++; // avoid repeating the last item
+            } while (itemsCount > 0);
+
+            var timingRedundancyTask = Task.Run(() => replicatorSource.SyncFrom(lastPos, syncFrom.IncludeMine ? new string[0] : new[] { syncFrom.ReplicaId }));
+
+            return async (lp, wle) =>
+                {
+                    await timingRedundancyTask;
+                    await replicatorSource.WriteAsync(new SyncPacket
+                    {
+                        ReplicaId = _ownReplicaId,
+                        Item = new Item {Pos = lp, LogEvent = wle}
+                    });
+                };            
+        }
+
+        private async Task StartPull(SyncService.SyncServiceClient syncService, string targetReplicaId)
+        {
+            var replicatorSink = CreateReplicatorSink(targetReplicaId);
+            var lastPos = _replicationTable.GetLastPos(targetReplicaId) + 1 ?? 0;
 
             int itemsCount;
             do
             {
-                (itemsCount, lastPos) = await SyncWriteLog(lastPos);
+                (itemsCount, lastPos) = await SyncWriteLog(syncService, replicatorSink, lastPos);
                 if (itemsCount > 0) lastPos++; // avoid repeating the last item
             } while (itemsCount > 0);
 
-            using (var callSubscribe = _syncService.Subscribe(new SyncSubscribeRequest {ReplicaId = _ownReplicaId}))
+            using (var callSubscribe = syncService.Subscribe(new SyncSubscribeRequest {ReplicaId = _ownReplicaId}))
             {
-                await SyncWriteLog(lastPos);
+                await SyncWriteLog(syncService, replicatorSink, lastPos);
 
                 // NOTE: Don't change the order of Subscribe and SyncFrom as it may break "at-least-one" guarantee
                 await callSubscribe.ResponseStream.ForEachAsync(async response =>
                 {
                     Console.WriteLine($"Sync Received: '{response}'");
-                    lastPos = await _replicator.ProcessSyncPacket(response) ?? lastPos;
+                    lastPos = await replicatorSink.ProcessSyncPacket(response) ?? lastPos;
                 });
             }
         }
 
-        private async Task<(int, ulong)> SyncWriteLog(ulong syncStartPos)
+        private async Task<(int, ulong)> SyncWriteLog(SyncService.SyncServiceClient syncService,
+            ReplicatorSink replicatorSink, ulong syncStartPos)
         {
             Console.WriteLine($"Started WriteLog Sync");
             var lastPos = syncStartPos;
             var itemsCount = 0;
 
-            using (var callFrom = _syncService.SyncFrom(
+            using (var callFrom = syncService.SyncFrom(
                 new SyncFromRequest { ReplicaId = _ownReplicaId, Since = syncStartPos, IncludeMine = false, IncludeAcked = false }))
             {
                 await callFrom.ResponseStream.ForEachAsync(async sp =>
                 {
-                    var newLastPos = await _replicator.ProcessSyncPacket(sp);
+                    var newLastPos = await replicatorSink.ProcessSyncPacket(sp);
                     if (newLastPos.HasValue)
                     {
                         itemsCount++;
@@ -142,10 +156,18 @@ namespace LmdbCacheServer.Replica
             return (itemsCount, lastPos);
         }
 
+        public Task PostWriteLogEvent(ulong pos, WriteLogEvent wle) => 
+            Task.WhenAll(_replicators.Values.Select(async rep =>
+            {
+                var (s, _) = rep;
+                var sink = await s;
+                await sink(pos, wle);
+            })); // TODO: Add "write to 'm of n'" support 
+
         public void Dispose()
         {
-            _cancellationTokenSource.Cancel();
-            _replicator.Dispose();
+            _cts.Cancel();
+            //_replicator.Dispose();
         }
     }
 }
