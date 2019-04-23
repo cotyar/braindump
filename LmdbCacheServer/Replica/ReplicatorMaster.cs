@@ -26,7 +26,7 @@ namespace LmdbCacheServer.Replica
         private readonly WriteLogTable _wlTable;
         private readonly ReplicationConfig _replicationConfig;
         private readonly Func<WriteTransaction, string, ulong, VectorClock> _incrementClock;
-        private readonly ConcurrentDictionary<string, (ReplicatorSource, TaskCompletionSource<bool>)> _replicationSources;
+        private readonly ConcurrentDictionary<string, ReplicatorSource> _replicationSources;
         private readonly ConcurrentDictionary<string, (ReplicatorSink, TaskCompletionSource<bool>)> _replicationSinks;
         private readonly CancellationTokenSource _cts;
 
@@ -42,7 +42,7 @@ namespace LmdbCacheServer.Replica
             _replicationConfig = replicationConfig;
             _incrementClock = incrementClock;
             _cts = new CancellationTokenSource();
-            _replicationSources = new ConcurrentDictionary<string, (ReplicatorSource, TaskCompletionSource<bool>)>();
+            _replicationSources = new ConcurrentDictionary<string, ReplicatorSource>();
 
         }
 
@@ -55,80 +55,126 @@ namespace LmdbCacheServer.Replica
         public override Task<GetReplicaIdResponse> GetReplicaId(Empty request, ServerCallContext context) => 
             Task.FromResult(new GetReplicaIdResponse { ReplicaId = _ownReplicaId} );
 
-        public override Task SyncFrom(SyncFromRequest request, IServerStreamWriter<SyncPacket> responseStream, ServerCallContext context) =>
+        public override Task Sync(IAsyncStreamReader<SyncPacket> requestStream, IServerStreamWriter<SyncPacket> responseStream, ServerCallContext context) =>
             GrpcSafeHandler(async () =>
             {
-                var replicator = CreateReplicatorSource(responseStream.WriteAsync);
-                await replicator.SyncFrom(request.Since, request.IncludeMine ? new string[0] : new []{ request.ReplicaId });
-            });
+                ReplicatorSink replicatorSink = null;
+                var replicatorSource = CreateReplicatorSource(responseStream.WriteAsync);
 
-        public override Task<SyncFromRequest> SyncTo(SyncToRequest request, ServerCallContext context) =>
-            GrpcSafeHandler(() => new SyncFromRequest
-            {
-                ReplicaId = _ownReplicaId,
-                Since = _replicationTable.GetLastPos(request.ReplicaId) + 1 ?? 0,
-                IncludeMine = false,
-                IncludeAcked = true // TODO: Not used yet
-            });
-
-        public override Task<Empty> Publish(IAsyncStreamReader<SyncPacket> requestStream, ServerCallContext context) =>
-            GrpcSafeHandler(async () =>
-            {
-                ReplicatorSink replicator = null;
                 await requestStream.ForEachAsync(async syncPacket =>
                 {
-                    if (replicator == null)
+                    if (replicatorSink == null)
                     {
-                        replicator = CreateReplicatorSink(syncPacket.ReplicaId);
+                        _replicationSources.AddOrUpdate(syncPacket.ReplicaId, replicatorSource,
+                            (replicaId, rs) =>
+                            {
+                                rs.Dispose();
+                                return replicatorSource;
+                            });
+
+                        replicatorSink = CreateReplicatorSink(syncPacket.ReplicaId);
+                        await responseStream.WriteAsync(new SyncPacket
+                        {
+                            ReplicaId = _ownReplicaId,
+                            SyncFrom = new SyncFrom
+                            {
+                                ReplicaId = _ownReplicaId,
+                                Since = _replicationTable.GetLastPos(syncPacket.ReplicaId) + 1 ?? 0,
+                                IncludeMine = false,
+                                IncludeAcked = true // TODO: Not used yet
+                            }
+                        });
                     }
 
-                    await replicator.ProcessSyncPacket(syncPacket);
+                    if (syncPacket.PacketCase == SyncPacket.PacketOneofCase.SyncFrom)
+                    {
+                        var task = Task.Run(() => replicatorSource.SyncFrom(syncPacket.SyncFrom.Since, syncPacket.SyncFrom.IncludeMine ? new string[0] : new[] {syncPacket.SyncFrom.ReplicaId }));
+                        if (_replicationConfig.AwaitSyncFrom)
+                        {
+                            await task;
+                        }
+                    }
+                    else
+                    {
+                        await replicatorSink.ProcessSyncPacket(syncPacket);
+                    }
                 });
-
-                return new Empty();
             });
-    
 
-        public override Task Subscribe(SyncSubscribeRequest request, IServerStreamWriter<SyncPacket> responseStream, ServerCallContext context) =>
-            GrpcSafeHandler(async () =>
-            {
-                var tcs = new TaskCompletionSource<bool>();
-                var replicator = CreateReplicatorSource(responseStream.WriteAsync);
-                _replicationSources.AddOrUpdate(request.ReplicaId, (replicator, tcs), (s, writer) => throw new ReplicationIdUsedException(request.ReplicaId));
 
-                await tcs.Task;
-            });
+        //        public override Task SyncFrom(SyncFromRequest request, IServerStreamWriter<SyncPacket> responseStream, ServerCallContext context) =>
+        //            GrpcSafeHandler(async () =>
+        //            {
+        //                var replicator = CreateReplicatorSource(responseStream.WriteAsync);
+        //                await replicator.SyncFrom(request.Since, request.IncludeMine ? new string[0] : new []{ request.ReplicaId });
+        //            });
+        //
+        //        public override Task<SyncFromRequest> SyncTo(SyncToRequest request, ServerCallContext context) =>
+        //            GrpcSafeHandler(() => new SyncFromRequest
+        //            {
+        //                ReplicaId = _ownReplicaId,
+        //                Since = _replicationTable.GetLastPos(request.ReplicaId) + 1 ?? 0,
+        //                IncludeMine = false,
+        //                IncludeAcked = true // TODO: Not used yet
+        //            });
+        //
+        //        public override Task<Empty> Publish(IAsyncStreamReader<SyncPacket> requestStream, ServerCallContext context) =>
+        //            GrpcSafeHandler(async () =>
+        //            {
+        //                ReplicatorSink replicator = null;
+        //                await requestStream.ForEachAsync(async syncPacket =>
+        //                {
+        //                    if (replicator == null)
+        //                    {
+        //                        replicator = CreateReplicatorSink(syncPacket.ReplicaId);
+        //                    }
+        //
+        //                    await replicator.ProcessSyncPacket(syncPacket);
+        //                });
+        //
+        //                return new Empty();
+        //            });
+        //    
+        //
+        //        public override Task Subscribe(SyncSubscribeRequest request, IServerStreamWriter<SyncPacket> responseStream, ServerCallContext context) =>
+        //            GrpcSafeHandler(async () =>
+        //            {
+        //                var tcs = new TaskCompletionSource<bool>();
+        //                var replicator = CreateReplicatorSource(responseStream.WriteAsync);
+        //                _replicationSources.AddOrUpdate(request.ReplicaId, (replicator, tcs), (s, writer) => throw new ReplicationIdUsedException(request.ReplicaId));
+        //
+        //                await tcs.Task;
+        //            });
 
         public Task PostWriteLogEvent(ulong pos, WriteLogEvent wle) => 
-            Task.WhenAll(_replicationSources.Values.Select(slave => slave.Item1.WriteAsync(new SyncPacket
+            Task.WhenAll(_replicationSources.Values.Select(slave => slave.WriteAsync(new SyncPacket
             {
                 ReplicaId = _ownReplicaId,
                 Item = new Item { Pos = pos, LogEvent = wle }
             }))); // TODO: Add "write to 'm of n'" support 
 
-        public Task TerminateSync(string replicaId)
+        public bool TerminateSync(string replicaId)
         {
             if (_replicationSources.TryRemove(replicaId, out var streamWriter))
             {
-                streamWriter.Item1.Dispose();
-                streamWriter.Item2.SetResult(true);
+                streamWriter.Dispose();
+                return true;
             }
 
-            return Task.CompletedTask;
+            return false;
         }
 
         public void Dispose()
         {
-            foreach (var (_, (replicator, tcs)) in _replicationSources)
+            foreach (var (_, replicator) in _replicationSources)
             {
                 replicator.Dispose();
-                tcs.SetResult(true);
             }
         }
 
-        public override Task<Empty> Ack(IAsyncStreamReader<SyncAckRequest> requestStream, ServerCallContext context)
-        {
-            return base.Ack(requestStream, context); // TODO: Override when state replication is implemented
-        }
+//        public override Task<Empty> Ack(IAsyncStreamReader<SyncAckRequest> requestStream, ServerCallContext context)
+//        {
+//            return base.Ack(requestStream, context); // TODO: Override when state replication is implemented
+//        }
     }
 }

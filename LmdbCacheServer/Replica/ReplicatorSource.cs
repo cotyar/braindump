@@ -14,6 +14,7 @@ using static LmdbCache.KvMetadata.Types.Status;
 using static LmdbCache.KvMetadata.Types.UpdateAction;
 using static LmdbCache.SyncPacket.PacketOneofCase;
 using static LmdbCache.SyncPacket.Types;
+using static LmdbCache.WriteLogEvent.LoggedEventOneofCase;
 using static LmdbCache.WriteLogEvent.Types;
 
 namespace LmdbCacheServer.Replica
@@ -22,27 +23,28 @@ namespace LmdbCacheServer.Replica
     {
         private readonly LightningPersistence _lmdb;
         private readonly string _ownReplicaId;
+        private readonly KvTable _kvTable;
         private readonly WriteLogTable _wlTable;
         private readonly CancellationToken _cancellationToken;
         private readonly Func<SyncPacket, Task> _responseStreamWriteAsync;
 
         private readonly ReplicationConfig _replicationConfig;
-        private readonly Func<AbstractTransaction, string, ByteString> _getValue;
 
-        public ReplicatorSource(LightningPersistence lmdb, string _ownReplicaId,
+        public ReplicatorSource(LightningPersistence lmdb, string ownReplicaId,
             KvTable kvTable, WriteLogTable wlTable,
             ReplicationConfig replicationConfig, CancellationToken cancellationToken,
             Func<SyncPacket, Task> responseStreamWriteAsync)
         {
             _lmdb = lmdb;
-            this._ownReplicaId = _ownReplicaId;
+            _ownReplicaId = ownReplicaId;
+            _kvTable = kvTable;
             _wlTable = wlTable;
             _replicationConfig = replicationConfig;
             _cancellationToken = cancellationToken;
             _responseStreamWriteAsync = responseStreamWriteAsync;
-
-            _getValue = (txn, key) => kvTable.TryGet(txn, new KvKey(key)).Item2?.Value;
         }
+
+        private ByteString GetValue(AbstractTransaction txn, string key) => _kvTable.TryGet(txn, new KvKey(key)).Item2?.Value;
 
         public void Dispose()
         {
@@ -52,13 +54,14 @@ namespace LmdbCacheServer.Replica
         {
             var lastPos = since;
             Console.WriteLine($"Received replication request to sync from {lastPos}");
+            var until = _lmdb.Read(txn => _wlTable.GetLastClock(txn))?.Item1 ?? 0;
 
-            if (!_cancellationToken.IsCancellationRequested)
+            while (!_cancellationToken.IsCancellationRequested && lastPos <= until)
             {
                 var page = _lmdb.Read(txn =>
                 {
                     var logPage = _wlTable.GetLogPage(txn, lastPos, _replicationConfig.PageSize)
-                        .Where(logItem => !excludeOriginReplicas.Contains(logItem.Item2.OriginatorReplicaId))
+                        .Where(logItem => logItem.Item1 <= until && !excludeOriginReplicas.Contains(logItem.Item2.OriginatorReplicaId))
                         . // TODO: Add check for IncludeAcked
                         ToArray();
 
@@ -66,7 +69,7 @@ namespace LmdbCacheServer.Replica
                     {
                         if (logItem.Item2.LoggedEventCase == WriteLogEvent.LoggedEventOneofCase.Updated && (logItem.Item2.Updated.Value == null || logItem.Item2.Updated.Value.IsEmpty))
                         {
-                            var latestValue = _getValue(txn, logItem.Item2.Updated.Key);
+                            var latestValue = GetValue(txn, logItem.Item2.Updated.Key);
                             if (latestValue != null)
                             {
                                 logItem.Item2.Updated.Value = latestValue; // TODO: Handle "Value not found"
@@ -81,7 +84,8 @@ namespace LmdbCacheServer.Replica
                     return logPage;
                 });
 
-                if (page.Length > 0)
+                if (page.Length == 0) break;
+
                 {
                     if (_replicationConfig.UseBatching)
                     {
@@ -104,13 +108,13 @@ namespace LmdbCacheServer.Replica
                         }
                     }
                 }
-
-                await _responseStreamWriteAsync(new SyncPacket
-                {
-                    ReplicaId = _ownReplicaId,
-                    Footer = new Footer { LastPos = lastPos }
-                });
             }
+
+            await _responseStreamWriteAsync(new SyncPacket
+            {
+                ReplicaId = _ownReplicaId,
+                SkipPos = new SkipPos { LastPos = lastPos }
+            });
 
             Console.WriteLine($"Page replicated. Last pos: {lastPos}");
 

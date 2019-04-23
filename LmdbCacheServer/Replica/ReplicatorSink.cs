@@ -42,16 +42,16 @@ namespace LmdbCacheServer.Replica
             _incrementClock = incrementClock;
         }
 
-        public async Task<ulong?> ProcessSyncPacket(SyncPacket response)
+        public async Task<ulong?> ProcessSyncPacket(SyncPacket syncPacket)
         {
             if (_cancellationToken.IsCancellationRequested) return null;
 
-            switch (response.PacketCase)
+            switch (syncPacket.PacketCase)
             {
                 case Items:
-                    Console.WriteLine($"Received batch: '{response.Items.Batch.Count}'");
+                    Console.WriteLine($"Received batch: '{syncPacket.Items.Batch.Count}'");
                     ulong? lastPos = null;
-                    foreach (var responseItem in response.Items.Batch)
+                    foreach (var responseItem in syncPacket.Items.Batch)
                     {
                         if (_cancellationToken.IsCancellationRequested) break;
                         await SyncHandler((responseItem.Pos, responseItem.LogEvent));
@@ -59,15 +59,16 @@ namespace LmdbCacheServer.Replica
                     }
                     return lastPos;
                 case Item:
-                    //                            Console.WriteLine($"Received: '{response}'");
-                    await SyncHandler((response.Item.Pos, response.Item.LogEvent));
-                    return response.Item.Pos;
-                case Footer:
+                    //                            Console.WriteLine($"Received: '{syncPacket}'");
+                    await SyncHandler((syncPacket.Item.Pos, syncPacket.Item.LogEvent));
+                    return syncPacket.Item.Pos;
+                case SkipPos:
                     await _lmdb.WriteAsync(txn =>
                     {
-                        _replicationTable.SetLastPos(txn, _targetReplicaId, response.Footer.LastPos);
+                        _replicationTable.SetLastPos(txn, _targetReplicaId, syncPacket.SkipPos.LastPos);
                     }, false, true);
-                    return response.Footer.LastPos;
+                    return syncPacket.SkipPos.LastPos;
+                case SyncFrom:
                 case None:
                 default:
                     throw new ArgumentOutOfRangeException();

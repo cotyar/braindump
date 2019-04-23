@@ -27,6 +27,7 @@ message ReplicationConfig {
   uint32 port         = 1;
   uint32 pageSize     = 2;
   bool useBatching    = 3;
+  bool awaitSyncFrom  = 4;
 }
 
 message ReplicaConfig {
@@ -226,14 +227,16 @@ message KeyValueListResponse {
 service SyncService {
   rpc GetReplicaId(Empty) returns (GetReplicaIdResponse) {}
 
-  // Pull sync
-  rpc SyncFrom(SyncFromRequest) returns (stream SyncPacket) {} 
-  rpc Subscribe(SyncSubscribeRequest) returns (stream SyncPacket) {} // TODO: Add Acks streaming
-  rpc Ack(stream SyncAckRequest) returns (Empty) {} // TODO: Add Acks streaming
+  rpc Sync(stream SyncPacket) returns (stream SyncPacket) {} //stream SyncAckRequest) {} 
 
-  // Push sync
-  rpc SyncTo(SyncToRequest) returns (SyncFromRequest) {} 
-  rpc Publish(stream SyncPacket) returns (Empty) {} //stream SyncAckRequest) {} 
+  // // Pull sync
+  // rpc SyncFrom(SyncFromRequest) returns (stream SyncPacket) {} 
+  // rpc Subscribe(SyncSubscribeRequest) returns (stream SyncPacket) {} // TODO: Add Acks streaming
+  // rpc Ack(stream SyncAckRequest) returns (Empty) {} // TODO: Add Acks streaming
+
+  // // Push sync
+  // rpc SyncTo(SyncToRequest) returns (SyncFromRequest) {} 
+  // rpc Publish(stream SyncPacket) returns (Empty) {} //stream SyncAckRequest) {} 
 }
 
 ///////////////////////////////
@@ -256,6 +259,7 @@ message WriteLogEvent {
   VectorClock clock          = 1; 
   string correlationId       = 2;
   string originatorReplicaId = 3;
+  
   oneof loggedEvent {
     AddedOrUpdated updated   = 5;
     Deleted deleted          = 7;
@@ -267,14 +271,13 @@ message GetReplicaIdResponse {
   string replicaId   = 1;
 }
 
-message SyncFromRequest {
-  string replicaId   = 1; // TODO: Add pagesize?
-  uint64 since       = 2; 
-  bool includeMine   = 3;
-  bool includeAcked  = 4;
-}
-
 message SyncPacket {
+  message SyncFrom {
+    string replicaId   = 1; // TODO: Add pagesize?
+    uint64 since       = 2; 
+    bool includeMine   = 3;
+    bool includeAcked  = 4;
+  }
   message Item {
     uint64 pos             = 1;
     WriteLogEvent logEvent = 2;
@@ -282,34 +285,36 @@ message SyncPacket {
   message Items {
     repeated Item batch    = 1;
   }
-  message Footer {
+  message SkipPos {
     uint64 lastPos         = 1;
   }
   
-  string replicaId  = 1;
+  string replicaId    = 1;
+
   oneof packet {
-    Items items     = 5;
-    Item  item      = 6;
-    Footer footer   = 7;
+    SyncFrom syncFrom = 4;
+    Items items       = 5;
+    Item  item        = 6;
+    SkipPos skipPos   = 7;
   }
 }
 
-message SyncSubscribeRequest {
-  string replicaId   = 1;
-}
+// message SyncSubscribeRequest {
+//   string replicaId   = 1;
+// }
 
 // message SyncSubscribeResponse {
 //   uint64 pos             = 1;
 //   WriteLogEvent logEvent = 2;
 // }
 
-message SyncAckRequest {
-  uint64 eventId = 1;
-}
+// message SyncAckRequest {
+//   uint64 eventId = 1;
+// }
 
-message SyncToRequest {
-  string replicaId   = 1;
-}
+// message SyncToRequest {
+//   string replicaId   = 1;
+// }
 
 ///////////////////////////////
 

@@ -71,18 +71,6 @@ namespace LmdbCacheServer.Replica
                     }
                 });
 
-            _replicators = new List<IReplicator>();
-
-            if (!string.IsNullOrWhiteSpace(ReplicaConfig.MasterNode))
-            {
-                // TODO: Add supervision
-
-                _replicatorSlave = new ReplicatorSlave(_lmdb, ReplicaConfig.ReplicaId,
-                    _kvTable, _replicationTable, _wlTable, ReplicaConfig.Replication, IncrementClockWithRemoteUpdate);
-                var added = GrpcSafeHandler(() => _replicatorSlave.StartSync(new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure))).GetAwaiter().GetResult(); 
-                _replicators.Add(_replicatorSlave);
-            }
-
             _webServerCompletion = WebServer.StartWebServer(_shutdownCancellationTokenSource.Token, ReplicaConfig.HostName, ReplicaConfig.WebUIPort);
 
             _monitor = new Monitor(CollectStats, ReplicaConfig.MonitoringInterval);
@@ -94,6 +82,19 @@ namespace LmdbCacheServer.Replica
             _serverMonitoring.Start();
 
             Console.WriteLine("Monitoring server started listening on port " + ReplicaConfig.MonitoringPort);
+
+
+            _replicators = new List<IReplicator>();
+
+            if (!string.IsNullOrWhiteSpace(ReplicaConfig.MasterNode))
+            {
+                // TODO: Add supervision
+
+                _replicatorSlave = new ReplicatorSlave(_lmdb, ReplicaConfig.ReplicaId,
+                    _kvTable, _replicationTable, _wlTable, ReplicaConfig.Replication, IncrementClockWithRemoteUpdate);
+                _replicatorSlave.StartSync(new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure)).GetAwaiter().GetResult(); 
+                _replicators.Add(_replicatorSlave);
+            }
 
             var replicatorMaster = new ReplicatorMaster(_lmdb, replicaConfig.ReplicaId, 
                 _kvTable, _replicationTable, _wlTable, ReplicaConfig.Replication, IncrementClockWithRemoteUpdate);
