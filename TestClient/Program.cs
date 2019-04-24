@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using LmdbCache;
 using LmdbCacheClient;
+using static LmdbCache.ValueMetadata.Types.Compression;
+using static LmdbCache.ValueMetadata.Types.HashedWith;
 
 namespace TestClient
 {
@@ -44,7 +46,12 @@ namespace TestClient
             {
                 var kvs = kvsAll.Skip(i * keysCount).Take(keysCount).ToDictionary(kv => kv.Key, kv => kv.Value);
 
-                using (var writeClient = new LightClient(new Channel($"{host}:{port}", ChannelCredentials.Insecure), true))
+                using (var writeClient = new LightClient(new Channel($"{host}:{port}", ChannelCredentials.Insecure), new ClientConfig
+                    {
+                        UseStreaming = true,
+                        Compression = None,
+                        HashedWith = Md5
+                    }))
                 {
                     sw = new Stopwatch();
                     sw.Start();
@@ -68,7 +75,12 @@ namespace TestClient
             {
                 var kvs = kvsAll.Skip((i % writeStreams) * keysCount).Take(keysCount).ToDictionary(kv => kv.Key, kv => kv.Value);
 
-                using (var readClient = new LightClient(new Channel($"{host}:{port}", ChannelCredentials.Insecure), true))
+                using (var readClient = new LightClient(new Channel($"{host}:{port}", ChannelCredentials.Insecure), new ClientConfig
+                    {
+                        UseStreaming = true,
+                        Compression = None,
+                        HashedWith = Md5
+                    }))
                 {
                     var getDict = new Dictionary<string, byte[]>();
                     sw = new Stopwatch();

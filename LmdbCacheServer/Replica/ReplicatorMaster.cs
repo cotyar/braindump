@@ -27,7 +27,6 @@ namespace LmdbCacheServer.Replica
         private readonly ReplicationConfig _replicationConfig;
         private readonly Func<WriteTransaction, string, ulong, VectorClock> _incrementClock;
         private readonly ConcurrentDictionary<string, ReplicatorSource> _replicationSources;
-        private readonly ConcurrentDictionary<string, (ReplicatorSink, TaskCompletionSource<bool>)> _replicationSinks;
         private readonly CancellationTokenSource _cts;
 
         public ReplicatorMaster(LightningPersistence lmdb, string ownReplicaId, 
@@ -100,51 +99,6 @@ namespace LmdbCacheServer.Replica
                     }
                 });
             });
-
-
-        //        public override Task SyncFrom(SyncFromRequest request, IServerStreamWriter<SyncPacket> responseStream, ServerCallContext context) =>
-        //            GrpcSafeHandler(async () =>
-        //            {
-        //                var replicator = CreateReplicatorSource(responseStream.WriteAsync);
-        //                await replicator.SyncFrom(request.Since, request.IncludeMine ? new string[0] : new []{ request.ReplicaId });
-        //            });
-        //
-        //        public override Task<SyncFromRequest> SyncTo(SyncToRequest request, ServerCallContext context) =>
-        //            GrpcSafeHandler(() => new SyncFromRequest
-        //            {
-        //                ReplicaId = _ownReplicaId,
-        //                Since = _replicationTable.GetLastPos(request.ReplicaId) + 1 ?? 0,
-        //                IncludeMine = false,
-        //                IncludeAcked = true // TODO: Not used yet
-        //            });
-        //
-        //        public override Task<Empty> Publish(IAsyncStreamReader<SyncPacket> requestStream, ServerCallContext context) =>
-        //            GrpcSafeHandler(async () =>
-        //            {
-        //                ReplicatorSink replicator = null;
-        //                await requestStream.ForEachAsync(async syncPacket =>
-        //                {
-        //                    if (replicator == null)
-        //                    {
-        //                        replicator = CreateReplicatorSink(syncPacket.ReplicaId);
-        //                    }
-        //
-        //                    await replicator.ProcessSyncPacket(syncPacket);
-        //                });
-        //
-        //                return new Empty();
-        //            });
-        //    
-        //
-        //        public override Task Subscribe(SyncSubscribeRequest request, IServerStreamWriter<SyncPacket> responseStream, ServerCallContext context) =>
-        //            GrpcSafeHandler(async () =>
-        //            {
-        //                var tcs = new TaskCompletionSource<bool>();
-        //                var replicator = CreateReplicatorSource(responseStream.WriteAsync);
-        //                _replicationSources.AddOrUpdate(request.ReplicaId, (replicator, tcs), (s, writer) => throw new ReplicationIdUsedException(request.ReplicaId));
-        //
-        //                await tcs.Task;
-        //            });
 
         public Task PostWriteLogEvent(ulong pos, WriteLogEvent wle) => 
             Task.WhenAll(_replicationSources.Values.Select(slave => slave.WriteAsync(new SyncPacket

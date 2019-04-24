@@ -189,4 +189,6 @@ docs/content/release-notes.md
 \.fake/
 release.cmd
 
+node_modules/
+
 *.mdb

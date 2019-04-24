@@ -44,6 +44,12 @@ message ReplicaConfig {
   ReplicationConfig replication   = 20;
 }
 
+message ClientConfig {
+  bool useStreaming                     = 1;
+  ValueMetadata.Compression compression = 2;
+  ValueMetadata.HashedWith hashedWith   = 3;
+}
+
 // Interface exported by the server.
 service LmdbCacheService {
 
@@ -78,6 +84,22 @@ message VectorClock { // In fact we are following LWWRegister ("Last Write Wins"
   uint64 ticksOffsetUtc     = 2;
 }
 
+message ValueMetadata {
+  enum HashedWith {
+    MD5                 = 0;
+  }
+  enum Compression {
+    NONE                = 0;
+    LZ4                 = 1;
+    GZIP                = 2;
+  }
+  HashedWith hashedWith   = 1;
+  bytes hash              = 2;
+  Compression compression = 3;
+  uint32 sizeCompressed   = 4;
+  uint32 sizeFull         = 5;
+}
+
 message KvMetadata {
   enum Status {
     ACTIVE              = 0;
@@ -90,34 +112,29 @@ message KvMetadata {
     UPDATED             = 1;
     REPLICATED          = 2;
   }
-  enum Compression {
-    NONE                = 0;
-    LZ4                 = 1;
-    GZIP                = 2;
-  }
-  Status status           = 1;
-  Timestamp expiry        = 2;
-  VectorClock updated     = 3;
-  UpdateAction action     = 4;
-  Compression compression = 5;
-  uint32 valueSize        = 6;
-  string correlationId    = 7;
+  Status status               = 1;
+  Timestamp expiry            = 2;
+  VectorClock updated         = 3;
+  UpdateAction action         = 4;
+  string correlationId        = 5;
+  ValueMetadata valueMetadata = 6;
 }
+
 
 message AddRequest {
   message Header {
-    bool overrideExisting               = 1;
-    KvMetadata.Compression compression  = 2;    
-    string correlationId                = 3;
-    uint32 chunksCount                  = 4;
+    bool overrideExisting = 1;
+    string correlationId  = 2;
+    uint32 chunksCount    = 3;
   }
   message AddRequestEntry {
-    string    key    = 1;
-    Timestamp expiry = 2; 
-    bytes     value  = 3;
+    string key                  = 1;
+    Timestamp expiry            = 2; 
+    ValueMetadata valueMetadata = 3;    
+    bytes value                 = 4;
   }
   Header header   = 1;
-  repeated AddRequestEntry entries    = 5;
+  repeated AddRequestEntry entries = 5;
 }
 
 message AddResponse {
@@ -167,10 +184,10 @@ message GetResponse {
       NOT_FOUND           = 1;
       FAILURE             = 2;
     }
-    GetResult result                    = 1;
-    uint32    index                     = 2;
-    KvMetadata.Compression compression  = 3;
-    bytes     value                     = 5;
+    GetResult result            = 1;
+    uint32    index             = 2;
+    ValueMetadata valueMetadata = 3;
+    bytes     value             = 5;
   }
   repeated GetResponseEntry results = 1;
 }
@@ -245,9 +262,10 @@ service SyncService {
 
 message WriteLogEvent {
   message AddedOrUpdated { // TODO: Add a value hash?
-    string    key       = 1;
-    Timestamp expiry    = 2; 
-    bytes     value     = 3;
+    string    key               = 1;
+    Timestamp expiry            = 2; 
+    ValueMetadata valueMetadata = 3;
+    bytes value                 = 4;
   }
   message Deleted {
     string      key     = 1;

@@ -91,7 +91,8 @@ namespace LmdbCacheServer.Replica
                             Expiry = addedOrUpdated.Expiry,
                             Action = Replicated,
                             Updated = _incrementClock(txn, _targetReplicaId, syncEvent.Item1),
-                            Compression = KvMetadata.Types.Compression.None // TODO: Use correct compression mode
+                            ValueMetadata = addedOrUpdated.ValueMetadata,
+                            CorrelationId = syncEvent.Item2.CorrelationId
                         };
 
                         var wasUpdated = _kvTable.Add(
@@ -116,7 +117,9 @@ namespace LmdbCacheServer.Replica
                             Status = KvMetadata.Types.Status.Deleted,
                             Expiry = currentClock.TicksOffsetUtc.ToTimestamp(),
                             Action = Replicated,
-                            Updated = currentClock
+                            Updated = currentClock,
+                            CorrelationId = syncEvent.Item2.CorrelationId,
+                            ValueMetadata = null
                         };
 
                         var kvKey = new KvKey(deleted.Key);

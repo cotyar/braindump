@@ -11,6 +11,8 @@ using LmdbCacheServer;
 using LmdbCacheServer.Replica;
 using LmdbCacheServer.Tables;
 using LmdbLight;
+using static LmdbCache.ValueMetadata.Types.Compression;
+using static LmdbCache.ValueMetadata.Types.HashedWith;
 
 namespace LmdbLightTest
 {
@@ -41,7 +43,12 @@ namespace LmdbLightTest
             };
             _server = new Replica(ReplicaConfig);
 
-            _client = new LightClient(new Channel($"127.0.0.1:{port}", ChannelCredentials.Insecure), true);
+            _client = new LightClient(new Channel($"127.0.0.1:{port}", ChannelCredentials.Insecure), new ClientConfig
+                {
+                    UseStreaming = true,
+                    Compression = None,
+                    HashedWith = Md5
+                });
         }
 
         public HashSet<string> Contains(IEnumerable<string> keys) => _client.Contains(keys);

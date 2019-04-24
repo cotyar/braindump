@@ -18,6 +18,7 @@ goog.exportSymbol('proto.LmdbCache.AddResponse', null, global);
 goog.exportSymbol('proto.LmdbCache.AddResponse.AddResult', null, global);
 goog.exportSymbol('proto.LmdbCache.AddStreamRequest', null, global);
 goog.exportSymbol('proto.LmdbCache.AddStreamRequest.DataChunk', null, global);
+goog.exportSymbol('proto.LmdbCache.ClientConfig', null, global);
 goog.exportSymbol('proto.LmdbCache.ClusterStatus', null, global);
 goog.exportSymbol('proto.LmdbCache.CollectedStats', null, global);
 goog.exportSymbol('proto.LmdbCache.ContainsKeysResponse', null, global);
@@ -39,7 +40,6 @@ goog.exportSymbol('proto.LmdbCache.KeyListRequest', null, global);
 goog.exportSymbol('proto.LmdbCache.KeyListResponse', null, global);
 goog.exportSymbol('proto.LmdbCache.KeyValueListResponse', null, global);
 goog.exportSymbol('proto.LmdbCache.KvMetadata', null, global);
-goog.exportSymbol('proto.LmdbCache.KvMetadata.Compression', null, global);
 goog.exportSymbol('proto.LmdbCache.KvMetadata.Status', null, global);
 goog.exportSymbol('proto.LmdbCache.KvMetadata.UpdateAction', null, global);
 goog.exportSymbol('proto.LmdbCache.LightningConfig', null, global);
@@ -57,6 +57,9 @@ goog.exportSymbol('proto.LmdbCache.SyncPacket.Items', null, global);
 goog.exportSymbol('proto.LmdbCache.SyncPacket.SkipPos', null, global);
 goog.exportSymbol('proto.LmdbCache.SyncPacket.SyncFrom', null, global);
 goog.exportSymbol('proto.LmdbCache.Timestamp', null, global);
+goog.exportSymbol('proto.LmdbCache.ValueMetadata', null, global);
+goog.exportSymbol('proto.LmdbCache.ValueMetadata.Compression', null, global);
+goog.exportSymbol('proto.LmdbCache.ValueMetadata.HashedWith', null, global);
 goog.exportSymbol('proto.LmdbCache.VectorClock', null, global);
 goog.exportSymbol('proto.LmdbCache.WriteLogEvent', null, global);
 goog.exportSymbol('proto.LmdbCache.WriteLogEvent.AddedOrUpdated', null, global);
@@ -968,6 +971,204 @@ proto.LmdbCache.ReplicaConfig.prototype.hasReplication = function() {
  * @extends {jspb.Message}
  * @constructor
  */
+proto.LmdbCache.ClientConfig = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.LmdbCache.ClientConfig, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  proto.LmdbCache.ClientConfig.displayName = 'proto.LmdbCache.ClientConfig';
+}
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.LmdbCache.ClientConfig.prototype.toObject = function(opt_includeInstance) {
+  return proto.LmdbCache.ClientConfig.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.LmdbCache.ClientConfig} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.LmdbCache.ClientConfig.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    usestreaming: jspb.Message.getFieldWithDefault(msg, 1, false),
+    compression: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    hashedwith: jspb.Message.getFieldWithDefault(msg, 3, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.LmdbCache.ClientConfig}
+ */
+proto.LmdbCache.ClientConfig.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.LmdbCache.ClientConfig;
+  return proto.LmdbCache.ClientConfig.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.LmdbCache.ClientConfig} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.LmdbCache.ClientConfig}
+ */
+proto.LmdbCache.ClientConfig.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setUsestreaming(value);
+      break;
+    case 2:
+      var value = /** @type {!proto.LmdbCache.ValueMetadata.Compression} */ (reader.readEnum());
+      msg.setCompression(value);
+      break;
+    case 3:
+      var value = /** @type {!proto.LmdbCache.ValueMetadata.HashedWith} */ (reader.readEnum());
+      msg.setHashedwith(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.LmdbCache.ClientConfig.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.LmdbCache.ClientConfig.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.LmdbCache.ClientConfig} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.LmdbCache.ClientConfig.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getUsestreaming();
+  if (f) {
+    writer.writeBool(
+      1,
+      f
+    );
+  }
+  f = message.getCompression();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      2,
+      f
+    );
+  }
+  f = message.getHashedwith();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      3,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional bool useStreaming = 1;
+ * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
+ * You should avoid comparisons like {@code val === true/false} in those cases.
+ * @return {boolean}
+ */
+proto.LmdbCache.ClientConfig.prototype.getUsestreaming = function() {
+  return /** @type {boolean} */ (jspb.Message.getFieldWithDefault(this, 1, false));
+};
+
+
+/** @param {boolean} value */
+proto.LmdbCache.ClientConfig.prototype.setUsestreaming = function(value) {
+  jspb.Message.setProto3BooleanField(this, 1, value);
+};
+
+
+/**
+ * optional ValueMetadata.Compression compression = 2;
+ * @return {!proto.LmdbCache.ValueMetadata.Compression}
+ */
+proto.LmdbCache.ClientConfig.prototype.getCompression = function() {
+  return /** @type {!proto.LmdbCache.ValueMetadata.Compression} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/** @param {!proto.LmdbCache.ValueMetadata.Compression} value */
+proto.LmdbCache.ClientConfig.prototype.setCompression = function(value) {
+  jspb.Message.setProto3EnumField(this, 2, value);
+};
+
+
+/**
+ * optional ValueMetadata.HashedWith hashedWith = 3;
+ * @return {!proto.LmdbCache.ValueMetadata.HashedWith}
+ */
+proto.LmdbCache.ClientConfig.prototype.getHashedwith = function() {
+  return /** @type {!proto.LmdbCache.ValueMetadata.HashedWith} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/** @param {!proto.LmdbCache.ValueMetadata.HashedWith} value */
+proto.LmdbCache.ClientConfig.prototype.setHashedwith = function(value) {
+  jspb.Message.setProto3EnumField(this, 3, value);
+};
+
+
+
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
 proto.LmdbCache.Empty = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
@@ -1397,6 +1598,296 @@ proto.LmdbCache.VectorClock.prototype.setTicksoffsetutc = function(value) {
  * @extends {jspb.Message}
  * @constructor
  */
+proto.LmdbCache.ValueMetadata = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.LmdbCache.ValueMetadata, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  proto.LmdbCache.ValueMetadata.displayName = 'proto.LmdbCache.ValueMetadata';
+}
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto suitable for use in Soy templates.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     com.google.apps.jspb.JsClassTemplate.JS_RESERVED_WORDS.
+ * @param {boolean=} opt_includeInstance Whether to include the JSPB instance
+ *     for transitional soy proto support: http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.LmdbCache.ValueMetadata.prototype.toObject = function(opt_includeInstance) {
+  return proto.LmdbCache.ValueMetadata.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.LmdbCache.ValueMetadata} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.LmdbCache.ValueMetadata.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    hashedwith: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    hash: msg.getHash_asB64(),
+    compression: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    sizecompressed: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    sizefull: jspb.Message.getFieldWithDefault(msg, 5, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.LmdbCache.ValueMetadata}
+ */
+proto.LmdbCache.ValueMetadata.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.LmdbCache.ValueMetadata;
+  return proto.LmdbCache.ValueMetadata.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.LmdbCache.ValueMetadata} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.LmdbCache.ValueMetadata}
+ */
+proto.LmdbCache.ValueMetadata.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {!proto.LmdbCache.ValueMetadata.HashedWith} */ (reader.readEnum());
+      msg.setHashedwith(value);
+      break;
+    case 2:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setHash(value);
+      break;
+    case 3:
+      var value = /** @type {!proto.LmdbCache.ValueMetadata.Compression} */ (reader.readEnum());
+      msg.setCompression(value);
+      break;
+    case 4:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setSizecompressed(value);
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setSizefull(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.LmdbCache.ValueMetadata.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.LmdbCache.ValueMetadata.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.LmdbCache.ValueMetadata} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.LmdbCache.ValueMetadata.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getHashedwith();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      1,
+      f
+    );
+  }
+  f = message.getHash_asU8();
+  if (f.length > 0) {
+    writer.writeBytes(
+      2,
+      f
+    );
+  }
+  f = message.getCompression();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      3,
+      f
+    );
+  }
+  f = message.getSizecompressed();
+  if (f !== 0) {
+    writer.writeUint32(
+      4,
+      f
+    );
+  }
+  f = message.getSizefull();
+  if (f !== 0) {
+    writer.writeUint32(
+      5,
+      f
+    );
+  }
+};
+
+
+/**
+ * @enum {number}
+ */
+proto.LmdbCache.ValueMetadata.HashedWith = {
+  MD5: 0
+};
+
+/**
+ * @enum {number}
+ */
+proto.LmdbCache.ValueMetadata.Compression = {
+  NONE: 0,
+  LZ4: 1,
+  GZIP: 2
+};
+
+/**
+ * optional HashedWith hashedWith = 1;
+ * @return {!proto.LmdbCache.ValueMetadata.HashedWith}
+ */
+proto.LmdbCache.ValueMetadata.prototype.getHashedwith = function() {
+  return /** @type {!proto.LmdbCache.ValueMetadata.HashedWith} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/** @param {!proto.LmdbCache.ValueMetadata.HashedWith} value */
+proto.LmdbCache.ValueMetadata.prototype.setHashedwith = function(value) {
+  jspb.Message.setProto3EnumField(this, 1, value);
+};
+
+
+/**
+ * optional bytes hash = 2;
+ * @return {!(string|Uint8Array)}
+ */
+proto.LmdbCache.ValueMetadata.prototype.getHash = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * optional bytes hash = 2;
+ * This is a type-conversion wrapper around `getHash()`
+ * @return {string}
+ */
+proto.LmdbCache.ValueMetadata.prototype.getHash_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getHash()));
+};
+
+
+/**
+ * optional bytes hash = 2;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getHash()`
+ * @return {!Uint8Array}
+ */
+proto.LmdbCache.ValueMetadata.prototype.getHash_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getHash()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.LmdbCache.ValueMetadata.prototype.setHash = function(value) {
+  jspb.Message.setProto3BytesField(this, 2, value);
+};
+
+
+/**
+ * optional Compression compression = 3;
+ * @return {!proto.LmdbCache.ValueMetadata.Compression}
+ */
+proto.LmdbCache.ValueMetadata.prototype.getCompression = function() {
+  return /** @type {!proto.LmdbCache.ValueMetadata.Compression} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/** @param {!proto.LmdbCache.ValueMetadata.Compression} value */
+proto.LmdbCache.ValueMetadata.prototype.setCompression = function(value) {
+  jspb.Message.setProto3EnumField(this, 3, value);
+};
+
+
+/**
+ * optional uint32 sizeCompressed = 4;
+ * @return {number}
+ */
+proto.LmdbCache.ValueMetadata.prototype.getSizecompressed = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+};
+
+
+/** @param {number} value */
+proto.LmdbCache.ValueMetadata.prototype.setSizecompressed = function(value) {
+  jspb.Message.setProto3IntField(this, 4, value);
+};
+
+
+/**
+ * optional uint32 sizeFull = 5;
+ * @return {number}
+ */
+proto.LmdbCache.ValueMetadata.prototype.getSizefull = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/** @param {number} value */
+proto.LmdbCache.ValueMetadata.prototype.setSizefull = function(value) {
+  jspb.Message.setProto3IntField(this, 5, value);
+};
+
+
+
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
 proto.LmdbCache.KvMetadata = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
@@ -1437,9 +1928,8 @@ proto.LmdbCache.KvMetadata.toObject = function(includeInstance, msg) {
     expiry: (f = msg.getExpiry()) && proto.LmdbCache.Timestamp.toObject(includeInstance, f),
     updated: (f = msg.getUpdated()) && proto.LmdbCache.VectorClock.toObject(includeInstance, f),
     action: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    compression: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    valuesize: jspb.Message.getFieldWithDefault(msg, 6, 0),
-    correlationid: jspb.Message.getFieldWithDefault(msg, 7, "")
+    correlationid: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    valuemetadata: (f = msg.getValuemetadata()) && proto.LmdbCache.ValueMetadata.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1495,16 +1985,13 @@ proto.LmdbCache.KvMetadata.deserializeBinaryFromReader = function(msg, reader) {
       msg.setAction(value);
       break;
     case 5:
-      var value = /** @type {!proto.LmdbCache.KvMetadata.Compression} */ (reader.readEnum());
-      msg.setCompression(value);
-      break;
-    case 6:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setValuesize(value);
-      break;
-    case 7:
       var value = /** @type {string} */ (reader.readString());
       msg.setCorrelationid(value);
+      break;
+    case 6:
+      var value = new proto.LmdbCache.ValueMetadata;
+      reader.readMessage(value,proto.LmdbCache.ValueMetadata.deserializeBinaryFromReader);
+      msg.setValuemetadata(value);
       break;
     default:
       reader.skipField();
@@ -1565,25 +2052,19 @@ proto.LmdbCache.KvMetadata.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getCompression();
-  if (f !== 0.0) {
-    writer.writeEnum(
+  f = message.getCorrelationid();
+  if (f.length > 0) {
+    writer.writeString(
       5,
       f
     );
   }
-  f = message.getValuesize();
-  if (f !== 0) {
-    writer.writeUint32(
+  f = message.getValuemetadata();
+  if (f != null) {
+    writer.writeMessage(
       6,
-      f
-    );
-  }
-  f = message.getCorrelationid();
-  if (f.length > 0) {
-    writer.writeString(
-      7,
-      f
+      f,
+      proto.LmdbCache.ValueMetadata.serializeBinaryToWriter
     );
   }
 };
@@ -1605,15 +2086,6 @@ proto.LmdbCache.KvMetadata.UpdateAction = {
   ADDED: 0,
   UPDATED: 1,
   REPLICATED: 2
-};
-
-/**
- * @enum {number}
- */
-proto.LmdbCache.KvMetadata.Compression = {
-  NONE: 0,
-  LZ4: 1,
-  GZIP: 2
 };
 
 /**
@@ -1707,47 +2179,47 @@ proto.LmdbCache.KvMetadata.prototype.setAction = function(value) {
 
 
 /**
- * optional Compression compression = 5;
- * @return {!proto.LmdbCache.KvMetadata.Compression}
- */
-proto.LmdbCache.KvMetadata.prototype.getCompression = function() {
-  return /** @type {!proto.LmdbCache.KvMetadata.Compression} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
-};
-
-
-/** @param {!proto.LmdbCache.KvMetadata.Compression} value */
-proto.LmdbCache.KvMetadata.prototype.setCompression = function(value) {
-  jspb.Message.setProto3EnumField(this, 5, value);
-};
-
-
-/**
- * optional uint32 valueSize = 6;
- * @return {number}
- */
-proto.LmdbCache.KvMetadata.prototype.getValuesize = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
-};
-
-
-/** @param {number} value */
-proto.LmdbCache.KvMetadata.prototype.setValuesize = function(value) {
-  jspb.Message.setProto3IntField(this, 6, value);
-};
-
-
-/**
- * optional string correlationId = 7;
+ * optional string correlationId = 5;
  * @return {string}
  */
 proto.LmdbCache.KvMetadata.prototype.getCorrelationid = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
 };
 
 
 /** @param {string} value */
 proto.LmdbCache.KvMetadata.prototype.setCorrelationid = function(value) {
-  jspb.Message.setProto3StringField(this, 7, value);
+  jspb.Message.setProto3StringField(this, 5, value);
+};
+
+
+/**
+ * optional ValueMetadata valueMetadata = 6;
+ * @return {?proto.LmdbCache.ValueMetadata}
+ */
+proto.LmdbCache.KvMetadata.prototype.getValuemetadata = function() {
+  return /** @type{?proto.LmdbCache.ValueMetadata} */ (
+    jspb.Message.getWrapperField(this, proto.LmdbCache.ValueMetadata, 6));
+};
+
+
+/** @param {?proto.LmdbCache.ValueMetadata|undefined} value */
+proto.LmdbCache.KvMetadata.prototype.setValuemetadata = function(value) {
+  jspb.Message.setWrapperField(this, 6, value);
+};
+
+
+proto.LmdbCache.KvMetadata.prototype.clearValuemetadata = function() {
+  this.setValuemetadata(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.LmdbCache.KvMetadata.prototype.hasValuemetadata = function() {
+  return jspb.Message.getField(this, 6) != null;
 };
 
 
@@ -1950,9 +2422,8 @@ proto.LmdbCache.AddRequest.Header.prototype.toObject = function(opt_includeInsta
 proto.LmdbCache.AddRequest.Header.toObject = function(includeInstance, msg) {
   var f, obj = {
     overrideexisting: jspb.Message.getFieldWithDefault(msg, 1, false),
-    compression: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    correlationid: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    chunkscount: jspb.Message.getFieldWithDefault(msg, 4, 0)
+    correlationid: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    chunkscount: jspb.Message.getFieldWithDefault(msg, 3, 0)
   };
 
   if (includeInstance) {
@@ -1994,14 +2465,10 @@ proto.LmdbCache.AddRequest.Header.deserializeBinaryFromReader = function(msg, re
       msg.setOverrideexisting(value);
       break;
     case 2:
-      var value = /** @type {!proto.LmdbCache.KvMetadata.Compression} */ (reader.readEnum());
-      msg.setCompression(value);
-      break;
-    case 3:
       var value = /** @type {string} */ (reader.readString());
       msg.setCorrelationid(value);
       break;
-    case 4:
+    case 3:
       var value = /** @type {number} */ (reader.readUint32());
       msg.setChunkscount(value);
       break;
@@ -2041,24 +2508,17 @@ proto.LmdbCache.AddRequest.Header.serializeBinaryToWriter = function(message, wr
       f
     );
   }
-  f = message.getCompression();
-  if (f !== 0.0) {
-    writer.writeEnum(
-      2,
-      f
-    );
-  }
   f = message.getCorrelationid();
   if (f.length > 0) {
     writer.writeString(
-      3,
+      2,
       f
     );
   }
   f = message.getChunkscount();
   if (f !== 0) {
     writer.writeUint32(
-      4,
+      3,
       f
     );
   }
@@ -2083,47 +2543,32 @@ proto.LmdbCache.AddRequest.Header.prototype.setOverrideexisting = function(value
 
 
 /**
- * optional KvMetadata.Compression compression = 2;
- * @return {!proto.LmdbCache.KvMetadata.Compression}
- */
-proto.LmdbCache.AddRequest.Header.prototype.getCompression = function() {
-  return /** @type {!proto.LmdbCache.KvMetadata.Compression} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
-};
-
-
-/** @param {!proto.LmdbCache.KvMetadata.Compression} value */
-proto.LmdbCache.AddRequest.Header.prototype.setCompression = function(value) {
-  jspb.Message.setProto3EnumField(this, 2, value);
-};
-
-
-/**
- * optional string correlationId = 3;
+ * optional string correlationId = 2;
  * @return {string}
  */
 proto.LmdbCache.AddRequest.Header.prototype.getCorrelationid = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /** @param {string} value */
 proto.LmdbCache.AddRequest.Header.prototype.setCorrelationid = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
 /**
- * optional uint32 chunksCount = 4;
+ * optional uint32 chunksCount = 3;
  * @return {number}
  */
 proto.LmdbCache.AddRequest.Header.prototype.getChunkscount = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
 
 /** @param {number} value */
 proto.LmdbCache.AddRequest.Header.prototype.setChunkscount = function(value) {
-  jspb.Message.setProto3IntField(this, 4, value);
+  jspb.Message.setProto3IntField(this, 3, value);
 };
 
 
@@ -2176,6 +2621,7 @@ proto.LmdbCache.AddRequest.AddRequestEntry.toObject = function(includeInstance, 
   var f, obj = {
     key: jspb.Message.getFieldWithDefault(msg, 1, ""),
     expiry: (f = msg.getExpiry()) && proto.LmdbCache.Timestamp.toObject(includeInstance, f),
+    valuemetadata: (f = msg.getValuemetadata()) && proto.LmdbCache.ValueMetadata.toObject(includeInstance, f),
     value: msg.getValue_asB64()
   };
 
@@ -2223,6 +2669,11 @@ proto.LmdbCache.AddRequest.AddRequestEntry.deserializeBinaryFromReader = functio
       msg.setExpiry(value);
       break;
     case 3:
+      var value = new proto.LmdbCache.ValueMetadata;
+      reader.readMessage(value,proto.LmdbCache.ValueMetadata.deserializeBinaryFromReader);
+      msg.setValuemetadata(value);
+      break;
+    case 4:
       var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setValue(value);
       break;
@@ -2270,10 +2721,18 @@ proto.LmdbCache.AddRequest.AddRequestEntry.serializeBinaryToWriter = function(me
       proto.LmdbCache.Timestamp.serializeBinaryToWriter
     );
   }
+  f = message.getValuemetadata();
+  if (f != null) {
+    writer.writeMessage(
+      3,
+      f,
+      proto.LmdbCache.ValueMetadata.serializeBinaryToWriter
+    );
+  }
   f = message.getValue_asU8();
   if (f.length > 0) {
     writer.writeBytes(
-      3,
+      4,
       f
     );
   }
@@ -2326,16 +2785,46 @@ proto.LmdbCache.AddRequest.AddRequestEntry.prototype.hasExpiry = function() {
 
 
 /**
- * optional bytes value = 3;
- * @return {string}
+ * optional ValueMetadata valueMetadata = 3;
+ * @return {?proto.LmdbCache.ValueMetadata}
  */
-proto.LmdbCache.AddRequest.AddRequestEntry.prototype.getValue = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+proto.LmdbCache.AddRequest.AddRequestEntry.prototype.getValuemetadata = function() {
+  return /** @type{?proto.LmdbCache.ValueMetadata} */ (
+    jspb.Message.getWrapperField(this, proto.LmdbCache.ValueMetadata, 3));
+};
+
+
+/** @param {?proto.LmdbCache.ValueMetadata|undefined} value */
+proto.LmdbCache.AddRequest.AddRequestEntry.prototype.setValuemetadata = function(value) {
+  jspb.Message.setWrapperField(this, 3, value);
+};
+
+
+proto.LmdbCache.AddRequest.AddRequestEntry.prototype.clearValuemetadata = function() {
+  this.setValuemetadata(undefined);
 };
 
 
 /**
- * optional bytes value = 3;
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.LmdbCache.AddRequest.AddRequestEntry.prototype.hasValuemetadata = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional bytes value = 4;
+ * @return {!(string|Uint8Array)}
+ */
+proto.LmdbCache.AddRequest.AddRequestEntry.prototype.getValue = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/**
+ * optional bytes value = 4;
  * This is a type-conversion wrapper around `getValue()`
  * @return {string}
  */
@@ -2346,7 +2835,7 @@ proto.LmdbCache.AddRequest.AddRequestEntry.prototype.getValue_asB64 = function()
 
 
 /**
- * optional bytes value = 3;
+ * optional bytes value = 4;
  * Note that Uint8Array is not supported on all browsers.
  * @see http://caniuse.com/Uint8Array
  * This is a type-conversion wrapper around `getValue()`
@@ -2360,7 +2849,7 @@ proto.LmdbCache.AddRequest.AddRequestEntry.prototype.getValue_asU8 = function() 
 
 /** @param {!(string|Uint8Array)} value */
 proto.LmdbCache.AddRequest.AddRequestEntry.prototype.setValue = function(value) {
-  jspb.Message.setProto3BytesField(this, 3, value);
+  jspb.Message.setProto3BytesField(this, 4, value);
 };
 
 
@@ -3751,7 +4240,7 @@ proto.LmdbCache.GetResponse.GetResponseEntry.toObject = function(includeInstance
   var f, obj = {
     result: jspb.Message.getFieldWithDefault(msg, 1, 0),
     index: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    compression: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    valuemetadata: (f = msg.getValuemetadata()) && proto.LmdbCache.ValueMetadata.toObject(includeInstance, f),
     value: msg.getValue_asB64()
   };
 
@@ -3798,8 +4287,9 @@ proto.LmdbCache.GetResponse.GetResponseEntry.deserializeBinaryFromReader = funct
       msg.setIndex(value);
       break;
     case 3:
-      var value = /** @type {!proto.LmdbCache.KvMetadata.Compression} */ (reader.readEnum());
-      msg.setCompression(value);
+      var value = new proto.LmdbCache.ValueMetadata;
+      reader.readMessage(value,proto.LmdbCache.ValueMetadata.deserializeBinaryFromReader);
+      msg.setValuemetadata(value);
       break;
     case 5:
       var value = /** @type {!Uint8Array} */ (reader.readBytes());
@@ -3848,11 +4338,12 @@ proto.LmdbCache.GetResponse.GetResponseEntry.serializeBinaryToWriter = function(
       f
     );
   }
-  f = message.getCompression();
-  if (f !== 0.0) {
-    writer.writeEnum(
+  f = message.getValuemetadata();
+  if (f != null) {
+    writer.writeMessage(
       3,
-      f
+      f,
+      proto.LmdbCache.ValueMetadata.serializeBinaryToWriter
     );
   }
   f = message.getValue_asU8();
@@ -3905,26 +4396,41 @@ proto.LmdbCache.GetResponse.GetResponseEntry.prototype.setIndex = function(value
 
 
 /**
- * optional KvMetadata.Compression compression = 3;
- * @return {!proto.LmdbCache.KvMetadata.Compression}
+ * optional ValueMetadata valueMetadata = 3;
+ * @return {?proto.LmdbCache.ValueMetadata}
  */
-proto.LmdbCache.GetResponse.GetResponseEntry.prototype.getCompression = function() {
-  return /** @type {!proto.LmdbCache.KvMetadata.Compression} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+proto.LmdbCache.GetResponse.GetResponseEntry.prototype.getValuemetadata = function() {
+  return /** @type{?proto.LmdbCache.ValueMetadata} */ (
+    jspb.Message.getWrapperField(this, proto.LmdbCache.ValueMetadata, 3));
 };
 
 
-/** @param {!proto.LmdbCache.KvMetadata.Compression} value */
-proto.LmdbCache.GetResponse.GetResponseEntry.prototype.setCompression = function(value) {
-  jspb.Message.setProto3EnumField(this, 3, value);
+/** @param {?proto.LmdbCache.ValueMetadata|undefined} value */
+proto.LmdbCache.GetResponse.GetResponseEntry.prototype.setValuemetadata = function(value) {
+  jspb.Message.setWrapperField(this, 3, value);
+};
+
+
+proto.LmdbCache.GetResponse.GetResponseEntry.prototype.clearValuemetadata = function() {
+  this.setValuemetadata(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.LmdbCache.GetResponse.GetResponseEntry.prototype.hasValuemetadata = function() {
+  return jspb.Message.getField(this, 3) != null;
 };
 
 
 /**
  * optional bytes value = 5;
- * @return {string}
+ * @return {!(string|Uint8Array)}
  */
 proto.LmdbCache.GetResponse.GetResponseEntry.prototype.getValue = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
 };
 
 
@@ -5415,10 +5921,10 @@ proto.LmdbCache.KeyValueListResponse.prototype.setKey = function(value) {
 
 /**
  * optional bytes value = 3;
- * @return {string}
+ * @return {!(string|Uint8Array)}
  */
 proto.LmdbCache.KeyValueListResponse.prototype.getValue = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
@@ -5708,6 +6214,7 @@ proto.LmdbCache.WriteLogEvent.AddedOrUpdated.toObject = function(includeInstance
   var f, obj = {
     key: jspb.Message.getFieldWithDefault(msg, 1, ""),
     expiry: (f = msg.getExpiry()) && proto.LmdbCache.Timestamp.toObject(includeInstance, f),
+    valuemetadata: (f = msg.getValuemetadata()) && proto.LmdbCache.ValueMetadata.toObject(includeInstance, f),
     value: msg.getValue_asB64()
   };
 
@@ -5755,6 +6262,11 @@ proto.LmdbCache.WriteLogEvent.AddedOrUpdated.deserializeBinaryFromReader = funct
       msg.setExpiry(value);
       break;
     case 3:
+      var value = new proto.LmdbCache.ValueMetadata;
+      reader.readMessage(value,proto.LmdbCache.ValueMetadata.deserializeBinaryFromReader);
+      msg.setValuemetadata(value);
+      break;
+    case 4:
       var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setValue(value);
       break;
@@ -5802,10 +6314,18 @@ proto.LmdbCache.WriteLogEvent.AddedOrUpdated.serializeBinaryToWriter = function(
       proto.LmdbCache.Timestamp.serializeBinaryToWriter
     );
   }
+  f = message.getValuemetadata();
+  if (f != null) {
+    writer.writeMessage(
+      3,
+      f,
+      proto.LmdbCache.ValueMetadata.serializeBinaryToWriter
+    );
+  }
   f = message.getValue_asU8();
   if (f.length > 0) {
     writer.writeBytes(
-      3,
+      4,
       f
     );
   }
@@ -5858,16 +6378,46 @@ proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.hasExpiry = function() {
 
 
 /**
- * optional bytes value = 3;
- * @return {string}
+ * optional ValueMetadata valueMetadata = 3;
+ * @return {?proto.LmdbCache.ValueMetadata}
  */
-proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.getValue = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.getValuemetadata = function() {
+  return /** @type{?proto.LmdbCache.ValueMetadata} */ (
+    jspb.Message.getWrapperField(this, proto.LmdbCache.ValueMetadata, 3));
+};
+
+
+/** @param {?proto.LmdbCache.ValueMetadata|undefined} value */
+proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.setValuemetadata = function(value) {
+  jspb.Message.setWrapperField(this, 3, value);
+};
+
+
+proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.clearValuemetadata = function() {
+  this.setValuemetadata(undefined);
 };
 
 
 /**
- * optional bytes value = 3;
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.hasValuemetadata = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional bytes value = 4;
+ * @return {!(string|Uint8Array)}
+ */
+proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.getValue = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/**
+ * optional bytes value = 4;
  * This is a type-conversion wrapper around `getValue()`
  * @return {string}
  */
@@ -5878,7 +6428,7 @@ proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.getValue_asB64 = function
 
 
 /**
- * optional bytes value = 3;
+ * optional bytes value = 4;
  * Note that Uint8Array is not supported on all browsers.
  * @see http://caniuse.com/Uint8Array
  * This is a type-conversion wrapper around `getValue()`
@@ -5892,7 +6442,7 @@ proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.getValue_asU8 = function(
 
 /** @param {!(string|Uint8Array)} value */
 proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.setValue = function(value) {
-  jspb.Message.setProto3BytesField(this, 3, value);
+  jspb.Message.setProto3BytesField(this, 4, value);
 };
 
 

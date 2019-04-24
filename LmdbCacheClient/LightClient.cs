@@ -14,25 +14,29 @@ using static LmdbCache.AddRequest.Types;
 using static LmdbCache.AddStreamRequest.Types;
 using static LmdbCache.GetResponse.Types;
 using static LmdbCache.KvMetadata.Types;
-using static LmdbCache.KvMetadata.Types.Compression;
+using static LmdbCache.ValueMetadata.Types;
+using static LmdbCache.ValueMetadata.Types.Compression;
+using static LmdbCache.ValueMetadata.Types.HashedWith;
 
 namespace LmdbCacheClient
 {
     public class LightClient : IClient
     {
         private readonly Channel _channel;
-        private readonly bool _useStreaming;
-        private readonly Compression _compression;
+        private readonly ClientConfig _clientConfig;
         private readonly LmdbCacheService.LmdbCacheServiceClient _lightClient;
         private readonly string _correlationId;
+        private readonly ValueHasher _valueHasher;
+        private readonly ValueCompressor _valueCompressor;
 
-        public LightClient(Channel channel, bool useStreaming, Compression compression = None)
+        public LightClient(Channel channel, ClientConfig clientConfig)
         {
             _channel = channel;
-            _useStreaming = useStreaming;
-            _compression = compression;
+            _clientConfig = clientConfig;
             _lightClient = new LmdbCacheService.LmdbCacheServiceClient(channel);
             _correlationId = Guid.NewGuid().ToString("N");
+            _valueHasher = new ValueHasher();
+            _valueCompressor = new ValueCompressor();
         }
 
         private async Task<AddResponse> AddStreaming(AddRequestEntry[] entries, bool allowOverride)
@@ -42,7 +46,6 @@ namespace LmdbCacheClient
                 var header = new AddStreamRequest { Header = new Header
                     {
                         OverrideExisting = allowOverride,
-                        Compression = _compression,
                         CorrelationId = _correlationId, 
                         ChunksCount = (uint)entries.Length
                     } };
@@ -74,12 +77,27 @@ namespace LmdbCacheClient
             }
 
             var preparedBatch = batch.
-                Select(ks => new AddRequestEntry { Key = ks.Item1, Expiry = expiry.ToTimestamp(), Value = ByteString.FromStream(ks.Item2)}).
+                Select(ks =>
+                {
+                    var value = ByteString.FromStream(_valueCompressor.Compress(_clientConfig.Compression, ks.Item2));
+                    return new AddRequestEntry
+                    {
+                        Key = ks.Item1,
+                        Expiry = expiry.ToTimestamp(),
+                        ValueMetadata = new ValueMetadata
+                        {
+                            Compression = _clientConfig.Compression,
+                            HashedWith = _clientConfig.HashedWith,
+                            Hash = ByteString.CopyFrom(_valueHasher.ComputeHash(_clientConfig.HashedWith, value.ToByteArray()))
+                        },
+                        Value = value
+                    };
+                }).
                 ToArray();
 
             var addResponse = Task.Run(async () =>
                 {
-                    if (_useStreaming)
+                    if (_clientConfig.UseStreaming)
                     {
                         return await AddStreaming(preparedBatch, allowOverride);
                     }
@@ -89,7 +107,6 @@ namespace LmdbCacheClient
                         Header = new Header
                         {
                             OverrideExisting = allowOverride,
-                            Compression = _compression,
                             CorrelationId = _correlationId,
                             ChunksCount = (uint)preparedBatch.Length
                         }
@@ -130,7 +147,7 @@ namespace LmdbCacheClient
 
             var request = new GetRequest { CorrelationId = _correlationId };
             request.Keys.AddRange(keysCopied);
-            var results = Task.Run(async () => _useStreaming
+            var results = Task.Run(async () => _clientConfig.UseStreaming
                 ? await GetStream(request)
                 : (await _lightClient.GetAsync(request)).Results
             ).GetAwaiter().GetResult();

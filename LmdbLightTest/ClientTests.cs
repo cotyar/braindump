@@ -13,6 +13,8 @@ using LmdbCacheServer;
 using LmdbCacheServer.Replica;
 using LmdbLight;
 using NUnit.Framework;
+using static LmdbCache.ValueMetadata.Types.Compression;
+using static LmdbCache.ValueMetadata.Types.HashedWith;
 
 namespace LmdbLightTest
 {
@@ -75,7 +77,12 @@ namespace LmdbLightTest
             using (var client = new GrpcTestClient(Config))
             {
                 var clients = Enumerable.Range(0, count).
-                    Select(_ => new LightClient(new Channel($"127.0.0.1:{client.ReplicaConfig.Port}", ChannelCredentials.Insecure), true)).
+                    Select(_ => new LightClient(new Channel($"127.0.0.1:{client.ReplicaConfig.Port}", ChannelCredentials.Insecure), new ClientConfig
+                    {
+                        UseStreaming = true,
+                        Compression = None,
+                        HashedWith = Md5
+                    })).
                     ToArray();
 
                 foreach (var lightClient in clients)
@@ -308,7 +315,12 @@ namespace LmdbLightTest
                 {
                     var kvs = kvsAll.Skip(i * iterations).Take(iterations).ToDictionary(kv => kv.Key, kv => kv.Value);
 
-                    using (var writeClient = new LightClient(new Channel($"127.0.0.1:{client.ReplicaConfig.Port}", ChannelCredentials.Insecure), true))
+                    using (var writeClient = new LightClient(new Channel($"127.0.0.1:{client.ReplicaConfig.Port}", ChannelCredentials.Insecure), new ClientConfig
+                        {
+                            UseStreaming = true,
+                            Compression = None,
+                            HashedWith = Md5
+                        }))
                     {
                         sw = new Stopwatch();
                         sw.Start();
@@ -335,7 +347,12 @@ namespace LmdbLightTest
                 {
                     var kvs = kvsAll.Skip((i % writeStreams) * iterations).Take(iterations).ToDictionary(kv => kv.Key, kv => kv.Value);
 
-                    using (var readClient = new LightClient(new Channel($"127.0.0.1:{client.ReplicaConfig.Port}", ChannelCredentials.Insecure), true))
+                    using (var readClient = new LightClient(new Channel($"127.0.0.1:{client.ReplicaConfig.Port}", ChannelCredentials.Insecure), new ClientConfig
+                        {
+                            UseStreaming = true,
+                            Compression = None,
+                            HashedWith = Md5
+                        }))
                     {
                         var getDict = new Dictionary<string, byte[]>();
                         sw = new Stopwatch();

@@ -19,6 +19,7 @@ using static LmdbCache.GetResponse.Types.GetResponseEntry.Types;
 using static LmdbCache.KvMetadata.Types;
 using static LmdbCache.KvMetadata.Types.Status;
 using static LmdbCache.KvMetadata.Types.UpdateAction;
+using static LmdbCache.ValueMetadata.Types.HashedWith;
 
 namespace LmdbCacheServer
 {
@@ -40,8 +41,8 @@ namespace LmdbCacheServer
                     Status = Active,
                     Expiry = ks.Expiry,
                     Action = Added,
-                    Compression = header.Compression,
-                    CorrelationId = header.CorrelationId
+                    CorrelationId = header.CorrelationId,
+                    ValueMetadata = ks.ValueMetadata
                 }, new KvValue(ks.Value))).ToArray();
 
                 var ret = await (header.OverrideExisting ? _kvTable.AddOrUpdate(batch) : _kvTable.Add(batch));
@@ -145,7 +146,7 @@ namespace LmdbCacheServer
                     {
                         Result = GetResult.Success,
                         Index = (uint) i,
-                        Compression = kv.Item2.Compression,
+                        ValueMetadata = kv.Item2.ValueMetadata,
                         Value = kv.Item3.Value.Value
                     };
                     return gre;
@@ -161,13 +162,15 @@ namespace LmdbCacheServer
 
                 for (var i = 0; i < kvs.Length; i++) 
                 {
-                    var kv = kvs[i];
-                    var gre = kv.Item3.HasValue
+                    var (_, kvMetadata, kvValue) = kvs[i];
+                    var gre = kvValue.HasValue
                         ? new GetResponseEntry
-                        {
-                            Result = GetResult.Success, Index = (uint) i, Compression = kv.Item2.Compression,
-                            Value = kv.Item3.Value.Value
-                        }
+                            {
+                                Result = GetResult.Success,
+                                Index = (uint) i,
+                                ValueMetadata = kvMetadata.ValueMetadata,
+                                Value = kvValue.Value.Value
+                            }
                         : new GetResponseEntry {Result = GetResult.NotFound, Index = (uint) i};
                     await responseStream.WriteAsync(new GetStreamResponse {Result = gre});
                 }

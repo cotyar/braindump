@@ -23,6 +23,11 @@ cd /d %~dp0
 set PROTOC=%UserProfile%\.nuget\packages\Grpc.Tools\1.16.0\tools\windows_x64\protoc.exe
 set PLUGIN=%UserProfile%\.nuget\packages\Grpc.Tools\1.16.0\tools\windows_x64\grpc_csharp_plugin.exe
 
-%PROTOC% --csharp_out Generated --js_out=import_style=commonjs:Generated %1 --grpc_out Generated --plugin=protoc-gen-grpc=%PLUGIN%
+# Path to this plugin
+set PROTOC_GEN_TS_PATH=node_modules\.bin\protoc-gen-ts.cmd
+
+%PROTOC% --csharp_out Generated --grpc_out Generated --js_out import_style=commonjs,binary:Generated --ts_out Generated --plugin="protoc-gen-grpc=%PLUGIN%" --plugin="protoc-gen-ts=%PROTOC_GEN_TS_PATH%"  %1
+
+@rem %PROTOC% --js_out import_style=commonjs,binary:Generated --ts_out Generated --grpc_out Generated --plugin="protoc-gen-grpc=%PLUGIN%" --plugin="protoc-gen-ts=%PROTOC_GEN_TS_PATH%"  %1
 
 endlocal

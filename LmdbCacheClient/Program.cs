@@ -15,12 +15,12 @@ namespace LmdbCacheClient
 {
     class Program
     {
-        static async Task StartServer()
+        static async Task StartServer(int port)
         {
-            var channel = new Channel("127.0.0.1:40051", ChannelCredentials.Insecure);
-            var client = new LmdbCacheService.LmdbCacheServiceClient(channel);
+            //var channel = new Channel("127.0.0.1:40051", ChannelCredentials.Insecure);
+            //var client = new LmdbCacheService.LmdbCacheServiceClient(channel);
 
-            var monitoringChannel = new Channel("127.0.0.1:43551", ChannelCredentials.Insecure);
+            var monitoringChannel = new Channel($"127.0.0.1:{port}", ChannelCredentials.Insecure);
             var monitoringClient = new MonitoringService.MonitoringServiceClient(monitoringChannel);
 
             Console.WriteLine($"Status: {monitoringClient.GetStatus(new MonitoringUpdateRequest { CorrelationId = "Client monitor 1" })}");
@@ -44,12 +44,13 @@ namespace LmdbCacheClient
             cancellationTokenSource.Cancel();
 
             await monitoringChannel.ShutdownAsync();
-            await channel.ShutdownAsync();
+            //await channel.ShutdownAsync();
         }
 
         static void Main(string[] args)
         {
-            StartServer().Wait();
+            var port = args.Length > 0 ? int.Parse(args[0]) : 43051;
+            StartServer(port).Wait();
         }
 
         private static readonly Random Rnd = new Random();

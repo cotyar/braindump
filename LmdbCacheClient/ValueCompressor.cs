@@ -6,6 +6,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using LmdbCache;
 using LZ4;
+using static LmdbCache.ValueMetadata.Types;
+using static LmdbCache.ValueMetadata.Types.Compression;
 
 namespace LmdbCacheClient
 {
@@ -18,15 +20,15 @@ namespace LmdbCacheClient
         public Stream CompressLz4(Stream stream) => new LZ4Stream(stream, LZ4StreamMode.Compress);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Stream Compress(KvMetadata.Types.Compression compressionLevel, Stream stream)
+        public Stream Compress(Compression compressionLevel, Stream stream)
         {
             switch (compressionLevel)
             {
-                case KvMetadata.Types.Compression.None:
+                case None:
                     return stream;
-                case KvMetadata.Types.Compression.Lz4:
+                case Lz4:
                     return CompressLz4(stream);
-                case KvMetadata.Types.Compression.Gzip:
+                case Gzip:
                     return CompressGZip(stream);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(compressionLevel), compressionLevel, null);
@@ -40,20 +42,19 @@ namespace LmdbCacheClient
         public Stream DecompressLz4(Stream stream) => new LZ4Stream(stream, LZ4StreamMode.Decompress);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Stream Decompress(KvMetadata.Types.Compression compressionLevel, Stream stream)
+        public Stream Decompress(Compression compressionLevel, Stream stream)
         {
             switch (compressionLevel)
             {
-                case KvMetadata.Types.Compression.None:
+                case None:
                     return stream;
-                case KvMetadata.Types.Compression.Lz4:
+                case Lz4:
                     return DecompressLz4(stream);
-                case KvMetadata.Types.Compression.Gzip:
+                case Gzip:
                     return DecompressGZip(stream);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(compressionLevel), compressionLevel, null);
             }
         }
-
     }
 }
