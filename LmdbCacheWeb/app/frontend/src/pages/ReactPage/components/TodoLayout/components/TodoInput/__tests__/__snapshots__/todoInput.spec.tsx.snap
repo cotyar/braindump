@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TodoInput should renders correctly 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="input-field"
+  >
+    <input
+      id="input-addTodo"
+      type="text"
+    />
+    <label>
+      todoLayout.todoInput.addTodo
+    </label>
+  </div>
+</form>
+`;

@@ -1,26 +1,21 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "target": "es5",
-    "sourceMap": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "frontend/src",
+    "target": "es6",
     "module": "esnext",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "noEmit": true,
+    "jsx": "react",
+    "esModuleInterop": true,
     "noEmitOnError": true,
-    "jsx": "preserve"
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "sourceMap": true,
+    "strict": true
   },
-  "include": [
-    "src"
+  "exclude": [
+    "node_modules",
+    "**/__tests__/**"
   ]
 }

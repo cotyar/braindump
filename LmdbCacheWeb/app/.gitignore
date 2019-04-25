@@ -1,23 +1,36 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
-
-# production
-/build
-
-# misc
+# General
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+*~
+*.swp
+*.log
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Thumbnails
+._*
+Thumbs.db
+
+# Trash folder or files
+.Trashes
+.Trash-*
+
+# Folder config file
+[Dd]esktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Editor config folder
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Code coverage
+coverage/
+.coveralls.yml
+
+# Misc
+node_modules/
+dist/
+

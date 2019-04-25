@@ -1,68 +1,144 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# express-webpack-react-redux-typescript-boilerplate
 
-## Available Scripts
+[![Dependency Status](https://david-dm.org/Armour/express-webpack-react-redux-typescript-boilerplate/status.svg)](https://david-dm.org/Armour/express-webpack-react-redux-typescript-boilerplate)
+[![CircleCI](https://circleci.com/gh/Armour/express-webpack-react-redux-typescript-boilerplate/tree/master.svg?style=shield)](https://circleci.com/gh/Armour/express-webpack-react-redux-typescript-boilerplate/tree/master)
+[![Appveyor](https://ci.appveyor.com/api/projects/status/github/Armour/express-webpack-react-redux-typescript-boilerplate?svg=true&branch=master)](https://ci.appveyor.com/api/projects/status/github/Armour/express-webpack-react-redux-typescript-boilerplate?svg=true&branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/Armour/express-webpack-react-redux-typescript-boilerplate/badge.svg?branch=master)](https://coveralls.io/github/Armour/express-webpack-react-redux-typescript-boilerplate?branch=master)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
+[![Tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/facebook/jest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Template from jarvis](https://img.shields.io/badge/Hi-Jarvis-ff69b4.svg)](https://github.com/Armour/Jarvis)
 
-In the project directory, you can run:
+## Example
 
-### `npm start`
+* [Demo Page](https://express-react-typescript.herokuapp.com/) - contains classic todo list, async server call, and 404 page with random [moe images](https://github.com/Armour/express-webpack-react-redux-typescript-boilerplate/tree/master/frontend/src/pages/NotFoundPage/assets/images). (Support multi-language, currently English, Chinese, and Japanese)
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+  ![Home Page](https://user-images.githubusercontent.com/5276065/44188928-402d7800-a0d5-11e8-8445-0c0dece815c2.png)
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+  ![React Page](https://user-images.githubusercontent.com/5276065/44188929-402d7800-a0d5-11e8-8580-f9a330765f6a.png)
 
-### `npm test`
+  ![404 Page](https://user-images.githubusercontent.com/5276065/44188930-402d7800-a0d5-11e8-919c-a4baa2c969ab.png)
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Stack
 
-### `npm run build`
+* [x] [yarn](https://github.com/yarnpkg/yarn) - dependency manager
+* [x] [express](http://expressjs.com/) - node.js web framework for backend
+* [x] [postgresql](https://www.postgresql.org/) - advanced open source database
+* [x] [materialize](http://materializecss.com/) - a modern responsive front-end framework based on Material Design
+* [x] [sass](https://github.com/sass/sass) - CSS pre-processors
+* [x] [postcss](https://github.com/postcss/postcss) - CSS post-processor
+* [x] [css-modules](https://github.com/css-modules/css-modules) - for default scoped/local css
+* [x] [typescript](https://github.com/Microsoft/TypeScript) - a typed superset of javascript that scales
+* [x] [webpack 4](https://github.com/webpack/webpack) - module bundler
+* [x] [webpack-dev-server](https://github.com/webpack/webpack-dev-server) - serves a webpack app in development mode with hot reload
+* [x] followed [ES6 standard](https://github.com/lukehoban/es6features)
+* [x] [babel](https://babeljs.io/) - a JavaScript compiler that compile ES6 to ES5
+* [x] [react](https://facebook.github.io/react/) - a JavaScript library for building user interfaces
+* [x] [react-hot-loader 4](https://github.com/gaearon/react-hot-loader) - hot module reload!
+* [x] [react-router 4](https://github.com/ReactTraining/react-router) - declarative routing for React
+* [x] [react-redux 6](https://github.com/reactjs/react-redux) - the official react bindings for [redux 4](https://github.com/reactjs/redux) (a predictable state container for js apps)
+* [x] [react-saga](https://github.com/redux-saga/redux-saga/) - make redux asynchronous flows easy to read, write and test, the replacement for [redux-thunk](https://github.com/reduxjs/redux-thunk)
+* [x] [connected-react-router 6](https://github.com/supasate/connected-react-router) - a redux binding for react-router 4, the replacement for [react-router-redux v5](https://github.com/ReactTraining/react-router/tree/master/packages/react-router-redux)
+* [x] [react-i18next](https://github.com/i18next/react-i18next) - internationalization for react done right
+* [x] [immutable.js](https://github.com/facebook/immutable-js/) - persistent Immutable data structures for react redux state management
+* [x] [editorconfig](http://editorconfig.org/) - maintain consistent coding styles between different editors and IDEs
+* [x] [eslint](http://eslint.org/) - lint javascript files (.js, .jsx)
+* [x] [tslint](https://palantir.github.io/tslint/) - lint typescript files (.ts, .tsx)
+* [x] [stylelint](https://stylelint.io/) - lint style files (.css, .scss)
+* [x] [commitlint](https://github.com/marionebl/commitlint) - lint git commit messages
+* [x] [jest](https://facebook.github.io/jest/) - painless javascript testing
+* [x] [coveralls](https://coveralls.io/) - test coverage
+* [x] [husky](https://github.com/typicode/husky) - git hooks
+* [x] [circle-ci 2](https://circleci.com/) - continuous integration tool for testing and deployment
+* [x] [heroku](https://www.heroku.com/) - a platform as a service (PaaS) that enables developers to build, run, and operate applications entirely in the cloud.
+* [x] [docker](https://github.com/docker/docker) - the open-source application container engine
+* [x] [RESTful API design](https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-design) - follow RESTful api design best practice
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## How to run the example code
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+### Prerequisite
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* `yarn` or `npm`
+* (optional) `docker` with `docker-compose`
 
-### `npm run eject`
+### Quickest way
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+The easiest way to run the example project is to use `docker-compose`:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+docker-compose up --build
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+that's it :)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+You can also follow instructions below if you want to customize it.
 
-## Learn More
+### Install project dependencies
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Go to project root directory:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+yarn install
+```
 
-### Code Splitting
+If you find permission problem when trying to install yarn globally, check [this](https://github.com/yarnpkg/yarn/issues/1060#issuecomment-268160528) out.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+### Setup database and session store
 
-### Analyzing the Bundle Size
+You can either
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+* setup `postgresql` and `redis` using docker images:
 
-### Making a Progressive Web App
+```bash
+docker-compose up -d postgres redis
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+or
 
-### Advanced Configuration
+* maintain it by yourself, if so, make sure you set the right config in `backend/config.json`.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+### Build & Run
 
-### Deployment
+On development (with hot reload):
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+```bash
+yarn dev
+```
 
-### `npm run build` fails to minify
+On production (with [terser](https://github.com/terser-js/terser) and other optimazitions):
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+```bash
+yarn prod
+```
+
+## Profile assets bundle
+
+Thanks to [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer), we can analyze and then optimize our assets bundle through [DLL Plugin](https://webpack.js.org/plugins/dll-plugin/).
+
+```bash
+yarn profile
+```
+
+## Run test
+
+```bash
+yarn test
+```
+
+## Code coverage
+
+```bash
+yarn coverage
+```
+
+## Deployment
+
+Every push on master branch will trigger [Github Actions](.github/main.workflow) for heroku deployment.
+
+## Contributing
+
+See [CONTRIBUTING.md](https://github.com/Armour/express-webpack-react-redux-typescript-boilerplate/blob/master/.github/CONTRIBUTING.md)
+
+## License
+
+[MIT License](https://github.com/Armour/express-webpack-react-redux-typescript-boilerplate/blob/master/LICENSE)
