@@ -26,7 +26,7 @@ set PLUGIN=%UserProfile%\.nuget\packages\Grpc.Tools\1.16.0\tools\windows_x64\grp
 # Path to this plugin
 set PROTOC_GEN_TS_PATH=node_modules\.bin\protoc-gen-ts.cmd
 
-%PROTOC% --csharp_out Generated --grpc_out Generated --js_out import_style=commonjs,binary:Generated --ts_out Generated --plugin="protoc-gen-grpc=%PLUGIN%" --plugin="protoc-gen-ts=%PROTOC_GEN_TS_PATH%"  %1
+%PROTOC% --csharp_out Generated --grpc_out Generated --js_out import_style=commonjs,binary:Generated --ts_out service=true:Generated --plugin="protoc-gen-grpc=%PLUGIN%" --plugin="protoc-gen-ts=%PROTOC_GEN_TS_PATH%"  %1
 
 @rem %PROTOC% --js_out import_style=commonjs,binary:Generated --ts_out Generated --grpc_out Generated --plugin="protoc-gen-grpc=%PLUGIN%" --plugin="protoc-gen-ts=%PROTOC_GEN_TS_PATH%"  %1
 
