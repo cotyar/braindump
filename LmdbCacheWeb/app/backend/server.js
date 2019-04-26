@@ -35,20 +35,20 @@ app.use(bodyParser.urlencoded({
   limit: '20mb',
   extended: true,
 }));
-// app.use(cookieParser());
-// app.use(session({
-//   store: new RedisStore({
-//     host: isProduction ? config.redis_hostname_prod : config.redis_hostname_dev,
-//     port: config.redis_port,
-//   }),
-//   secret: 'keyboard cat',
-//   saveUninitialized: false,
-//   resave: false,
-//   cookie: {
-//     httpOnly: !isProduction,
-//     secure: isProduction,
-//   },
-// }));
+app.use(cookieParser());
+app.use(session({
+  // store: new RedisStore({
+  //   host: isProduction ? config.redis_hostname_prod : config.redis_hostname_dev,
+  //   port: config.redis_port,
+  // }),
+  secret: 'keyboard cat',
+  saveUninitialized: false,
+  resave: false,
+  cookie: {
+    httpOnly: !isProduction,
+    secure: isProduction,
+  },
+}));
 
 // api router
 app.use('/api/v1', router);

@@ -44,6 +44,9 @@ export default {
               cacheDirectory: true,
             },
           },
+          {
+            loader: 'ts-loader',
+          },
         ],
       },
       // Use a list of loaders to load materialize and prism css files
