@@ -1,0 +1,404 @@
+syntax = "proto3";
+
+package LmdbCache;
+
+option csharp_namespace = "LmdbCache";
+
+//import "google/protobuf/empty.proto";
+// import "google/protobuf/timestamp.proto";
+
+enum LightningDbSyncMode {
+    FSync    = 0;  // SAFE
+    Async    = 1;  // SANE
+    NoSync   = 2; // INSANE
+    ReadOnly = 3;
+}
+
+message LightningConfig {
+    string name                           = 1;
+    uint64 storageLimit                   = 2;
+    uint32 maxTables                      = 3;
+    uint32 writeBatchTimeoutMilliseconds  = 4;
+    uint32 writeBatchMaxDelegates         = 5;
+    LightningDbSyncMode syncMode          = 6;
+}
+
+message ReplicationConfig {
+  uint32 port         = 1;
+  uint32 pageSize     = 2;
+  bool useBatching    = 3;
+  bool awaitSyncFrom  = 4;
+}
+
+message ReplicaConfig {
+  string replicaId                = 1;
+  string hostName                 = 2;
+  uint32 port                     = 3;
+  uint32 webUIPort                = 4;
+  uint32 monitoringPort           = 5;
+  uint32 monitoringInterval       = 6;
+
+  string masterNode               = 10;
+
+  LightningConfig persistence     = 15;
+  ReplicationConfig replication   = 20;
+}
+
+message ClientConfig {
+  bool useStreaming                     = 1;
+  ValueMetadata.Compression compression = 2;
+  ValueMetadata.HashedWith hashedWith   = 3;
+}
+
+// Interface exported by the server.
+service LmdbCacheService {
+
+  rpc Add(AddRequest) returns (AddResponse) {}
+
+  rpc AddStream(stream AddStreamRequest) returns (AddResponse) {}
+
+  rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+
+  rpc Copy(CopyRequest) returns (CopyResponse) {}
+
+  rpc Get(GetRequest) returns (GetResponse) {}
+
+  rpc GetStream(GetRequest) returns (stream GetStreamResponse) {}
+
+  rpc ContainsKeys(GetRequest) returns (ContainsKeysResponse) {}
+
+  rpc ListKeys(KeyListRequest) returns (stream KeyListResponse) {}
+
+  rpc ListKeyValues(KeyListRequest) returns (stream KeyValueListResponse) {}
+}
+
+message Empty {
+}
+
+message Timestamp {
+  uint64 ticksOffsetUtc = 1;
+}
+
+message VectorClock { // In fact we are following LWWRegister ("Last Write Wins") logic for conflict resolution here
+  map<string, uint64> replicas = 1;
+  uint64 ticksOffsetUtc     = 2;
+}
+
+message ValueMetadata {
+  enum HashedWith {
+    MD5                 = 0;
+  }
+  enum Compression {
+    NONE                = 0;
+    LZ4                 = 1;
+    GZIP                = 2;
+  }
+  HashedWith hashedWith   = 1;
+  bytes hash              = 2;
+  Compression compression = 3;
+  uint32 sizeCompressed   = 4;
+  uint32 sizeFull         = 5;
+}
+
+message KvMetadata {
+  enum Status {
+    ACTIVE              = 0;
+    DELETED             = 1;
+    EXPIRED             = 2;
+//    FAILURE             = 3;
+  }
+  enum UpdateAction {
+    ADDED               = 0;
+    UPDATED             = 1;
+    REPLICATED          = 2;
+  }
+  Status status               = 1;
+  Timestamp expiry            = 2;
+  VectorClock updated         = 3;
+  UpdateAction action         = 4;
+  string correlationId        = 5;
+  ValueMetadata valueMetadata = 6;
+}
+
+
+message AddRequest {
+  message Header {
+    bool overrideExisting = 1;
+    string correlationId  = 2;
+    uint32 chunksCount    = 3;
+  }
+  message AddRequestEntry {
+    string key                  = 1;
+    Timestamp expiry            = 2; 
+    ValueMetadata valueMetadata = 3;    
+    bytes value                 = 4;
+  }
+  Header header   = 1;
+  repeated AddRequestEntry entries = 5;
+}
+
+message AddResponse {
+  enum AddResult {
+    KEY_ADDED           = 0;
+    KEY_UPDATED         = 1;
+    KEY_ALREADY_EXISTS  = 2;
+    FAILURE             = 3;
+  }
+  repeated AddResult results = 1;
+}
+
+message AddStreamRequest {
+  message DataChunk {
+    uint32 index                      = 1;
+    AddRequest.AddRequestEntry entry  = 2; 
+  }
+  oneof msg {
+    AddRequest.Header header   = 1;
+    DataChunk chunk            = 2;
+  }
+}
+
+message DeleteRequest {
+  string correlationId   = 1;
+  repeated string keys   = 2;
+}
+
+message DeleteResponse {
+  enum DeleteResult {
+    SUCCESS             = 0;
+    NOT_FOUND           = 1;
+    FAILURE             = 2;
+  }
+  repeated DeleteResult results = 1;
+}
+
+message GetRequest {
+  string correlationId    = 1;
+  repeated string keys    = 2;
+}
+
+message GetResponse {
+  message GetResponseEntry {
+    enum GetResult {
+      SUCCESS             = 0;
+      NOT_FOUND           = 1;
+      FAILURE             = 2;
+    }
+    GetResult result            = 1;
+    uint32    index             = 2;
+    ValueMetadata valueMetadata = 3;
+    bytes     value             = 5;
+  }
+  repeated GetResponseEntry results = 1;
+}
+
+message GetStreamResponse {
+  GetResponse.GetResponseEntry result = 1;
+}
+
+message ContainsKeysResponse {
+  repeated bool results = 1;
+}
+
+message CopyRequest {
+  message CopyRequestEntry {
+    string    keyFrom = 1;
+    Timestamp expiry  = 2; 
+    string    keyTo   = 3;
+  }
+  string correlationId              = 1;
+  repeated CopyRequestEntry entries = 2;
+}
+
+message CopyResponse {
+  enum CopyResult {
+    SUCCESS             = 0;
+    FROM_KEY_NOT_FOUND  = 1;
+    TO_KEY_EXISTS       = 2;
+    FAILURE             = 3;
+  }
+  repeated CopyResult results = 1;
+}
+
+message KeyListRequest {
+  string keyPrefix      = 1;
+  uint32 pageSize       = 2;
+  uint32 page           = 3;
+  string correlationId  = 4;
+}
+
+message KeyListResponse {
+  string key    = 1;
+  // Timestamp expiry = 2;
+}
+
+message KeyValueListResponse {
+  string key    = 1;
+  // Timestamp expiry = 2;
+  bytes  value  = 3;
+}
+
+///////////////////////////////
+
+// Interface exported by the server.
+service SyncService {
+  rpc GetReplicaId(Empty) returns (GetReplicaIdResponse) {}
+
+  rpc Sync(stream SyncPacket) returns (stream SyncPacket) {} //stream SyncAckRequest) {} 
+
+  // // Pull sync
+  // rpc SyncFrom(SyncFromRequest) returns (stream SyncPacket) {} 
+  // rpc Subscribe(SyncSubscribeRequest) returns (stream SyncPacket) {} // TODO: Add Acks streaming
+  // rpc Ack(stream SyncAckRequest) returns (Empty) {} // TODO: Add Acks streaming
+
+  // // Push sync
+  // rpc SyncTo(SyncToRequest) returns (SyncFromRequest) {} 
+  // rpc Publish(stream SyncPacket) returns (Empty) {} //stream SyncAckRequest) {} 
+}
+
+///////////////////////////////
+
+// WriteLog types.
+
+message WriteLogEvent {
+  message AddedOrUpdated { // TODO: Add a value hash?
+    string    key               = 1;
+    Timestamp expiry            = 2; 
+    ValueMetadata valueMetadata = 3;
+    bytes value                 = 4;
+  }
+  message Deleted {
+    string      key     = 1;
+  }
+  // message Expired {
+  //   string      key     = 1;
+  // }
+
+  VectorClock clock          = 1; 
+  string correlationId       = 2;
+  string originatorReplicaId = 3;
+  
+  oneof loggedEvent {
+    AddedOrUpdated updated   = 5;
+    Deleted deleted          = 7;
+    //Expired expired   = 8; 
+  }
+}
+
+message GetReplicaIdResponse {
+  string replicaId   = 1;
+}
+
+message SyncPacket {
+  message SyncFrom {
+    string replicaId   = 1; // TODO: Add pagesize?
+    uint64 since       = 2; 
+    bool includeMine   = 3;
+    bool includeAcked  = 4;
+  }
+  message Item {
+    uint64 pos             = 1;
+    WriteLogEvent logEvent = 2;
+  }
+  message Items {
+    repeated Item batch    = 1;
+  }
+  message SkipPos {
+    uint64 lastPos         = 1;
+  }
+  
+  string replicaId    = 1;
+
+  oneof packet {
+    SyncFrom syncFrom = 4;
+    Items items       = 5;
+    Item  item        = 6;
+    SkipPos skipPos   = 7;
+  }
+}
+
+// message SyncSubscribeRequest {
+//   string replicaId   = 1;
+// }
+
+// message SyncSubscribeResponse {
+//   uint64 pos             = 1;
+//   WriteLogEvent logEvent = 2;
+// }
+
+// message SyncAckRequest {
+//   uint64 eventId = 1;
+// }
+
+// message SyncToRequest {
+//   string replicaId   = 1;
+// }
+
+///////////////////////////////
+
+// Interface exported by the server.
+service MonitoringService {
+  // rpc GetReplicaId(Empty) returns (GetReplicaIdResponse) {}
+
+  rpc GetStatus(MonitoringUpdateRequest) returns (MonitoringUpdateResponse) {} 
+  rpc Subscribe(MonitoringUpdateRequest) returns (stream MonitoringUpdateResponse) {} 
+}
+
+///////////////////////////////
+
+// Monitoring types.
+
+message MonitoringUpdateRequest {
+  string correlationId = 1;
+}
+
+message MonitoringUpdateResponse {
+  ReplicaStatus status = 1;
+}
+
+message ReplicaStatus {
+  string replicaId                      = 1;
+  ReplicaConnectionInfo connectionInfo  = 2;
+  Timestamp started                     = 3;
+  ReplicaConfig replicaConfig           = 4;
+  VectorClock currentClock              = 5;
+
+  ReplicaCounters counters              = 10;
+  CollectedStats collectedStats         = 11;
+  ClusterStatus clusterStatus           = 12;
+}
+
+message ClusterStatus {
+  map<string, ReplicaConnectionInfo> replicas = 1;
+}
+
+message ReplicaConnectionInfo {
+  string host = 1;
+  uint32 port = 2;
+  // Some other metadata?
+}
+
+message ReplicaCounters {
+  uint64 addsCounter            = 1;
+  uint64 deletesCounter         = 2;
+  uint64 copysCounter           = 3;
+  uint64 getCounter             = 4;
+  uint64 containsCounter        = 5;
+  uint64 keySearchCounter       = 6;
+  uint64 metadataSearchCounter  = 7;
+  uint64 pageSearchCounter      = 8;
+
+  uint32 largestKeySize    = 10;
+  uint32 largestValueSize  = 11;
+
+  uint64 replicatedAdds    = 15;
+  uint64 replicatedDeletes = 16;
+}
+
+message CollectedStats {
+  uint64 nonExpiredKeys = 10;
+  uint64 allKeys        = 11;
+  uint64 activeKeys     = 12;
+  uint64 deletedKeys    = 13;
+  uint64 expiredKeys    = 14;
+}
