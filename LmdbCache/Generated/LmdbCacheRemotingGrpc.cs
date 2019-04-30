@@ -307,6 +307,23 @@ namespace LmdbCache {
           .AddMethod(__Method_ListKeyValues, serviceImpl.ListKeyValues).Build();
     }
 
+    /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the  service binding logic.
+    /// Note: this method is part of an experimental API that can change or be removed without any prior notice.</summary>
+    /// <param name="serviceBinder">Service methods will be bound by calling <c>AddMethod</c> on this object.</param>
+    /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    public static void BindService(grpc::ServiceBinderBase serviceBinder, LmdbCacheServiceBase serviceImpl)
+    {
+      serviceBinder.AddMethod(__Method_Add, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::LmdbCache.AddRequest, global::LmdbCache.AddResponse>(serviceImpl.Add));
+      serviceBinder.AddMethod(__Method_AddStream, serviceImpl == null ? null : new grpc::ClientStreamingServerMethod<global::LmdbCache.AddStreamRequest, global::LmdbCache.AddResponse>(serviceImpl.AddStream));
+      serviceBinder.AddMethod(__Method_Delete, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::LmdbCache.DeleteRequest, global::LmdbCache.DeleteResponse>(serviceImpl.Delete));
+      serviceBinder.AddMethod(__Method_Copy, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::LmdbCache.CopyRequest, global::LmdbCache.CopyResponse>(serviceImpl.Copy));
+      serviceBinder.AddMethod(__Method_Get, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::LmdbCache.GetRequest, global::LmdbCache.GetResponse>(serviceImpl.Get));
+      serviceBinder.AddMethod(__Method_GetStream, serviceImpl == null ? null : new grpc::ServerStreamingServerMethod<global::LmdbCache.GetRequest, global::LmdbCache.GetStreamResponse>(serviceImpl.GetStream));
+      serviceBinder.AddMethod(__Method_ContainsKeys, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::LmdbCache.GetRequest, global::LmdbCache.ContainsKeysResponse>(serviceImpl.ContainsKeys));
+      serviceBinder.AddMethod(__Method_ListKeys, serviceImpl == null ? null : new grpc::ServerStreamingServerMethod<global::LmdbCache.KeyListRequest, global::LmdbCache.KeyListResponse>(serviceImpl.ListKeys));
+      serviceBinder.AddMethod(__Method_ListKeyValues, serviceImpl == null ? null : new grpc::ServerStreamingServerMethod<global::LmdbCache.KeyListRequest, global::LmdbCache.KeyValueListResponse>(serviceImpl.ListKeyValues));
+    }
+
   }
   /// <summary>
   /// Interface exported by the server.
@@ -417,6 +434,16 @@ namespace LmdbCache {
           .AddMethod(__Method_Sync, serviceImpl.Sync).Build();
     }
 
+    /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the  service binding logic.
+    /// Note: this method is part of an experimental API that can change or be removed without any prior notice.</summary>
+    /// <param name="serviceBinder">Service methods will be bound by calling <c>AddMethod</c> on this object.</param>
+    /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    public static void BindService(grpc::ServiceBinderBase serviceBinder, SyncServiceBase serviceImpl)
+    {
+      serviceBinder.AddMethod(__Method_GetReplicaId, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::LmdbCache.Empty, global::LmdbCache.GetReplicaIdResponse>(serviceImpl.GetReplicaId));
+      serviceBinder.AddMethod(__Method_Sync, serviceImpl == null ? null : new grpc::DuplexStreamingServerMethod<global::LmdbCache.SyncPacket, global::LmdbCache.SyncPacket>(serviceImpl.Sync));
+    }
+
   }
   /// <summary>
   /// Interface exported by the server.
@@ -524,6 +551,16 @@ namespace LmdbCache {
       return grpc::ServerServiceDefinition.CreateBuilder()
           .AddMethod(__Method_GetStatus, serviceImpl.GetStatus)
           .AddMethod(__Method_Subscribe, serviceImpl.Subscribe).Build();
+    }
+
+    /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the  service binding logic.
+    /// Note: this method is part of an experimental API that can change or be removed without any prior notice.</summary>
+    /// <param name="serviceBinder">Service methods will be bound by calling <c>AddMethod</c> on this object.</param>
+    /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    public static void BindService(grpc::ServiceBinderBase serviceBinder, MonitoringServiceBase serviceImpl)
+    {
+      serviceBinder.AddMethod(__Method_GetStatus, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::LmdbCache.MonitoringUpdateRequest, global::LmdbCache.MonitoringUpdateResponse>(serviceImpl.GetStatus));
+      serviceBinder.AddMethod(__Method_Subscribe, serviceImpl == null ? null : new grpc::ServerStreamingServerMethod<global::LmdbCache.MonitoringUpdateRequest, global::LmdbCache.MonitoringUpdateResponse>(serviceImpl.Subscribe));
     }
 
   }

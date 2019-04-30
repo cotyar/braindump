@@ -30,7 +30,7 @@ namespace LmdbCacheServer.Replica
         private readonly ReplicationConfig _replicationConfig;
         private readonly Func<WriteTransaction, string, ulong, VectorClock> _incrementClock;
         private readonly CancellationTokenSource _cts;
-        private readonly ConcurrentDictionary<string, (Task<Func<ulong, WriteLogEvent, Task>>, Task)> _replicators;
+        private readonly ConcurrentDictionary<string, (Task<Func<Item, Task>>, Task)> _replicators;
         private readonly ConcurrentDictionary<string, ReplicatorSource> _replicationSources;
 
         public ReplicatorSlave(LightningPersistence lmdb, string ownReplicaId, 
@@ -44,7 +44,7 @@ namespace LmdbCacheServer.Replica
             _wlTable = wlTable;
             _replicationConfig = replicationConfig;
             _incrementClock = incrementClock;
-            _replicators = new ConcurrentDictionary<string, (Task<Func<ulong, WriteLogEvent, Task>>, Task)>();
+            _replicators = new ConcurrentDictionary<string, (Task<Func<Item, Task>>, Task)>();
             _replicationSources = new ConcurrentDictionary<string, ReplicatorSource>();
             _cts = new CancellationTokenSource();
         }
@@ -104,13 +104,13 @@ namespace LmdbCacheServer.Replica
                 });
             });
 
-        public Task PostWriteLogEvent(ulong pos, WriteLogEvent wle) => 
+        public Task PostWriteLogEvent(Item syncItem) => 
             Task.WhenAll(_replicators.Values.Select(async rep =>
-            {
-                var (s, _) = rep;
-                var sink = await s;
-                await sink(pos, wle);
-            })); // TODO: Add "write to 'm of n'" support 
+                {
+                    var (s, _) = rep;
+                    var sink = await s;
+                    await sink(syncItem);
+                })); // TODO: Add "write to 'm of n'" support 
 
         public void Dispose()
         {

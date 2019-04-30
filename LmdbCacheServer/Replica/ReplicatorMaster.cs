@@ -100,11 +100,11 @@ namespace LmdbCacheServer.Replica
                 });
             });
 
-        public Task PostWriteLogEvent(ulong pos, WriteLogEvent wle) => 
+        public Task PostWriteLogEvent(Item syncItem) => 
             Task.WhenAll(_replicationSources.Values.Select(slave => slave.WriteAsync(new SyncPacket
             {
                 ReplicaId = _ownReplicaId,
-                Item = new Item { Pos = pos, LogEvent = wle }
+                Item = syncItem
             }))); // TODO: Add "write to 'm of n'" support 
 
         public bool TerminateSync(string replicaId)

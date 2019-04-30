@@ -91,7 +91,7 @@ namespace LmdbCacheServer.Replica
                             Expiry = addedOrUpdated.Expiry,
                             Action = Replicated,
                             Updated = _incrementClock(txn, _targetReplicaId, syncEvent.Item1),
-                            ValueMetadata = addedOrUpdated.ValueMetadata,
+                            ValueMetadata = syncEvent.Item2.ValueMetadata,
                             CorrelationId = syncEvent.Item2.CorrelationId
                         };
 
@@ -119,7 +119,7 @@ namespace LmdbCacheServer.Replica
                             Action = Replicated,
                             Updated = currentClock,
                             CorrelationId = syncEvent.Item2.CorrelationId,
-                            ValueMetadata = null
+                            ValueMetadata = syncEvent.Item2.ValueMetadata,
                         };
 
                         var kvKey = new KvKey(deleted.Key);

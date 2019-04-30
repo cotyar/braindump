@@ -20,10 +20,10 @@ setlocal
 cd /d %~dp0
 
 @rem packages will be available in nuget cache directory once the project is built or after "dotnet restore"
-set PROTOC=%UserProfile%\.nuget\packages\Grpc.Tools\1.16.0\tools\windows_x64\protoc.exe
-set PLUGIN=%UserProfile%\.nuget\packages\Grpc.Tools\1.16.0\tools\windows_x64\grpc_csharp_plugin.exe
+set PROTOC=%UserProfile%\.nuget\packages\Grpc.Tools\1.19.0\tools\windows_x64\protoc.exe
+set PLUGIN=%UserProfile%\.nuget\packages\Grpc.Tools\1.19.0\tools\windows_x64\grpc_csharp_plugin.exe
 
-# Path to this plugin
+@rem Path to this plugin
 set PROTOC_GEN_TS_PATH=node_modules\.bin\protoc-gen-ts.cmd
 
 %PROTOC% --csharp_out Generated --grpc_out Generated --js_out import_style=commonjs,binary:Generated --ts_out service=true:Generated --plugin="protoc-gen-grpc=%PLUGIN%" --plugin="protoc-gen-ts=%PROTOC_GEN_TS_PATH%"  %1

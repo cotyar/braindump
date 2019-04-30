@@ -5,6 +5,6 @@ namespace LmdbCacheServer.Replica
 {
     public interface IReplicator
     {
-        Task PostWriteLogEvent(ulong pos, WriteLogEvent wle);
+        Task PostWriteLogEvent(SyncPacket.Types.Item syncItem);
     }
 }

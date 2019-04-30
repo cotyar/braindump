@@ -7,6 +7,7 @@ module WebServer =
     open Suave
     open Suave.Filters
     open Suave.Operators
+    open Suave.CORS
     open System.Threading
 
     let StartWebServer (cts: CancellationToken) ip (port : uint32) =

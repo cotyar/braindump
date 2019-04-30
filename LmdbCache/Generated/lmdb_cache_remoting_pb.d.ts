@@ -871,6 +871,11 @@ export class WriteLogEvent extends jspb.Message {
   getOriginatorreplicaid(): string;
   setOriginatorreplicaid(value: string): void;
 
+  hasValuemetadata(): boolean;
+  clearValuemetadata(): void;
+  getValuemetadata(): ValueMetadata | undefined;
+  setValuemetadata(value?: ValueMetadata): void;
+
   hasUpdated(): boolean;
   clearUpdated(): void;
   getUpdated(): WriteLogEvent.AddedOrUpdated | undefined;
@@ -897,6 +902,7 @@ export namespace WriteLogEvent {
     clock?: VectorClock.AsObject,
     correlationid: string,
     originatorreplicaid: string,
+    valuemetadata?: ValueMetadata.AsObject,
     updated?: WriteLogEvent.AddedOrUpdated.AsObject,
     deleted?: WriteLogEvent.Deleted.AsObject,
   }
@@ -909,11 +915,6 @@ export namespace WriteLogEvent {
     clearExpiry(): void;
     getExpiry(): Timestamp | undefined;
     setExpiry(value?: Timestamp): void;
-
-    hasValuemetadata(): boolean;
-    clearValuemetadata(): void;
-    getValuemetadata(): ValueMetadata | undefined;
-    setValuemetadata(value?: ValueMetadata): void;
 
     getValue(): Uint8Array | string;
     getValue_asU8(): Uint8Array;
@@ -934,7 +935,6 @@ export namespace WriteLogEvent {
     export type AsObject = {
       key: string,
       expiry?: Timestamp.AsObject,
-      valuemetadata?: ValueMetadata.AsObject,
       value: Uint8Array | string,
     }
   }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -60,16 +61,21 @@ namespace LmdbCacheServer.Replica
             _replicationTable = new ReplicationTable(_lmdb, "replication");
             _wlTable = new WriteLogTable(_lmdb, "writelog", ReplicaConfig.ReplicaId);
 
-            _kvTable = new KvTable(_lmdb, "kv", _statusTable, _kvExpiryTable, _kvMetadataTable,
+            _kvTable = new KvTable(_lmdb, "kv", ReplicaConfig.ReplicaId, 
+                _statusTable, _kvExpiryTable, _kvMetadataTable,
                 CurrentClock, IncrementClock, (txn, wle) =>
                 {
                     wle.Clock = IncrementClock(txn);
+                    var pos = wle.Clock.GetReplicaValue(ReplicaConfig.ReplicaId);
+
+                    if (pos == null)
+                        throw new EventLogException($"IncrementClock must return a new Pos for current replica. WriteLog: '{wle}'"); // TODO: Values can be large, possibly exclude them from the Exception.
 
                     if (!_wlTable.AddLogEvents(txn, wle))
-                    {
                         throw new EventLogException($"Cannot write event to the WriteLog: '{wle}'"); // TODO: Values can be large, possibly exclude them from the Exception.
-                    }
-                });
+
+                    return pos.Value;
+                }, events => Task.WhenAll(_replicators.SelectMany(r => events.Select(r.PostWriteLogEvent)).ToArray()));
 
             _webServerCompletion = WebServer.StartWebServer(_shutdownCancellationTokenSource.Token, ReplicaConfig.HostName, ReplicaConfig.WebUIPort);
 

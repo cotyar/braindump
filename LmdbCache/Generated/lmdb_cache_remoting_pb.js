@@ -6034,6 +6034,7 @@ proto.LmdbCache.WriteLogEvent.toObject = function(includeInstance, msg) {
     clock: (f = msg.getClock()) && proto.LmdbCache.VectorClock.toObject(includeInstance, f),
     correlationid: jspb.Message.getFieldWithDefault(msg, 2, ""),
     originatorreplicaid: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    valuemetadata: (f = msg.getValuemetadata()) && proto.LmdbCache.ValueMetadata.toObject(includeInstance, f),
     updated: (f = msg.getUpdated()) && proto.LmdbCache.WriteLogEvent.AddedOrUpdated.toObject(includeInstance, f),
     deleted: (f = msg.getDeleted()) && proto.LmdbCache.WriteLogEvent.Deleted.toObject(includeInstance, f)
   };
@@ -6084,6 +6085,11 @@ proto.LmdbCache.WriteLogEvent.deserializeBinaryFromReader = function(msg, reader
     case 3:
       var value = /** @type {string} */ (reader.readString());
       msg.setOriginatorreplicaid(value);
+      break;
+    case 4:
+      var value = new proto.LmdbCache.ValueMetadata;
+      reader.readMessage(value,proto.LmdbCache.ValueMetadata.deserializeBinaryFromReader);
+      msg.setValuemetadata(value);
       break;
     case 5:
       var value = new proto.LmdbCache.WriteLogEvent.AddedOrUpdated;
@@ -6144,6 +6150,14 @@ proto.LmdbCache.WriteLogEvent.serializeBinaryToWriter = function(message, writer
     writer.writeString(
       3,
       f
+    );
+  }
+  f = message.getValuemetadata();
+  if (f != null) {
+    writer.writeMessage(
+      4,
+      f,
+      proto.LmdbCache.ValueMetadata.serializeBinaryToWriter
     );
   }
   f = message.getUpdated();
@@ -6214,7 +6228,6 @@ proto.LmdbCache.WriteLogEvent.AddedOrUpdated.toObject = function(includeInstance
   var f, obj = {
     key: jspb.Message.getFieldWithDefault(msg, 1, ""),
     expiry: (f = msg.getExpiry()) && proto.LmdbCache.Timestamp.toObject(includeInstance, f),
-    valuemetadata: (f = msg.getValuemetadata()) && proto.LmdbCache.ValueMetadata.toObject(includeInstance, f),
     value: msg.getValue_asB64()
   };
 
@@ -6262,11 +6275,6 @@ proto.LmdbCache.WriteLogEvent.AddedOrUpdated.deserializeBinaryFromReader = funct
       msg.setExpiry(value);
       break;
     case 3:
-      var value = new proto.LmdbCache.ValueMetadata;
-      reader.readMessage(value,proto.LmdbCache.ValueMetadata.deserializeBinaryFromReader);
-      msg.setValuemetadata(value);
-      break;
-    case 4:
       var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setValue(value);
       break;
@@ -6314,18 +6322,10 @@ proto.LmdbCache.WriteLogEvent.AddedOrUpdated.serializeBinaryToWriter = function(
       proto.LmdbCache.Timestamp.serializeBinaryToWriter
     );
   }
-  f = message.getValuemetadata();
-  if (f != null) {
-    writer.writeMessage(
-      3,
-      f,
-      proto.LmdbCache.ValueMetadata.serializeBinaryToWriter
-    );
-  }
   f = message.getValue_asU8();
   if (f.length > 0) {
     writer.writeBytes(
-      4,
+      3,
       f
     );
   }
@@ -6378,46 +6378,16 @@ proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.hasExpiry = function() {
 
 
 /**
- * optional ValueMetadata valueMetadata = 3;
- * @return {?proto.LmdbCache.ValueMetadata}
- */
-proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.getValuemetadata = function() {
-  return /** @type{?proto.LmdbCache.ValueMetadata} */ (
-    jspb.Message.getWrapperField(this, proto.LmdbCache.ValueMetadata, 3));
-};
-
-
-/** @param {?proto.LmdbCache.ValueMetadata|undefined} value */
-proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.setValuemetadata = function(value) {
-  jspb.Message.setWrapperField(this, 3, value);
-};
-
-
-proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.clearValuemetadata = function() {
-  this.setValuemetadata(undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {!boolean}
- */
-proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.hasValuemetadata = function() {
-  return jspb.Message.getField(this, 3) != null;
-};
-
-
-/**
- * optional bytes value = 4;
+ * optional bytes value = 3;
  * @return {!(string|Uint8Array)}
  */
 proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.getValue = function() {
-  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
 /**
- * optional bytes value = 4;
+ * optional bytes value = 3;
  * This is a type-conversion wrapper around `getValue()`
  * @return {string}
  */
@@ -6428,7 +6398,7 @@ proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.getValue_asB64 = function
 
 
 /**
- * optional bytes value = 4;
+ * optional bytes value = 3;
  * Note that Uint8Array is not supported on all browsers.
  * @see http://caniuse.com/Uint8Array
  * This is a type-conversion wrapper around `getValue()`
@@ -6442,7 +6412,7 @@ proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.getValue_asU8 = function(
 
 /** @param {!(string|Uint8Array)} value */
 proto.LmdbCache.WriteLogEvent.AddedOrUpdated.prototype.setValue = function(value) {
-  jspb.Message.setProto3BytesField(this, 4, value);
+  jspb.Message.setProto3BytesField(this, 3, value);
 };
 
 
@@ -6645,6 +6615,36 @@ proto.LmdbCache.WriteLogEvent.prototype.getOriginatorreplicaid = function() {
 /** @param {string} value */
 proto.LmdbCache.WriteLogEvent.prototype.setOriginatorreplicaid = function(value) {
   jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional ValueMetadata valueMetadata = 4;
+ * @return {?proto.LmdbCache.ValueMetadata}
+ */
+proto.LmdbCache.WriteLogEvent.prototype.getValuemetadata = function() {
+  return /** @type{?proto.LmdbCache.ValueMetadata} */ (
+    jspb.Message.getWrapperField(this, proto.LmdbCache.ValueMetadata, 4));
+};
+
+
+/** @param {?proto.LmdbCache.ValueMetadata|undefined} value */
+proto.LmdbCache.WriteLogEvent.prototype.setValuemetadata = function(value) {
+  jspb.Message.setWrapperField(this, 4, value);
+};
+
+
+proto.LmdbCache.WriteLogEvent.prototype.clearValuemetadata = function() {
+  this.setValuemetadata(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.LmdbCache.WriteLogEvent.prototype.hasValuemetadata = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 

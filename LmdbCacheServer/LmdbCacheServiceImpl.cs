@@ -8,6 +8,7 @@ using Google.Protobuf;
 using Grpc.Core;
 using Grpc.Core.Utils;
 using LmdbCache;
+using LmdbCacheServer.Replica;
 using LmdbCacheServer.Tables;
 using LmdbLight;
 using static LmdbCache.Helper;
@@ -26,8 +27,8 @@ namespace LmdbCacheServer
     public class LmdbCacheServiceImpl : LmdbCacheService.LmdbCacheServiceBase
     {
         private readonly KvTable _kvTable;
-
-        public LmdbCacheServiceImpl(KvTable kvTable) 
+ 
+        public LmdbCacheServiceImpl(KvTable kvTable)
         {
             _kvTable = kvTable;
         }

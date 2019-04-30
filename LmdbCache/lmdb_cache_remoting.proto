@@ -264,8 +264,7 @@ message WriteLogEvent {
   message AddedOrUpdated { // TODO: Add a value hash?
     string    key               = 1;
     Timestamp expiry            = 2; 
-    ValueMetadata valueMetadata = 3;
-    bytes value                 = 4;
+    bytes value                 = 3;
   }
   message Deleted {
     string      key     = 1;
@@ -274,9 +273,10 @@ message WriteLogEvent {
   //   string      key     = 1;
   // }
 
-  VectorClock clock          = 1; 
-  string correlationId       = 2;
-  string originatorReplicaId = 3;
+  VectorClock clock           = 1; 
+  string correlationId        = 2;
+  string originatorReplicaId  = 3;
+  ValueMetadata valueMetadata = 4;
   
   oneof loggedEvent {
     AddedOrUpdated updated   = 5;
