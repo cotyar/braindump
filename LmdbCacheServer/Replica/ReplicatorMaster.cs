@@ -25,13 +25,13 @@ namespace LmdbCacheServer.Replica
         private readonly ReplicationTable _replicationTable;
         private readonly WriteLogTable _wlTable;
         private readonly ReplicationConfig _replicationConfig;
-        private readonly Func<WriteTransaction, string, ulong, VectorClock> _incrementClock;
+        private readonly Action<WriteTransaction, string, ulong?> _updateClock;
         private readonly ConcurrentDictionary<string, ReplicatorSource> _replicationSources;
         private readonly CancellationTokenSource _cts;
 
         public ReplicatorMaster(LightningPersistence lmdb, string ownReplicaId, 
             KvTable kvTable, ReplicationTable replicationTable, WriteLogTable wlTable,
-            ReplicationConfig replicationConfig, Func<WriteTransaction, string, ulong, VectorClock> incrementClock)
+            ReplicationConfig replicationConfig, Action<WriteTransaction, string, ulong?> updateClock)
         {
             _lmdb = lmdb;
             _ownReplicaId = ownReplicaId;
@@ -39,7 +39,7 @@ namespace LmdbCacheServer.Replica
             _replicationTable = replicationTable;
             _wlTable = wlTable;
             _replicationConfig = replicationConfig;
-            _incrementClock = incrementClock;
+            _updateClock = updateClock;
             _cts = new CancellationTokenSource();
             _replicationSources = new ConcurrentDictionary<string, ReplicatorSource>();
 
@@ -49,7 +49,7 @@ namespace LmdbCacheServer.Replica
             new ReplicatorSource(_lmdb, _ownReplicaId, _kvTable, _wlTable, _replicationConfig, _cts.Token, responseStreamWriteAsync);
 
         private ReplicatorSink CreateReplicatorSink(string targetReplicaId) =>
-            new ReplicatorSink(_lmdb, targetReplicaId, _kvTable, _replicationTable, _replicationConfig, _cts.Token, _incrementClock);
+            new ReplicatorSink(_lmdb, targetReplicaId, _kvTable, _replicationTable, _replicationConfig, _cts.Token, _updateClock);
 
         public override Task<GetReplicaIdResponse> GetReplicaId(Empty request, ServerCallContext context) => 
             Task.FromResult(new GetReplicaIdResponse { ReplicaId = _ownReplicaId} );
@@ -101,11 +101,12 @@ namespace LmdbCacheServer.Replica
             });
 
         public Task PostWriteLogEvent(Item syncItem) => 
-            Task.WhenAll(_replicationSources.Values.Select(slave => slave.WriteAsync(new SyncPacket
-            {
-                ReplicaId = _ownReplicaId,
-                Item = syncItem
-            }))); // TODO: Add "write to 'm of n'" support 
+            Task.WhenAll(_replicationSources.Values.Select(slave => 
+                GrpcSafeHandler(() => slave.WriteAsync(new SyncPacket
+                {
+                    ReplicaId = _ownReplicaId,
+                    Item = syncItem
+                })))); // TODO: Add "write to 'm of n'" support 
 
         public bool TerminateSync(string replicaId)
         {

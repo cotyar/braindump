@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -40,7 +41,7 @@ namespace LmdbCacheServer.Replica
         private readonly Timestamp _started;
 
         private readonly ReplicatorSlave _replicatorSlave;
-        private readonly IList<IReplicator> _replicators;
+        private readonly ConcurrentBag<IReplicator> _replicators;
         private readonly Monitor _monitor;
 
         public Replica(ReplicaConfig replicaConfig, VectorClock clock = null)
@@ -62,20 +63,8 @@ namespace LmdbCacheServer.Replica
             _wlTable = new WriteLogTable(_lmdb, "writelog", ReplicaConfig.ReplicaId);
 
             _kvTable = new KvTable(_lmdb, "kv", ReplicaConfig.ReplicaId, 
-                _statusTable, _kvExpiryTable, _kvMetadataTable,
-                CurrentClock, IncrementClock, (txn, wle) =>
-                {
-                    wle.Clock = IncrementClock(txn);
-                    var pos = wle.Clock.GetReplicaValue(ReplicaConfig.ReplicaId);
-
-                    if (pos == null)
-                        throw new EventLogException($"IncrementClock must return a new Pos for current replica. WriteLog: '{wle}'"); // TODO: Values can be large, possibly exclude them from the Exception.
-
-                    if (!_wlTable.AddLogEvents(txn, wle))
-                        throw new EventLogException($"Cannot write event to the WriteLog: '{wle}'"); // TODO: Values can be large, possibly exclude them from the Exception.
-
-                    return pos.Value;
-                }, events => Task.WhenAll(_replicators.SelectMany(r => events.Select(r.PostWriteLogEvent)).ToArray()));
+                _statusTable, _kvExpiryTable, _kvMetadataTable, _wlTable,
+                CurrentClock, IncrementClock, events => Task.WhenAll(_replicators.SelectMany(r => events.Select(r.PostWriteLogEvent)).ToArray()));
 
             _webServerCompletion = WebServer.StartWebServer(_shutdownCancellationTokenSource.Token, ReplicaConfig.HostName, ReplicaConfig.WebUIPort);
 
@@ -90,20 +79,29 @@ namespace LmdbCacheServer.Replica
             Console.WriteLine("Monitoring server started listening on port " + ReplicaConfig.MonitoringPort);
 
 
-            _replicators = new List<IReplicator>();
+            _replicators = new ConcurrentBag<IReplicator>();
 
             if (!string.IsNullOrWhiteSpace(ReplicaConfig.MasterNode))
             {
-                // TODO: Add supervision
+                try
+                {
+                    // TODO: Add supervision
 
-                _replicatorSlave = new ReplicatorSlave(_lmdb, ReplicaConfig.ReplicaId,
-                    _kvTable, _replicationTable, _wlTable, ReplicaConfig.Replication, IncrementClockWithRemoteUpdate);
-                _replicatorSlave.StartSync(new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure)).GetAwaiter().GetResult(); 
-                _replicators.Add(_replicatorSlave);
+                    _replicatorSlave = new ReplicatorSlave(_lmdb, ReplicaConfig.ReplicaId,
+                        _kvTable, _replicationTable, _wlTable, ReplicaConfig.Replication,
+                        UpdateClockWithRemoteReplicaPos);
+                    _replicatorSlave.StartSync(new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure))
+                        .GetAwaiter().GetResult();
+                    _replicators.Add(_replicatorSlave);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Starting Replication failed for node ${ReplicaConfig.MasterNode}. Continue without Replication.");
+                }
             }
 
             var replicatorMaster = new ReplicatorMaster(_lmdb, replicaConfig.ReplicaId, 
-                _kvTable, _replicationTable, _wlTable, ReplicaConfig.Replication, IncrementClockWithRemoteUpdate);
+                _kvTable, _replicationTable, _wlTable, ReplicaConfig.Replication, UpdateClockWithRemoteReplicaPos);
             _serverReplication = new Server
             {
                 Services = { SyncService.BindService(replicatorMaster) },
@@ -148,16 +146,25 @@ namespace LmdbCacheServer.Replica
             return clock;
         }
 
-        private VectorClock IncrementClockWithRemoteUpdate(WriteTransaction txn, string remoteReplica, ulong remotePos)
+        private void UpdateClockWithRemoteReplicaPos(WriteTransaction txn, string remoteReplica, ulong? remotePos)
         {
-            var clock = _statusTable.GetLastClock(txn).Increment(ReplicaConfig.ReplicaId);
-            var oldRemotePos = clock.GetReplicaValue(remoteReplica);
-            if (oldRemotePos < remotePos)
+            //var clock = _statusTable.GetLastClock(txn).Merge(remoteClock).Increment(ReplicaConfig.ReplicaId);
+            //if (clock.GetReplicaValue(remoteReplica) != remotePos)
+            //{
+            //    throw new EventLogException($"Inconsistent Pos '{remotePos}' and remote VClock '{remoteClock}'");
+            //}
+
+            if (!remotePos.HasValue)
             {
-                clock = clock.SetReplicaValue(remoteReplica, remotePos);
+                throw new EventLogException($"Inconsistent missing Pos for remote replica '{remoteReplica}'");
+            }
+            var clock = _statusTable.GetLastClock(txn);
+            var oldRemotePos = clock.GetReplicaValue(remoteReplica);
+            if (!oldRemotePos.HasValue || oldRemotePos < remotePos)
+            {
+                clock = clock.SetReplicaValue(remoteReplica, remotePos.Value);
             }
             _statusTable.SetLastClock(txn, clock);
-            return clock;
         }
 
         private Task<ReplicaStatus> CollectStats()

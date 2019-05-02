@@ -275,16 +275,24 @@ export class KvMetadata extends jspb.Message {
   getExpiry(): Timestamp | undefined;
   setExpiry(value?: Timestamp): void;
 
-  hasUpdated(): boolean;
-  clearUpdated(): void;
-  getUpdated(): VectorClock | undefined;
-  setUpdated(value?: VectorClock): void;
+  hasOriginated(): boolean;
+  clearOriginated(): void;
+  getOriginated(): VectorClock | undefined;
+  setOriginated(value?: VectorClock): void;
+
+  hasLocallyupdated(): boolean;
+  clearLocallyupdated(): void;
+  getLocallyupdated(): VectorClock | undefined;
+  setLocallyupdated(value?: VectorClock): void;
 
   getAction(): KvMetadata.UpdateAction;
   setAction(value: KvMetadata.UpdateAction): void;
 
   getCorrelationid(): string;
   setCorrelationid(value: string): void;
+
+  getOriginatorreplicaid(): string;
+  setOriginatorreplicaid(value: string): void;
 
   hasValuemetadata(): boolean;
   clearValuemetadata(): void;
@@ -305,9 +313,11 @@ export namespace KvMetadata {
   export type AsObject = {
     status: KvMetadata.Status,
     expiry?: Timestamp.AsObject,
-    updated?: VectorClock.AsObject,
+    originated?: VectorClock.AsObject,
+    locallyupdated?: VectorClock.AsObject,
     action: KvMetadata.UpdateAction,
     correlationid: string,
+    originatorreplicaid: string,
     valuemetadata?: ValueMetadata.AsObject,
   }
 
@@ -860,10 +870,10 @@ export namespace KeyValueListResponse {
 }
 
 export class WriteLogEvent extends jspb.Message {
-  hasClock(): boolean;
-  clearClock(): void;
-  getClock(): VectorClock | undefined;
-  setClock(value?: VectorClock): void;
+  hasOriginated(): boolean;
+  clearOriginated(): void;
+  getOriginated(): VectorClock | undefined;
+  setOriginated(value?: VectorClock): void;
 
   getCorrelationid(): string;
   setCorrelationid(value: string): void;
@@ -875,6 +885,11 @@ export class WriteLogEvent extends jspb.Message {
   clearValuemetadata(): void;
   getValuemetadata(): ValueMetadata | undefined;
   setValuemetadata(value?: ValueMetadata): void;
+
+  hasLocallysaved(): boolean;
+  clearLocallysaved(): void;
+  getLocallysaved(): VectorClock | undefined;
+  setLocallysaved(value?: VectorClock): void;
 
   hasUpdated(): boolean;
   clearUpdated(): void;
@@ -899,10 +914,11 @@ export class WriteLogEvent extends jspb.Message {
 
 export namespace WriteLogEvent {
   export type AsObject = {
-    clock?: VectorClock.AsObject,
+    originated?: VectorClock.AsObject,
     correlationid: string,
     originatorreplicaid: string,
     valuemetadata?: ValueMetadata.AsObject,
+    locallysaved?: VectorClock.AsObject,
     updated?: WriteLogEvent.AddedOrUpdated.AsObject,
     deleted?: WriteLogEvent.Deleted.AsObject,
   }
@@ -961,8 +977,8 @@ export namespace WriteLogEvent {
 
   export enum LoggedeventCase {
     LOGGEDEVENT_NOT_SET = 0,
-    UPDATED = 5,
-    DELETED = 7,
+    UPDATED = 10,
+    DELETED = 11,
   }
 }
 
@@ -1063,9 +1079,6 @@ export namespace SyncPacket {
   }
 
   export class Item extends jspb.Message {
-    getPos(): number;
-    setPos(value: number): void;
-
     hasLogevent(): boolean;
     clearLogevent(): void;
     getLogevent(): WriteLogEvent | undefined;
@@ -1083,7 +1096,6 @@ export namespace SyncPacket {
 
   export namespace Item {
     export type AsObject = {
-      pos: number,
       logevent?: WriteLogEvent.AsObject,
     }
   }

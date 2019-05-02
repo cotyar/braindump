@@ -23,7 +23,7 @@ namespace LmdbCacheServer.Replica
         private readonly KvTable _kvTable;
         private readonly ReplicationTable _replicationTable;
         private readonly CancellationToken _cancellationToken;
-        private readonly Func<WriteTransaction, string, ulong, VectorClock> _incrementClock;
+        private readonly Action<WriteTransaction, string, ulong?> _updateClock;
         private readonly string _targetReplicaId;
 
         private readonly ReplicationConfig _replicationConfig;
@@ -31,7 +31,7 @@ namespace LmdbCacheServer.Replica
         public ReplicatorSink(LightningPersistence lmdb, string targetReplicaId,
             KvTable kvTable, ReplicationTable replicationTable, 
             ReplicationConfig replicationConfig, CancellationToken cancellationToken,
-            Func<WriteTransaction, string, ulong, VectorClock> incrementClock)
+            Action<WriteTransaction, string, ulong?> updateClock)
         {
             _lmdb = lmdb;
             _targetReplicaId = targetReplicaId;
@@ -39,7 +39,7 @@ namespace LmdbCacheServer.Replica
             _replicationTable = replicationTable;
             _replicationConfig = replicationConfig;
             _cancellationToken = cancellationToken;
-            _incrementClock = incrementClock;
+            _updateClock = updateClock;
         }
 
         public async Task<ulong?> ProcessSyncPacket(SyncPacket syncPacket)
@@ -54,18 +54,18 @@ namespace LmdbCacheServer.Replica
                     foreach (var responseItem in syncPacket.Items.Batch)
                     {
                         if (_cancellationToken.IsCancellationRequested) break;
-                        await SyncHandler((responseItem.Pos, responseItem.LogEvent));
-                        lastPos = responseItem.Pos;
+                        var pos = await SyncHandler(responseItem.LogEvent);
+                        lastPos = pos;
                     }
                     return lastPos;
                 case Item:
                     //                            Console.WriteLine($"Received: '{syncPacket}'");
-                    await SyncHandler((syncPacket.Item.Pos, syncPacket.Item.LogEvent));
-                    return syncPacket.Item.Pos;
+                    return await SyncHandler(syncPacket.Item.LogEvent);
                 case SkipPos:
                     await _lmdb.WriteAsync(txn =>
                     {
                         _replicationTable.SetLastPos(txn, _targetReplicaId, syncPacket.SkipPos.LastPos);
+                        _updateClock(txn, _targetReplicaId, syncPacket.SkipPos.LastPos);
                     }, false, true);
                     return syncPacket.SkipPos.LastPos;
                 case SyncFrom:
@@ -75,14 +75,18 @@ namespace LmdbCacheServer.Replica
             }
         }
 
-        public async Task SyncHandler((ulong, WriteLogEvent) syncEvent)
+        public async Task<ulong> SyncHandler(WriteLogEvent syncEvent)
         {
-            if (_cancellationToken.IsCancellationRequested) return;
+            var posn = syncEvent.LocallySaved.GetReplicaValue(_targetReplicaId);
+            if (!posn.HasValue) throw new EventLogException($"Broken syncEvent.LocallySaved during replication '{syncEvent.LocallySaved}'. For replica '{_targetReplicaId}'");
+            var pos = posn.Value;
 
-            switch (syncEvent.Item2.LoggedEventCase)
+            if (_cancellationToken.IsCancellationRequested) return pos;
+
+            switch (syncEvent.LoggedEventCase)
             {
                 case WriteLogEvent.LoggedEventOneofCase.Updated:
-                    var addedOrUpdated = syncEvent.Item2.Updated;
+                    var addedOrUpdated = syncEvent.Updated;
                     await _lmdb.WriteAsync(txn =>
                     {
                         var addMetadata = new KvMetadata
@@ -90,9 +94,9 @@ namespace LmdbCacheServer.Replica
                             Status = Active,
                             Expiry = addedOrUpdated.Expiry,
                             Action = Replicated,
-                            Updated = _incrementClock(txn, _targetReplicaId, syncEvent.Item1),
-                            ValueMetadata = syncEvent.Item2.ValueMetadata,
-                            CorrelationId = syncEvent.Item2.CorrelationId
+                            Originated = syncEvent.Originated,
+                            ValueMetadata = syncEvent.ValueMetadata,
+                            CorrelationId = syncEvent.CorrelationId
                         };
 
                         var wasUpdated = _kvTable.Add(
@@ -100,40 +104,42 @@ namespace LmdbCacheServer.Replica
                             new KvKey(addedOrUpdated.Key),
                             addMetadata,
                             new KvValue(addedOrUpdated.Value),
-                            addMetadata.Updated,
                             (key, vcOld, vcNew) => vcOld.Earlier(vcNew));
-                        _replicationTable.SetLastPos(txn, _targetReplicaId, syncEvent.Item1);
+                        _replicationTable.SetLastPos(txn, _targetReplicaId, pos);
                         _kvTable.StatusTable.IncrementCounters(txn, replicatedAdds: 1);
                         // TODO: Should we do anything if the value wasn't updated? Maybe logging?        
                     }, false, true);
                     break;
                 case WriteLogEvent.LoggedEventOneofCase.Deleted:
-                    var deleted = syncEvent.Item2.Deleted;
+                    var deleted = syncEvent.Deleted;
                     await _lmdb.WriteAsync(txn =>
                     {
-                        var currentClock = _incrementClock(txn, _targetReplicaId, syncEvent.Item1);
+                        _updateClock(txn, _targetReplicaId, syncEvent.LocallySaved.GetReplicaValue(_targetReplicaId));
                         var delMetadata = new KvMetadata
                         {
                             Status = KvMetadata.Types.Status.Deleted,
-                            Expiry = currentClock.TicksOffsetUtc.ToTimestamp(),
+                            Expiry = syncEvent.LocallySaved.TicksOffsetUtc.ToTimestamp(),
                             Action = Replicated,
-                            Updated = currentClock,
-                            CorrelationId = syncEvent.Item2.CorrelationId,
-                            ValueMetadata = syncEvent.Item2.ValueMetadata,
+                            Originated = syncEvent.Originated,
+                            OriginatorReplicaId = syncEvent.OriginatorReplicaId,
+                            CorrelationId = syncEvent.CorrelationId,
+                            ValueMetadata = syncEvent.ValueMetadata,
                         };
 
                         var kvKey = new KvKey(deleted.Key);
                         _kvTable.Delete(txn, kvKey, delMetadata);
-                        _replicationTable.SetLastPos(txn, _targetReplicaId, syncEvent.Item1);
+                        _replicationTable.SetLastPos(txn, _targetReplicaId, pos);
                         _kvTable.StatusTable.IncrementCounters(txn, replicatedDeletes: 1);
                         // TODO: Should we do anything if the value wasn't updated? Maybe logging?
                     }, false, true);
                     break;
                 case WriteLogEvent.LoggedEventOneofCase.None:
-                    throw new ArgumentException("syncEvent", $"Unexpected LogEvent case: {syncEvent.Item2.LoggedEventCase}");
+                    throw new ArgumentException("syncEvent", $"Unexpected LogEvent case: {syncEvent.LoggedEventCase}");
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            return pos;
         }
 
         public void Dispose()

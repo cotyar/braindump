@@ -1926,9 +1926,11 @@ proto.LmdbCache.KvMetadata.toObject = function(includeInstance, msg) {
   var f, obj = {
     status: jspb.Message.getFieldWithDefault(msg, 1, 0),
     expiry: (f = msg.getExpiry()) && proto.LmdbCache.Timestamp.toObject(includeInstance, f),
-    updated: (f = msg.getUpdated()) && proto.LmdbCache.VectorClock.toObject(includeInstance, f),
-    action: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    correlationid: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    originated: (f = msg.getOriginated()) && proto.LmdbCache.VectorClock.toObject(includeInstance, f),
+    locallyupdated: (f = msg.getLocallyupdated()) && proto.LmdbCache.VectorClock.toObject(includeInstance, f),
+    action: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    correlationid: jspb.Message.getFieldWithDefault(msg, 6, ""),
+    originatorreplicaid: jspb.Message.getFieldWithDefault(msg, 7, ""),
     valuemetadata: (f = msg.getValuemetadata()) && proto.LmdbCache.ValueMetadata.toObject(includeInstance, f)
   };
 
@@ -1978,17 +1980,26 @@ proto.LmdbCache.KvMetadata.deserializeBinaryFromReader = function(msg, reader) {
     case 3:
       var value = new proto.LmdbCache.VectorClock;
       reader.readMessage(value,proto.LmdbCache.VectorClock.deserializeBinaryFromReader);
-      msg.setUpdated(value);
+      msg.setOriginated(value);
       break;
     case 4:
+      var value = new proto.LmdbCache.VectorClock;
+      reader.readMessage(value,proto.LmdbCache.VectorClock.deserializeBinaryFromReader);
+      msg.setLocallyupdated(value);
+      break;
+    case 5:
       var value = /** @type {!proto.LmdbCache.KvMetadata.UpdateAction} */ (reader.readEnum());
       msg.setAction(value);
       break;
-    case 5:
+    case 6:
       var value = /** @type {string} */ (reader.readString());
       msg.setCorrelationid(value);
       break;
-    case 6:
+    case 7:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setOriginatorreplicaid(value);
+      break;
+    case 8:
       var value = new proto.LmdbCache.ValueMetadata;
       reader.readMessage(value,proto.LmdbCache.ValueMetadata.deserializeBinaryFromReader);
       msg.setValuemetadata(value);
@@ -2037,7 +2048,7 @@ proto.LmdbCache.KvMetadata.serializeBinaryToWriter = function(message, writer) {
       proto.LmdbCache.Timestamp.serializeBinaryToWriter
     );
   }
-  f = message.getUpdated();
+  f = message.getOriginated();
   if (f != null) {
     writer.writeMessage(
       3,
@@ -2045,24 +2056,39 @@ proto.LmdbCache.KvMetadata.serializeBinaryToWriter = function(message, writer) {
       proto.LmdbCache.VectorClock.serializeBinaryToWriter
     );
   }
+  f = message.getLocallyupdated();
+  if (f != null) {
+    writer.writeMessage(
+      4,
+      f,
+      proto.LmdbCache.VectorClock.serializeBinaryToWriter
+    );
+  }
   f = message.getAction();
   if (f !== 0.0) {
     writer.writeEnum(
-      4,
+      5,
       f
     );
   }
   f = message.getCorrelationid();
   if (f.length > 0) {
     writer.writeString(
-      5,
+      6,
+      f
+    );
+  }
+  f = message.getOriginatorreplicaid();
+  if (f.length > 0) {
+    writer.writeString(
+      7,
       f
     );
   }
   f = message.getValuemetadata();
   if (f != null) {
     writer.writeMessage(
-      6,
+      8,
       f,
       proto.LmdbCache.ValueMetadata.serializeBinaryToWriter
     );
@@ -2134,23 +2160,23 @@ proto.LmdbCache.KvMetadata.prototype.hasExpiry = function() {
 
 
 /**
- * optional VectorClock updated = 3;
+ * optional VectorClock originated = 3;
  * @return {?proto.LmdbCache.VectorClock}
  */
-proto.LmdbCache.KvMetadata.prototype.getUpdated = function() {
+proto.LmdbCache.KvMetadata.prototype.getOriginated = function() {
   return /** @type{?proto.LmdbCache.VectorClock} */ (
     jspb.Message.getWrapperField(this, proto.LmdbCache.VectorClock, 3));
 };
 
 
 /** @param {?proto.LmdbCache.VectorClock|undefined} value */
-proto.LmdbCache.KvMetadata.prototype.setUpdated = function(value) {
+proto.LmdbCache.KvMetadata.prototype.setOriginated = function(value) {
   jspb.Message.setWrapperField(this, 3, value);
 };
 
 
-proto.LmdbCache.KvMetadata.prototype.clearUpdated = function() {
-  this.setUpdated(undefined);
+proto.LmdbCache.KvMetadata.prototype.clearOriginated = function() {
+  this.setOriginated(undefined);
 };
 
 
@@ -2158,54 +2184,99 @@ proto.LmdbCache.KvMetadata.prototype.clearUpdated = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.LmdbCache.KvMetadata.prototype.hasUpdated = function() {
+proto.LmdbCache.KvMetadata.prototype.hasOriginated = function() {
   return jspb.Message.getField(this, 3) != null;
 };
 
 
 /**
- * optional UpdateAction action = 4;
+ * optional VectorClock locallyUpdated = 4;
+ * @return {?proto.LmdbCache.VectorClock}
+ */
+proto.LmdbCache.KvMetadata.prototype.getLocallyupdated = function() {
+  return /** @type{?proto.LmdbCache.VectorClock} */ (
+    jspb.Message.getWrapperField(this, proto.LmdbCache.VectorClock, 4));
+};
+
+
+/** @param {?proto.LmdbCache.VectorClock|undefined} value */
+proto.LmdbCache.KvMetadata.prototype.setLocallyupdated = function(value) {
+  jspb.Message.setWrapperField(this, 4, value);
+};
+
+
+proto.LmdbCache.KvMetadata.prototype.clearLocallyupdated = function() {
+  this.setLocallyupdated(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.LmdbCache.KvMetadata.prototype.hasLocallyupdated = function() {
+  return jspb.Message.getField(this, 4) != null;
+};
+
+
+/**
+ * optional UpdateAction action = 5;
  * @return {!proto.LmdbCache.KvMetadata.UpdateAction}
  */
 proto.LmdbCache.KvMetadata.prototype.getAction = function() {
-  return /** @type {!proto.LmdbCache.KvMetadata.UpdateAction} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+  return /** @type {!proto.LmdbCache.KvMetadata.UpdateAction} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
 };
 
 
 /** @param {!proto.LmdbCache.KvMetadata.UpdateAction} value */
 proto.LmdbCache.KvMetadata.prototype.setAction = function(value) {
-  jspb.Message.setProto3EnumField(this, 4, value);
+  jspb.Message.setProto3EnumField(this, 5, value);
 };
 
 
 /**
- * optional string correlationId = 5;
+ * optional string correlationId = 6;
  * @return {string}
  */
 proto.LmdbCache.KvMetadata.prototype.getCorrelationid = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
 };
 
 
 /** @param {string} value */
 proto.LmdbCache.KvMetadata.prototype.setCorrelationid = function(value) {
-  jspb.Message.setProto3StringField(this, 5, value);
+  jspb.Message.setProto3StringField(this, 6, value);
 };
 
 
 /**
- * optional ValueMetadata valueMetadata = 6;
+ * optional string originatorReplicaId = 7;
+ * @return {string}
+ */
+proto.LmdbCache.KvMetadata.prototype.getOriginatorreplicaid = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
+};
+
+
+/** @param {string} value */
+proto.LmdbCache.KvMetadata.prototype.setOriginatorreplicaid = function(value) {
+  jspb.Message.setProto3StringField(this, 7, value);
+};
+
+
+/**
+ * optional ValueMetadata valueMetadata = 8;
  * @return {?proto.LmdbCache.ValueMetadata}
  */
 proto.LmdbCache.KvMetadata.prototype.getValuemetadata = function() {
   return /** @type{?proto.LmdbCache.ValueMetadata} */ (
-    jspb.Message.getWrapperField(this, proto.LmdbCache.ValueMetadata, 6));
+    jspb.Message.getWrapperField(this, proto.LmdbCache.ValueMetadata, 8));
 };
 
 
 /** @param {?proto.LmdbCache.ValueMetadata|undefined} value */
 proto.LmdbCache.KvMetadata.prototype.setValuemetadata = function(value) {
-  jspb.Message.setWrapperField(this, 6, value);
+  jspb.Message.setWrapperField(this, 8, value);
 };
 
 
@@ -2219,7 +2290,7 @@ proto.LmdbCache.KvMetadata.prototype.clearValuemetadata = function() {
  * @return {!boolean}
  */
 proto.LmdbCache.KvMetadata.prototype.hasValuemetadata = function() {
-  return jspb.Message.getField(this, 6) != null;
+  return jspb.Message.getField(this, 8) != null;
 };
 
 
@@ -5984,15 +6055,15 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.LmdbCache.WriteLogEvent.oneofGroups_ = [[5,7]];
+proto.LmdbCache.WriteLogEvent.oneofGroups_ = [[10,11]];
 
 /**
  * @enum {number}
  */
 proto.LmdbCache.WriteLogEvent.LoggedeventCase = {
   LOGGEDEVENT_NOT_SET: 0,
-  UPDATED: 5,
-  DELETED: 7
+  UPDATED: 10,
+  DELETED: 11
 };
 
 /**
@@ -6031,10 +6102,11 @@ proto.LmdbCache.WriteLogEvent.prototype.toObject = function(opt_includeInstance)
  */
 proto.LmdbCache.WriteLogEvent.toObject = function(includeInstance, msg) {
   var f, obj = {
-    clock: (f = msg.getClock()) && proto.LmdbCache.VectorClock.toObject(includeInstance, f),
+    originated: (f = msg.getOriginated()) && proto.LmdbCache.VectorClock.toObject(includeInstance, f),
     correlationid: jspb.Message.getFieldWithDefault(msg, 2, ""),
     originatorreplicaid: jspb.Message.getFieldWithDefault(msg, 3, ""),
     valuemetadata: (f = msg.getValuemetadata()) && proto.LmdbCache.ValueMetadata.toObject(includeInstance, f),
+    locallysaved: (f = msg.getLocallysaved()) && proto.LmdbCache.VectorClock.toObject(includeInstance, f),
     updated: (f = msg.getUpdated()) && proto.LmdbCache.WriteLogEvent.AddedOrUpdated.toObject(includeInstance, f),
     deleted: (f = msg.getDeleted()) && proto.LmdbCache.WriteLogEvent.Deleted.toObject(includeInstance, f)
   };
@@ -6076,7 +6148,7 @@ proto.LmdbCache.WriteLogEvent.deserializeBinaryFromReader = function(msg, reader
     case 1:
       var value = new proto.LmdbCache.VectorClock;
       reader.readMessage(value,proto.LmdbCache.VectorClock.deserializeBinaryFromReader);
-      msg.setClock(value);
+      msg.setOriginated(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
@@ -6092,11 +6164,16 @@ proto.LmdbCache.WriteLogEvent.deserializeBinaryFromReader = function(msg, reader
       msg.setValuemetadata(value);
       break;
     case 5:
+      var value = new proto.LmdbCache.VectorClock;
+      reader.readMessage(value,proto.LmdbCache.VectorClock.deserializeBinaryFromReader);
+      msg.setLocallysaved(value);
+      break;
+    case 10:
       var value = new proto.LmdbCache.WriteLogEvent.AddedOrUpdated;
       reader.readMessage(value,proto.LmdbCache.WriteLogEvent.AddedOrUpdated.deserializeBinaryFromReader);
       msg.setUpdated(value);
       break;
-    case 7:
+    case 11:
       var value = new proto.LmdbCache.WriteLogEvent.Deleted;
       reader.readMessage(value,proto.LmdbCache.WriteLogEvent.Deleted.deserializeBinaryFromReader);
       msg.setDeleted(value);
@@ -6130,7 +6207,7 @@ proto.LmdbCache.WriteLogEvent.prototype.serializeBinary = function() {
  */
 proto.LmdbCache.WriteLogEvent.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getClock();
+  f = message.getOriginated();
   if (f != null) {
     writer.writeMessage(
       1,
@@ -6160,10 +6237,18 @@ proto.LmdbCache.WriteLogEvent.serializeBinaryToWriter = function(message, writer
       proto.LmdbCache.ValueMetadata.serializeBinaryToWriter
     );
   }
-  f = message.getUpdated();
+  f = message.getLocallysaved();
   if (f != null) {
     writer.writeMessage(
       5,
+      f,
+      proto.LmdbCache.VectorClock.serializeBinaryToWriter
+    );
+  }
+  f = message.getUpdated();
+  if (f != null) {
+    writer.writeMessage(
+      10,
       f,
       proto.LmdbCache.WriteLogEvent.AddedOrUpdated.serializeBinaryToWriter
     );
@@ -6171,7 +6256,7 @@ proto.LmdbCache.WriteLogEvent.serializeBinaryToWriter = function(message, writer
   f = message.getDeleted();
   if (f != null) {
     writer.writeMessage(
-      7,
+      11,
       f,
       proto.LmdbCache.WriteLogEvent.Deleted.serializeBinaryToWriter
     );
@@ -6559,23 +6644,23 @@ proto.LmdbCache.WriteLogEvent.Deleted.prototype.setKey = function(value) {
 
 
 /**
- * optional VectorClock clock = 1;
+ * optional VectorClock originated = 1;
  * @return {?proto.LmdbCache.VectorClock}
  */
-proto.LmdbCache.WriteLogEvent.prototype.getClock = function() {
+proto.LmdbCache.WriteLogEvent.prototype.getOriginated = function() {
   return /** @type{?proto.LmdbCache.VectorClock} */ (
     jspb.Message.getWrapperField(this, proto.LmdbCache.VectorClock, 1));
 };
 
 
 /** @param {?proto.LmdbCache.VectorClock|undefined} value */
-proto.LmdbCache.WriteLogEvent.prototype.setClock = function(value) {
+proto.LmdbCache.WriteLogEvent.prototype.setOriginated = function(value) {
   jspb.Message.setWrapperField(this, 1, value);
 };
 
 
-proto.LmdbCache.WriteLogEvent.prototype.clearClock = function() {
-  this.setClock(undefined);
+proto.LmdbCache.WriteLogEvent.prototype.clearOriginated = function() {
+  this.setOriginated(undefined);
 };
 
 
@@ -6583,7 +6668,7 @@ proto.LmdbCache.WriteLogEvent.prototype.clearClock = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.LmdbCache.WriteLogEvent.prototype.hasClock = function() {
+proto.LmdbCache.WriteLogEvent.prototype.hasOriginated = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
@@ -6649,18 +6734,48 @@ proto.LmdbCache.WriteLogEvent.prototype.hasValuemetadata = function() {
 
 
 /**
- * optional AddedOrUpdated updated = 5;
+ * optional VectorClock locallySaved = 5;
+ * @return {?proto.LmdbCache.VectorClock}
+ */
+proto.LmdbCache.WriteLogEvent.prototype.getLocallysaved = function() {
+  return /** @type{?proto.LmdbCache.VectorClock} */ (
+    jspb.Message.getWrapperField(this, proto.LmdbCache.VectorClock, 5));
+};
+
+
+/** @param {?proto.LmdbCache.VectorClock|undefined} value */
+proto.LmdbCache.WriteLogEvent.prototype.setLocallysaved = function(value) {
+  jspb.Message.setWrapperField(this, 5, value);
+};
+
+
+proto.LmdbCache.WriteLogEvent.prototype.clearLocallysaved = function() {
+  this.setLocallysaved(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.LmdbCache.WriteLogEvent.prototype.hasLocallysaved = function() {
+  return jspb.Message.getField(this, 5) != null;
+};
+
+
+/**
+ * optional AddedOrUpdated updated = 10;
  * @return {?proto.LmdbCache.WriteLogEvent.AddedOrUpdated}
  */
 proto.LmdbCache.WriteLogEvent.prototype.getUpdated = function() {
   return /** @type{?proto.LmdbCache.WriteLogEvent.AddedOrUpdated} */ (
-    jspb.Message.getWrapperField(this, proto.LmdbCache.WriteLogEvent.AddedOrUpdated, 5));
+    jspb.Message.getWrapperField(this, proto.LmdbCache.WriteLogEvent.AddedOrUpdated, 10));
 };
 
 
 /** @param {?proto.LmdbCache.WriteLogEvent.AddedOrUpdated|undefined} value */
 proto.LmdbCache.WriteLogEvent.prototype.setUpdated = function(value) {
-  jspb.Message.setOneofWrapperField(this, 5, proto.LmdbCache.WriteLogEvent.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 10, proto.LmdbCache.WriteLogEvent.oneofGroups_[0], value);
 };
 
 
@@ -6674,23 +6789,23 @@ proto.LmdbCache.WriteLogEvent.prototype.clearUpdated = function() {
  * @return {!boolean}
  */
 proto.LmdbCache.WriteLogEvent.prototype.hasUpdated = function() {
-  return jspb.Message.getField(this, 5) != null;
+  return jspb.Message.getField(this, 10) != null;
 };
 
 
 /**
- * optional Deleted deleted = 7;
+ * optional Deleted deleted = 11;
  * @return {?proto.LmdbCache.WriteLogEvent.Deleted}
  */
 proto.LmdbCache.WriteLogEvent.prototype.getDeleted = function() {
   return /** @type{?proto.LmdbCache.WriteLogEvent.Deleted} */ (
-    jspb.Message.getWrapperField(this, proto.LmdbCache.WriteLogEvent.Deleted, 7));
+    jspb.Message.getWrapperField(this, proto.LmdbCache.WriteLogEvent.Deleted, 11));
 };
 
 
 /** @param {?proto.LmdbCache.WriteLogEvent.Deleted|undefined} value */
 proto.LmdbCache.WriteLogEvent.prototype.setDeleted = function(value) {
-  jspb.Message.setOneofWrapperField(this, 7, proto.LmdbCache.WriteLogEvent.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 11, proto.LmdbCache.WriteLogEvent.oneofGroups_[0], value);
 };
 
 
@@ -6704,7 +6819,7 @@ proto.LmdbCache.WriteLogEvent.prototype.clearDeleted = function() {
  * @return {!boolean}
  */
 proto.LmdbCache.WriteLogEvent.prototype.hasDeleted = function() {
-  return jspb.Message.getField(this, 7) != null;
+  return jspb.Message.getField(this, 11) != null;
 };
 
 
@@ -7335,7 +7450,6 @@ proto.LmdbCache.SyncPacket.Item.prototype.toObject = function(opt_includeInstanc
  */
 proto.LmdbCache.SyncPacket.Item.toObject = function(includeInstance, msg) {
   var f, obj = {
-    pos: jspb.Message.getFieldWithDefault(msg, 1, 0),
     logevent: (f = msg.getLogevent()) && proto.LmdbCache.WriteLogEvent.toObject(includeInstance, f)
   };
 
@@ -7374,10 +7488,6 @@ proto.LmdbCache.SyncPacket.Item.deserializeBinaryFromReader = function(msg, read
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setPos(value);
-      break;
-    case 2:
       var value = new proto.LmdbCache.WriteLogEvent;
       reader.readMessage(value,proto.LmdbCache.WriteLogEvent.deserializeBinaryFromReader);
       msg.setLogevent(value);
@@ -7411,17 +7521,10 @@ proto.LmdbCache.SyncPacket.Item.prototype.serializeBinary = function() {
  */
 proto.LmdbCache.SyncPacket.Item.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getPos();
-  if (f !== 0) {
-    writer.writeUint64(
-      1,
-      f
-    );
-  }
   f = message.getLogevent();
   if (f != null) {
     writer.writeMessage(
-      2,
+      1,
       f,
       proto.LmdbCache.WriteLogEvent.serializeBinaryToWriter
     );
@@ -7430,33 +7533,18 @@ proto.LmdbCache.SyncPacket.Item.serializeBinaryToWriter = function(message, writ
 
 
 /**
- * optional uint64 pos = 1;
- * @return {number}
- */
-proto.LmdbCache.SyncPacket.Item.prototype.getPos = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
-};
-
-
-/** @param {number} value */
-proto.LmdbCache.SyncPacket.Item.prototype.setPos = function(value) {
-  jspb.Message.setProto3IntField(this, 1, value);
-};
-
-
-/**
- * optional WriteLogEvent logEvent = 2;
+ * optional WriteLogEvent logEvent = 1;
  * @return {?proto.LmdbCache.WriteLogEvent}
  */
 proto.LmdbCache.SyncPacket.Item.prototype.getLogevent = function() {
   return /** @type{?proto.LmdbCache.WriteLogEvent} */ (
-    jspb.Message.getWrapperField(this, proto.LmdbCache.WriteLogEvent, 2));
+    jspb.Message.getWrapperField(this, proto.LmdbCache.WriteLogEvent, 1));
 };
 
 
 /** @param {?proto.LmdbCache.WriteLogEvent|undefined} value */
 proto.LmdbCache.SyncPacket.Item.prototype.setLogevent = function(value) {
-  jspb.Message.setWrapperField(this, 2, value);
+  jspb.Message.setWrapperField(this, 1, value);
 };
 
 
@@ -7470,7 +7558,7 @@ proto.LmdbCache.SyncPacket.Item.prototype.clearLogevent = function() {
  * @return {!boolean}
  */
 proto.LmdbCache.SyncPacket.Item.prototype.hasLogevent = function() {
-  return jspb.Message.getField(this, 2) != null;
+  return jspb.Message.getField(this, 1) != null;
 };
 
 

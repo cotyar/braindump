@@ -28,14 +28,14 @@ namespace LmdbCacheServer.Replica
         private readonly ReplicationTable _replicationTable;
         private readonly WriteLogTable _wlTable;
         private readonly ReplicationConfig _replicationConfig;
-        private readonly Func<WriteTransaction, string, ulong, VectorClock> _incrementClock;
+        private readonly Action<WriteTransaction, string, ulong?> _updateClock;
         private readonly CancellationTokenSource _cts;
         private readonly ConcurrentDictionary<string, (Task<Func<Item, Task>>, Task)> _replicators;
         private readonly ConcurrentDictionary<string, ReplicatorSource> _replicationSources;
 
         public ReplicatorSlave(LightningPersistence lmdb, string ownReplicaId, 
             KvTable kvTable, ReplicationTable replicationTable, WriteLogTable wlTable,
-            ReplicationConfig replicationConfig, Func<WriteTransaction, string, ulong, VectorClock> incrementClock) // TODO: Add ACKs streaming
+            ReplicationConfig replicationConfig, Action<WriteTransaction, string, ulong?> updateClock) // TODO: Add ACKs streaming
         {
             _lmdb = lmdb;
             _ownReplicaId = ownReplicaId;
@@ -43,7 +43,7 @@ namespace LmdbCacheServer.Replica
             _replicationTable = replicationTable;
             _wlTable = wlTable;
             _replicationConfig = replicationConfig;
-            _incrementClock = incrementClock;
+            _updateClock = updateClock;
             _replicators = new ConcurrentDictionary<string, (Task<Func<Item, Task>>, Task)>();
             _replicationSources = new ConcurrentDictionary<string, ReplicatorSource>();
             _cts = new CancellationTokenSource();
@@ -53,7 +53,7 @@ namespace LmdbCacheServer.Replica
             new ReplicatorSource(_lmdb, _ownReplicaId, _kvTable, _wlTable, _replicationConfig, _cts.Token, responseStreamWriteAsync);
 
         private ReplicatorSink CreateReplicatorSink(string targetReplicaId) =>
-            new ReplicatorSink(_lmdb, targetReplicaId, _kvTable, _replicationTable, _replicationConfig, _cts.Token, _incrementClock);
+            new ReplicatorSink(_lmdb, targetReplicaId, _kvTable, _replicationTable, _replicationConfig, _cts.Token, _updateClock);
 
         public Task StartSync(Channel syncChannel) =>
             GrpcSafeHandler(async () =>

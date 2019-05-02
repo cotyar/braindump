@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using LmdbCache;
+using LmdbCacheServer.Replica;
 using LmdbLight;
 using static LmdbCache.KvMetadata.Types.Status;
 using static LmdbCache.KvMetadata.Types.UpdateAction;
@@ -18,18 +19,17 @@ namespace LmdbCacheServer.Tables
         private readonly string _replicaId;
         private readonly ExpiryTable _expiryTable;
         private readonly KvMetadataTable _metadataTable;
+        private readonly WriteLogTable _wlTable;
         private readonly Func<VectorClock> _currentClock;
         private readonly Func<WriteTransaction, VectorClock> _incrementClock;
-        private readonly Func<WriteTransaction, WriteLogEvent, ulong> _kvUpdateHandler;
         private readonly Func<Item[], Task> _updateNotifier;
         private readonly Table _kvTable;
 
         public ReplicaStatusTable StatusTable { get; }
 
         public KvTable(LightningPersistence lmdb, string kvTableName, string replicaId,
-            ReplicaStatusTable statusTable, ExpiryTable expiryTable, KvMetadataTable metadataTable, 
-            Func<VectorClock> currentClock, Func<WriteTransaction, VectorClock> incrementClock,
-            Func<WriteTransaction, WriteLogEvent, ulong> kvUpdateHandler, Func<Item[], Task> updateNotifier)
+            ReplicaStatusTable statusTable, ExpiryTable expiryTable, KvMetadataTable metadataTable, WriteLogTable wlTable,
+            Func<VectorClock> currentClock, Func<WriteTransaction, VectorClock> incrementClock, Func<Item[], Task> updateNotifier)
         {
             _lmdb = lmdb;
             _replicaId = replicaId;
@@ -37,11 +37,22 @@ namespace LmdbCacheServer.Tables
             _kvTable = _lmdb.OpenTable(kvTableName);
             _expiryTable = expiryTable;
             _metadataTable = metadataTable;
+            _wlTable = wlTable;
             _currentClock = currentClock;
             _incrementClock = incrementClock;
-            _kvUpdateHandler = kvUpdateHandler;
             _updateNotifier = updateNotifier;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private (ulong, VectorClock) IncrementClock(WriteTransaction txn)
+        {
+            var clock = _incrementClock(txn);
+            var posn = clock.GetReplicaValue(_replicaId);
+            if (!posn.HasValue)
+                throw new EventLogException($"IncrementClock MUST return a new Pos for current replica {_replicaId}. '{clock}'");
+            return (posn.Value, clock);
+        }
+
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void RemoveExpired(WriteTransaction txn, TableKey tableKey, Timestamp keyExpiry)
@@ -53,7 +64,8 @@ namespace LmdbCacheServer.Tables
                 Status = Expired,
                 Expiry = keyExpiry,
                 Action = Updated,
-                Updated = currentClock
+                Originated = currentClock,
+                LocallyUpdated = currentClock
             };
 
             txn.Delete(_kvTable, tableKey); // TODO: Check and fail on not successful return codes
@@ -195,19 +207,20 @@ namespace LmdbCacheServer.Tables
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public (bool, Item) Add(WriteTransaction txn, KvKey key, KvMetadata metadata, KvValue value, VectorClock currentClock, Func<KvKey, VectorClock /*old*/, VectorClock /*new*/, bool> proceedWithUpdatePredicate)
+        public (bool, Item) Add(WriteTransaction txn, KvKey key, KvMetadata metadata, KvValue value, Func<KvKey, VectorClock /*old*/, VectorClock /*new*/, bool> proceedWithUpdatePredicate)
         {
             var tableKey = ToTableKey(key);
-            if (metadata.Updated == null) // TODO: Temporal solution. Split KvMetadata into permanent and replica-based ones
-            {
-                metadata.Updated = _incrementClock(txn);
-            }
+            var (pos, clock) = IncrementClock(txn);
+
+            metadata.Originated = metadata.Originated ?? clock;
+            metadata.LocallyUpdated = clock;
+
             var exMetadata = _metadataTable.TryGet(txn, tableKey);
             if (exMetadata != null)
             {
-                if (CheckAndRemoveIfExpired(key, currentClock, exMetadata, txn))
+                if (CheckAndRemoveIfExpired(key, clock, exMetadata, txn))
                 {
-                    if (!proceedWithUpdatePredicate(key, exMetadata.Updated, metadata.Updated))
+                    if (!proceedWithUpdatePredicate(key, exMetadata.Originated, metadata.Originated))
                     {
                         return (false, null);
                     }
@@ -219,14 +232,15 @@ namespace LmdbCacheServer.Tables
             _metadataTable.AddOrUpdate(txn, tableKey, metadata);
             _expiryTable.AddExpiryRecords(txn, new[] { (metadata.Expiry, tableKey) });
             var addOrUpdateLogEvent = ToAddOrUpdateLogEvent(key, metadata, value);
-            var pos = _kvUpdateHandler(txn, addOrUpdateLogEvent);
+            if (!_wlTable.AddLogEvents(txn, addOrUpdateLogEvent))
+                throw new EventLogException($"Cannot write event to the WriteLog: '{addOrUpdateLogEvent}'"); // TODO: Values can be large, possibly exclude them from the Exception.
             StatusTable.IncrementCounters(txn, rc =>
             {
                 rc.AddsCounter += 1;
                 if (rc.LargestKeySize < (uint)key.Key.Length) rc.LargestKeySize = (uint)key.Key.Length;
                 if (rc.LargestValueSize < (uint)value.Value.Length) rc.LargestValueSize = (uint)value.Value.Length;
             });
-            return (true, new Item { Pos = pos, LogEvent = addOrUpdateLogEvent });
+            return (true, new Item { LogEvent = addOrUpdateLogEvent });
         }
 
 
@@ -235,12 +249,10 @@ namespace LmdbCacheServer.Tables
         {
             var ret = await _lmdb.WriteAsync(txn =>
             {
-                var currentClock = _currentClock();
-
                 return batch.Select(item =>
                 {
                     var (key, metadata, value) = item;
-                    return (key, Add(txn, key, metadata, value, currentClock, proceedWithUpdatePredicate));
+                    return (key, Add(txn, key, metadata, value, proceedWithUpdatePredicate));
                 }).ToArray();
             }, false);
 
@@ -313,25 +325,22 @@ namespace LmdbCacheServer.Tables
         {
             var ret = await _lmdb.WriteAsync(txn =>
             {
-                var currentClock = _currentClock();
-
                 return keys.Select(item =>
                 {
                     var (key, metadata) = item;
-                    if (metadata.Updated == null
-                    ) // TODO: Temporal solution. Split KvMetadata into permanent and replica-based ones
-                    {
-                        metadata.Updated = _incrementClock(txn);
-                        metadata.Expiry = currentClock.TicksOffsetUtc.ToTimestamp();
-                    }
+                    var (pos, clock) = IncrementClock(txn);
+
+                    metadata.Originated = metadata.Originated ?? clock;
+                    metadata.LocallyUpdated = clock;
+                    metadata.Expiry = clock.TicksOffsetUtc.ToTimestamp();
 
                     var tableKey = ToTableKey(key);
                     var exMetadata = _metadataTable.TryGet(txn, tableKey);
                     if (exMetadata != null)
                     {
-                        if (CheckAndRemoveIfExpired(key, currentClock, exMetadata, txn))
+                        if (CheckAndRemoveIfExpired(key, clock, exMetadata, txn))
                         {
-                            if (!exMetadata.Updated.Earlier(metadata.Updated))
+                            if (!exMetadata.Originated.Earlier(metadata.Originated))
                             {
                                 return (key, (false, null));
                             }
@@ -341,9 +350,11 @@ namespace LmdbCacheServer.Tables
                     txn.Delete(_kvTable, tableKey); // TODO: Check and fail on not successful return codes
                     _metadataTable.AddOrUpdate(txn, tableKey, metadata);
                     var deleteLogEvent = ToDeleteLogEvent(key, metadata);
-                    var pos = _kvUpdateHandler(txn, deleteLogEvent);
+                    if (!_wlTable.AddLogEvents(txn, deleteLogEvent))
+                        throw new EventLogException($"Cannot write event to the WriteLog: '{deleteLogEvent}'"); // TODO: Values can be large, possibly exclude them from the Exception.
+
                     StatusTable.IncrementCounters(txn, deletesCounter: 1);
-                    return (key, (true, new Item { Pos = pos, LogEvent = deleteLogEvent }));
+                    return (key, (true, new Item { LogEvent = deleteLogEvent }));
                 }).ToArray();
             }, false);
 
@@ -357,13 +368,20 @@ namespace LmdbCacheServer.Tables
         public void Delete(WriteTransaction txn, KvKey key, KvMetadata metadata) // TODO: Align with other Delete operations (Expiry behaviour is in question)
         { 
             var tableKey = ToTableKey(key);
+            var (pos, clock) = IncrementClock(txn);
+
+            metadata.Originated = metadata.Originated ?? clock;
+            metadata.LocallyUpdated = clock;
+
             var exMetadata = _metadataTable.TryGet(txn, tableKey);
-            if (exMetadata?.Status == Active && exMetadata.Updated.Earlier(metadata.Updated)
-                || exMetadata?.Status == Expired && exMetadata.Updated.Earlier(metadata.Updated))
+            if (exMetadata?.Status == Active && exMetadata.Originated.Earlier(metadata.Originated)
+                || exMetadata?.Status == Expired && exMetadata.Originated.Earlier(metadata.Originated))
             {
                 txn.Delete(_kvTable, tableKey);
                 _metadataTable.AddOrUpdate(txn, tableKey, metadata);
-                _kvUpdateHandler(txn, ToDeleteLogEvent(key, metadata));
+                var deleteLogEvent = ToDeleteLogEvent(key, metadata);
+                if (!_wlTable.AddLogEvents(txn, deleteLogEvent))
+                    throw new EventLogException($"Cannot write event to the WriteLog: '{deleteLogEvent}'"); // TODO: Values can be large, possibly exclude them from the Exception.
                 StatusTable.IncrementCounters(txn, deletesCounter: 1);
             }
         }
@@ -379,24 +397,20 @@ namespace LmdbCacheServer.Tables
         public KvValue FromTableValue(TableValue value) => new KvValue(value.Value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public WriteLogEvent ToAddOrUpdateLogEvent(KvKey key, KvMetadata metadata, KvValue value)
-        {
-            //if (value.Value.Length != 1)
-            //    throw new ArgumentException(
-            //        $"Chunked values are not supported by the WriteLog yet. For key '{key.Key}' received value of '{value.Value.Length}' chunks");
-
-            return new WriteLogEvent {
+        public WriteLogEvent ToAddOrUpdateLogEvent(KvKey key, KvMetadata metadata, KvValue value) =>
+            new WriteLogEvent {
                 Updated = new WriteLogEvent.Types.AddedOrUpdated
-                    {
-                        Key = key.Key,
-                        //Value = value.Value, // TODO: Add streaming // TODO: Implement lazy value logic
-                        Expiry = metadata.Expiry
-                    },
+                {
+                    Key = key.Key,
+                    //Value = value.Value, // TODO: Add streaming // TODO: Implement lazy value logic
+                    Expiry = metadata.Expiry
+                },
                 ValueMetadata = metadata.ValueMetadata,
                 CorrelationId = metadata.CorrelationId,
-                OriginatorReplicaId = _replicaId
+                OriginatorReplicaId = _replicaId,
+                Originated = metadata.Originated,
+                LocallySaved = metadata.LocallyUpdated
             };
-        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public WriteLogEvent ToDeleteLogEvent(KvKey key, KvMetadata metadata) => 
@@ -408,7 +422,9 @@ namespace LmdbCacheServer.Tables
                     },
                 ValueMetadata = metadata.ValueMetadata,
                 CorrelationId = metadata.CorrelationId,
-                OriginatorReplicaId = _replicaId
+                OriginatorReplicaId = _replicaId,
+                Originated = metadata.Originated,
+                LocallySaved = metadata.LocallyUpdated
             };
     }
 

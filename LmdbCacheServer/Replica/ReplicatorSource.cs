@@ -89,7 +89,7 @@ namespace LmdbCacheServer.Replica
                 {
                     if (_replicationConfig.UseBatching)
                     {
-                        await ProcessInBatches(page);
+                        lastPos = await ProcessInBatches(page);
                     }
                     else
                     {
@@ -101,12 +101,14 @@ namespace LmdbCacheServer.Replica
                                 await _responseStreamWriteAsync(new SyncPacket
                                 {
                                     ReplicaId = _ownReplicaId,
-                                    Item = new Item { Pos = pos, LogEvent = item }
+                                    Item = new Item { LogEvent = item }
                                 });
                                 lastPos = pos;
                             }
                         }
                     }
+
+                    lastPos++;
                 }
             }
 
@@ -118,7 +120,7 @@ namespace LmdbCacheServer.Replica
 
             Console.WriteLine($"Page replicated. Last pos: {lastPos}");
 
-            async Task ProcessInBatches((ulong, WriteLogEvent)[] page)
+            async Task<ulong> ProcessInBatches((ulong, WriteLogEvent)[] page)
             {
                 var batches = page.Aggregate((0, new List<List<Item>>()), (acc, logItem) =>
                     {
@@ -129,11 +131,11 @@ namespace LmdbCacheServer.Replica
                         if (currentBatches.Count == 0 || lastBatchBytes + itemSize > 3 * 1024 * 1024)
                         {
                             currentBatches.Add(new List<Item>
-                                {new Item {Pos = logItem.Item1, LogEvent = logItem.Item2}});
+                                {new Item { LogEvent = logItem.Item2 }});
                             return (itemSize, currentBatches);
                         }
 
-                        currentBatches.Last().Add(new Item {Pos = logItem.Item1, LogEvent = logItem.Item2});
+                        currentBatches.Last().Add(new Item {LogEvent = logItem.Item2});
                         return (lastBatchBytes + itemSize, currentBatches);
                     })
                     .Item2;
@@ -150,10 +152,10 @@ namespace LmdbCacheServer.Replica
                             ReplicaId = _ownReplicaId,
                             Items = items
                         });
-                        lastPos = batch.Last().Pos;
                         //                            Console.WriteLine($"Replication page has been written");
                     }
                 }
+                return page.Last().Item1;
             }
         }
 

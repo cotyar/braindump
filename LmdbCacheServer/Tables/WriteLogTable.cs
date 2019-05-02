@@ -26,13 +26,13 @@ namespace LmdbCacheServer
         {
             var ret = txn.TryGetLast(_table);
             return ret.HasValue 
-                ? (FromTableKey(ret.Value.Item1), FromTableValue(ret.Value.Item2).Clock)
+                ? (FromTableKey(ret.Value.Item1), FromTableValue(ret.Value.Item2).LocallySaved)
                 : ((ulong, VectorClock)?) null;
         }
 
         public bool AddLogEvents(WriteTransaction txn, WriteLogEvent logEvent)
         {
-            var replicaValue = logEvent.Clock.GetReplicaValue(_replicaId);
+            var replicaValue = logEvent.LocallySaved.GetReplicaValue(_replicaId);
             if (!replicaValue.HasValue)
                 throw new ArgumentException(nameof(logEvent), $"VectorClock for the event is not properly prepared and empty for this replicaId: '{_replicaId}'");
 

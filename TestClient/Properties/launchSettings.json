@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "LmdbCacheServer": {
+    "TestClient": {
       "commandName": "Project",
-      "commandLineArgs": "zzz"
+      "commandLineArgs": "40551"
     }
   }
 }
