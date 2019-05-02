@@ -9,7 +9,7 @@ import { Server as WebSocketServer } from 'ws';
 function WsProxyServer(port) {
   const wss = new WebSocketServer({ port });
   // console.log(`protobuf  : ${protobuf.loadProtoFile}`);
-  const gbBuilder = protobuf.loadProtoFile('C:\\Work2\\braindump\\LmdbCacheWeb\\app\\backend\\grpcweb\\grpc-bus.proto');
+  const gbBuilder = protobuf.loadProtoFile('C:\\Work2\\braindump\\LmdbCacheWeb\\app\\src\\server\\grpcweb\\grpc-bus.proto');
   // console.log(`gbBuilder  : ${gbBuilder}`);
   const gbTree = gbBuilder.build().grpcbus;
 

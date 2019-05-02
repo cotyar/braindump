@@ -13,6 +13,7 @@
     "no-unused-vars": 1,
     "camelcase": 0,
     "object-curly-newline": 0,
-    "react/jsx-tag-spacing": 0
+    "react/jsx-tag-spacing": 0,
+    "esversion": 6
   }
 }

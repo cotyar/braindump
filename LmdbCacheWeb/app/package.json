@@ -13,8 +13,8 @@
   "author": "Evgeny Roskach",
   "license": "ISC",
   "devDependencies": {
-    "@babel/node": "^7.2.2",
     "@babel/core": "^7.0.0",
+    "@babel/node": "^7.2.2",
     "@babel/plugin-proposal-export-default-from": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
@@ -45,17 +45,23 @@
     "webpack-dev-server": "^3.1.7"
   },
   "dependencies": {
-    "@babel/core": "^7.0.0",
     "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.0.0",
+    "@fortawesome/fontawesome-free": "^5.8.1",
+    "@fortawesome/fontawesome-svg-core": "^1.2.17",
+    "@fortawesome/free-solid-svg-icons": "^5.8.1",
+    "@fortawesome/react-fontawesome": "^0.1.4",
+    "bloomer": "^0.6.5",
+    "bulma": "^0.7.4",
+    "express": "^4.16.3",
     "grpc": "^1.0.1",
     "grpc-bus": "https://github.com/gabrielgrant/grpc-bus/releases/download/v1.0.1-dev5/grpc-bus-1.0.1-dev5.tgz",
     "grpc-bus-websocket-client": "^0.3.1",
     "protobufjs": "^5.0.2",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
     "rsvp": "^3.3.3",
     "universal-websocket-client": "^1.0.1",
-    "ws": "^1.1.1",
-    "express": "^4.16.3",
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2"
+    "ws": "^1.1.1"
   }
 }

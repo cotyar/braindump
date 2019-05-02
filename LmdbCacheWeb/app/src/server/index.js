@@ -7,8 +7,9 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 8080;
 
-app.get('/apia', (req, res) => res.send({ aaa: 'Hello World!' }));
-app.get('/vapia', (req, res) => res.send({ vaaa: 'Hello World!' }));
+// app.get('/apia', (req, res) => res.send({ aaa: 'Hello World!' }));
+// app.get('/vapia', (req, res) => res.send({ vaaa: 'Hello World!' }));
+app.get('/assets/css/fontawesome.min.css', (req, res) => res.sendFile(path.resolve(__dirname, '../client/assets/css/fontawesome.min.css')));
 app.get('/grpc-bus.proto', (req, res) => res.sendFile(path.resolve(__dirname, 'grpcweb/grpc-bus.proto')));
 app.get('/lmdb_cache_remoting.proto', (req, res) => res.sendFile(path.resolve(__dirname, 'grpcweb/lmdb_cache_remoting.proto')));
 
@@ -27,7 +28,8 @@ app.get('/api/getUsername', (req, res) => res.send({ username: os.userInfo().use
  * serve react app
  */
 app.use(express.static('dist'));
-app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'dist/index.html')));
+// app.use(express.static('assets'));
+app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'index.html')));
 
 
 /**
