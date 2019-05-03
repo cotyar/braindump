@@ -229,7 +229,7 @@ export default class ServerInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      serverState: props.serverState
+      // serverState: props.serverState
     };
   }
 
@@ -242,7 +242,7 @@ export default class ServerInfo extends Component {
   // }
 
   render() {
-    const { serverState } = this.state;
+    const { serverState } = this.props;
     return !serverState
       ? <div/>
       : (

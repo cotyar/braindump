@@ -39,7 +39,7 @@ export default class App extends Component {
           <Header />
         </Section>
         <Section>
-          <ServerInfoTabs port={43051}/>
+          <ServerInfoTabs ports={[43051, 43551]}/>
         </Section>
       </div>
     );

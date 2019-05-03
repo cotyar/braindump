@@ -17,35 +17,51 @@ export default class ServerInfoTabs extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      serverPort: props.port,
-      serverState: null
+      serverPorts: props.ports,
+      serverStates: props.ports.map(() => null),
+      activeIndex: -1
     };
   }
 
   componentDidMount() {
-    const { serverPort } = this.state;
-    connectMonitoring(serverPort, (statusMsg) => {
+    const { serverPorts, serverStates, activeIndex } = this.state;
+    serverPorts.forEach((port, idx) => connectMonitoring(port, (statusMsg) => {
+      const i = idx;
       console.info(statusMsg);
-      this.setState({ serverState: statusMsg });
-    }, console.error);
+      serverStates[i] = statusMsg;
+      const newState = { serverStates, activeIndex };
+      if (activeIndex === -1) {
+        newState.activeIndex = i;
+      }
+      this.setState(newState);
+    }, console.error));
   }
 
   render() {
-    const { serverPort, serverState } = this.state;
-    return !serverState
+    const { serverPorts, serverStates, activeIndex } = this.state;
+    return !serverStates[activeIndex]
       ? <div/>
       : (
         <div>
           <Tabs>
             <TabList>
-              <Tab isActive>
-                <TabLink onClick={() => console.log('click!!!')}>
-                  <span><strong>{serverState.status.replicaId}:&nbsp;</strong>{serverPort}<strong>,&nbsp;Started:&nbsp;</strong>{formatTicksOffsetUtc(serverState.status.started.ticksOffsetUtc)}</span>
-                </TabLink>
-              </Tab>
+              { serverStates.map((s, idx) => {
+                const i = idx;
+                return (
+                  <Tab isActive={i === activeIndex}>
+                    <TabLink onClick={() => this.setState({ activeIndex: i })}>
+                      {
+                        serverStates[i]
+                          ? <span><strong>{serverStates[i].status.replicaId}:&nbsp;</strong>{serverPorts[i]}<strong>,&nbsp;Started:&nbsp;</strong>{formatTicksOffsetUtc(serverStates[i].status.started.ticksOffsetUtc)}</span>
+                          : <span>{serverPorts[i]}</span>
+                      }
+                    </TabLink>
+                  </Tab>
+                );
+              })}
             </TabList>
           </Tabs>
-          {!serverState ? (<div/>) : (<ServerInfo serverState={serverState}/>)}
+          <ServerInfo serverState={serverStates[activeIndex]}/>)
         </div>
       );
   }
