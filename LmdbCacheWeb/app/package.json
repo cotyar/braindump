@@ -60,6 +60,7 @@
     "protobufjs": "^5.0.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
+    "react-treeview": "^0.4.7",
     "rsvp": "^3.3.3",
     "universal-websocket-client": "^1.0.1",
     "ws": "^1.1.1"

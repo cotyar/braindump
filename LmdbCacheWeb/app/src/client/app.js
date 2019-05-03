@@ -2,12 +2,12 @@
 /* eslint-disable indent */
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-// import style from './assets/css/style.scss';
+import style from './assets/css/style.scss';
 import { express_icon, nodejs_icon, react_icon, webpack_icon } from './assets/img';
 
 import 'bulma/css/bulma.css';
 // import fontawesome from '@fortawesome/fontawesome'
-import { Box } from 'bloomer';
+import { Box, Section } from 'bloomer';
 
 import Header from './components/header';
 import ServerInfo from './components/serverInfo';
@@ -44,8 +44,12 @@ export default class App extends Component {
 
       <div>
         <Box>A white box to contain other elements</Box>
-        <Header />
-        <ServerInfo />
+        <Section>
+          <Header />
+        </Section>
+        <Section>
+          <ServerInfo port={43051}/>
+        </Section>
       </div>
     );
   }

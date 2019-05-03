@@ -1,8 +1,15 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-proto */
+/* eslint-disable react/prop-types */
+/* eslint-disable max-len */
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable import/order */
 /* eslint-disable indent */
 import React, { Component } from 'react';
+import TreeView from 'react-treeview';
 
 import 'bulma/css/bulma.css';
+import 'react-treeview/react-treeview.css';
 // import fontawesome, { faUser } from '@fortawesome/fontawesome-free';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,58 +18,150 @@ import { faCoffee, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Box, Columns, Column, Notification, Container,
   Card, CardContent, CardFooter, CardFooterItem,
   CardHeader, CardHeaderIcon, CardHeaderTitle, CardImage,
-  Icon
+  Icon, Content, Subtitle
 } from 'bloomer';
+
+import { connectMonitoring } from '../services/grpcBus';
+
+export const DataItem = ({ color, label, value }) => (
+  <Notification isColor={color} hasTextAlign="centered" >
+    <Subtitle tag="p" isSize={5}><strong>{label}:</strong> {value}</Subtitle>
+  </Notification>
+);
+
+const columnSize = { tablet: '1/4', desktop: '1/4' };
+export const DataColumn = ({ color, label, value }) => (
+  <Column isSize={columnSize}>
+    <DataItem color={color} label={label} value={value}/>
+  </Column>
+);
+
+export const DataColumnGroup = ({ children }) => (
+  <Container >
+    <Columns isCentered isMultiline >
+      { children }
+    </Columns>
+  </Container>
+);
+
+export const Counters = ({ counters }) => (
+  <Container>
+    <Card>
+      <CardHeader>
+        <CardHeaderTitle className="has-background-light">Counters</CardHeaderTitle>
+      </CardHeader>
+      <CardContent>
+        <Container>
+          <DataColumnGroup>
+            <DataColumn label="Add" value={counters.addsCounter.low} color="warning" />
+            <DataColumn label="Contains" value={counters.containsCounter.low}/>
+            <DataColumn label="Copy" value={counters.copysCounter.low}/>
+            <DataColumn label="Delete" value={counters.deletesCounter.low}/>
+            <DataColumn label="Get" value={counters.getCounter.low} color="warning" />
+            <DataColumn label="Key Search" value={counters.keySearchCounter.low}/>
+            <DataColumn label="Metadata Search" value={counters.metadataSearchCounter.low}/>
+            <DataColumn label="Page Search" value={counters.pageSearchCounter.low}/>
+            <DataColumn label="Replicated Add" value={counters.replicatedAdds.low}/>
+            <DataColumn label="Replicated Delete" value={counters.replicatedDeletes.low}/>
+            <DataColumn label="Largest Key" value={counters.largestKeySize}/>
+            <DataColumn label="Largest Value" value={counters.largestValueSize}/>
+          </DataColumnGroup>
+        </Container>
+      </CardContent>
+    </Card>
+  </Container>
+);
+
+let key1 = 0;
+function TreeColumn({ label, parenLabel: parentLabel, value }) {
+  console.info(`${label}|${value}|${parentLabel}`);
+  key1 += 1;
+  return (
+    <Column isSize={columnSize}>
+      {/* <DataItem color={color} label={label} value={value}/> */}
+      <TreeView nodeLabel={label} key={key1} defaultCollapsed={false}>
+        { Object.keys(value)
+            // eslint-disable-next-line no-prototype-builtins
+            .filter(p => value.hasOwnProperty(p) && p !== 'builder')
+            // eslint-disable-next-line no-nested-ternary
+            .map(p => (value && typeof value === 'object'
+              ? (value.__proto__.$type && value[p]
+                ? TreeColumn({ label: p, parentLabel: (`${parentLabel}^${label}`), value: value[p] })
+                : <div className="info">{p}: <span>[object]</span></div>)
+              : <div className="info">{p}: <span>{value || 'null'}</span></div>)) }
+      </TreeView>
+    </Column>
+  );
+}
+
+function printTree({ label, parentLabel, value }) {
+  // console.info(`${value.__proto__.$type}|${label}|${parentLabel}|${value}`);
+  console.info(`${label}|${value}|${parentLabel}`);
+  return Object.keys(value)
+          // eslint-disable-next-line no-prototype-builtins
+          .filter(p => value.hasOwnProperty(p) && p !== 'builder')
+          .map(p => (value && typeof value === 'object' && value.__proto__.$type && value[p]
+            ? printTree({ label: p, parentLabel: (`${parentLabel}^${label}`), value: value[p] })
+            : value));
+}
 
 export default class ServerInfo extends Component {
   constructor(props) {
     super(props);
-    this.state = { serverState: 'null  ss' };
+    this.state = {
+      serverPort: props.port,
+      serverState: null
+    };
   }
 
   componentDidMount() {
     // fetch('/api/getUsername')
     //   .then(res => res.json())
     //   .then(user => this.setState({ username: user.username }));
+    const { serverPort } = this.state;
+    connectMonitoring(serverPort, (statusMsg) => {
+        console.info(statusMsg);
+        this.setState({ serverState: statusMsg });
+      }, console.error);
+    // connectMonitoring(serverPort, statusMsg => printTree({ label: 'top', parentLabel: '', value: statusMsg }), console.error);
+    // connectMonitoring(serverPort, console.info, console.error);
   }
 
   render() {
-    const { serverState } = this.state;
-    const columnSize = { tablet: '1/3', desktop: '1/5' };
-
-    return (
-      // <div style={divStyle}>
-      //   {username ? <h1>{`Hello ${username} (i.e. me)`}</h1> : <h1>Loading.. please wait!</h1>}
-      //   <img src={nodejs_icon} alt="react" height="80"/>
-      //   <img src={express_icon} alt="react" height="80"/>
-      //   <img src={react_icon} alt="react" height="80"/>
-      //   <img src={webpack_icon} alt="react" height="80"/>
-      // </div>
-      <Box>
-        <h3>Server state:</h3>
-        <Container isFluid>
-          <Columns isCentered isMultiline>
-            <Column isSize={columnSize}>
-              <CardHeader>
-                <CardHeaderTitle>Component</CardHeaderTitle>
-                <CardHeaderIcon>
-                  <FontAwesomeIcon icon={faTimes}/>
-                </CardHeaderIcon>
-              </CardHeader>
-              <Notification isColor="success" hasTextAlign="centered"> isOneThird </Notification>
-            </Column>
-            <Column isSize={columnSize}>
-              <Notification isColor="warning" hasTextAlign="centered"> 2 </Notification>
-            </Column>
-            <Column isSize={columnSize}>
-              <Notification isColor="danger" hasTextAlign="centered"> Third column </Notification>
-            </Column>
-            <Column isSize={columnSize}>
-              <Notification isColor="primary" hasTextAlign="centered"> Fourth column </Notification>
-            </Column>
-          </Columns>
-        </Container>
-      </Box>
+    const { serverPort, serverState } = this.state;
+    return !serverState
+      ? <div/>
+      : (
+        <Card>
+          <CardHeader>
+            <CardHeaderTitle className="has-background-light">Server state:&nbsp;<span className="notbold">{serverPort}</span></CardHeaderTitle>
+          </CardHeader>
+          <CardContent>
+            <Counters counters={serverState.status.counters} />
+            {/* <DataColumnGroup>
+              <DataColumn color="warning" label="lll" value="aaa"/>
+              <DataColumn color="warning" label="lll" value="aaa"/>
+              <DataColumn color="warning" label="lll" value="aaa"/>
+            </DataColumnGroup>
+            <Container isFluid>
+              <Columns isCentered isMultiline>
+                <TreeColumn label={serverPort} value={serverState}/>
+                <DataColumn color="warning" label="lll" value="aaa"/>
+                <Column isSize={columnSize}>
+                  <Notification isColor="warning" hasTextAlign="centered">
+                    <Subtitle tag="p" isSize={5}><strong>123</strong> posts</Subtitle>
+                  </Notification>
+                </Column>
+                <Column isSize={columnSize}>
+                  <Notification isColor="danger" hasTextAlign="centered"> Third column </Notification>
+                </Column>
+                <Column isSize={columnSize}>
+                  <Notification isColor="primary" hasTextAlign="centered"> Fourth column </Notification>
+                </Column>
+              </Columns>
+            </Container> */}
+          </CardContent>
+        </Card>
     );
   }
 }
