@@ -18,7 +18,7 @@ import { faCoffee, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Box, Columns, Column, Notification, Container,
   Card, CardContent, CardFooter, CardFooterItem,
   CardHeader, CardHeaderIcon, CardHeaderTitle, CardImage,
-  Icon, Content, Subtitle
+  Icon, Content, Subtitle, Table
 } from 'bloomer';
 
 import { connectMonitoring } from '../services/grpcBus';
@@ -29,47 +29,140 @@ export const DataItem = ({ color, label, value }) => (
   </Notification>
 );
 
-const columnSize = { tablet: '1/4', desktop: '1/4' };
-export const DataColumn = ({ color, label, value }) => (
-  <Column isSize={columnSize}>
+const defaultColumnSize = { tablet: '1/4', desktop: '1/4' };
+export const DataColumn = ({ color, label, value, columnSize }) => (
+  <Column isSize={columnSize || defaultColumnSize}>
     <DataItem color={color} label={label} value={value}/>
   </Column>
 );
 
 export const DataColumnGroup = ({ children }) => (
-  <Container >
-    <Columns isCentered isMultiline >
-      { children }
-    </Columns>
-  </Container>
+  <Columns isCentered isMultiline >
+    { children }
+  </Columns>
+);
+
+export const formatTicksOffsetUtc = ticksOffsetUtc => `${ticksOffsetUtc.high}|${ticksOffsetUtc.low}`;
+
+export const TicksOffsetUtc = ({ ticksOffsetUtc }) => (<DataColumn label="Ticks Offset Utc" value={formatTicksOffsetUtc(ticksOffsetUtc)}/>);
+
+export const CurrentClock = ({ clock }) => (
+  <Card>
+    <CardHeader>
+      <CardHeaderTitle className="has-background-light">Current Clock</CardHeaderTitle>
+    </CardHeader>
+    <CardContent>
+      <Container>
+        <DataColumnGroup>
+          <TicksOffsetUtc ticksOffsetUtc={clock.ticksOffsetUtc}/>
+          <Column isSize={defaultColumnSize}>
+            <Table isBordered isStriped isNarrow>
+              <thead>
+                <tr>
+                  <th>Replica</th>
+                  <th>Pos</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.keys(clock.replicas.map).map(r => (
+                  <tr key={r}>
+                    <td>{r}</td>
+                    <td>{clock.replicas.map[r].value.low}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Column>
+        </DataColumnGroup>
+      </Container>
+    </CardContent>
+  </Card>
+);
+
+export const ReplicaConfig = ({ config }) => (
+  <Card>
+    <CardHeader>
+      <CardHeaderTitle className="has-background-light">Replica Config</CardHeaderTitle>
+    </CardHeader>
+    <CardContent>
+      <Container>
+        <DataColumnGroup>
+          <DataColumn label="Host" value={config.hostName}/>
+          <DataColumn label="Master Node" value={config.masterNode}/>
+          <DataColumn label="Monitoring Interval" value={config.monitoringInterval}/>
+          <DataColumn label="Monitoring Port" value={config.monitoringPort}/>
+          <DataColumn label="Port" value={config.port}/>
+          <DataColumn label="Replica Id" value={config.replicaId}/>
+          <DataColumn label="WebUI Port" value={config.webUIPort}/>
+        </DataColumnGroup>
+      </Container>
+    </CardContent>
+  </Card>
+);
+
+export const ReplicationConfig = ({ replication }) => (
+  <Card>
+    <CardHeader>
+      <CardHeaderTitle className="has-background-light">Replication Config</CardHeaderTitle>
+    </CardHeader>
+    <CardContent>
+      <Container>
+        <DataColumnGroup>
+          <DataColumn label="Port" value={replication.port}/>
+          <DataColumn label="Page Size" value={replication.pageSize}/>
+          <DataColumn label="Await SyncFrom" value={replication.awaitSyncFrom ? 'true' : 'false'}/>
+          <DataColumn label="Use Batching" value={replication.useBatching ? 'true' : 'false'}/>
+        </DataColumnGroup>
+      </Container>
+    </CardContent>
+  </Card>
+);
+
+
+export const PersistenceConfig = ({ persistence }) => (
+  <Card>
+    <CardHeader>
+      <CardHeaderTitle className="has-background-light">Storage Config</CardHeaderTitle>
+    </CardHeader>
+    <CardContent>
+      <Container>
+        <DataColumnGroup>
+          <DataColumn label="Path" value={persistence.name} columnSize={{ tablet: '3/4', desktop: '3/4' }}/>
+          <DataColumn label="Max Tables" value={persistence.maxTables}/>
+          <DataColumn label="Limit Gb" value={persistence.storageLimit.low}/>
+          <DataColumn label="Disk Sync Mode" value={persistence.syncMode}/>
+          <DataColumn label="WB Max Queue" value={persistence.writeBatchMaxDelegates}/>
+          <DataColumn label="WB Timeout ms" value={persistence.writeBatchTimeoutMilliseconds}/>
+        </DataColumnGroup>
+      </Container>
+    </CardContent>
+  </Card>
 );
 
 export const Counters = ({ counters }) => (
-  <Container>
-    <Card>
-      <CardHeader>
-        <CardHeaderTitle className="has-background-light">Counters</CardHeaderTitle>
-      </CardHeader>
-      <CardContent>
-        <Container>
-          <DataColumnGroup>
-            <DataColumn label="Add" value={counters.addsCounter.low} color="warning" />
-            <DataColumn label="Contains" value={counters.containsCounter.low}/>
-            <DataColumn label="Copy" value={counters.copysCounter.low}/>
-            <DataColumn label="Delete" value={counters.deletesCounter.low}/>
-            <DataColumn label="Get" value={counters.getCounter.low} color="warning" />
-            <DataColumn label="Key Search" value={counters.keySearchCounter.low}/>
-            <DataColumn label="Metadata Search" value={counters.metadataSearchCounter.low}/>
-            <DataColumn label="Page Search" value={counters.pageSearchCounter.low}/>
-            <DataColumn label="Replicated Add" value={counters.replicatedAdds.low}/>
-            <DataColumn label="Replicated Delete" value={counters.replicatedDeletes.low}/>
-            <DataColumn label="Largest Key" value={counters.largestKeySize}/>
-            <DataColumn label="Largest Value" value={counters.largestValueSize}/>
-          </DataColumnGroup>
-        </Container>
-      </CardContent>
-    </Card>
-  </Container>
+  <Card>
+    <CardHeader>
+      <CardHeaderTitle className="has-background-light">Counters</CardHeaderTitle>
+    </CardHeader>
+    <CardContent>
+      <Container>
+        <DataColumnGroup>
+          <DataColumn label="Add" value={counters.addsCounter.low} color="warning" />
+          <DataColumn label="Contains" value={counters.containsCounter.low}/>
+          <DataColumn label="Copy" value={counters.copysCounter.low}/>
+          <DataColumn label="Delete" value={counters.deletesCounter.low}/>
+          <DataColumn label="Get" value={counters.getCounter.low} color="warning" />
+          <DataColumn label="Key Search" value={counters.keySearchCounter.low}/>
+          <DataColumn label="Metadata Search" value={counters.metadataSearchCounter.low}/>
+          <DataColumn label="Page Search" value={counters.pageSearchCounter.low}/>
+          <DataColumn label="Replicated Add" value={counters.replicatedAdds.low}/>
+          <DataColumn label="Replicated Delete" value={counters.replicatedDeletes.low}/>
+          <DataColumn label="Largest Key" value={counters.largestKeySize}/>
+          <DataColumn label="Largest Value" value={counters.largestValueSize}/>
+        </DataColumnGroup>
+      </Container>
+    </CardContent>
+  </Card>
 );
 
 let key1 = 0;
@@ -77,7 +170,7 @@ function TreeColumn({ label, parenLabel: parentLabel, value }) {
   console.info(`${label}|${value}|${parentLabel}`);
   key1 += 1;
   return (
-    <Column isSize={columnSize}>
+    <Column isSize={defaultColumnSize}>
       {/* <DataItem color={color} label={label} value={value}/> */}
       <TreeView nodeLabel={label} key={key1} defaultCollapsed={false}>
         { Object.keys(value)
@@ -129,14 +222,26 @@ export default class ServerInfo extends Component {
 
   render() {
     const { serverPort, serverState } = this.state;
+    if (serverState) {
+      console.log(serverState.status.started);
+      console.log(serverState.status.started.ticksOffsetUtc);
+    }
     return !serverState
       ? <div/>
       : (
         <Card>
           <CardHeader>
-            <CardHeaderTitle className="has-background-light">Server state:&nbsp;<span className="notbold">{serverPort}</span></CardHeaderTitle>
+            <CardHeaderTitle className="has-background-light">
+              {serverState.status.replicaId}:&nbsp;<span className="notbold">{serverPort}</span>,&nbsp;Started:&nbsp;<span className="notbold">{formatTicksOffsetUtc(serverState.status.started.ticksOffsetUtc)}</span>
+            </CardHeaderTitle>
           </CardHeader>
           <CardContent>
+            <CurrentClock clock={serverState.status.currentClock} />
+            <br/>
+            <ReplicaConfig config={serverState.status.replicaConfig} />
+            <ReplicationConfig replication={serverState.status.replicaConfig.replication} />
+            <PersistenceConfig persistence={serverState.status.replicaConfig.persistence} />
+            <br/>
             <Counters counters={serverState.status.counters} />
             {/* <DataColumnGroup>
               <DataColumn color="warning" label="lll" value="aaa"/>
