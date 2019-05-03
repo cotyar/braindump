@@ -165,6 +165,32 @@ export const Counters = ({ counters }) => (
   </Card>
 );
 
+export const CollectedStats = ({ stats }) => {
+  console.log(stats);
+  return (
+    <Card>
+      <CardHeader>
+        <CardHeaderTitle className="has-background-light">Collected Stats</CardHeaderTitle>
+        <CardHeaderIcon>
+          {/* <Icon className="fa fa-angle-down" /> */}
+          <span className="icon" aria-hidden="true" ><FontAwesomeIcon icon={faCoffee} /></span>
+        </CardHeaderIcon>
+      </CardHeader>
+      <CardContent>
+        <Container>
+          <DataColumnGroup>
+            <DataColumn label="Active Keys" value={stats.activeKeys.low} color="warning" />
+            <DataColumn label="Deleted Keys" value={stats.deletedKeys.low} />
+            <DataColumn label="Expired Keys" value={stats.expiredKeys.low} />
+            <DataColumn label="Non-Exp Keys" value={stats.nonExpiredKeys.low} />
+            <DataColumn label="All Keys" value={stats.allKeys.low} />
+          </DataColumnGroup>
+        </Container>
+      </CardContent>
+    </Card>
+  );
+};
+
 let key1 = 0;
 function TreeColumn({ label, parenLabel: parentLabel, value }) {
   console.info(`${label}|${value}|${parentLabel}`);
@@ -222,10 +248,6 @@ export default class ServerInfo extends Component {
 
   render() {
     const { serverPort, serverState } = this.state;
-    if (serverState) {
-      console.log(serverState.status.started);
-      console.log(serverState.status.started.ticksOffsetUtc);
-    }
     return !serverState
       ? <div/>
       : (
@@ -243,6 +265,8 @@ export default class ServerInfo extends Component {
             <PersistenceConfig persistence={serverState.status.replicaConfig.persistence} />
             <br/>
             <Counters counters={serverState.status.counters} />
+            <br/>
+            <CollectedStats stats={serverState.status.collectedStats} />
             {/* <DataColumnGroup>
               <DataColumn color="warning" label="lll" value="aaa"/>
               <DataColumn color="warning" label="lll" value="aaa"/>
