@@ -48,7 +48,7 @@ export default class ServerInfoTabs extends Component {
               { serverStates.map((s, idx) => {
                 const i = idx;
                 return (
-                  <Tab isActive={i === activeIndex}>
+                  <Tab key={i} isActive={i === activeIndex}>
                     <TabLink onClick={() => this.setState({ activeIndex: i })}>
                       {
                         serverStates[i]

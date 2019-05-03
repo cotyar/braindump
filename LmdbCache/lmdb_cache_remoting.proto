@@ -310,23 +310,6 @@ message SyncPacket {
   }
 }
 
-// message SyncSubscribeRequest {
-//   string replicaId   = 1;
-// }
-
-// message SyncSubscribeResponse {
-//   uint64 pos             = 1;
-//   WriteLogEvent logEvent = 2;
-// }
-
-// message SyncAckRequest {
-//   uint64 eventId = 1;
-// }
-
-// message SyncToRequest {
-//   string replicaId   = 1;
-// }
-
 ///////////////////////////////
 
 // Interface exported by the server.
