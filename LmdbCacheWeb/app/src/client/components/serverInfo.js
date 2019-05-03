@@ -18,7 +18,8 @@ import { faCoffee, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Box, Columns, Column, Notification, Container,
   Card, CardContent, CardFooter, CardFooterItem,
   CardHeader, CardHeaderIcon, CardHeaderTitle, CardImage,
-  Icon, Content, Subtitle, Table
+  Icon, Content, Subtitle, Table,
+  Tabs, TabList, Tab, TabLink
 } from 'bloomer';
 
 import { connectMonitoring } from '../services/grpcBus';
@@ -228,35 +229,29 @@ export default class ServerInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      serverPort: props.port,
-      serverState: null
+      serverState: props.serverState
     };
   }
 
-  componentDidMount() {
-    // fetch('/api/getUsername')
-    //   .then(res => res.json())
-    //   .then(user => this.setState({ username: user.username }));
-    const { serverPort } = this.state;
-    connectMonitoring(serverPort, (statusMsg) => {
-        console.info(statusMsg);
-        this.setState({ serverState: statusMsg });
-      }, console.error);
-    // connectMonitoring(serverPort, statusMsg => printTree({ label: 'top', parentLabel: '', value: statusMsg }), console.error);
-    // connectMonitoring(serverPort, console.info, console.error);
-  }
+  // componentDidMount() {
+  //   const { serverPort } = this.state;
+  //   connectMonitoring(serverPort, (statusMsg) => {
+  //       console.info(statusMsg);
+  //       this.setState({ serverState: statusMsg });
+  //     }, console.error);
+  // }
 
   render() {
-    const { serverPort, serverState } = this.state;
+    const { serverState } = this.state;
     return !serverState
       ? <div/>
       : (
         <Card>
-          <CardHeader>
+          {/* <CardHeader>
             <CardHeaderTitle className="has-background-light">
               {serverState.status.replicaId}:&nbsp;<span className="notbold">{serverPort}</span>,&nbsp;Started:&nbsp;<span className="notbold">{formatTicksOffsetUtc(serverState.status.started.ticksOffsetUtc)}</span>
             </CardHeaderTitle>
-          </CardHeader>
+          </CardHeader> */}
           <CardContent>
             <CurrentClock clock={serverState.status.currentClock} />
             <br/>
@@ -267,28 +262,6 @@ export default class ServerInfo extends Component {
             <Counters counters={serverState.status.counters} />
             <br/>
             <CollectedStats stats={serverState.status.collectedStats} />
-            {/* <DataColumnGroup>
-              <DataColumn color="warning" label="lll" value="aaa"/>
-              <DataColumn color="warning" label="lll" value="aaa"/>
-              <DataColumn color="warning" label="lll" value="aaa"/>
-            </DataColumnGroup>
-            <Container isFluid>
-              <Columns isCentered isMultiline>
-                <TreeColumn label={serverPort} value={serverState}/>
-                <DataColumn color="warning" label="lll" value="aaa"/>
-                <Column isSize={columnSize}>
-                  <Notification isColor="warning" hasTextAlign="centered">
-                    <Subtitle tag="p" isSize={5}><strong>123</strong> posts</Subtitle>
-                  </Notification>
-                </Column>
-                <Column isSize={columnSize}>
-                  <Notification isColor="danger" hasTextAlign="centered"> Third column </Notification>
-                </Column>
-                <Column isSize={columnSize}>
-                  <Notification isColor="primary" hasTextAlign="centered"> Fourth column </Notification>
-                </Column>
-              </Columns>
-            </Container> */}
           </CardContent>
         </Card>
     );
