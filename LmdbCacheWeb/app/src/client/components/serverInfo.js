@@ -88,12 +88,12 @@ export const ReplicaConfig = ({ config }) => (
     <CardContent>
       <Container>
         <DataColumnGroup>
+          <DataColumn label="Replica Id" value={config.replicaId}/>
+          <DataColumn label="Port" value={config.port}/>
           <DataColumn label="Host" value={config.hostName}/>
           <DataColumn label="Master Node" value={config.masterNode}/>
           <DataColumn label="Monitoring Interval" value={config.monitoringInterval}/>
           <DataColumn label="Monitoring Port" value={config.monitoringPort}/>
-          <DataColumn label="Port" value={config.port}/>
-          <DataColumn label="Replica Id" value={config.replicaId}/>
           <DataColumn label="WebUI Port" value={config.webUIPort}/>
         </DataColumnGroup>
       </Container>

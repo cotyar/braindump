@@ -2,6 +2,8 @@
 /* eslint-disable indent */
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import ReactQueryParams from 'react-query-params';
+
 import style from './assets/css/style.scss';
 
 import 'bulma/css/bulma.css';
@@ -18,20 +20,27 @@ import ServerInfoTabs from './components/serverInfoTabs';
 // };
 
 
-export default class App extends Component {
+export default class App extends ReactQueryParams {
   constructor(props) {
     super(props);
     this.state = { username: null };
   }
 
   componentDidMount() {
-    fetch('/api/getUsername')
-      .then(res => res.json())
-      .then(user => this.setState({ username: user.username }));
+    // fetch('/api/getUsername')
+    //   .then(res => res.json())
+    //   .then(user => this.setState({ username: user.username }));
   }
 
   render() {
-    const { username } = this.state;
+    // const { username } = this.state;
+    let serverPorts = this.queryParams.ports;
+    if (!serverPorts) {
+      serverPorts = [43051, 43551];
+      this.setQueryParams({
+        ports: serverPorts
+      });
+    }
     return (
       <div>
         <Box>A white box to contain other elements</Box>
@@ -39,7 +48,7 @@ export default class App extends Component {
           <Header />
         </Section>
         <Section>
-          <ServerInfoTabs ports={[43051, 43551]}/>
+          <ServerInfoTabs ports={serverPorts}/>
         </Section>
       </div>
     );
