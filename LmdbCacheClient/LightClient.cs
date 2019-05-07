@@ -156,7 +156,7 @@ namespace LmdbCacheClient
 
             foreach (var kv in ret)
             {
-                streamReader(keysCopied[kv.Index], kv.Value.ToStream());
+                streamReader(keysCopied[kv.Index], _valueCompressor.Decompress(kv.ValueMetadata.Compression, kv.Value.ToStream()));
             }
 
             return ret.Select(kv => keysCopied[kv.Index]).ToHashSet();
