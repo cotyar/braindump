@@ -22,7 +22,7 @@ import { Box, Columns, Column, Notification, Container,
   Tabs, TabList, Tab, TabLink
 } from 'bloomer';
 
-import { connectMonitoring } from '../services/grpcBus';
+import { connectMonitoring } from '../services/grpcMonitoringService';
 
 export const DataItem = ({ color, label, value }) => (
   <Notification isColor={color} hasTextAlign="centered" >

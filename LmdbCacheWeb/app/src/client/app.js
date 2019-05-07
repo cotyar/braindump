@@ -43,12 +43,12 @@ export default class App extends ReactQueryParams {
     }
     return (
       <div>
-        <Box>A white box to contain other elements</Box>
+        {/* <Box>A white box to contain other elements</Box> */}
         <Section>
-          <Header />
+          <Header ports={[40051]} />
         </Section>
         <Section>
-          <ServerInfoTabs ports={serverPorts}/>
+          <ServerInfoTabs ports={serverPorts} />
         </Section>
       </div>
     );

@@ -91,6 +91,15 @@ LmdbCacheService.ListKeyValues = {
   responseType: lmdb_cache_remoting_pb.KeyValueListResponse
 };
 
+LmdbCacheService.Echo = {
+  methodName: "Echo",
+  service: LmdbCacheService,
+  requestStream: false,
+  responseStream: false,
+  requestType: lmdb_cache_remoting_pb.EchoRequest,
+  responseType: lmdb_cache_remoting_pb.EchoResponse
+};
+
 exports.LmdbCacheService = LmdbCacheService;
 
 function LmdbCacheServiceClient(serviceHost, options) {
@@ -411,6 +420,37 @@ LmdbCacheServiceClient.prototype.listKeyValues = function listKeyValues(requestM
   };
 };
 
+LmdbCacheServiceClient.prototype.echo = function echo(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(LmdbCacheService.Echo, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
 exports.LmdbCacheServiceClient = LmdbCacheServiceClient;
 
 var SyncService = (function () {
@@ -624,4 +664,67 @@ MonitoringServiceClient.prototype.subscribe = function subscribe(requestMessage,
 };
 
 exports.MonitoringServiceClient = MonitoringServiceClient;
+
+var ServiceDiscoveryService = (function () {
+  function ServiceDiscoveryService() {}
+  ServiceDiscoveryService.serviceName = "LmdbCache.ServiceDiscoveryService";
+  return ServiceDiscoveryService;
+}());
+
+ServiceDiscoveryService.GetKnownReplicas = {
+  methodName: "GetKnownReplicas",
+  service: ServiceDiscoveryService,
+  requestStream: false,
+  responseStream: true,
+  requestType: lmdb_cache_remoting_pb.Empty,
+  responseType: lmdb_cache_remoting_pb.GetKnownReplicasResponse
+};
+
+exports.ServiceDiscoveryService = ServiceDiscoveryService;
+
+function ServiceDiscoveryServiceClient(serviceHost, options) {
+  this.serviceHost = serviceHost;
+  this.options = options || {};
+}
+
+ServiceDiscoveryServiceClient.prototype.getKnownReplicas = function getKnownReplicas(requestMessage, metadata) {
+  var listeners = {
+    data: [],
+    end: [],
+    status: []
+  };
+  var client = grpc.invoke(ServiceDiscoveryService.GetKnownReplicas, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onMessage: function (responseMessage) {
+      listeners.data.forEach(function (handler) {
+        handler(responseMessage);
+      });
+    },
+    onEnd: function (status, statusMessage, trailers) {
+      listeners.end.forEach(function (handler) {
+        handler();
+      });
+      listeners.status.forEach(function (handler) {
+        handler({ code: status, details: statusMessage, metadata: trailers });
+      });
+      listeners = null;
+    }
+  });
+  return {
+    on: function (type, handler) {
+      listeners[type].push(handler);
+      return this;
+    },
+    cancel: function () {
+      listeners = null;
+      client.close();
+    }
+  };
+};
+
+exports.ServiceDiscoveryServiceClient = ServiceDiscoveryServiceClient;
 

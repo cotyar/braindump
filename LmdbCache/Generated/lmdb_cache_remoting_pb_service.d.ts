@@ -85,6 +85,15 @@ type LmdbCacheServiceListKeyValues = {
   readonly responseType: typeof lmdb_cache_remoting_pb.KeyValueListResponse;
 };
 
+type LmdbCacheServiceEcho = {
+  readonly methodName: string;
+  readonly service: typeof LmdbCacheService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof lmdb_cache_remoting_pb.EchoRequest;
+  readonly responseType: typeof lmdb_cache_remoting_pb.EchoResponse;
+};
+
 export class LmdbCacheService {
   static readonly serviceName: string;
   static readonly Add: LmdbCacheServiceAdd;
@@ -96,6 +105,7 @@ export class LmdbCacheService {
   static readonly ContainsKeys: LmdbCacheServiceContainsKeys;
   static readonly ListKeys: LmdbCacheServiceListKeys;
   static readonly ListKeyValues: LmdbCacheServiceListKeyValues;
+  static readonly Echo: LmdbCacheServiceEcho;
 }
 
 type SyncServiceGetReplicaId = {
@@ -144,6 +154,20 @@ export class MonitoringService {
   static readonly serviceName: string;
   static readonly GetStatus: MonitoringServiceGetStatus;
   static readonly Subscribe: MonitoringServiceSubscribe;
+}
+
+type ServiceDiscoveryServiceGetKnownReplicas = {
+  readonly methodName: string;
+  readonly service: typeof ServiceDiscoveryService;
+  readonly requestStream: false;
+  readonly responseStream: true;
+  readonly requestType: typeof lmdb_cache_remoting_pb.Empty;
+  readonly responseType: typeof lmdb_cache_remoting_pb.GetKnownReplicasResponse;
+};
+
+export class ServiceDiscoveryService {
+  static readonly serviceName: string;
+  static readonly GetKnownReplicas: ServiceDiscoveryServiceGetKnownReplicas;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -227,6 +251,15 @@ export class LmdbCacheServiceClient {
   ): UnaryResponse;
   listKeys(requestMessage: lmdb_cache_remoting_pb.KeyListRequest, metadata?: grpc.Metadata): ResponseStream<lmdb_cache_remoting_pb.KeyListResponse>;
   listKeyValues(requestMessage: lmdb_cache_remoting_pb.KeyListRequest, metadata?: grpc.Metadata): ResponseStream<lmdb_cache_remoting_pb.KeyValueListResponse>;
+  echo(
+    requestMessage: lmdb_cache_remoting_pb.EchoRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: lmdb_cache_remoting_pb.EchoResponse|null) => void
+  ): UnaryResponse;
+  echo(
+    requestMessage: lmdb_cache_remoting_pb.EchoRequest,
+    callback: (error: ServiceError|null, responseMessage: lmdb_cache_remoting_pb.EchoResponse|null) => void
+  ): UnaryResponse;
 }
 
 export class SyncServiceClient {
@@ -259,5 +292,12 @@ export class MonitoringServiceClient {
     callback: (error: ServiceError|null, responseMessage: lmdb_cache_remoting_pb.MonitoringUpdateResponse|null) => void
   ): UnaryResponse;
   subscribe(requestMessage: lmdb_cache_remoting_pb.MonitoringUpdateRequest, metadata?: grpc.Metadata): ResponseStream<lmdb_cache_remoting_pb.MonitoringUpdateResponse>;
+}
+
+export class ServiceDiscoveryServiceClient {
+  readonly serviceHost: string;
+
+  constructor(serviceHost: string, options?: grpc.RpcOptions);
+  getKnownReplicas(requestMessage: lmdb_cache_remoting_pb.Empty, metadata?: grpc.Metadata): ResponseStream<lmdb_cache_remoting_pb.GetKnownReplicasResponse>;
 }
 

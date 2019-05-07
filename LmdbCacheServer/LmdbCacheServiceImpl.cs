@@ -33,28 +33,32 @@ namespace LmdbCacheServer
             _kvTable = kvTable;
         }
 
+        public override Task<EchoResponse> Echo(EchoRequest request, ServerCallContext context)
+        {
+            return Task.FromResult(new EchoResponse { Echo = request.Echo });
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Task<AddResponse> Add(IEnumerable<AddRequestEntry> entries, Header header) =>
-            GrpcSafeHandler(async () =>
+        public async Task<AddResponse> Add(IEnumerable<AddRequestEntry> entries, Header header)
+        {
+            var batch = entries.Select(ks => (new KvKey(ks.Key), new KvMetadata
             {
-                var batch = entries.Select(ks => (new KvKey(ks.Key), new KvMetadata
-                {
-                    Status = Active,
-                    Expiry = ks.Expiry,
-                    Action = Added,
-                    CorrelationId = header.CorrelationId,
-                    ValueMetadata = ks.ValueMetadata
-                }, new KvValue(ks.Value))).ToArray();
+                Status = Active,
+                Expiry = ks.Expiry,
+                Action = Added,
+                CorrelationId = header.CorrelationId,
+                ValueMetadata = ks.ValueMetadata
+            }, new KvValue(ks.Value))).ToArray();
 
-                var ret = await (header.OverrideExisting ? _kvTable.AddOrUpdate(batch) : _kvTable.Add(batch));
-                var response = new AddResponse();
-                var addResults = ret.Select(kv => kv.Item2
-                    ? (header.OverrideExisting ? AddResult.KeyUpdated : AddResult.KeyAdded) // TODO: Recheck statuses
-                    : (header.OverrideExisting ? AddResult.Failure : AddResult.KeyAlreadyExists));
-                response.Results.AddRange(addResults);
+            var ret = await (header.OverrideExisting ? _kvTable.AddOrUpdate(batch) : _kvTable.Add(batch));
+            var response = new AddResponse();
+            var addResults = ret.Select(kv => kv.Item2
+                ? (header.OverrideExisting ? AddResult.KeyUpdated : AddResult.KeyAdded) // TODO: Recheck statuses
+                : (header.OverrideExisting ? AddResult.Failure : AddResult.KeyAlreadyExists));
+            response.Results.AddRange(addResults);
 
-                return response;
-            });
+            return response;
+        }
 
         public override Task<AddResponse> Add(AddRequest request, ServerCallContext context) =>
             GrpcSafeHandler(() => Add(request.Entries, request.Header));

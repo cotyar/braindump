@@ -40,138 +40,145 @@ namespace LmdbCache {
             "Q29uZmlnIpgBCgxDbGllbnRDb25maWcSFAoMdXNlU3RyZWFtaW5nGAEgASgI",
             "EjkKC2NvbXByZXNzaW9uGAIgASgOMiQuTG1kYkNhY2hlLlZhbHVlTWV0YWRh",
             "dGEuQ29tcHJlc3Npb24SNwoKaGFzaGVkV2l0aBgDIAEoDjIjLkxtZGJDYWNo",
-            "ZS5WYWx1ZU1ldGFkYXRhLkhhc2hlZFdpdGgiBwoFRW1wdHkiIwoJVGltZXN0",
-            "YW1wEhYKDnRpY2tzT2Zmc2V0VXRjGAEgASgEIo4BCgtWZWN0b3JDbG9jaxI2",
-            "CghyZXBsaWNhcxgBIAMoCzIkLkxtZGJDYWNoZS5WZWN0b3JDbG9jay5SZXBs",
-            "aWNhc0VudHJ5EhYKDnRpY2tzT2Zmc2V0VXRjGAIgASgEGi8KDVJlcGxpY2Fz",
-            "RW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgEOgI4ASL+AQoNVmFs",
-            "dWVNZXRhZGF0YRI3CgpoYXNoZWRXaXRoGAEgASgOMiMuTG1kYkNhY2hlLlZh",
-            "bHVlTWV0YWRhdGEuSGFzaGVkV2l0aBIMCgRoYXNoGAIgASgMEjkKC2NvbXBy",
-            "ZXNzaW9uGAMgASgOMiQuTG1kYkNhY2hlLlZhbHVlTWV0YWRhdGEuQ29tcHJl",
-            "c3Npb24SFgoOc2l6ZUNvbXByZXNzZWQYBCABKA0SEAoIc2l6ZUZ1bGwYBSAB",
-            "KA0iFQoKSGFzaGVkV2l0aBIHCgNNRDUQACIqCgtDb21wcmVzc2lvbhIICgRO",
-            "T05FEAASBwoDTFo0EAESCAoER1pJUBACIr0DCgpLdk1ldGFkYXRhEiwKBnN0",
-            "YXR1cxgBIAEoDjIcLkxtZGJDYWNoZS5Ldk1ldGFkYXRhLlN0YXR1cxIkCgZl",
-            "eHBpcnkYAiABKAsyFC5MbWRiQ2FjaGUuVGltZXN0YW1wEioKCm9yaWdpbmF0",
-            "ZWQYAyABKAsyFi5MbWRiQ2FjaGUuVmVjdG9yQ2xvY2sSLgoObG9jYWxseVVw",
-            "ZGF0ZWQYBCABKAsyFi5MbWRiQ2FjaGUuVmVjdG9yQ2xvY2sSMgoGYWN0aW9u",
-            "GAUgASgOMiIuTG1kYkNhY2hlLkt2TWV0YWRhdGEuVXBkYXRlQWN0aW9uEhUK",
-            "DWNvcnJlbGF0aW9uSWQYBiABKAkSGwoTb3JpZ2luYXRvclJlcGxpY2FJZBgH",
-            "IAEoCRIvCg12YWx1ZU1ldGFkYXRhGAggASgLMhguTG1kYkNhY2hlLlZhbHVl",
-            "TWV0YWRhdGEiLgoGU3RhdHVzEgoKBkFDVElWRRAAEgsKB0RFTEVURUQQARIL",
-            "CgdFWFBJUkVEEAIiNgoMVXBkYXRlQWN0aW9uEgkKBUFEREVEEAASCwoHVVBE",
-            "QVRFRBABEg4KClJFUExJQ0FURUQQAiLJAgoKQWRkUmVxdWVzdBIsCgZoZWFk",
-            "ZXIYASABKAsyHC5MbWRiQ2FjaGUuQWRkUmVxdWVzdC5IZWFkZXISNgoHZW50",
-            "cmllcxgFIAMoCzIlLkxtZGJDYWNoZS5BZGRSZXF1ZXN0LkFkZFJlcXVlc3RF",
-            "bnRyeRpOCgZIZWFkZXISGAoQb3ZlcnJpZGVFeGlzdGluZxgBIAEoCBIVCg1j",
-            "b3JyZWxhdGlvbklkGAIgASgJEhMKC2NodW5rc0NvdW50GAMgASgNGoQBCg9B",
-            "ZGRSZXF1ZXN0RW50cnkSCwoDa2V5GAEgASgJEiQKBmV4cGlyeRgCIAEoCzIU",
-            "LkxtZGJDYWNoZS5UaW1lc3RhbXASLwoNdmFsdWVNZXRhZGF0YRgDIAEoCzIY",
-            "LkxtZGJDYWNoZS5WYWx1ZU1ldGFkYXRhEg0KBXZhbHVlGAQgASgMIpIBCgtB",
-            "ZGRSZXNwb25zZRIxCgdyZXN1bHRzGAEgAygOMiAuTG1kYkNhY2hlLkFkZFJl",
-            "c3BvbnNlLkFkZFJlc3VsdCJQCglBZGRSZXN1bHQSDQoJS0VZX0FEREVEEAAS",
-            "DwoLS0VZX1VQREFURUQQARIWChJLRVlfQUxSRUFEWV9FWElTVFMQAhILCgdG",
-            "QUlMVVJFEAMi0wEKEEFkZFN0cmVhbVJlcXVlc3QSLgoGaGVhZGVyGAEgASgL",
-            "MhwuTG1kYkNhY2hlLkFkZFJlcXVlc3QuSGVhZGVySAASNgoFY2h1bmsYAiAB",
-            "KAsyJS5MbWRiQ2FjaGUuQWRkU3RyZWFtUmVxdWVzdC5EYXRhQ2h1bmtIABpQ",
-            "CglEYXRhQ2h1bmsSDQoFaW5kZXgYASABKA0SNAoFZW50cnkYAiABKAsyJS5M",
-            "bWRiQ2FjaGUuQWRkUmVxdWVzdC5BZGRSZXF1ZXN0RW50cnlCBQoDbXNnIjQK",
-            "DURlbGV0ZVJlcXVlc3QSFQoNY29ycmVsYXRpb25JZBgBIAEoCRIMCgRrZXlz",
-            "GAIgAygJIoIBCg5EZWxldGVSZXNwb25zZRI3CgdyZXN1bHRzGAEgAygOMiYu",
-            "TG1kYkNhY2hlLkRlbGV0ZVJlc3BvbnNlLkRlbGV0ZVJlc3VsdCI3CgxEZWxl",
-            "dGVSZXN1bHQSCwoHU1VDQ0VTUxAAEg0KCU5PVF9GT1VORBABEgsKB0ZBSUxV",
-            "UkUQAiIxCgpHZXRSZXF1ZXN0EhUKDWNvcnJlbGF0aW9uSWQYASABKAkSDAoE",
-            "a2V5cxgCIAMoCSKkAgoLR2V0UmVzcG9uc2USOAoHcmVzdWx0cxgBIAMoCzIn",
-            "LkxtZGJDYWNoZS5HZXRSZXNwb25zZS5HZXRSZXNwb25zZUVudHJ5GtoBChBH",
-            "ZXRSZXNwb25zZUVudHJ5EkEKBnJlc3VsdBgBIAEoDjIxLkxtZGJDYWNoZS5H",
-            "ZXRSZXNwb25zZS5HZXRSZXNwb25zZUVudHJ5LkdldFJlc3VsdBINCgVpbmRl",
-            "eBgCIAEoDRIvCg12YWx1ZU1ldGFkYXRhGAMgASgLMhguTG1kYkNhY2hlLlZh",
-            "bHVlTWV0YWRhdGESDQoFdmFsdWUYBSABKAwiNAoJR2V0UmVzdWx0EgsKB1NV",
-            "Q0NFU1MQABINCglOT1RfRk9VTkQQARILCgdGQUlMVVJFEAIiTAoRR2V0U3Ry",
-            "ZWFtUmVzcG9uc2USNwoGcmVzdWx0GAEgASgLMicuTG1kYkNhY2hlLkdldFJl",
-            "c3BvbnNlLkdldFJlc3BvbnNlRW50cnkiJwoUQ29udGFpbnNLZXlzUmVzcG9u",
-            "c2USDwoHcmVzdWx0cxgBIAMoCCK4AQoLQ29weVJlcXVlc3QSFQoNY29ycmVs",
-            "YXRpb25JZBgBIAEoCRI4CgdlbnRyaWVzGAIgAygLMicuTG1kYkNhY2hlLkNv",
-            "cHlSZXF1ZXN0LkNvcHlSZXF1ZXN0RW50cnkaWAoQQ29weVJlcXVlc3RFbnRy",
-            "eRIPCgdrZXlGcm9tGAEgASgJEiQKBmV4cGlyeRgCIAEoCzIULkxtZGJDYWNo",
-            "ZS5UaW1lc3RhbXASDQoFa2V5VG8YAyABKAkilgEKDENvcHlSZXNwb25zZRIz",
-            "CgdyZXN1bHRzGAEgAygOMiIuTG1kYkNhY2hlLkNvcHlSZXNwb25zZS5Db3B5",
-            "UmVzdWx0IlEKCkNvcHlSZXN1bHQSCwoHU1VDQ0VTUxAAEhYKEkZST01fS0VZ",
-            "X05PVF9GT1VORBABEhEKDVRPX0tFWV9FWElTVFMQAhILCgdGQUlMVVJFEAMi",
-            "WgoOS2V5TGlzdFJlcXVlc3QSEQoJa2V5UHJlZml4GAEgASgJEhAKCHBhZ2VT",
-            "aXplGAIgASgNEgwKBHBhZ2UYAyABKA0SFQoNY29ycmVsYXRpb25JZBgEIAEo",
-            "CSIeCg9LZXlMaXN0UmVzcG9uc2USCwoDa2V5GAEgASgJIjIKFEtleVZhbHVl",
-            "TGlzdFJlc3BvbnNlEgsKA2tleRgBIAEoCRINCgV2YWx1ZRgDIAEoDCK6AwoN",
-            "V3JpdGVMb2dFdmVudBIqCgpvcmlnaW5hdGVkGAEgASgLMhYuTG1kYkNhY2hl",
-            "LlZlY3RvckNsb2NrEhUKDWNvcnJlbGF0aW9uSWQYAiABKAkSGwoTb3JpZ2lu",
-            "YXRvclJlcGxpY2FJZBgDIAEoCRIvCg12YWx1ZU1ldGFkYXRhGAQgASgLMhgu",
-            "TG1kYkNhY2hlLlZhbHVlTWV0YWRhdGESLAoMbG9jYWxseVNhdmVkGAUgASgL",
-            "MhYuTG1kYkNhY2hlLlZlY3RvckNsb2NrEjoKB3VwZGF0ZWQYCiABKAsyJy5M",
-            "bWRiQ2FjaGUuV3JpdGVMb2dFdmVudC5BZGRlZE9yVXBkYXRlZEgAEjMKB2Rl",
-            "bGV0ZWQYCyABKAsyIC5MbWRiQ2FjaGUuV3JpdGVMb2dFdmVudC5EZWxldGVk",
-            "SAAaUgoOQWRkZWRPclVwZGF0ZWQSCwoDa2V5GAEgASgJEiQKBmV4cGlyeRgC",
-            "IAEoCzIULkxtZGJDYWNoZS5UaW1lc3RhbXASDQoFdmFsdWUYAyABKAwaFgoH",
-            "RGVsZXRlZBILCgNrZXkYASABKAlCDQoLbG9nZ2VkRXZlbnQiKQoUR2V0UmVw",
-            "bGljYUlkUmVzcG9uc2USEQoJcmVwbGljYUlkGAEgASgJIsYDCgpTeW5jUGFj",
-            "a2V0EhEKCXJlcGxpY2FJZBgBIAEoCRIyCghzeW5jRnJvbRgEIAEoCzIeLkxt",
-            "ZGJDYWNoZS5TeW5jUGFja2V0LlN5bmNGcm9tSAASLAoFaXRlbXMYBSABKAsy",
-            "Gy5MbWRiQ2FjaGUuU3luY1BhY2tldC5JdGVtc0gAEioKBGl0ZW0YBiABKAsy",
-            "Gi5MbWRiQ2FjaGUuU3luY1BhY2tldC5JdGVtSAASMAoHc2tpcFBvcxgHIAEo",
-            "CzIdLkxtZGJDYWNoZS5TeW5jUGFja2V0LlNraXBQb3NIABpXCghTeW5jRnJv",
-            "bRIRCglyZXBsaWNhSWQYASABKAkSDQoFc2luY2UYAiABKAQSEwoLaW5jbHVk",
-            "ZU1pbmUYAyABKAgSFAoMaW5jbHVkZUFja2VkGAQgASgIGjIKBEl0ZW0SKgoI",
-            "bG9nRXZlbnQYASABKAsyGC5MbWRiQ2FjaGUuV3JpdGVMb2dFdmVudBoyCgVJ",
-            "dGVtcxIpCgViYXRjaBgBIAMoCzIaLkxtZGJDYWNoZS5TeW5jUGFja2V0Lkl0",
-            "ZW0aGgoHU2tpcFBvcxIPCgdsYXN0UG9zGAEgASgEQggKBnBhY2tldCIwChdN",
-            "b25pdG9yaW5nVXBkYXRlUmVxdWVzdBIVCg1jb3JyZWxhdGlvbklkGAEgASgJ",
-            "IkQKGE1vbml0b3JpbmdVcGRhdGVSZXNwb25zZRIoCgZzdGF0dXMYASABKAsy",
-            "GC5MbWRiQ2FjaGUuUmVwbGljYVN0YXR1cyL0AgoNUmVwbGljYVN0YXR1cxIR",
-            "CglyZXBsaWNhSWQYASABKAkSOAoOY29ubmVjdGlvbkluZm8YAiABKAsyIC5M",
-            "bWRiQ2FjaGUuUmVwbGljYUNvbm5lY3Rpb25JbmZvEiUKB3N0YXJ0ZWQYAyAB",
-            "KAsyFC5MbWRiQ2FjaGUuVGltZXN0YW1wEi8KDXJlcGxpY2FDb25maWcYBCAB",
-            "KAsyGC5MbWRiQ2FjaGUuUmVwbGljYUNvbmZpZxIsCgxjdXJyZW50Q2xvY2sY",
-            "BSABKAsyFi5MbWRiQ2FjaGUuVmVjdG9yQ2xvY2sSLAoIY291bnRlcnMYCiAB",
-            "KAsyGi5MbWRiQ2FjaGUuUmVwbGljYUNvdW50ZXJzEjEKDmNvbGxlY3RlZFN0",
-            "YXRzGAsgASgLMhkuTG1kYkNhY2hlLkNvbGxlY3RlZFN0YXRzEi8KDWNsdXN0",
-            "ZXJTdGF0dXMYDCABKAsyGC5MbWRiQ2FjaGUuQ2x1c3RlclN0YXR1cyKcAQoN",
-            "Q2x1c3RlclN0YXR1cxI4CghyZXBsaWNhcxgBIAMoCzImLkxtZGJDYWNoZS5D",
-            "bHVzdGVyU3RhdHVzLlJlcGxpY2FzRW50cnkaUQoNUmVwbGljYXNFbnRyeRIL",
-            "CgNrZXkYASABKAkSLwoFdmFsdWUYAiABKAsyIC5MbWRiQ2FjaGUuUmVwbGlj",
-            "YUNvbm5lY3Rpb25JbmZvOgI4ASIzChVSZXBsaWNhQ29ubmVjdGlvbkluZm8S",
-            "DAoEaG9zdBgBIAEoCRIMCgRwb3J0GAIgASgNIroCCg9SZXBsaWNhQ291bnRl",
-            "cnMSEwoLYWRkc0NvdW50ZXIYASABKAQSFgoOZGVsZXRlc0NvdW50ZXIYAiAB",
-            "KAQSFAoMY29weXNDb3VudGVyGAMgASgEEhIKCmdldENvdW50ZXIYBCABKAQS",
-            "FwoPY29udGFpbnNDb3VudGVyGAUgASgEEhgKEGtleVNlYXJjaENvdW50ZXIY",
-            "BiABKAQSHQoVbWV0YWRhdGFTZWFyY2hDb3VudGVyGAcgASgEEhkKEXBhZ2VT",
-            "ZWFyY2hDb3VudGVyGAggASgEEhYKDmxhcmdlc3RLZXlTaXplGAogASgNEhgK",
-            "EGxhcmdlc3RWYWx1ZVNpemUYCyABKA0SFgoOcmVwbGljYXRlZEFkZHMYDyAB",
-            "KAQSGQoRcmVwbGljYXRlZERlbGV0ZXMYECABKAQidwoOQ29sbGVjdGVkU3Rh",
-            "dHMSFgoObm9uRXhwaXJlZEtleXMYCiABKAQSDwoHYWxsS2V5cxgLIAEoBBIS",
-            "CgphY3RpdmVLZXlzGAwgASgEEhMKC2RlbGV0ZWRLZXlzGA0gASgEEhMKC2V4",
-            "cGlyZWRLZXlzGA4gASgEKkUKE0xpZ2h0bmluZ0RiU3luY01vZGUSCQoFRlN5",
-            "bmMQABIJCgVBc3luYxABEgoKBk5vU3luYxACEgwKCFJlYWRPbmx5EAMy7AQK",
-            "EExtZGJDYWNoZVNlcnZpY2USNgoDQWRkEhUuTG1kYkNhY2hlLkFkZFJlcXVl",
-            "c3QaFi5MbWRiQ2FjaGUuQWRkUmVzcG9uc2UiABJECglBZGRTdHJlYW0SGy5M",
-            "bWRiQ2FjaGUuQWRkU3RyZWFtUmVxdWVzdBoWLkxtZGJDYWNoZS5BZGRSZXNw",
-            "b25zZSIAKAESPwoGRGVsZXRlEhguTG1kYkNhY2hlLkRlbGV0ZVJlcXVlc3Qa",
-            "GS5MbWRiQ2FjaGUuRGVsZXRlUmVzcG9uc2UiABI5CgRDb3B5EhYuTG1kYkNh",
-            "Y2hlLkNvcHlSZXF1ZXN0GhcuTG1kYkNhY2hlLkNvcHlSZXNwb25zZSIAEjYK",
-            "A0dldBIVLkxtZGJDYWNoZS5HZXRSZXF1ZXN0GhYuTG1kYkNhY2hlLkdldFJl",
-            "c3BvbnNlIgASRAoJR2V0U3RyZWFtEhUuTG1kYkNhY2hlLkdldFJlcXVlc3Qa",
-            "HC5MbWRiQ2FjaGUuR2V0U3RyZWFtUmVzcG9uc2UiADABEkgKDENvbnRhaW5z",
-            "S2V5cxIVLkxtZGJDYWNoZS5HZXRSZXF1ZXN0Gh8uTG1kYkNhY2hlLkNvbnRh",
-            "aW5zS2V5c1Jlc3BvbnNlIgASRQoITGlzdEtleXMSGS5MbWRiQ2FjaGUuS2V5",
-            "TGlzdFJlcXVlc3QaGi5MbWRiQ2FjaGUuS2V5TGlzdFJlc3BvbnNlIgAwARJP",
-            "Cg1MaXN0S2V5VmFsdWVzEhkuTG1kYkNhY2hlLktleUxpc3RSZXF1ZXN0Gh8u",
-            "TG1kYkNhY2hlLktleVZhbHVlTGlzdFJlc3BvbnNlIgAwATKOAQoLU3luY1Nl",
-            "cnZpY2USQwoMR2V0UmVwbGljYUlkEhAuTG1kYkNhY2hlLkVtcHR5Gh8uTG1k",
-            "YkNhY2hlLkdldFJlcGxpY2FJZFJlc3BvbnNlIgASOgoEU3luYxIVLkxtZGJD",
-            "YWNoZS5TeW5jUGFja2V0GhUuTG1kYkNhY2hlLlN5bmNQYWNrZXQiACgBMAEy",
-            "xQEKEU1vbml0b3JpbmdTZXJ2aWNlElYKCUdldFN0YXR1cxIiLkxtZGJDYWNo",
-            "ZS5Nb25pdG9yaW5nVXBkYXRlUmVxdWVzdBojLkxtZGJDYWNoZS5Nb25pdG9y",
-            "aW5nVXBkYXRlUmVzcG9uc2UiABJYCglTdWJzY3JpYmUSIi5MbWRiQ2FjaGUu",
-            "TW9uaXRvcmluZ1VwZGF0ZVJlcXVlc3QaIy5MbWRiQ2FjaGUuTW9uaXRvcmlu",
-            "Z1VwZGF0ZVJlc3BvbnNlIgAwAUIMqgIJTG1kYkNhY2hlYgZwcm90bzM="));
+            "ZS5WYWx1ZU1ldGFkYXRhLkhhc2hlZFdpdGgiGwoLRWNob1JlcXVlc3QSDAoE",
+            "ZWNobxgBIAEoCSIcCgxFY2hvUmVzcG9uc2USDAoEZWNobxgBIAEoCSIHCgVF",
+            "bXB0eSIjCglUaW1lc3RhbXASFgoOdGlja3NPZmZzZXRVdGMYASABKAQijgEK",
+            "C1ZlY3RvckNsb2NrEjYKCHJlcGxpY2FzGAEgAygLMiQuTG1kYkNhY2hlLlZl",
+            "Y3RvckNsb2NrLlJlcGxpY2FzRW50cnkSFgoOdGlja3NPZmZzZXRVdGMYAiAB",
+            "KAQaLwoNUmVwbGljYXNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiAB",
+            "KAQ6AjgBIv4BCg1WYWx1ZU1ldGFkYXRhEjcKCmhhc2hlZFdpdGgYASABKA4y",
+            "Iy5MbWRiQ2FjaGUuVmFsdWVNZXRhZGF0YS5IYXNoZWRXaXRoEgwKBGhhc2gY",
+            "AiABKAwSOQoLY29tcHJlc3Npb24YAyABKA4yJC5MbWRiQ2FjaGUuVmFsdWVN",
+            "ZXRhZGF0YS5Db21wcmVzc2lvbhIWCg5zaXplQ29tcHJlc3NlZBgEIAEoDRIQ",
+            "CghzaXplRnVsbBgFIAEoDSIVCgpIYXNoZWRXaXRoEgcKA01ENRAAIioKC0Nv",
+            "bXByZXNzaW9uEggKBE5PTkUQABIHCgNMWjQQARIICgRHWklQEAIivQMKCkt2",
+            "TWV0YWRhdGESLAoGc3RhdHVzGAEgASgOMhwuTG1kYkNhY2hlLkt2TWV0YWRh",
+            "dGEuU3RhdHVzEiQKBmV4cGlyeRgCIAEoCzIULkxtZGJDYWNoZS5UaW1lc3Rh",
+            "bXASKgoKb3JpZ2luYXRlZBgDIAEoCzIWLkxtZGJDYWNoZS5WZWN0b3JDbG9j",
+            "axIuCg5sb2NhbGx5VXBkYXRlZBgEIAEoCzIWLkxtZGJDYWNoZS5WZWN0b3JD",
+            "bG9jaxIyCgZhY3Rpb24YBSABKA4yIi5MbWRiQ2FjaGUuS3ZNZXRhZGF0YS5V",
+            "cGRhdGVBY3Rpb24SFQoNY29ycmVsYXRpb25JZBgGIAEoCRIbChNvcmlnaW5h",
+            "dG9yUmVwbGljYUlkGAcgASgJEi8KDXZhbHVlTWV0YWRhdGEYCCABKAsyGC5M",
+            "bWRiQ2FjaGUuVmFsdWVNZXRhZGF0YSIuCgZTdGF0dXMSCgoGQUNUSVZFEAAS",
+            "CwoHREVMRVRFRBABEgsKB0VYUElSRUQQAiI2CgxVcGRhdGVBY3Rpb24SCQoF",
+            "QURERUQQABILCgdVUERBVEVEEAESDgoKUkVQTElDQVRFRBACIskCCgpBZGRS",
+            "ZXF1ZXN0EiwKBmhlYWRlchgBIAEoCzIcLkxtZGJDYWNoZS5BZGRSZXF1ZXN0",
+            "LkhlYWRlchI2CgdlbnRyaWVzGAUgAygLMiUuTG1kYkNhY2hlLkFkZFJlcXVl",
+            "c3QuQWRkUmVxdWVzdEVudHJ5Gk4KBkhlYWRlchIYChBvdmVycmlkZUV4aXN0",
+            "aW5nGAEgASgIEhUKDWNvcnJlbGF0aW9uSWQYAiABKAkSEwoLY2h1bmtzQ291",
+            "bnQYAyABKA0ahAEKD0FkZFJlcXVlc3RFbnRyeRILCgNrZXkYASABKAkSJAoG",
+            "ZXhwaXJ5GAIgASgLMhQuTG1kYkNhY2hlLlRpbWVzdGFtcBIvCg12YWx1ZU1l",
+            "dGFkYXRhGAMgASgLMhguTG1kYkNhY2hlLlZhbHVlTWV0YWRhdGESDQoFdmFs",
+            "dWUYBCABKAwikgEKC0FkZFJlc3BvbnNlEjEKB3Jlc3VsdHMYASADKA4yIC5M",
+            "bWRiQ2FjaGUuQWRkUmVzcG9uc2UuQWRkUmVzdWx0IlAKCUFkZFJlc3VsdBIN",
+            "CglLRVlfQURERUQQABIPCgtLRVlfVVBEQVRFRBABEhYKEktFWV9BTFJFQURZ",
+            "X0VYSVNUUxACEgsKB0ZBSUxVUkUQAyLTAQoQQWRkU3RyZWFtUmVxdWVzdBIu",
+            "CgZoZWFkZXIYASABKAsyHC5MbWRiQ2FjaGUuQWRkUmVxdWVzdC5IZWFkZXJI",
+            "ABI2CgVjaHVuaxgCIAEoCzIlLkxtZGJDYWNoZS5BZGRTdHJlYW1SZXF1ZXN0",
+            "LkRhdGFDaHVua0gAGlAKCURhdGFDaHVuaxINCgVpbmRleBgBIAEoDRI0CgVl",
+            "bnRyeRgCIAEoCzIlLkxtZGJDYWNoZS5BZGRSZXF1ZXN0LkFkZFJlcXVlc3RF",
+            "bnRyeUIFCgNtc2ciNAoNRGVsZXRlUmVxdWVzdBIVCg1jb3JyZWxhdGlvbklk",
+            "GAEgASgJEgwKBGtleXMYAiADKAkiggEKDkRlbGV0ZVJlc3BvbnNlEjcKB3Jl",
+            "c3VsdHMYASADKA4yJi5MbWRiQ2FjaGUuRGVsZXRlUmVzcG9uc2UuRGVsZXRl",
+            "UmVzdWx0IjcKDERlbGV0ZVJlc3VsdBILCgdTVUNDRVNTEAASDQoJTk9UX0ZP",
+            "VU5EEAESCwoHRkFJTFVSRRACIjEKCkdldFJlcXVlc3QSFQoNY29ycmVsYXRp",
+            "b25JZBgBIAEoCRIMCgRrZXlzGAIgAygJIqQCCgtHZXRSZXNwb25zZRI4Cgdy",
+            "ZXN1bHRzGAEgAygLMicuTG1kYkNhY2hlLkdldFJlc3BvbnNlLkdldFJlc3Bv",
+            "bnNlRW50cnka2gEKEEdldFJlc3BvbnNlRW50cnkSQQoGcmVzdWx0GAEgASgO",
+            "MjEuTG1kYkNhY2hlLkdldFJlc3BvbnNlLkdldFJlc3BvbnNlRW50cnkuR2V0",
+            "UmVzdWx0Eg0KBWluZGV4GAIgASgNEi8KDXZhbHVlTWV0YWRhdGEYAyABKAsy",
+            "GC5MbWRiQ2FjaGUuVmFsdWVNZXRhZGF0YRINCgV2YWx1ZRgFIAEoDCI0CglH",
+            "ZXRSZXN1bHQSCwoHU1VDQ0VTUxAAEg0KCU5PVF9GT1VORBABEgsKB0ZBSUxV",
+            "UkUQAiJMChFHZXRTdHJlYW1SZXNwb25zZRI3CgZyZXN1bHQYASABKAsyJy5M",
+            "bWRiQ2FjaGUuR2V0UmVzcG9uc2UuR2V0UmVzcG9uc2VFbnRyeSInChRDb250",
+            "YWluc0tleXNSZXNwb25zZRIPCgdyZXN1bHRzGAEgAygIIrgBCgtDb3B5UmVx",
+            "dWVzdBIVCg1jb3JyZWxhdGlvbklkGAEgASgJEjgKB2VudHJpZXMYAiADKAsy",
+            "Jy5MbWRiQ2FjaGUuQ29weVJlcXVlc3QuQ29weVJlcXVlc3RFbnRyeRpYChBD",
+            "b3B5UmVxdWVzdEVudHJ5Eg8KB2tleUZyb20YASABKAkSJAoGZXhwaXJ5GAIg",
+            "ASgLMhQuTG1kYkNhY2hlLlRpbWVzdGFtcBINCgVrZXlUbxgDIAEoCSKWAQoM",
+            "Q29weVJlc3BvbnNlEjMKB3Jlc3VsdHMYASADKA4yIi5MbWRiQ2FjaGUuQ29w",
+            "eVJlc3BvbnNlLkNvcHlSZXN1bHQiUQoKQ29weVJlc3VsdBILCgdTVUNDRVNT",
+            "EAASFgoSRlJPTV9LRVlfTk9UX0ZPVU5EEAESEQoNVE9fS0VZX0VYSVNUUxAC",
+            "EgsKB0ZBSUxVUkUQAyJaCg5LZXlMaXN0UmVxdWVzdBIRCglrZXlQcmVmaXgY",
+            "ASABKAkSEAoIcGFnZVNpemUYAiABKA0SDAoEcGFnZRgDIAEoDRIVCg1jb3Jy",
+            "ZWxhdGlvbklkGAQgASgJIh4KD0tleUxpc3RSZXNwb25zZRILCgNrZXkYASAB",
+            "KAkiMgoUS2V5VmFsdWVMaXN0UmVzcG9uc2USCwoDa2V5GAEgASgJEg0KBXZh",
+            "bHVlGAMgASgMIroDCg1Xcml0ZUxvZ0V2ZW50EioKCm9yaWdpbmF0ZWQYASAB",
+            "KAsyFi5MbWRiQ2FjaGUuVmVjdG9yQ2xvY2sSFQoNY29ycmVsYXRpb25JZBgC",
+            "IAEoCRIbChNvcmlnaW5hdG9yUmVwbGljYUlkGAMgASgJEi8KDXZhbHVlTWV0",
+            "YWRhdGEYBCABKAsyGC5MbWRiQ2FjaGUuVmFsdWVNZXRhZGF0YRIsCgxsb2Nh",
+            "bGx5U2F2ZWQYBSABKAsyFi5MbWRiQ2FjaGUuVmVjdG9yQ2xvY2sSOgoHdXBk",
+            "YXRlZBgKIAEoCzInLkxtZGJDYWNoZS5Xcml0ZUxvZ0V2ZW50LkFkZGVkT3JV",
+            "cGRhdGVkSAASMwoHZGVsZXRlZBgLIAEoCzIgLkxtZGJDYWNoZS5Xcml0ZUxv",
+            "Z0V2ZW50LkRlbGV0ZWRIABpSCg5BZGRlZE9yVXBkYXRlZBILCgNrZXkYASAB",
+            "KAkSJAoGZXhwaXJ5GAIgASgLMhQuTG1kYkNhY2hlLlRpbWVzdGFtcBINCgV2",
+            "YWx1ZRgDIAEoDBoWCgdEZWxldGVkEgsKA2tleRgBIAEoCUINCgtsb2dnZWRF",
+            "dmVudCIpChRHZXRSZXBsaWNhSWRSZXNwb25zZRIRCglyZXBsaWNhSWQYASAB",
+            "KAkixgMKClN5bmNQYWNrZXQSEQoJcmVwbGljYUlkGAEgASgJEjIKCHN5bmNG",
+            "cm9tGAQgASgLMh4uTG1kYkNhY2hlLlN5bmNQYWNrZXQuU3luY0Zyb21IABIs",
+            "CgVpdGVtcxgFIAEoCzIbLkxtZGJDYWNoZS5TeW5jUGFja2V0Lkl0ZW1zSAAS",
+            "KgoEaXRlbRgGIAEoCzIaLkxtZGJDYWNoZS5TeW5jUGFja2V0Lkl0ZW1IABIw",
+            "Cgdza2lwUG9zGAcgASgLMh0uTG1kYkNhY2hlLlN5bmNQYWNrZXQuU2tpcFBv",
+            "c0gAGlcKCFN5bmNGcm9tEhEKCXJlcGxpY2FJZBgBIAEoCRINCgVzaW5jZRgC",
+            "IAEoBBITCgtpbmNsdWRlTWluZRgDIAEoCBIUCgxpbmNsdWRlQWNrZWQYBCAB",
+            "KAgaMgoESXRlbRIqCghsb2dFdmVudBgBIAEoCzIYLkxtZGJDYWNoZS5Xcml0",
+            "ZUxvZ0V2ZW50GjIKBUl0ZW1zEikKBWJhdGNoGAEgAygLMhouTG1kYkNhY2hl",
+            "LlN5bmNQYWNrZXQuSXRlbRoaCgdTa2lwUG9zEg8KB2xhc3RQb3MYASABKARC",
+            "CAoGcGFja2V0IjAKF01vbml0b3JpbmdVcGRhdGVSZXF1ZXN0EhUKDWNvcnJl",
+            "bGF0aW9uSWQYASABKAkiRAoYTW9uaXRvcmluZ1VwZGF0ZVJlc3BvbnNlEigK",
+            "BnN0YXR1cxgBIAEoCzIYLkxtZGJDYWNoZS5SZXBsaWNhU3RhdHVzIvQCCg1S",
+            "ZXBsaWNhU3RhdHVzEhEKCXJlcGxpY2FJZBgBIAEoCRI4Cg5jb25uZWN0aW9u",
+            "SW5mbxgCIAEoCzIgLkxtZGJDYWNoZS5SZXBsaWNhQ29ubmVjdGlvbkluZm8S",
+            "JQoHc3RhcnRlZBgDIAEoCzIULkxtZGJDYWNoZS5UaW1lc3RhbXASLwoNcmVw",
+            "bGljYUNvbmZpZxgEIAEoCzIYLkxtZGJDYWNoZS5SZXBsaWNhQ29uZmlnEiwK",
+            "DGN1cnJlbnRDbG9jaxgFIAEoCzIWLkxtZGJDYWNoZS5WZWN0b3JDbG9jaxIs",
+            "Cghjb3VudGVycxgKIAEoCzIaLkxtZGJDYWNoZS5SZXBsaWNhQ291bnRlcnMS",
+            "MQoOY29sbGVjdGVkU3RhdHMYCyABKAsyGS5MbWRiQ2FjaGUuQ29sbGVjdGVk",
+            "U3RhdHMSLwoNY2x1c3RlclN0YXR1cxgMIAEoCzIYLkxtZGJDYWNoZS5DbHVz",
+            "dGVyU3RhdHVzIpwBCg1DbHVzdGVyU3RhdHVzEjgKCHJlcGxpY2FzGAEgAygL",
+            "MiYuTG1kYkNhY2hlLkNsdXN0ZXJTdGF0dXMuUmVwbGljYXNFbnRyeRpRCg1S",
+            "ZXBsaWNhc0VudHJ5EgsKA2tleRgBIAEoCRIvCgV2YWx1ZRgCIAEoCzIgLkxt",
+            "ZGJDYWNoZS5SZXBsaWNhQ29ubmVjdGlvbkluZm86AjgBIjMKFVJlcGxpY2FD",
+            "b25uZWN0aW9uSW5mbxIMCgRob3N0GAEgASgJEgwKBHBvcnQYAiABKA0iugIK",
+            "D1JlcGxpY2FDb3VudGVycxITCgthZGRzQ291bnRlchgBIAEoBBIWCg5kZWxl",
+            "dGVzQ291bnRlchgCIAEoBBIUCgxjb3B5c0NvdW50ZXIYAyABKAQSEgoKZ2V0",
+            "Q291bnRlchgEIAEoBBIXCg9jb250YWluc0NvdW50ZXIYBSABKAQSGAoQa2V5",
+            "U2VhcmNoQ291bnRlchgGIAEoBBIdChVtZXRhZGF0YVNlYXJjaENvdW50ZXIY",
+            "ByABKAQSGQoRcGFnZVNlYXJjaENvdW50ZXIYCCABKAQSFgoObGFyZ2VzdEtl",
+            "eVNpemUYCiABKA0SGAoQbGFyZ2VzdFZhbHVlU2l6ZRgLIAEoDRIWCg5yZXBs",
+            "aWNhdGVkQWRkcxgPIAEoBBIZChFyZXBsaWNhdGVkRGVsZXRlcxgQIAEoBCJ3",
+            "Cg5Db2xsZWN0ZWRTdGF0cxIWCg5ub25FeHBpcmVkS2V5cxgKIAEoBBIPCgdh",
+            "bGxLZXlzGAsgASgEEhIKCmFjdGl2ZUtleXMYDCABKAQSEwoLZGVsZXRlZEtl",
+            "eXMYDSABKAQSEwoLZXhwaXJlZEtleXMYDiABKAQiWQoYR2V0S25vd25SZXBs",
+            "aWNhc1Jlc3BvbnNlEhEKCXJlcGxpY2FJZBgBIAEoCRIqCghyZXBsaWNhcxgC",
+            "IAEoCzIYLkxtZGJDYWNoZS5DbHVzdGVyU3RhdHVzKkUKE0xpZ2h0bmluZ0Ri",
+            "U3luY01vZGUSCQoFRlN5bmMQABIJCgVBc3luYxABEgoKBk5vU3luYxACEgwK",
+            "CFJlYWRPbmx5EAMypwUKEExtZGJDYWNoZVNlcnZpY2USNgoDQWRkEhUuTG1k",
+            "YkNhY2hlLkFkZFJlcXVlc3QaFi5MbWRiQ2FjaGUuQWRkUmVzcG9uc2UiABJE",
+            "CglBZGRTdHJlYW0SGy5MbWRiQ2FjaGUuQWRkU3RyZWFtUmVxdWVzdBoWLkxt",
+            "ZGJDYWNoZS5BZGRSZXNwb25zZSIAKAESPwoGRGVsZXRlEhguTG1kYkNhY2hl",
+            "LkRlbGV0ZVJlcXVlc3QaGS5MbWRiQ2FjaGUuRGVsZXRlUmVzcG9uc2UiABI5",
+            "CgRDb3B5EhYuTG1kYkNhY2hlLkNvcHlSZXF1ZXN0GhcuTG1kYkNhY2hlLkNv",
+            "cHlSZXNwb25zZSIAEjYKA0dldBIVLkxtZGJDYWNoZS5HZXRSZXF1ZXN0GhYu",
+            "TG1kYkNhY2hlLkdldFJlc3BvbnNlIgASRAoJR2V0U3RyZWFtEhUuTG1kYkNh",
+            "Y2hlLkdldFJlcXVlc3QaHC5MbWRiQ2FjaGUuR2V0U3RyZWFtUmVzcG9uc2Ui",
+            "ADABEkgKDENvbnRhaW5zS2V5cxIVLkxtZGJDYWNoZS5HZXRSZXF1ZXN0Gh8u",
+            "TG1kYkNhY2hlLkNvbnRhaW5zS2V5c1Jlc3BvbnNlIgASRQoITGlzdEtleXMS",
+            "GS5MbWRiQ2FjaGUuS2V5TGlzdFJlcXVlc3QaGi5MbWRiQ2FjaGUuS2V5TGlz",
+            "dFJlc3BvbnNlIgAwARJPCg1MaXN0S2V5VmFsdWVzEhkuTG1kYkNhY2hlLktl",
+            "eUxpc3RSZXF1ZXN0Gh8uTG1kYkNhY2hlLktleVZhbHVlTGlzdFJlc3BvbnNl",
+            "IgAwARI5CgRFY2hvEhYuTG1kYkNhY2hlLkVjaG9SZXF1ZXN0GhcuTG1kYkNh",
+            "Y2hlLkVjaG9SZXNwb25zZSIAMo4BCgtTeW5jU2VydmljZRJDCgxHZXRSZXBs",
+            "aWNhSWQSEC5MbWRiQ2FjaGUuRW1wdHkaHy5MbWRiQ2FjaGUuR2V0UmVwbGlj",
+            "YUlkUmVzcG9uc2UiABI6CgRTeW5jEhUuTG1kYkNhY2hlLlN5bmNQYWNrZXQa",
+            "FS5MbWRiQ2FjaGUuU3luY1BhY2tldCIAKAEwATLFAQoRTW9uaXRvcmluZ1Nl",
+            "cnZpY2USVgoJR2V0U3RhdHVzEiIuTG1kYkNhY2hlLk1vbml0b3JpbmdVcGRh",
+            "dGVSZXF1ZXN0GiMuTG1kYkNhY2hlLk1vbml0b3JpbmdVcGRhdGVSZXNwb25z",
+            "ZSIAElgKCVN1YnNjcmliZRIiLkxtZGJDYWNoZS5Nb25pdG9yaW5nVXBkYXRl",
+            "UmVxdWVzdBojLkxtZGJDYWNoZS5Nb25pdG9yaW5nVXBkYXRlUmVzcG9uc2Ui",
+            "ADABMmgKF1NlcnZpY2VEaXNjb3ZlcnlTZXJ2aWNlEk0KEEdldEtub3duUmVw",
+            "bGljYXMSEC5MbWRiQ2FjaGUuRW1wdHkaIy5MbWRiQ2FjaGUuR2V0S25vd25S",
+            "ZXBsaWNhc1Jlc3BvbnNlIgAwAUIMqgIJTG1kYkNhY2hlYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::LmdbCache.LightningDbSyncMode), }, new pbr::GeneratedClrTypeInfo[] {
@@ -179,6 +186,8 @@ namespace LmdbCache {
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.ReplicationConfig), global::LmdbCache.ReplicationConfig.Parser, new[]{ "Port", "PageSize", "UseBatching", "AwaitSyncFrom" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.ReplicaConfig), global::LmdbCache.ReplicaConfig.Parser, new[]{ "ReplicaId", "HostName", "Port", "WebUIPort", "MonitoringPort", "MonitoringInterval", "MasterNode", "Persistence", "Replication" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.ClientConfig), global::LmdbCache.ClientConfig.Parser, new[]{ "UseStreaming", "Compression", "HashedWith" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.EchoRequest), global::LmdbCache.EchoRequest.Parser, new[]{ "Echo" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.EchoResponse), global::LmdbCache.EchoResponse.Parser, new[]{ "Echo" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.Empty), global::LmdbCache.Empty.Parser, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.Timestamp), global::LmdbCache.Timestamp.Parser, new[]{ "TicksOffsetUtc" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.VectorClock), global::LmdbCache.VectorClock.Parser, new[]{ "Replicas", "TicksOffsetUtc" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
@@ -212,7 +221,8 @@ namespace LmdbCache {
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.ClusterStatus), global::LmdbCache.ClusterStatus.Parser, new[]{ "Replicas" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.ReplicaConnectionInfo), global::LmdbCache.ReplicaConnectionInfo.Parser, new[]{ "Host", "Port" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.ReplicaCounters), global::LmdbCache.ReplicaCounters.Parser, new[]{ "AddsCounter", "DeletesCounter", "CopysCounter", "GetCounter", "ContainsCounter", "KeySearchCounter", "MetadataSearchCounter", "PageSearchCounter", "LargestKeySize", "LargestValueSize", "ReplicatedAdds", "ReplicatedDeletes" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.CollectedStats), global::LmdbCache.CollectedStats.Parser, new[]{ "NonExpiredKeys", "AllKeys", "ActiveKeys", "DeletedKeys", "ExpiredKeys" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.CollectedStats), global::LmdbCache.CollectedStats.Parser, new[]{ "NonExpiredKeys", "AllKeys", "ActiveKeys", "DeletedKeys", "ExpiredKeys" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::LmdbCache.GetKnownReplicasResponse), global::LmdbCache.GetKnownReplicasResponse.Parser, new[]{ "ReplicaId", "Replicas" }, null, null, null)
           }));
     }
     #endregion
@@ -1270,6 +1280,264 @@ namespace LmdbCache {
 
   }
 
+  public sealed partial class EchoRequest : pb::IMessage<EchoRequest> {
+    private static readonly pb::MessageParser<EchoRequest> _parser = new pb::MessageParser<EchoRequest>(() => new EchoRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<EchoRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[4]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public EchoRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public EchoRequest(EchoRequest other) : this() {
+      echo_ = other.echo_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public EchoRequest Clone() {
+      return new EchoRequest(this);
+    }
+
+    /// <summary>Field number for the "echo" field.</summary>
+    public const int EchoFieldNumber = 1;
+    private string echo_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Echo {
+      get { return echo_; }
+      set {
+        echo_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as EchoRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(EchoRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Echo != other.Echo) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Echo.Length != 0) hash ^= Echo.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Echo.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Echo);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Echo.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Echo);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(EchoRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Echo.Length != 0) {
+        Echo = other.Echo;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Echo = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class EchoResponse : pb::IMessage<EchoResponse> {
+    private static readonly pb::MessageParser<EchoResponse> _parser = new pb::MessageParser<EchoResponse>(() => new EchoResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<EchoResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[5]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public EchoResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public EchoResponse(EchoResponse other) : this() {
+      echo_ = other.echo_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public EchoResponse Clone() {
+      return new EchoResponse(this);
+    }
+
+    /// <summary>Field number for the "echo" field.</summary>
+    public const int EchoFieldNumber = 1;
+    private string echo_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Echo {
+      get { return echo_; }
+      set {
+        echo_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as EchoResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(EchoResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Echo != other.Echo) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Echo.Length != 0) hash ^= Echo.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Echo.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Echo);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Echo.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Echo);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(EchoResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Echo.Length != 0) {
+        Echo = other.Echo;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Echo = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
   public sealed partial class Empty : pb::IMessage<Empty> {
     private static readonly pb::MessageParser<Empty> _parser = new pb::MessageParser<Empty>(() => new Empty());
     private pb::UnknownFieldSet _unknownFields;
@@ -1278,7 +1546,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[4]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1379,7 +1647,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[5]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1511,7 +1779,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[6]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1660,7 +1928,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[7]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1918,7 +2186,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[8]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[10]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2289,7 +2557,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[9]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[11]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2861,7 +3129,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[10]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[12]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2997,7 +3265,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[11]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[13]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3371,7 +3639,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[12]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[14]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3520,7 +3788,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[13]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[15]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3655,7 +3923,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[14]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[16]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3804,7 +4072,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[15]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[17]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4164,7 +4432,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[16]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[18]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4299,7 +4567,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[17]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[19]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4421,7 +4689,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[18]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[20]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4768,7 +5036,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[19]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[21]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4904,7 +5172,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[20]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[22]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5117,7 +5385,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[21]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[23]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5249,7 +5517,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[22]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[24]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5409,7 +5677,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[23]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[25]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6104,7 +6372,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[24]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[26]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6233,7 +6501,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[25]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[27]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7151,7 +7419,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[26]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[28]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7280,7 +7548,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[27]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[29]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7415,7 +7683,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[28]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[30]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7782,7 +8050,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[29]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[31]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7903,7 +8171,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[30]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[32]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8063,7 +8331,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[31]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[33]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8500,7 +8768,7 @@ namespace LmdbCache {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[32]; }
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[34]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8725,6 +8993,169 @@ namespace LmdbCache {
           }
           case 112: {
             ExpiredKeys = input.ReadUInt64();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class GetKnownReplicasResponse : pb::IMessage<GetKnownReplicasResponse> {
+    private static readonly pb::MessageParser<GetKnownReplicasResponse> _parser = new pb::MessageParser<GetKnownReplicasResponse>(() => new GetKnownReplicasResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<GetKnownReplicasResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.MessageTypes[35]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GetKnownReplicasResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GetKnownReplicasResponse(GetKnownReplicasResponse other) : this() {
+      replicaId_ = other.replicaId_;
+      replicas_ = other.replicas_ != null ? other.replicas_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GetKnownReplicasResponse Clone() {
+      return new GetKnownReplicasResponse(this);
+    }
+
+    /// <summary>Field number for the "replicaId" field.</summary>
+    public const int ReplicaIdFieldNumber = 1;
+    private string replicaId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string ReplicaId {
+      get { return replicaId_; }
+      set {
+        replicaId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "replicas" field.</summary>
+    public const int ReplicasFieldNumber = 2;
+    private global::LmdbCache.ClusterStatus replicas_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::LmdbCache.ClusterStatus Replicas {
+      get { return replicas_; }
+      set {
+        replicas_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as GetKnownReplicasResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(GetKnownReplicasResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (ReplicaId != other.ReplicaId) return false;
+      if (!object.Equals(Replicas, other.Replicas)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (ReplicaId.Length != 0) hash ^= ReplicaId.GetHashCode();
+      if (replicas_ != null) hash ^= Replicas.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (ReplicaId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(ReplicaId);
+      }
+      if (replicas_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Replicas);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (ReplicaId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ReplicaId);
+      }
+      if (replicas_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Replicas);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(GetKnownReplicasResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.ReplicaId.Length != 0) {
+        ReplicaId = other.ReplicaId;
+      }
+      if (other.replicas_ != null) {
+        if (replicas_ == null) {
+          replicas_ = new global::LmdbCache.ClusterStatus();
+        }
+        Replicas.MergeFrom(other.Replicas);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            ReplicaId = input.ReadString();
+            break;
+          }
+          case 18: {
+            if (replicas_ == null) {
+              replicas_ = new global::LmdbCache.ClusterStatus();
+            }
+            input.ReadMessage(replicas_);
             break;
           }
         }

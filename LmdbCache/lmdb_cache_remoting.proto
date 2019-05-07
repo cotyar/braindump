@@ -70,6 +70,16 @@ service LmdbCacheService {
   rpc ListKeys(KeyListRequest) returns (stream KeyListResponse) {}
 
   rpc ListKeyValues(KeyListRequest) returns (stream KeyValueListResponse) {}
+
+  rpc Echo(EchoRequest) returns (EchoResponse) {}
+}
+
+message EchoRequest {
+  string echo      = 1;
+}
+
+message EchoResponse {
+  string echo      = 1;
 }
 
 message Empty {
@@ -377,4 +387,20 @@ message CollectedStats {
   uint64 activeKeys     = 12;
   uint64 deletedKeys    = 13;
   uint64 expiredKeys    = 14;
+}
+
+///////////////////////////////
+
+// Interface exported by the server.
+service ServiceDiscoveryService {
+  rpc GetKnownReplicas(Empty) returns (stream GetKnownReplicasResponse) {}
+}
+
+///////////////////////////////
+
+// Monitoring types.
+
+message GetKnownReplicasResponse {
+  string replicaId        = 1;
+  ClusterStatus replicas  = 2;
 }

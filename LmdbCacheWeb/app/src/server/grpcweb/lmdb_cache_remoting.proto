@@ -70,6 +70,16 @@ service LmdbCacheService {
   rpc ListKeys(KeyListRequest) returns (stream KeyListResponse) {}
 
   rpc ListKeyValues(KeyListRequest) returns (stream KeyValueListResponse) {}
+
+  rpc Echo(EchoRequest) returns (EchoResponse) {}
+}
+
+message EchoRequest {
+  string echo      = 1;
+}
+
+message EchoResponse {
+  string echo      = 1;
 }
 
 message Empty {
@@ -114,10 +124,12 @@ message KvMetadata {
   }
   Status status               = 1;
   Timestamp expiry            = 2;
-  VectorClock updated         = 3;
-  UpdateAction action         = 4;
-  string correlationId        = 5;
-  ValueMetadata valueMetadata = 6;
+  VectorClock originated      = 3; 
+  VectorClock locallyUpdated  = 4;
+  UpdateAction action         = 5;
+  string correlationId        = 6;
+  string originatorReplicaId  = 7;
+  ValueMetadata valueMetadata = 8;
 }
 
 
@@ -245,15 +257,6 @@ service SyncService {
   rpc GetReplicaId(Empty) returns (GetReplicaIdResponse) {}
 
   rpc Sync(stream SyncPacket) returns (stream SyncPacket) {} //stream SyncAckRequest) {} 
-
-  // // Pull sync
-  // rpc SyncFrom(SyncFromRequest) returns (stream SyncPacket) {} 
-  // rpc Subscribe(SyncSubscribeRequest) returns (stream SyncPacket) {} // TODO: Add Acks streaming
-  // rpc Ack(stream SyncAckRequest) returns (Empty) {} // TODO: Add Acks streaming
-
-  // // Push sync
-  // rpc SyncTo(SyncToRequest) returns (SyncFromRequest) {} 
-  // rpc Publish(stream SyncPacket) returns (Empty) {} //stream SyncAckRequest) {} 
 }
 
 ///////////////////////////////
@@ -264,8 +267,7 @@ message WriteLogEvent {
   message AddedOrUpdated { // TODO: Add a value hash?
     string    key               = 1;
     Timestamp expiry            = 2; 
-    ValueMetadata valueMetadata = 3;
-    bytes value                 = 4;
+    bytes value                 = 3;
   }
   message Deleted {
     string      key     = 1;
@@ -274,13 +276,15 @@ message WriteLogEvent {
   //   string      key     = 1;
   // }
 
-  VectorClock clock          = 1; 
-  string correlationId       = 2;
-  string originatorReplicaId = 3;
+  VectorClock originated      = 1; 
+  string correlationId        = 2;
+  string originatorReplicaId  = 3;
+  ValueMetadata valueMetadata = 4;
+  VectorClock locallySaved    = 5;
   
   oneof loggedEvent {
-    AddedOrUpdated updated   = 5;
-    Deleted deleted          = 7;
+    AddedOrUpdated updated   = 10;
+    Deleted deleted          = 11;
     //Expired expired   = 8; 
   }
 }
@@ -297,8 +301,7 @@ message SyncPacket {
     bool includeAcked  = 4;
   }
   message Item {
-    uint64 pos             = 1;
-    WriteLogEvent logEvent = 2;
+    WriteLogEvent logEvent = 1;
   }
   message Items {
     repeated Item batch    = 1;
@@ -317,28 +320,11 @@ message SyncPacket {
   }
 }
 
-// message SyncSubscribeRequest {
-//   string replicaId   = 1;
-// }
-
-// message SyncSubscribeResponse {
-//   uint64 pos             = 1;
-//   WriteLogEvent logEvent = 2;
-// }
-
-// message SyncAckRequest {
-//   uint64 eventId = 1;
-// }
-
-// message SyncToRequest {
-//   string replicaId   = 1;
-// }
-
 ///////////////////////////////
 
 // Interface exported by the server.
 service MonitoringService {
-  // rpc GetReplicaId(Empty) returns (GetReplicaIdResponse) {}
+  //rpc GetReplicaId(Empty) returns (GetReplicaIdResponse) {}
 
   rpc GetStatus(MonitoringUpdateRequest) returns (MonitoringUpdateResponse) {} 
   rpc Subscribe(MonitoringUpdateRequest) returns (stream MonitoringUpdateResponse) {} 
@@ -401,4 +387,20 @@ message CollectedStats {
   uint64 activeKeys     = 12;
   uint64 deletedKeys    = 13;
   uint64 expiredKeys    = 14;
+}
+
+///////////////////////////////
+
+// Interface exported by the server.
+service ServiceDiscoveryService {
+  rpc GetKnownReplicas(Empty) returns (stream GetKnownReplicasResponse) {}
+}
+
+///////////////////////////////
+
+// Monitoring types.
+
+message GetKnownReplicasResponse {
+  string replicaId        = 1;
+  ClusterStatus replicas  = 2;
 }

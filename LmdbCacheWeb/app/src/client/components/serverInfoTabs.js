@@ -9,7 +9,7 @@ import { Box, Columns, Column, Notification, Container,
   Tabs, TabList, Tab, TabLink
 } from 'bloomer';
 
-import { connectMonitoring } from '../services/grpcBus';
+import { connectMonitoring } from '../services/grpcMonitoringService';
 
 import ServerInfo, { formatTicksOffsetUtc } from './serverInfo';
 
@@ -43,7 +43,7 @@ export default class ServerInfoTabs extends Component {
       ? <div/>
       : (
         <div>
-          <Tabs>
+          <Tabs isBoxed="true" className="is-toggle is-toggle-rounded">
             <TabList>
               { serverStates.map((s, idx) => {
                 const i = idx;

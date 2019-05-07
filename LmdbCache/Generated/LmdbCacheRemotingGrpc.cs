@@ -29,6 +29,8 @@ namespace LmdbCache {
     static readonly grpc::Marshaller<global::LmdbCache.KeyListRequest> __Marshaller_LmdbCache_KeyListRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.KeyListRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.KeyListResponse> __Marshaller_LmdbCache_KeyListResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.KeyListResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.KeyValueListResponse> __Marshaller_LmdbCache_KeyValueListResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.KeyValueListResponse.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::LmdbCache.EchoRequest> __Marshaller_LmdbCache_EchoRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.EchoRequest.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::LmdbCache.EchoResponse> __Marshaller_LmdbCache_EchoResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.EchoResponse.Parser.ParseFrom);
 
     static readonly grpc::Method<global::LmdbCache.AddRequest, global::LmdbCache.AddResponse> __Method_Add = new grpc::Method<global::LmdbCache.AddRequest, global::LmdbCache.AddResponse>(
         grpc::MethodType.Unary,
@@ -93,6 +95,13 @@ namespace LmdbCache {
         __Marshaller_LmdbCache_KeyListRequest,
         __Marshaller_LmdbCache_KeyValueListResponse);
 
+    static readonly grpc::Method<global::LmdbCache.EchoRequest, global::LmdbCache.EchoResponse> __Method_Echo = new grpc::Method<global::LmdbCache.EchoRequest, global::LmdbCache.EchoResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "Echo",
+        __Marshaller_LmdbCache_EchoRequest,
+        __Marshaller_LmdbCache_EchoResponse);
+
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
@@ -143,6 +152,11 @@ namespace LmdbCache {
       }
 
       public virtual global::System.Threading.Tasks.Task ListKeyValues(global::LmdbCache.KeyListRequest request, grpc::IServerStreamWriter<global::LmdbCache.KeyValueListResponse> responseStream, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      public virtual global::System.Threading.Tasks.Task<global::LmdbCache.EchoResponse> Echo(global::LmdbCache.EchoRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -284,6 +298,22 @@ namespace LmdbCache {
       {
         return CallInvoker.AsyncServerStreamingCall(__Method_ListKeyValues, null, options, request);
       }
+      public virtual global::LmdbCache.EchoResponse Echo(global::LmdbCache.EchoRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return Echo(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual global::LmdbCache.EchoResponse Echo(global::LmdbCache.EchoRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_Echo, null, options, request);
+      }
+      public virtual grpc::AsyncUnaryCall<global::LmdbCache.EchoResponse> EchoAsync(global::LmdbCache.EchoRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return EchoAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual grpc::AsyncUnaryCall<global::LmdbCache.EchoResponse> EchoAsync(global::LmdbCache.EchoRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_Echo, null, options, request);
+      }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       protected override LmdbCacheServiceClient NewInstance(ClientBaseConfiguration configuration)
       {
@@ -304,7 +334,8 @@ namespace LmdbCache {
           .AddMethod(__Method_GetStream, serviceImpl.GetStream)
           .AddMethod(__Method_ContainsKeys, serviceImpl.ContainsKeys)
           .AddMethod(__Method_ListKeys, serviceImpl.ListKeys)
-          .AddMethod(__Method_ListKeyValues, serviceImpl.ListKeyValues).Build();
+          .AddMethod(__Method_ListKeyValues, serviceImpl.ListKeyValues)
+          .AddMethod(__Method_Echo, serviceImpl.Echo).Build();
     }
 
     /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the  service binding logic.
@@ -322,6 +353,7 @@ namespace LmdbCache {
       serviceBinder.AddMethod(__Method_ContainsKeys, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::LmdbCache.GetRequest, global::LmdbCache.ContainsKeysResponse>(serviceImpl.ContainsKeys));
       serviceBinder.AddMethod(__Method_ListKeys, serviceImpl == null ? null : new grpc::ServerStreamingServerMethod<global::LmdbCache.KeyListRequest, global::LmdbCache.KeyListResponse>(serviceImpl.ListKeys));
       serviceBinder.AddMethod(__Method_ListKeyValues, serviceImpl == null ? null : new grpc::ServerStreamingServerMethod<global::LmdbCache.KeyListRequest, global::LmdbCache.KeyValueListResponse>(serviceImpl.ListKeyValues));
+      serviceBinder.AddMethod(__Method_Echo, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::LmdbCache.EchoRequest, global::LmdbCache.EchoResponse>(serviceImpl.Echo));
     }
 
   }
@@ -561,6 +593,95 @@ namespace LmdbCache {
     {
       serviceBinder.AddMethod(__Method_GetStatus, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::LmdbCache.MonitoringUpdateRequest, global::LmdbCache.MonitoringUpdateResponse>(serviceImpl.GetStatus));
       serviceBinder.AddMethod(__Method_Subscribe, serviceImpl == null ? null : new grpc::ServerStreamingServerMethod<global::LmdbCache.MonitoringUpdateRequest, global::LmdbCache.MonitoringUpdateResponse>(serviceImpl.Subscribe));
+    }
+
+  }
+  /// <summary>
+  /// Interface exported by the server.
+  /// </summary>
+  public static partial class ServiceDiscoveryService
+  {
+    static readonly string __ServiceName = "LmdbCache.ServiceDiscoveryService";
+
+    static readonly grpc::Marshaller<global::LmdbCache.Empty> __Marshaller_LmdbCache_Empty = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.Empty.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::LmdbCache.GetKnownReplicasResponse> __Marshaller_LmdbCache_GetKnownReplicasResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.GetKnownReplicasResponse.Parser.ParseFrom);
+
+    static readonly grpc::Method<global::LmdbCache.Empty, global::LmdbCache.GetKnownReplicasResponse> __Method_GetKnownReplicas = new grpc::Method<global::LmdbCache.Empty, global::LmdbCache.GetKnownReplicasResponse>(
+        grpc::MethodType.ServerStreaming,
+        __ServiceName,
+        "GetKnownReplicas",
+        __Marshaller_LmdbCache_Empty,
+        __Marshaller_LmdbCache_GetKnownReplicasResponse);
+
+    /// <summary>Service descriptor</summary>
+    public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
+    {
+      get { return global::LmdbCache.LmdbCacheRemotingReflection.Descriptor.Services[3]; }
+    }
+
+    /// <summary>Base class for server-side implementations of ServiceDiscoveryService</summary>
+    public abstract partial class ServiceDiscoveryServiceBase
+    {
+      public virtual global::System.Threading.Tasks.Task GetKnownReplicas(global::LmdbCache.Empty request, grpc::IServerStreamWriter<global::LmdbCache.GetKnownReplicasResponse> responseStream, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+    }
+
+    /// <summary>Client for ServiceDiscoveryService</summary>
+    public partial class ServiceDiscoveryServiceClient : grpc::ClientBase<ServiceDiscoveryServiceClient>
+    {
+      /// <summary>Creates a new client for ServiceDiscoveryService</summary>
+      /// <param name="channel">The channel to use to make remote calls.</param>
+      public ServiceDiscoveryServiceClient(grpc::Channel channel) : base(channel)
+      {
+      }
+      /// <summary>Creates a new client for ServiceDiscoveryService that uses a custom <c>CallInvoker</c>.</summary>
+      /// <param name="callInvoker">The callInvoker to use to make remote calls.</param>
+      public ServiceDiscoveryServiceClient(grpc::CallInvoker callInvoker) : base(callInvoker)
+      {
+      }
+      /// <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      protected ServiceDiscoveryServiceClient() : base()
+      {
+      }
+      /// <summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <param name="configuration">The client configuration.</param>
+      protected ServiceDiscoveryServiceClient(ClientBaseConfiguration configuration) : base(configuration)
+      {
+      }
+
+      public virtual grpc::AsyncServerStreamingCall<global::LmdbCache.GetKnownReplicasResponse> GetKnownReplicas(global::LmdbCache.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetKnownReplicas(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual grpc::AsyncServerStreamingCall<global::LmdbCache.GetKnownReplicasResponse> GetKnownReplicas(global::LmdbCache.Empty request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncServerStreamingCall(__Method_GetKnownReplicas, null, options, request);
+      }
+      /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
+      protected override ServiceDiscoveryServiceClient NewInstance(ClientBaseConfiguration configuration)
+      {
+        return new ServiceDiscoveryServiceClient(configuration);
+      }
+    }
+
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    public static grpc::ServerServiceDefinition BindService(ServiceDiscoveryServiceBase serviceImpl)
+    {
+      return grpc::ServerServiceDefinition.CreateBuilder()
+          .AddMethod(__Method_GetKnownReplicas, serviceImpl.GetKnownReplicas).Build();
+    }
+
+    /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the  service binding logic.
+    /// Note: this method is part of an experimental API that can change or be removed without any prior notice.</summary>
+    /// <param name="serviceBinder">Service methods will be bound by calling <c>AddMethod</c> on this object.</param>
+    /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    public static void BindService(grpc::ServiceBinderBase serviceBinder, ServiceDiscoveryServiceBase serviceImpl)
+    {
+      serviceBinder.AddMethod(__Method_GetKnownReplicas, serviceImpl == null ? null : new grpc::ServerStreamingServerMethod<global::LmdbCache.Empty, global::LmdbCache.GetKnownReplicasResponse>(serviceImpl.GetKnownReplicas));
     }
 
   }
