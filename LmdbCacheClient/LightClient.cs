@@ -79,6 +79,7 @@ namespace LmdbCacheClient
             var preparedBatch = batch.
                 Select(ks =>
                 {
+                    var size = ks.Item2.Length;
                     var value = ByteString.FromStream(_valueCompressor.Compress(_clientConfig.Compression, ks.Item2));
                     return new AddRequestEntry
                     {
@@ -88,7 +89,9 @@ namespace LmdbCacheClient
                         {
                             Compression = _clientConfig.Compression,
                             HashedWith = _clientConfig.HashedWith,
-                            Hash = ByteString.CopyFrom(_valueHasher.ComputeHash(_clientConfig.HashedWith, value.ToByteArray()))
+                            Hash = ByteString.CopyFrom(_valueHasher.ComputeHash(_clientConfig.HashedWith, value.ToByteArray())),
+                            SizeFull = (uint)size,
+                            SizeCompressed = (uint)value.Length
                         },
                         Value = value
                     };
