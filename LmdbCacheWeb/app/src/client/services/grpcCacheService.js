@@ -41,9 +41,12 @@ export const getLmdbCacheService = (port, onConnect) => new GBC('ws://localhost:
         page: 0,
         correlationId: 'Web Client'
       }, (_err, res) => {
-        console.log('Echo received.');
-        if (res !== null) onMessage(res);
-        if (_err !== null) onError(_err);
+        console.log('Page received.');
+        if (_err !== null) {
+          onError(_err);
+        } else {
+          onMessage(res || { keyResponse: [] });
+        }
       });
     };
 

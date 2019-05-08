@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using Google.Protobuf;
 
 namespace LmdbLight
 {
@@ -66,11 +67,11 @@ namespace LmdbLight
             if (x == null) throw new ArgumentNullException(nameof(x));
             if (y == null) throw new ArgumentNullException(nameof(y));
 
-            if (x.Length > y.Length) return false;
+            if (x.Length < y.Length) return false;
 
             // ReSharper disable once LoopCanBeConvertedToQuery
             // Disabled for performance
-            for (int i = 0; i < x.Length; i++)
+            for (int i = 0; i < y.Length; i++)
             {
                 if (x[i] != y[i]) return false;
             }
@@ -78,6 +79,22 @@ namespace LmdbLight
             return true;
         }
 
+        public static bool StartsWith<T>(this ByteString x, ByteString y)
+        {
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (y == null) throw new ArgumentNullException(nameof(y));
+
+            if (x.Length < y.Length) return false;
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            // Disabled for performance
+            for (int i = 0; i < y.Length; i++)
+            {
+                if (x[i] != y[i]) return false;
+            }
+
+            return true;
+        }
 
         // TODO: Deal with uint and ulong properly
         public static byte[] ToBytes(this int index) => BitConverter.GetBytes(IPAddress.HostToNetworkOrder(index));

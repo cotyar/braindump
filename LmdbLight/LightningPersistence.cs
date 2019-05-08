@@ -221,7 +221,7 @@ namespace LmdbLight
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected IEnumerable<(TableKey, TableValue)> ReadPage(Table table,
             Func<byte[], TableKey> toKey, Func<byte[], TableValue> toValue,
-            TableKey prefix, uint page, uint pageSize) => ReadPage(table, toKey, toValue, prefix, (k, v) => true, page, pageSize);
+            TableKey prefix, uint page, uint pageSize) => ReadPage(table, toKey, toValue, prefix, (k, v) => k.Key.StartsWith<ByteString>(prefix.Key), page, pageSize);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected IEnumerable<(TableKey, TableValue)> ReadPageWhile(Table table,

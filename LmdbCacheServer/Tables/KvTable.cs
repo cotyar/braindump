@@ -182,11 +182,7 @@ namespace LmdbCacheServer.Tables
         public (KvKey, KvMetadata)[] MetadataByPrefix(KvKey prefix, uint page, uint pageSize)
         {
             // TODO: Fix pageSize for expiry correction. Use a continuation token.
-            var ret = _lmdb.Read(txn => MetadataByPrefix(txn, prefix, page, pageSize));
-
-            _lmdb.Write(txn => StatusTable.IncrementCounters(txn, keySearchCounter: 1), false, true);
-
-            return ret;
+            return _lmdb.Read(txn => MetadataByPrefix(txn, prefix, page, pageSize));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
