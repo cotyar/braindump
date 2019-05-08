@@ -71,6 +71,8 @@ service LmdbCacheService {
 
   rpc ListKeyValues(KeyListRequest) returns (stream KeyValueListResponse) {}
 
+  rpc PageKeys(KeyListRequest) returns (KeyPageResponse) {}
+
   rpc Echo(EchoRequest) returns (EchoResponse) {}
 }
 
@@ -240,14 +242,18 @@ message KeyListRequest {
 }
 
 message KeyListResponse {
-  string key    = 1;
-  // Timestamp expiry = 2;
+  string key          = 1;
+  KvMetadata metadata = 2;
 }
 
 message KeyValueListResponse {
   string key    = 1;
   // Timestamp expiry = 2;
   bytes  value  = 3;
+}
+
+message KeyPageResponse {
+  repeated KeyListResponse keyResponse = 1;
 }
 
 ///////////////////////////////

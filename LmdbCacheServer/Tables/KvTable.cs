@@ -179,11 +179,29 @@ namespace LmdbCacheServer.Tables
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public (KvKey, KvMetadata)[] MetadataByPrefix(KvKey prefix, uint page, uint pageSize)
+        {
+            // TODO: Fix pageSize for expiry correction. Use a continuation token.
+            var ret = _lmdb.Read(txn => MetadataByPrefix(txn, prefix, page, pageSize));
+
+            _lmdb.Write(txn => StatusTable.IncrementCounters(txn, keySearchCounter: 1), false, true);
+
+            return ret;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public (KvKey, KvMetadata)[] MetadataByPrefix(AbstractTransaction txn, KvKey prefix, uint page, uint pageSize)
         {
             var ret = _metadataTable.PageByPrefix(txn, prefix, page, pageSize);
 
-            _lmdb.Write(wtxn => StatusTable.IncrementCounters(wtxn, metadataSearchCounter: 1), false, true);
+            if (txn is WriteTransaction wtxn)
+            {
+                StatusTable.IncrementCounters(wtxn, metadataSearchCounter: 1);
+            }
+            else
+            {
+                _lmdb.Write(wtxn_ => StatusTable.IncrementCounters(wtxn_, metadataSearchCounter: 1), false, true);
+            }
 
             return ret;
         }

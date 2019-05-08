@@ -2,7 +2,7 @@
 
 const GBC = require('grpc-bus-websocket-client');
 
-export const getLmdbCacheService = (port, onConnect) => new GBC('ws://localhost:8081/', 'lmdb_cache_remoting.proto', { LmdbCache: { LmdbCacheService: `localhost:${port}` } })
+export const getLmdbCacheServiceAsync = (port, onConnect) => new GBC('ws://localhost:8081/', 'lmdb_cache_remoting.proto', { LmdbCache: { LmdbCacheService: `localhost:${port}` } })
   .connect()
   .then((gbc) => {
     console.log('LmdbCacheService connected.');
@@ -23,14 +23,31 @@ export const getLmdbCacheService = (port, onConnect) => new GBC('ws://localhost:
   })
   .catch(err => console.error(err));
 
-export const echo = (port, onMessage, onError) => new GBC('ws://localhost:8081/', 'lmdb_cache_remoting.proto', { LmdbCache: { LmdbCacheService: `localhost:${port}` } })
+export const getLmdbCacheService = (port, onConnect) => new GBC('ws://localhost:8081/', 'lmdb_cache_remoting.proto', { LmdbCache: { LmdbCacheService: `localhost:${port}` } })
   .connect()
   .then((gbc) => {
-    gbc.services.LmdbCache.LmdbCacheService.echo({ echo: 'Hello world!' }, (_err, res) => {
-      console.log('Echo received.');
-      if (res !== null) onMessage(res);
-      if (_err !== null) onError(_err);
-    });
+    const echo = (onMessage, onError) => {
+      gbc.services.LmdbCache.LmdbCacheService.echo({ echo: 'Hello world!' }, (_err, res) => {
+        console.log('Echo received.');
+        if (res !== null) onMessage(res);
+        if (_err !== null) onError(_err);
+      });
+    };
+
+    const listKeys = (prefix, onMessage, onError) => {
+      gbc.services.LmdbCache.LmdbCacheService.pageKeys({
+        keyPrefix: prefix,
+        pageSize: 10,
+        page: 0,
+        correlationId: 'Web Client'
+      }, (_err, res) => {
+        console.log('Echo received.');
+        if (res !== null) onMessage(res);
+        if (_err !== null) onError(_err);
+      });
+    };
+
+    onConnect({ echo, listKeys });
   });
 
 export default getLmdbCacheService;

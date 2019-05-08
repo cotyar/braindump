@@ -184,15 +184,24 @@ namespace LmdbCacheServer
         public override Task ListKeys(KeyListRequest request, IServerStreamWriter<KeyListResponse> responseStream, ServerCallContext context) =>
             GrpcSafeHandler(async () =>
             {
-                var ret = _kvTable.KeysByPrefix(new KvKey(request.KeyPrefix), 0, uint.MaxValue);
-                await responseStream.WriteAllAsync(ret.Select(k => new KeyListResponse {Key = k.Key}));
+                var ret = _kvTable.MetadataByPrefix(new KvKey(request.KeyPrefix), request.Page, request.PageSize > 0 ? request.PageSize : uint.MaxValue);
+                await responseStream.WriteAllAsync(ret.Select(k => new KeyListResponse {Key = k.Item1.Key, Metadata = k.Item2}));
             });
 
         public override Task ListKeyValues(KeyListRequest request, IServerStreamWriter<KeyValueListResponse> responseStream, ServerCallContext context) =>
             GrpcSafeHandler(async () =>
             {
-                var ret = _kvTable.PageByPrefix(new KvKey(request.KeyPrefix), 0, uint.MaxValue);
+                var ret = _kvTable.PageByPrefix(new KvKey(request.KeyPrefix), request.Page, request.PageSize > 0 ? request.PageSize : uint.MaxValue);
                 await responseStream.WriteAllAsync(ret.Select(k => new KeyValueListResponse {Key = k.Item1.ToString(), Value = k.Item2.Value})); // TODO: Add value streaming
+            });
+
+        public override Task<KeyPageResponse> PageKeys(KeyListRequest request, ServerCallContext context) =>
+            GrpcSafeHandler(() =>
+            {
+                var ret = _kvTable.MetadataByPrefix(new KvKey(request.KeyPrefix), request.Page, request.PageSize > 0 ? request.PageSize : uint.MaxValue);
+                var resp = new KeyPageResponse();
+                resp.KeyResponse.AddRange(ret.Select(k => new KeyListResponse { Key = k.Item1.Key, Metadata = k.Item2 }));
+                return Task.FromResult(resp);
             });
     }
 }

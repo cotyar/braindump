@@ -85,6 +85,15 @@ type LmdbCacheServiceListKeyValues = {
   readonly responseType: typeof lmdb_cache_remoting_pb.KeyValueListResponse;
 };
 
+type LmdbCacheServicePageKeys = {
+  readonly methodName: string;
+  readonly service: typeof LmdbCacheService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof lmdb_cache_remoting_pb.KeyListRequest;
+  readonly responseType: typeof lmdb_cache_remoting_pb.KeyPageResponse;
+};
+
 type LmdbCacheServiceEcho = {
   readonly methodName: string;
   readonly service: typeof LmdbCacheService;
@@ -105,6 +114,7 @@ export class LmdbCacheService {
   static readonly ContainsKeys: LmdbCacheServiceContainsKeys;
   static readonly ListKeys: LmdbCacheServiceListKeys;
   static readonly ListKeyValues: LmdbCacheServiceListKeyValues;
+  static readonly PageKeys: LmdbCacheServicePageKeys;
   static readonly Echo: LmdbCacheServiceEcho;
 }
 
@@ -251,6 +261,15 @@ export class LmdbCacheServiceClient {
   ): UnaryResponse;
   listKeys(requestMessage: lmdb_cache_remoting_pb.KeyListRequest, metadata?: grpc.Metadata): ResponseStream<lmdb_cache_remoting_pb.KeyListResponse>;
   listKeyValues(requestMessage: lmdb_cache_remoting_pb.KeyListRequest, metadata?: grpc.Metadata): ResponseStream<lmdb_cache_remoting_pb.KeyValueListResponse>;
+  pageKeys(
+    requestMessage: lmdb_cache_remoting_pb.KeyListRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: lmdb_cache_remoting_pb.KeyPageResponse|null) => void
+  ): UnaryResponse;
+  pageKeys(
+    requestMessage: lmdb_cache_remoting_pb.KeyListRequest,
+    callback: (error: ServiceError|null, responseMessage: lmdb_cache_remoting_pb.KeyPageResponse|null) => void
+  ): UnaryResponse;
   echo(
     requestMessage: lmdb_cache_remoting_pb.EchoRequest,
     metadata: grpc.Metadata,

@@ -43,7 +43,7 @@ export const DataColumnGroup = ({ children }) => (
   </Columns>
 );
 
-export const formatTicksOffsetUtc = ticksOffsetUtc => `${ticksOffsetUtc.high}|${ticksOffsetUtc.low}`;
+export const formatTicksOffsetUtc = ticksOffsetUtc => `${ticksOffsetUtc.toNumber()}`;
 
 export const TicksOffsetUtc = ({ ticksOffsetUtc }) => (<DataColumn label="Ticks Offset Utc" value={formatTicksOffsetUtc(ticksOffsetUtc)}/>);
 
@@ -68,7 +68,7 @@ export const CurrentClock = ({ clock }) => (
                 {Object.keys(clock.replicas.map).map(r => (
                   <tr key={r}>
                     <td>{r}</td>
-                    <td>{clock.replicas.map[r].value.low}</td>
+                    <td>{clock.replicas.map[r].value.toNumber()}</td>
                   </tr>
                 ))}
               </tbody>
@@ -130,7 +130,7 @@ export const PersistenceConfig = ({ persistence }) => (
         <DataColumnGroup>
           <DataColumn label="Path" value={persistence.name} columnSize={{ tablet: '3/4', desktop: '3/4' }}/>
           <DataColumn label="Max Tables" value={persistence.maxTables}/>
-          <DataColumn label="Limit Gb" value={persistence.storageLimit.low}/>
+          <DataColumn label="Limit Gb" value={persistence.storageLimit.toNumber()}/>
           <DataColumn label="Disk Sync Mode" value={persistence.syncMode}/>
           <DataColumn label="WB Max Queue" value={persistence.writeBatchMaxDelegates}/>
           <DataColumn label="WB Timeout ms" value={persistence.writeBatchTimeoutMilliseconds}/>
@@ -148,16 +148,16 @@ export const Counters = ({ counters }) => (
     <CardContent>
       <Container>
         <DataColumnGroup>
-          <DataColumn label="Add" value={counters.addsCounter.low} color="warning" />
-          <DataColumn label="Contains" value={counters.containsCounter.low}/>
-          <DataColumn label="Copy" value={counters.copysCounter.low}/>
-          <DataColumn label="Delete" value={counters.deletesCounter.low}/>
-          <DataColumn label="Get" value={counters.getCounter.low} color="warning" />
-          <DataColumn label="Key Search" value={counters.keySearchCounter.low}/>
-          <DataColumn label="Metadata Search" value={counters.metadataSearchCounter.low}/>
-          <DataColumn label="Page Search" value={counters.pageSearchCounter.low}/>
-          <DataColumn label="Replicated Add" value={counters.replicatedAdds.low}/>
-          <DataColumn label="Replicated Delete" value={counters.replicatedDeletes.low}/>
+          <DataColumn label="Add" value={counters.addsCounter.toNumber()} color="warning" />
+          <DataColumn label="Contains" value={counters.containsCounter.toNumber()}/>
+          <DataColumn label="Copy" value={counters.copysCounter.toNumber()}/>
+          <DataColumn label="Delete" value={counters.deletesCounter.toNumber()}/>
+          <DataColumn label="Get" value={counters.getCounter.toNumber()} color="warning" />
+          <DataColumn label="Key Search" value={counters.keySearchCounter.toNumber()}/>
+          <DataColumn label="Metadata Search" value={counters.metadataSearchCounter.toNumber()}/>
+          <DataColumn label="Page Search" value={counters.pageSearchCounter.toNumber()}/>
+          <DataColumn label="Replicated Add" value={counters.replicatedAdds.toNumber()}/>
+          <DataColumn label="Replicated Delete" value={counters.replicatedDeletes.toNumber()}/>
           <DataColumn label="Largest Key" value={counters.largestKeySize}/>
           <DataColumn label="Largest Value" value={counters.largestValueSize}/>
         </DataColumnGroup>
@@ -180,11 +180,11 @@ export const CollectedStats = ({ stats }) => {
       <CardContent>
         <Container>
           <DataColumnGroup>
-            <DataColumn label="Active Keys" value={stats.activeKeys.low} color="warning" />
-            <DataColumn label="Deleted Keys" value={stats.deletedKeys.low} />
-            <DataColumn label="Expired Keys" value={stats.expiredKeys.low} />
-            <DataColumn label="Non-Exp Keys" value={stats.nonExpiredKeys.low} />
-            <DataColumn label="All Keys" value={stats.allKeys.low} />
+            <DataColumn label="Active Keys" value={stats.activeKeys.toNumber()} color="warning" />
+            <DataColumn label="Deleted Keys" value={stats.deletedKeys.toNumber()} />
+            <DataColumn label="Expired Keys" value={stats.expiredKeys.toNumber()} />
+            <DataColumn label="Non-Exp Keys" value={stats.nonExpiredKeys.toNumber()} />
+            <DataColumn label="All Keys" value={stats.allKeys.toNumber()} />
           </DataColumnGroup>
         </Container>
       </CardContent>

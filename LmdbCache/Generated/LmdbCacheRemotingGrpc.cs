@@ -29,6 +29,7 @@ namespace LmdbCache {
     static readonly grpc::Marshaller<global::LmdbCache.KeyListRequest> __Marshaller_LmdbCache_KeyListRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.KeyListRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.KeyListResponse> __Marshaller_LmdbCache_KeyListResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.KeyListResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.KeyValueListResponse> __Marshaller_LmdbCache_KeyValueListResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.KeyValueListResponse.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::LmdbCache.KeyPageResponse> __Marshaller_LmdbCache_KeyPageResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.KeyPageResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.EchoRequest> __Marshaller_LmdbCache_EchoRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.EchoRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::LmdbCache.EchoResponse> __Marshaller_LmdbCache_EchoResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LmdbCache.EchoResponse.Parser.ParseFrom);
 
@@ -95,6 +96,13 @@ namespace LmdbCache {
         __Marshaller_LmdbCache_KeyListRequest,
         __Marshaller_LmdbCache_KeyValueListResponse);
 
+    static readonly grpc::Method<global::LmdbCache.KeyListRequest, global::LmdbCache.KeyPageResponse> __Method_PageKeys = new grpc::Method<global::LmdbCache.KeyListRequest, global::LmdbCache.KeyPageResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "PageKeys",
+        __Marshaller_LmdbCache_KeyListRequest,
+        __Marshaller_LmdbCache_KeyPageResponse);
+
     static readonly grpc::Method<global::LmdbCache.EchoRequest, global::LmdbCache.EchoResponse> __Method_Echo = new grpc::Method<global::LmdbCache.EchoRequest, global::LmdbCache.EchoResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -152,6 +160,11 @@ namespace LmdbCache {
       }
 
       public virtual global::System.Threading.Tasks.Task ListKeyValues(global::LmdbCache.KeyListRequest request, grpc::IServerStreamWriter<global::LmdbCache.KeyValueListResponse> responseStream, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      public virtual global::System.Threading.Tasks.Task<global::LmdbCache.KeyPageResponse> PageKeys(global::LmdbCache.KeyListRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -298,6 +311,22 @@ namespace LmdbCache {
       {
         return CallInvoker.AsyncServerStreamingCall(__Method_ListKeyValues, null, options, request);
       }
+      public virtual global::LmdbCache.KeyPageResponse PageKeys(global::LmdbCache.KeyListRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return PageKeys(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual global::LmdbCache.KeyPageResponse PageKeys(global::LmdbCache.KeyListRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_PageKeys, null, options, request);
+      }
+      public virtual grpc::AsyncUnaryCall<global::LmdbCache.KeyPageResponse> PageKeysAsync(global::LmdbCache.KeyListRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return PageKeysAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual grpc::AsyncUnaryCall<global::LmdbCache.KeyPageResponse> PageKeysAsync(global::LmdbCache.KeyListRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_PageKeys, null, options, request);
+      }
       public virtual global::LmdbCache.EchoResponse Echo(global::LmdbCache.EchoRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return Echo(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -335,6 +364,7 @@ namespace LmdbCache {
           .AddMethod(__Method_ContainsKeys, serviceImpl.ContainsKeys)
           .AddMethod(__Method_ListKeys, serviceImpl.ListKeys)
           .AddMethod(__Method_ListKeyValues, serviceImpl.ListKeyValues)
+          .AddMethod(__Method_PageKeys, serviceImpl.PageKeys)
           .AddMethod(__Method_Echo, serviceImpl.Echo).Build();
     }
 
@@ -353,6 +383,7 @@ namespace LmdbCache {
       serviceBinder.AddMethod(__Method_ContainsKeys, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::LmdbCache.GetRequest, global::LmdbCache.ContainsKeysResponse>(serviceImpl.ContainsKeys));
       serviceBinder.AddMethod(__Method_ListKeys, serviceImpl == null ? null : new grpc::ServerStreamingServerMethod<global::LmdbCache.KeyListRequest, global::LmdbCache.KeyListResponse>(serviceImpl.ListKeys));
       serviceBinder.AddMethod(__Method_ListKeyValues, serviceImpl == null ? null : new grpc::ServerStreamingServerMethod<global::LmdbCache.KeyListRequest, global::LmdbCache.KeyValueListResponse>(serviceImpl.ListKeyValues));
+      serviceBinder.AddMethod(__Method_PageKeys, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::LmdbCache.KeyListRequest, global::LmdbCache.KeyPageResponse>(serviceImpl.PageKeys));
       serviceBinder.AddMethod(__Method_Echo, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::LmdbCache.EchoRequest, global::LmdbCache.EchoResponse>(serviceImpl.Echo));
     }
 

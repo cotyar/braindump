@@ -867,6 +867,11 @@ export class KeyListResponse extends jspb.Message {
   getKey(): string;
   setKey(value: string): void;
 
+  hasMetadata(): boolean;
+  clearMetadata(): void;
+  getMetadata(): KvMetadata | undefined;
+  setMetadata(value?: KvMetadata): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): KeyListResponse.AsObject;
   static toObject(includeInstance: boolean, msg: KeyListResponse): KeyListResponse.AsObject;
@@ -880,6 +885,7 @@ export class KeyListResponse extends jspb.Message {
 export namespace KeyListResponse {
   export type AsObject = {
     key: string,
+    metadata?: KvMetadata.AsObject,
   }
 }
 
@@ -906,6 +912,28 @@ export namespace KeyValueListResponse {
   export type AsObject = {
     key: string,
     value: Uint8Array | string,
+  }
+}
+
+export class KeyPageResponse extends jspb.Message {
+  clearKeyresponseList(): void;
+  getKeyresponseList(): Array<KeyListResponse>;
+  setKeyresponseList(value: Array<KeyListResponse>): void;
+  addKeyresponse(value?: KeyListResponse, index?: number): KeyListResponse;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): KeyPageResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: KeyPageResponse): KeyPageResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: KeyPageResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): KeyPageResponse;
+  static deserializeBinaryFromReader(message: KeyPageResponse, reader: jspb.BinaryReader): KeyPageResponse;
+}
+
+export namespace KeyPageResponse {
+  export type AsObject = {
+    keyresponseList: Array<KeyListResponse.AsObject>,
   }
 }
 

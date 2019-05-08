@@ -91,6 +91,15 @@ LmdbCacheService.ListKeyValues = {
   responseType: lmdb_cache_remoting_pb.KeyValueListResponse
 };
 
+LmdbCacheService.PageKeys = {
+  methodName: "PageKeys",
+  service: LmdbCacheService,
+  requestStream: false,
+  responseStream: false,
+  requestType: lmdb_cache_remoting_pb.KeyListRequest,
+  responseType: lmdb_cache_remoting_pb.KeyPageResponse
+};
+
 LmdbCacheService.Echo = {
   methodName: "Echo",
   service: LmdbCacheService,
@@ -415,6 +424,37 @@ LmdbCacheServiceClient.prototype.listKeyValues = function listKeyValues(requestM
     },
     cancel: function () {
       listeners = null;
+      client.close();
+    }
+  };
+};
+
+LmdbCacheServiceClient.prototype.pageKeys = function pageKeys(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(LmdbCacheService.PageKeys, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
       client.close();
     }
   };
