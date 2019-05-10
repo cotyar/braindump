@@ -11,16 +11,16 @@ using static LmdbCache.ValueMetadata.Types.Compression;
 
 namespace LmdbCacheClient
 {
-    public class ValueCompressor
+    public static class ValueCompressor
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Stream CompressGZip(Stream stream) => new GZipStream(stream, CompressionLevel.Fastest);
+        public static Stream CompressGZip(Stream stream) => new GZipStream(stream, CompressionMode.Compress);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Stream CompressLz4(Stream stream) => new LZ4Stream(stream, LZ4StreamMode.Compress);
+        public static Stream CompressLz4(Stream stream) => new LZ4Stream(stream, LZ4StreamMode.Compress);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Stream Compress(Compression compressionLevel, Stream stream)
+        public static Stream Compress(Compression compressionLevel, Stream stream)
         {
             switch (compressionLevel)
             {
@@ -36,13 +36,13 @@ namespace LmdbCacheClient
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Stream DecompressGZip(Stream stream) => new GZipStream(stream, CompressionMode.Decompress);
+        public static Stream DecompressGZip(Stream stream) => new GZipStream(stream, CompressionMode.Decompress);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Stream DecompressLz4(Stream stream) => new LZ4Stream(stream, LZ4StreamMode.Decompress);
+        public static Stream DecompressLz4(Stream stream) => new LZ4Stream(stream, LZ4StreamMode.Decompress);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Stream Decompress(Compression compressionLevel, Stream stream)
+        public static Stream Decompress(Compression compressionLevel, Stream stream)
         {
             switch (compressionLevel)
             {

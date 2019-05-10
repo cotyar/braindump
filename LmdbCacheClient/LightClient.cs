@@ -27,7 +27,6 @@ namespace LmdbCacheClient
         private readonly LmdbCacheService.LmdbCacheServiceClient _lightClient;
         private readonly string _correlationId;
         private readonly ValueHasher _valueHasher;
-        private readonly ValueCompressor _valueCompressor;
 
         public LightClient(Channel channel, ClientConfig clientConfig)
         {
@@ -36,10 +35,9 @@ namespace LmdbCacheClient
             _lightClient = new LmdbCacheService.LmdbCacheServiceClient(channel);
             _correlationId = Guid.NewGuid().ToString("N");
             _valueHasher = new ValueHasher();
-            _valueCompressor = new ValueCompressor();
         }
 
-        private async Task<AddResponse> AddStreaming(AddRequestEntry[] entries, bool allowOverride)
+        private async Task<AddResponse> AddStreaming(List<AddRequestEntry> entries, bool allowOverride)
         {
             using (var call = _lightClient.AddStream())
             {
@@ -47,11 +45,11 @@ namespace LmdbCacheClient
                     {
                         OverrideExisting = allowOverride,
                         CorrelationId = _correlationId, 
-                        ChunksCount = (uint)entries.Length
+                        ChunksCount = (uint)entries.Count
                     } };
                 await call.RequestStream.WriteAsync(header);
 
-                for (var i = 0; i < entries.Length; i++)
+                for (var i = 0; i < entries.Count; i++)
                 {
                     var entry = entries[i];
                     var chunk = new AddStreamRequest { Chunk = new DataChunk { Entry = entry, Index = (uint) i } };
@@ -64,39 +62,40 @@ namespace LmdbCacheClient
             }
         }
 
-        private HashSet<string> TryAdd(IEnumerable<string> keys, Action<string, Stream> streamWriter, bool allowOverride,
+        private IEnumerable<string> TryAdd(IEnumerable<string> keys, Action<string, Stream> streamWriter, bool allowOverride,
             DateTimeOffset expiry, AvailabilityLevel requiredAvailabilityLevel)
         {
             // TODO: Add reactions to other AvailabilityLevels
-            var batch = keys.Select(k => (k, new MemoryStream())).ToArray();
 
-            foreach (var ks in batch)
+            var preparedBatch = new List<AddRequestEntry>();
+            foreach (var key in keys)
             {
-                streamWriter(ks.Item1, ks.Item2);
-                ks.Item2.Position = 0;
-            }
-
-            var preparedBatch = batch.
-                Select(ks =>
+                using (var valueStream = new MemoryStream())
+                using (var compressedStream = new LightWriteStream(ValueCompressor.Compress(_clientConfig.Compression, valueStream)))
                 {
-                    var size = ks.Item2.Length;
-                    var value = ByteString.FromStream(_valueCompressor.Compress(_clientConfig.Compression, ks.Item2));
-                    return new AddRequestEntry
+                    streamWriter(key, compressedStream);
+                    compressedStream.Flush();
+                    valueStream.Position = 0;
+                    var value = valueStream.ToByteArray();
+
+                    var entry = new AddRequestEntry
                     {
-                        Key = ks.Item1,
+                        Key = key,
                         Expiry = expiry.ToTimestamp(),
                         ValueMetadata = new ValueMetadata
                         {
                             Compression = _clientConfig.Compression,
                             HashedWith = _clientConfig.HashedWith,
-                            Hash = ByteString.CopyFrom(_valueHasher.ComputeHash(_clientConfig.HashedWith, value.ToByteArray())),
-                            SizeFull = (uint)size,
-                            SizeCompressed = (uint)value.Length
+                            Hash = ByteString.CopyFrom(_valueHasher.ComputeHash(_clientConfig.HashedWith, value)),
+                            SizeFull = (uint) compressedStream.Position,
+                            SizeCompressed = (uint) value.Length
                         },
-                        Value = value
+                        Value = ByteString.CopyFrom(value)
                     };
-                }).
-                ToArray();
+
+                    preparedBatch.Add(entry);
+                }
+            }
 
             var addResponse = Task.Run(async () =>
                 {
@@ -111,7 +110,7 @@ namespace LmdbCacheClient
                         {
                             OverrideExisting = allowOverride,
                             CorrelationId = _correlationId,
-                            ChunksCount = (uint)preparedBatch.Length
+                            ChunksCount = (uint)preparedBatch.Count
                         }
                     };
                     request.Entries.Add(preparedBatch);
@@ -125,10 +124,10 @@ namespace LmdbCacheClient
         }
 
         public HashSet<string> TryAdd(IEnumerable<string> keys, Action<string, Stream> streamWriter, DateTimeOffset expiry,
-            AvailabilityLevel requiredAvailabilityLevel = AvailabilityLevel.SavedToDisk) => TryAdd(keys, streamWriter, false, expiry, requiredAvailabilityLevel);
+            AvailabilityLevel requiredAvailabilityLevel = AvailabilityLevel.SavedToDisk) => TryAdd(keys, streamWriter, false, expiry, requiredAvailabilityLevel).ToHashSet();
 
         public HashSet<string> TryAddOrUpdate(IEnumerable<string> keys, Action<string, Stream> streamWriter, DateTimeOffset expiry,
-            AvailabilityLevel requiredAvailabilityLevel = AvailabilityLevel.SavedToDisk) => TryAdd(keys, streamWriter, true, expiry, requiredAvailabilityLevel);
+            AvailabilityLevel requiredAvailabilityLevel = AvailabilityLevel.SavedToDisk) => TryAdd(keys, streamWriter, true, expiry, requiredAvailabilityLevel).ToHashSet();
 
         private async Task<IEnumerable<GetResponseEntry>> GetStream(GetRequest request)
         {
@@ -159,7 +158,7 @@ namespace LmdbCacheClient
 
             foreach (var kv in ret)
             {
-                streamReader(keysCopied[kv.Index], _valueCompressor.Decompress(kv.ValueMetadata.Compression, kv.Value.ToStream()));
+                streamReader(keysCopied[kv.Index], ValueCompressor.Decompress(kv.ValueMetadata.Compression, kv.Value.ToStream()));
             }
 
             return ret.Select(kv => keysCopied[kv.Index]).ToHashSet();

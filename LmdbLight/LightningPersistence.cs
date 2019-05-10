@@ -253,12 +253,12 @@ namespace LmdbLight
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public TableKey[] KeysByPrefix(Table table, TableKey prefix, uint page, uint pageSize) => 
-            ReadPage(table, b => b, _ => default(TableValue), prefix, page, pageSize).Select(kv => kv.Item1).ToArray();
+        public IEnumerable<TableKey> KeysByPrefix(Table table, TableKey prefix, uint page, uint pageSize) => 
+            ReadPage(table, b => b, _ => default(TableValue), prefix, page, pageSize).Select(kv => kv.Item1);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public (TableKey, TableValue)[] PageByPrefix(Table table, TableKey prefix, uint page, uint pageSize) =>
-            ReadPage(table, b => b, b => b, prefix, page, pageSize).ToArray();
+        public IEnumerable<(TableKey, TableValue)> PageByPrefix(Table table, TableKey prefix, uint page, uint pageSize) =>
+            ReadPage(table, b => b, b => b, prefix, page, pageSize);
 
         //        public TableValueChunk[] GetValueChunks(DupTable table, TableKey key, uint page, uint pageSize) =>
         //            ReadDuplicatePage<TableValueChunk>(b => b, table, key, page, pageSize).ToArray();

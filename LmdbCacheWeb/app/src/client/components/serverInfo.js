@@ -58,7 +58,7 @@ export const CurrentClock = ({ clock }) => (
           <TicksOffsetUtc ticksOffsetUtc={clock.ticksOffsetUtc}/>
           <Column isSize={defaultColumnSize}>
             <Table isBordered isStriped isNarrow>
-              <thead>
+              <thead className="has-background-info">
                 <tr>
                   <th>Replica</th>
                   <th>Pos</th>
@@ -88,9 +88,9 @@ export const ReplicaConfig = ({ config }) => (
     <CardContent>
       <Container>
         <DataColumnGroup>
-          <DataColumn label="Replica Id" value={config.replicaId}/>
+          <DataColumn label="Replica Id" value={config.replicaId} color="warning"/>
           <DataColumn label="Port" value={config.port}/>
-          <DataColumn label="Host" value={config.hostName}/>
+          <DataColumn label="Host" value={config.hostName} color="primary"/>
           <DataColumn label="Master Node" value={config.masterNode}/>
           <DataColumn label="Monitoring Interval" value={config.monitoringInterval}/>
           <DataColumn label="Monitoring Port" value={config.monitoringPort}/>
