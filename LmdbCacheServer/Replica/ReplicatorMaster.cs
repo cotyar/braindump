@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using AsyncEnumerableExtensions;
 using Google.Protobuf;
 using Grpc.Core;
@@ -101,8 +102,8 @@ namespace LmdbCacheServer.Replica
             });
 
         public Task PostWriteLogEvent(Item syncItem) => 
-            Task.WhenAll(_replicationSources.Values.Select(slave => 
-                GrpcSafeHandler(() => slave.WriteAsync(new SyncPacket
+            Task.WhenAll(_replicationSources.Values.Select(source => 
+                GrpcSafeHandler(() => source.WriteAsync(new SyncPacket
                 {
                     ReplicaId = _ownReplicaId,
                     Item = syncItem

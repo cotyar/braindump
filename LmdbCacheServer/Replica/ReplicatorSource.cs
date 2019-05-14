@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using Google.Protobuf;
 using Grpc.Core;
 using LmdbCache;
@@ -27,6 +29,7 @@ namespace LmdbCacheServer.Replica
         private readonly WriteLogTable _wlTable;
         private readonly CancellationToken _cancellationToken;
         private readonly Func<SyncPacket, Task> _responseStreamWriteAsync;
+        private readonly Task _pumpTask;
 
         private readonly ReplicationConfig _replicationConfig;
 
@@ -41,15 +44,32 @@ namespace LmdbCacheServer.Replica
             _wlTable = wlTable;
             _replicationConfig = replicationConfig;
             _cancellationToken = cancellationToken;
-            _responseStreamWriteAsync = responseStreamWriteAsync;
+            (_pumpTask, _responseStreamWriteAsync) = StartBufferedWrites(responseStreamWriteAsync);
         }
 
+        private (Task, Func<SyncPacket, Task>) StartBufferedWrites(Func<SyncPacket, Task> responseStreamWriteAsync)
+        {
+            var sinkFlow = new BufferBlock<SyncPacket>();
+            var pumpTask = Task.Run(async () =>
+            {
+                while (!_cancellationToken.IsCancellationRequested)
+                {
+                    var msg = await sinkFlow.ReceiveAsync(_cancellationToken); // TODO: Add timeout
+                    await responseStreamWriteAsync(msg);
+                }
+            }, _cancellationToken);
+
+            return (pumpTask, sp => sinkFlow.SendAsync(sp, _cancellationToken));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private ByteString GetValue(AbstractTransaction txn, string key) => _kvTable.TryGet(txn, new KvKey(key)).Item2?.Value;
 
         public void Dispose()
         {
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public async Task SyncFrom(ulong since, string[] excludeOriginReplicas)
         {
             var lastPos = since;
@@ -159,6 +179,7 @@ namespace LmdbCacheServer.Replica
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Task WriteAsync(SyncPacket syncPacket) => _responseStreamWriteAsync(syncPacket);
     }
 }
