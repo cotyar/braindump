@@ -41,7 +41,7 @@ namespace LmdbCacheServer.Replica
         private readonly Timestamp _started;
 
         private readonly ReplicatorSlave _replicatorSlave;
-        private readonly ConcurrentBag<IReplicator> _replicators;
+        private readonly ConcurrentBag<(IReplicator, Task)> _replicators;
         private readonly Monitor _monitor;
 
         public Replica(ReplicaConfig replicaConfig, VectorClock clock = null)
@@ -64,7 +64,7 @@ namespace LmdbCacheServer.Replica
 
             _kvTable = new KvTable(_lmdb, "kv", ReplicaConfig.ReplicaId, 
                 _statusTable, _kvExpiryTable, _kvMetadataTable, _wlTable,
-                CurrentClock, IncrementClock, events => Task.WhenAll(_replicators.SelectMany(r => events.Select(r.PostWriteLogEvent)).ToArray()));
+                CurrentClock, IncrementClock, events => Task.WhenAll(_replicators.SelectMany(r => events.Select(r.Item1.PostWriteLogEvent)).ToArray()));
 
             _webServerCompletion = WebServer.StartWebServer(_shutdownCancellationTokenSource.Token, ReplicaConfig.HostName, ReplicaConfig.WebUIPort);
 
@@ -79,7 +79,7 @@ namespace LmdbCacheServer.Replica
             Console.WriteLine("Monitoring server started listening on port " + ReplicaConfig.MonitoringPort);
 
 
-            _replicators = new ConcurrentBag<IReplicator>();
+            _replicators = new ConcurrentBag<(IReplicator, Task)>();
 
             if (!string.IsNullOrWhiteSpace(ReplicaConfig.MasterNode))
             {
@@ -90,9 +90,8 @@ namespace LmdbCacheServer.Replica
                     _replicatorSlave = new ReplicatorSlave(_lmdb, ReplicaConfig.ReplicaId,
                         _kvTable, _replicationTable, _wlTable, ReplicaConfig.Replication,
                         UpdateClockWithRemoteReplicaPos);
-                    _replicatorSlave.StartSync(new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure))
-                        .GetAwaiter().GetResult();
-                    _replicators.Add(_replicatorSlave);
+                    var syncTask = _replicatorSlave.StartSync(new Channel(ReplicaConfig.MasterNode, ChannelCredentials.Insecure));
+                    _replicators.Add((_replicatorSlave, syncTask));
                 }
                 catch (Exception e)
                 {
@@ -108,7 +107,7 @@ namespace LmdbCacheServer.Replica
                 Ports = { new ServerPort(ReplicaConfig.HostName, (int)ReplicaConfig.Replication.Port, ServerCredentials.Insecure) }
             };
             _serverReplication.Start();
-            _replicators.Add(replicatorMaster);
+            _replicators.Add((replicatorMaster, Task.FromResult(0))); // TODO: Looks like WriteAsync will be called twice
 
             Console.WriteLine("Replication server started listening on port " + ReplicaConfig.Replication.Port);
 

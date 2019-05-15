@@ -255,11 +255,11 @@ export default class ServerInfo extends Component {
           <CardContent>
             <CurrentClock clock={serverState.status.currentClock} />
             <br/>
+            <Counters counters={serverState.status.counters} />
+            <br/>
             <ReplicaConfig config={serverState.status.replicaConfig} />
             <ReplicationConfig replication={serverState.status.replicaConfig.replication} />
             <PersistenceConfig persistence={serverState.status.replicaConfig.persistence} />
-            <br/>
-            <Counters counters={serverState.status.counters} />
             <br/>
             <CollectedStats stats={serverState.status.collectedStats} />
           </CardContent>
