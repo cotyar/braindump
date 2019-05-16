@@ -105,7 +105,7 @@ namespace TestClient
         static void Main(string[] args)
         {
             var port = args.Length > 0 ? uint.Parse(args[0]) : 40051u;
-            TestAddGetManyParallel("127.0.0.1", port, 4, 20, 100000);
+            TestAddGetManyParallel("127.0.0.1", port, 2, 20, 10000);
 
             Console.ReadLine();
         }

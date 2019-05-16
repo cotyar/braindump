@@ -11,6 +11,7 @@ using Grpc.Core;
 using LmdbCache;
 using LmdbCacheServer.Tables;
 using LmdbLight;
+using NLog;
 using static LmdbCache.KvMetadata.Types;
 using static LmdbCache.KvMetadata.Types.Status;
 using static LmdbCache.KvMetadata.Types.UpdateAction;
@@ -23,6 +24,8 @@ namespace LmdbCacheServer.Replica
 {
     public class ReplicatorSource : IDisposable
     {
+        private Logger _log = NLog.LogManager.GetCurrentClassLogger();
+
         private readonly LightningPersistence _lmdb;
         private readonly string _ownReplicaId;
         private readonly KvTable _kvTable;
@@ -73,7 +76,7 @@ namespace LmdbCacheServer.Replica
         public async Task SyncFrom(ulong since, string[] excludeOriginReplicas)
         {
             var lastPos = since;
-            Console.WriteLine($"Received replication request to sync from {lastPos}");
+            _log.Info($"Received replication request to sync from {lastPos}");
             var until = _lmdb.Read(txn => _wlTable.GetLastClock(txn))?.Item1 ?? 0;
 
             while (!_cancellationToken.IsCancellationRequested && lastPos <= until)
@@ -96,7 +99,7 @@ namespace LmdbCacheServer.Replica
                             }
                             else
                             {
-                                Console.WriteLine($"No value for the key {logItem.Item2.Updated.Key}");
+                                _log.Info($"No value for the key {logItem.Item2.Updated.Key}");
                             }
                         }
                     }
@@ -138,7 +141,7 @@ namespace LmdbCacheServer.Replica
                 SkipPos = new SkipPos { LastPos = lastPos }
             });
 
-            Console.WriteLine($"Page replicated. Last pos: {lastPos}");
+            _log.Info($"Page replicated. Last pos: {lastPos}");
 
             async Task<ulong> ProcessInBatches((ulong, WriteLogEvent)[] page)
             {

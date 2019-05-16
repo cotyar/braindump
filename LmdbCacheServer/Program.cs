@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Grpc.Core;
-
+using Grpc.Core.Logging;
 using LmdbCache;
 using LmdbCacheServer.Replica;
 using LmdbLight;
@@ -17,6 +19,11 @@ namespace LmdbCacheServer
 
         static void Main(string[] args)
         {
+            ConfigureLog($"logs/CacheServer_{DateTime.Now}.nlog");
+            GrpcEnvironment.SetLogger(new LogLevelFilterLogger(new ConsoleLogger(), LogLevel.Debug));
+            GC.AddMemoryPressure(2L * 1024 * 1024 * 1024);
+            // GrpcEnvironment.SetLogger(new TextWriterLogger(new StreamWriter(File.OpenWrite($"logs/CacheServer_{DateTime.Now}.log"))));
+
             var lightningConfig = new LightningConfig
             {
                 Name = @"C:\Work2\braindump\LmdbCacheServer\TestDir",
@@ -59,6 +66,19 @@ namespace LmdbCacheServer
 
                 Console.ReadKey();
             }
+        }
+
+        private static void ConfigureLog(string logfileName)
+        {
+            var config = new NLog.Config.LoggingConfiguration();
+
+            var logfile = new NLog.Targets.FileTarget("logfile") { FileName = logfileName };
+            var logconsole = new NLog.Targets.ConsoleTarget("logconsole");
+
+            config.AddRule(NLog.LogLevel.Info, NLog.LogLevel.Fatal, logconsole);
+            config.AddRule(NLog.LogLevel.Debug, NLog.LogLevel.Fatal, logfile);
+
+            NLog.LogManager.Configuration = config;
         }
     }
 }

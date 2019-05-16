@@ -6,11 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Grpc.Core;
 using LmdbCache;
+using NLog;
 
 namespace LmdbCacheServer
 {
     public class InMemoryCacheServiceImpl : LmdbCacheService.LmdbCacheServiceBase
     {
+        private Logger _log = NLog.LogManager.GetCurrentClassLogger();
+
         const UInt32 MaxPageSize = 1024;
 
         ConcurrentDictionary<string, AddRequest> state = new ConcurrentDictionary<string, AddRequest>();

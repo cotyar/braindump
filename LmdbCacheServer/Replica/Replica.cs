@@ -10,6 +10,7 @@ using LmdbCache;
 using LmdbCacheServer.Tables;
 using LmdbCacheWeb;
 using LmdbLight;
+using NLog;
 using static LmdbCache.Helper;
 using Monitor = LmdbCacheServer.Monitoring.Monitor;
 
@@ -18,6 +19,7 @@ namespace LmdbCacheServer.Replica
     public class Replica : IDisposable
     {
         //private volatile VectorClock _clock;
+        private Logger _log = NLog.LogManager.GetCurrentClassLogger();
 
         public ReplicaConfig ReplicaConfig { get; }
         public LightningConfig LightningConfig { get; }
@@ -76,7 +78,7 @@ namespace LmdbCacheServer.Replica
             };
             _serverMonitoring.Start();
 
-            Console.WriteLine("Monitoring server started listening on port " + ReplicaConfig.MonitoringPort);
+            _log.Info("Monitoring server started listening on port " + ReplicaConfig.MonitoringPort);
 
 
             _replicators = new ConcurrentBag<(IReplicator, Task)>();
@@ -95,7 +97,7 @@ namespace LmdbCacheServer.Replica
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"Starting Replication failed for node ${ReplicaConfig.MasterNode}. Continue without Replication.");
+                    _log.Info($"Starting Replication failed for node ${ReplicaConfig.MasterNode}. Continue without Replication.");
                 }
             }
 
@@ -109,7 +111,7 @@ namespace LmdbCacheServer.Replica
             _serverReplication.Start();
             _replicators.Add((replicatorMaster, Task.FromResult(0))); // TODO: Looks like WriteAsync will be called twice
 
-            Console.WriteLine("Replication server started listening on port " + ReplicaConfig.Replication.Port);
+            _log.Info($"Replication server started listening on port {ReplicaConfig.Replication.Port}");
 
             _server = new Server
             {
@@ -119,7 +121,7 @@ namespace LmdbCacheServer.Replica
             };
             _server.Start();
 
-            Console.WriteLine("Cache server listening on port " + ReplicaConfig.Port);
+            _log.Info("Cache server listening on port {ReplicaConfig.Port}");
         }
 
         private static ReplicaConfig AdjustConfig(ReplicaConfig config)

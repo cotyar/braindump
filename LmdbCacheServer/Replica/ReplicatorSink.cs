@@ -9,6 +9,7 @@ using Grpc.Core;
 using LmdbCache;
 using LmdbCacheServer.Tables;
 using LmdbLight;
+using NLog;
 using static LmdbCache.KvMetadata.Types;
 using static LmdbCache.KvMetadata.Types.Status;
 using static LmdbCache.KvMetadata.Types.UpdateAction;
@@ -19,6 +20,8 @@ namespace LmdbCacheServer.Replica
 {
     public class ReplicatorSink : IDisposable
     {
+        private Logger _log = NLog.LogManager.GetCurrentClassLogger();
+
         private readonly LightningPersistence _lmdb;
         private readonly KvTable _kvTable;
         private readonly ReplicationTable _replicationTable;
@@ -49,7 +52,7 @@ namespace LmdbCacheServer.Replica
             switch (syncPacket.PacketCase)
             {
                 case Items:
-                    Console.WriteLine($"Received batch: '{syncPacket.Items.Batch.Count}'");
+                    _log.Info($"Received batch: '{syncPacket.Items.Batch.Count}'");
                     ulong? lastPos = null;
                     foreach (var responseItem in syncPacket.Items.Batch)
                     {
