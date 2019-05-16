@@ -20,8 +20,8 @@ namespace LmdbCacheServer
         static void Main(string[] args)
         {
             ConfigureLog($"logs/CacheServer_{DateTime.Now}.nlog");
-            GrpcEnvironment.SetLogger(new LogLevelFilterLogger(new ConsoleLogger(), LogLevel.Debug));
             GC.AddMemoryPressure(2L * 1024 * 1024 * 1024);
+            GrpcEnvironment.SetLogger(new LogLevelFilterLogger(new ConsoleLogger(), LogLevel.Debug));
             // GrpcEnvironment.SetLogger(new TextWriterLogger(new StreamWriter(File.OpenWrite($"logs/CacheServer_{DateTime.Now}.log"))));
 
             var lightningConfig = new LightningConfig
